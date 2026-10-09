@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://kone-studio.com/</loc>
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <image:image><image:loc>https://kone-studio.com/assets/img/kone.webp</image:loc></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/decon.webp</image:loc></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/sport.webp</image:loc></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/relax.webp</image:loc></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/cervi.webp</image:loc></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/linfo.webp</image:loc></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/rifle.webp</image:loc></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/coppe.webp</image:loc></image:image>
+  </url>
+</urlset>

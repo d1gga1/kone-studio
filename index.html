@@ -3,23 +3,38 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Kone Moctar Studio — Personal training &amp; massaggi professionali</title>
-<meta name="description" content="Kone Moctar Studio: personal training one to one, corsi di gruppo e massaggi professionali. Movimento, cura, risultati — con la tua app personale per schede, allenamenti e chat diretta con Kone.">
+<title>Kone Moctar Studio | Personal Trainer e Massaggiatore Professionale</title>
+<meta name="description" content="Personal training one to one, corsi di gruppo (max 10) e massaggi professionali: decontratturante, sportivo, linfodrenante, riflessologia, coppettazione. Prenota con Kone Moctar e segui il tuo percorso nell'app.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://kone-studio.com/">
+<meta name="author" content="Kone Moctar Studio">
 <meta name="theme-color" content="#08080A">
 <meta name="color-scheme" content="dark">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="KM Studio">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- Google Search Console: incolla qui il codice di verifica (vedi README) -->
+<!-- <meta name="google-site-verification" content="CODICE"> -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="Kone Moctar Studio — Movimento · Cura · Risultati">
-<meta property="og:description" content="Personal training one to one, corsi di gruppo e massaggi professionali. E un'app tutta tua per schede, allenamenti e chat con Kone.">
-<meta property="og:image" content="/assets/og-image.png">
+<meta property="og:locale" content="it_IT">
+<meta property="og:site_name" content="Kone Moctar Studio">
+<meta property="og:url" content="https://kone-studio.com/">
+<meta property="og:title" content="Kone Moctar Studio | Personal Trainer e Massaggiatore Professionale">
+<meta property="og:description" content="Allenamento one to one, corsi di gruppo e massaggi professionali. Movimento, cura, risultati — con la tua app personale per schede e chat con Kone.">
+<meta property="og:image" content="https://kone-studio.com/assets/og-sito.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Kone Moctar Studio — Movimento, Cura, Risultati">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Kone Moctar Studio | Personal Trainer e Massaggiatore">
+<meta name="twitter:description" content="Personal training, corsi di gruppo e massaggi professionali. Prenota dall'app.">
+<meta name="twitter:image" content="https://kone-studio.com/assets/og-sito.jpg">
+<link rel="preload" href="assets/js/gsap.min.js" as="script">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&display=swap">
@@ -56,6 +71,7 @@ p{margin:0}
 .wrap{width:100%;max-width:1360px;margin:0 auto;padding:0 var(--gut)}
 section{position:relative}
 
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 /* ---------- grain + canvas ---------- */
 #dust{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
 .grain{position:fixed;inset:0;z-index:90;pointer-events:none;opacity:.06;
@@ -582,6 +598,10 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
   .manifesto .big .w{opacity:1}
 }
 </style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": ["HealthAndBeautyBusiness", "SportsActivityLocation"], "@id": "https://kone-studio.com/#studio", "name": "Kone Moctar Studio", "alternateName": "KM Studio", "url": "https://kone-studio.com/", "logo": "https://kone-studio.com/assets/icon-512.png", "image": ["https://kone-studio.com/assets/og-sito.jpg", "https://kone-studio.com/assets/img/kone.webp"], "description": "Personal training one to one, corsi di gruppo e massaggi professionali con Kone Moctar.", "slogan": "Movimento · Cura · Risultati", "telephone": "+39 392 269 6468", "email": "konemoctar00@gmail.com", "priceRange": "€€", "currenciesAccepted": "EUR", "sameAs": ["https://www.instagram.com/konemoctar4/"], "founder": {"@id": "https://kone-studio.com/#kone"}, "hasOfferCatalog": {"@type": "OfferCatalog", "name": "Servizi e trattamenti", "itemListElement": [{"@type": "Offer", "price": "45", "priceCurrency": "EUR", "itemOffered": {"@type": "Service", "name": "Personal training one to one", "description": "Seduta individuale con Kone Moctar"}}, {"@type": "Offer", "price": "65", "priceCurrency": "EUR", "itemOffered": {"@type": "Service", "name": "Personal training in coppia"}}, {"@type": "Offer", "price": "12", "priceCurrency": "EUR", "itemOffered": {"@type": "Service", "name": "Corso di gruppo (max 10 persone)"}}, {"@type": "Offer", "price": "30", "priceCurrency": "EUR", "itemOffered": {"@type": "Service", "name": "Massaggio decontratturante", "description": "Scioglie le tensioni muscolari e migliora la mobilità."}}, {"@type": "Offer", "price": "30", "priceCurrency": "EUR", "itemOffered": {"@type": "Service", "name": "Massaggio sportivo", "description": "Prima e dopo l'attività fisica: migliora prestazioni e recupero."}}, {"@type": "Offer", "price": "30", "priceCurrency": "EUR", "itemOffered": {"@type": "Service", "name": "Massaggio rilassante e antistress", "description": "Riduce lo stress e favorisce il benessere psicofisico."}}, {"@type": "Offer", "price": "30", "priceCurrency": "EUR", "itemOffered": {"@type": "Service", "name": "Massaggio cervico lombare", "description": "Allevia dolori e tensioni a collo, spalle e zona lombare."}}, {"@type": "Offer", "price": "30", "priceCurrency": "EUR", "itemOffered": {"@type": "Service", "name": "Massaggio linfodrenante", "description": "Favorisce il drenaggio dei liquidi e migliora la circolazione."}}, {"@type": "Offer", "price": "30", "priceCurrency": "EUR", "itemOffered": {"@type": "Service", "name": "Riflessologia plantare", "description": "Stimola i punti riflessi dei piedi per l'equilibrio generale."}}, {"@type": "Offer", "price": "30", "priceCurrency": "EUR", "itemOffered": {"@type": "Service", "name": "Coppettazione", "description": "Tecnica antica per tensioni profonde, circolazione e dolori."}}]}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "@id": "https://kone-studio.com/#kone", "name": "Kone Moctar", "jobTitle": "Personal trainer e massaggiatore professionale", "image": "https://kone-studio.com/assets/img/kone.webp", "worksFor": {"@id": "https://kone-studio.com/#studio"}, "sameAs": ["https://www.instagram.com/konemoctar4/"]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "@id": "https://kone-studio.com/#web", "name": "Kone Moctar Studio", "url": "https://kone-studio.com/", "inLanguage": "it-IT", "publisher": {"@id": "https://kone-studio.com/#studio"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Devo essere già allenato?", "acceptedAnswer": {"@type": "Answer", "text": "No. Si parte da dove sei tu: la prima fase serve proprio a conoscere il tuo livello, i tuoi obiettivi e gli eventuali infortuni. La scheda viene costruita su questo."}}, {"@type": "Question", "name": "Come prenoto una seduta o un massaggio?", "acceptedAnswer": {"@type": "Answer", "text": "Dall'app personale: scegli one to one, corso di gruppo o trattamento (30′ o 60′), vedi i posti liberi e prenoti. L'accesso all'app te lo attiva Kone in studio."}}, {"@type": "Question", "name": "Posso unire allenamento e massaggi?", "acceptedAnswer": {"@type": "Answer", "text": "È il cuore del metodo. Ci sono combo e percorsi che uniscono sedute di personal training e massaggi, da Essential a Total Body."}}, {"@type": "Question", "name": "Quante persone ci sono nei corsi?", "acceptedAnswer": {"@type": "Answer", "text": "Al massimo 10. Il programma di ogni corso viene generato ogni giorno in base a chi partecipa e ai feedback dell'ultima lezione."}}, {"@type": "Question", "name": "La coppettazione lascia segni?", "acceptedAnswer": {"@type": "Answer", "text": "Può lasciare segni circolari temporanei sulla pelle. È una tecnica indicata per tensioni profonde e per chi fa sport: se hai dubbi, parlane con Kone prima del trattamento."}}, {"@type": "Question", "name": "Cosa trovo nell'app?", "acceptedAnswer": {"@type": "Answer", "text": "La tua scheda con foto e video degli esercizi, il registro dei carichi e del peso con i grafici, le prenotazioni, il tuo piano e la chat diretta con Kone."}}]}</script>
 </head>
 <body class="locked">
 
@@ -659,7 +679,7 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
   <div class="wrap hero-grid">
     <div>
       <div class="eyebrow h-in">Personal training &amp; massaggi professionali</div>
-      <h1 aria-label="Movimento. Cura. Risultati.">
+      <h1><span class="sr-only">Kone Moctar Studio: personal trainer e massaggiatore professionale. </span>
         <span class="ln"><span class="split">Movimento.</span></span>
         <span class="ln"><span class="split outline">Cura.</span></span>
         <span class="ln"><span class="split gold-txt">Risultati.</span></span>
@@ -732,7 +752,7 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
 <section class="kone" id="kone">
   <div class="wrap kgrid">
     <div class="kphoto" id="kphoto">
-      <div class="fr"><img src="assets/img/kone.webp" srcset="assets/img/kone-sm.webp 608w, assets/img/kone.webp 1216w" sizes="(max-width:900px) 90vw, 520px" width="1216" height="1786" alt="Kone Moctar durante un massaggio nel suo studio" loading="lazy" decoding="async"><div class="shade"></div></div>
+      <div class="fr"><img src="assets/img/kone.webp" srcset="assets/img/kone-sm.webp 608w, assets/img/kone.webp 1216w" sizes="(max-width:900px) 90vw, 520px" width="1216" height="1786" alt="Kone Moctar, massaggiatore professionale e personal trainer, durante un massaggio" loading="lazy" decoding="async"><div class="shade"></div></div>
       <div class="tagk"><span>Il tuo coach</span><b>Kone Moctar</b></div>
       <svg class="seal" viewBox="0 0 120 120" aria-hidden="true"><defs><path id="cpath" d="M60 60m-46 0a46 46 0 1 1 92 0a46 46 0 1 1-92 0"/></defs><circle cx="60" cy="60" r="58" fill="#0a0906" stroke="url(#gold)" stroke-width="1.5"/><text><textPath href="#cpath">MOVIMENTO · CURA · RISULTATI · </textPath></text><g transform="translate(37 44) scale(.24)" fill="url(#gold)"><path d="M0,0 H21 V40 L50,0 H74 L40,48 L76,100 H52 L21,55 V100 H0 Z"/><g transform="translate(86 0)"><path d="M0,100 V0 H22 L46,44 L70,0 H92 V100 H71 V38 L52,70 H40 L21,38 V100 Z"/></g></g></svg>
     </div>
@@ -827,7 +847,71 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
       <div><div class="eyebrow">Trattamenti</div><h2><span class="reveal-line"><span>Le mani</span></span><span class="reveal-line"><span class="gold-txt">che ricostruiscono</span></span></h2></div>
       <p>Il massaggio non è un premio: è parte dell'allenamento. Scioglie quello che il lavoro e lo sport accumulano, e ti rimette in condizione di dare il massimo.</p>
     </div>
-    <div class="tgrid" id="tgrid"></div>
+    <div class="tgrid" id="tgrid">
+  <article class="tcard feature" data-cursor="hov">
+    <div class="tim"><img src="assets/img/decon.webp" alt="Massaggio decontratturante" loading="lazy" decoding="async" width="1600" height="1063" sizes="(max-width:620px) 92vw, (max-width:1100px) 46vw, 640px"></div>
+    <div class="tbody"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 14c0-4 3-8 7-8 1.5 0 2.5.8 2.5 2 0 1.6-2 2-2 3.5 0 1 1 1.5 2.5 1.5 2.5 0 4 1.5 4 3.5 0 2.5-3 4.5-7 4.5S5 18 5 14z"></path></svg></div>
+    <span class="tn">01</span>
+    <h3>Massaggio decontratturante</h3><p>Scioglie le tensioni muscolari e migliora la mobilità.</p>
+    <ul><li>Riduce contratture e punti di tensione</li><li>Restituisce mobilità a collo, schiena e spalle</li><li>Allevia i dolori da sovraccarico</li></ul>
+    <div class="tp"><div><span>30 MIN</span><b>30€</b></div><div><span>60 MIN</span><b>55€</b></div></div></div>
+  </article>
+  <article class="tcard feature" data-cursor="hov">
+    <div class="tim"><img src="assets/img/sport.webp" alt="Massaggio sportivo" loading="lazy" decoding="async" width="1600" height="1063" sizes="(max-width:620px) 92vw, (max-width:1100px) 46vw, 640px"></div>
+    <div class="tbody"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="4.5" r="2"></circle><path d="M6 21l3.5-6 3 2.5V22M9.5 15l1.5-6 4 2.5 3 .5M11 9l-3 1-2 3"></path></svg></div>
+    <span class="tn">02</span>
+    <h3>Massaggio sportivo</h3><p>Prima e dopo l'attività fisica: migliora prestazioni e recupero.</p>
+    <ul><li>Prepara i muscoli allo sforzo</li><li>Accelera il recupero</li><li>Aiuta a prevenire sovraccarichi</li></ul>
+    <div class="tp"><div><span>30 MIN</span><b>30€</b></div><div><span>60 MIN</span><b>55€</b></div></div></div>
+  </article>
+  <article class="tcard" data-cursor="hov">
+    <div class="tim"><img src="assets/img/relax.webp" alt="Rilassante e antistress" loading="lazy" decoding="async" width="1600" height="1063" sizes="(max-width:620px) 92vw, (max-width:1100px) 46vw, 320px"></div>
+    <div class="tbody"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19c-3-2-4.5-5-4.5-8 0-2 2-4.5 4.5-6.5 2.5 2 4.5 4.5 4.5 6.5 0 3-1.5 6-4.5 8z"></path><path d="M12 19c-4 0-8-2-9-6 2.5-.5 4.5 0 6 1M12 19c4 0 8-2 9-6-2.5-.5-4.5 0-6 1"></path></svg></div>
+    <span class="tn">03</span>
+    <h3>Rilassante e antistress</h3><p>Riduce lo stress e favorisce il benessere psicofisico.</p>
+    <ul><li>Abbassa tensione nervosa e ansia</li><li>Favorisce un sonno più profondo</li><li>Sensazione di leggerezza</li></ul>
+    <div class="tp"><div><span>30 MIN</span><b>30€</b></div><div><span>60 MIN</span><b>55€</b></div></div></div>
+  </article>
+  <article class="tcard" data-cursor="hov">
+    <div class="tim"><img src="assets/img/cervi.webp" alt="Cervico lombare" loading="lazy" decoding="async" width="1600" height="1063" sizes="(max-width:620px) 92vw, (max-width:1100px) 46vw, 320px"></div>
+    <div class="tbody"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5v19"></path><rect x="9" y="4" width="6" height="3" rx="1.2"></rect><rect x="8.5" y="9" width="7" height="3" rx="1.2"></rect><rect x="9" y="14" width="6" height="3" rx="1.2"></rect></svg></div>
+    <span class="tn">04</span>
+    <h3>Cervico lombare</h3><p>Allevia dolori e tensioni a collo, spalle e zona lombare.</p>
+    <ul><li>Scioglie la rigidità di collo e trapezi</li><li>Allenta la zona lombare</li><li>Aiuta postura e movimento</li></ul>
+    <div class="tp"><div><span>30 MIN</span><b>30€</b></div><div><span>60 MIN</span><b>55€</b></div></div></div>
+  </article>
+  <article class="tcard" data-cursor="hov">
+    <div class="tim"><img src="assets/img/linfo.webp" alt="Linfodrenante" loading="lazy" decoding="async" width="1600" height="1063" sizes="(max-width:620px) 92vw, (max-width:1100px) 46vw, 320px"></div>
+    <div class="tbody"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c3 4 6 7.5 6 11a6 6 0 0 1-12 0c0-3.5 3-7 6-11z"></path><path d="M9.5 14.5a2.5 2.5 0 0 0 2.5 2.5"></path></svg></div>
+    <span class="tn">05</span>
+    <h3>Linfodrenante</h3><p>Favorisce il drenaggio dei liquidi e migliora la circolazione.</p>
+    <ul><li>Riduce gonfiore e ritenzione</li><li>Gambe più leggere</li><li>Migliora la circolazione</li></ul>
+    <div class="tp"><div><span>30 MIN</span><b>30€</b></div><div><span>60 MIN</span><b>55€</b></div></div></div>
+  </article>
+  <article class="tcard" data-cursor="hov">
+    <div class="tim"><img src="assets/img/rifle.webp" alt="Riflessologia plantare" loading="lazy" decoding="async" width="1600" height="1063" sizes="(max-width:620px) 92vw, (max-width:1100px) 46vw, 320px"></div>
+    <div class="tbody"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21c-2 0-3-2-3-4 0-3 2-4 2.5-7 .4-2.5 1.5-4.5 3.5-4.5S14 7 13.5 10c-.5 3-1 5 0 7 1 2.5-2.5 4-5.5 4z"></path><circle cx="16" cy="5" r="1.2"></circle><circle cx="18.5" cy="7.5" r="1"></circle><circle cx="19.5" cy="10.5" r=".9"></circle></svg></div>
+    <span class="tn">06</span>
+    <h3>Riflessologia plantare</h3><p>Stimola i punti riflessi dei piedi per l'equilibrio generale.</p>
+    <ul><li>Rilassamento profondo</li><li>Piedi e gambe più leggeri</li><li>Equilibrio e benessere</li></ul>
+    <div class="tp"><div><span>30 MIN</span><b>30€</b></div><div><span>60 MIN</span><b>55€</b></div></div></div>
+  </article>
+  <article class="tcard feature" data-cursor="hov">
+    <div class="tim"><img src="assets/img/coppe.webp" alt="Coppettazione" loading="lazy" decoding="async" width="1600" height="1063" sizes="(max-width:620px) 92vw, (max-width:1100px) 46vw, 640px"></div>
+    <div class="tbody"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9h12l-1.5 9a2 2 0 0 1-2 1.5h-5a2 2 0 0 1-2-1.5z"></path><path d="M8 9V6.5a4 4 0 0 1 8 0V9"></path></svg></div>
+    <span class="tn">07</span>
+    <h3>Coppettazione</h3><p>Tecnica antica per tensioni profonde, circolazione e dolori. Può lasciare segni circolari temporanei.</p>
+    <ul><li>Lavora sulle tensioni ostinate</li><li>Migliora la circolazione locale</li><li>Riduce i dolori muscolari</li></ul>
+    <div class="tp"><div><span>30 MIN</span><b>30€</b></div><div><span>60 MIN</span><b>55€</b></div></div></div>
+  </article>
+  <article class="tcard feature" data-cursor="hov">
+    <div class="tim"><img src="assets/img/altri.webp" alt="Altri massaggi su richiesta" loading="lazy" decoding="async" width="1600" height="1063" sizes="(max-width:620px) 92vw, (max-width:1100px) 46vw, 640px"></div>
+    <div class="tbody"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"></path></svg></div>
+    <span class="tn">08</span>
+    <h3>Altri massaggi su richiesta</h3><p>Ogni corpo è unico, ogni trattamento è su misura: parlane con Kone.</p>
+    <ul><li>Costruito sulle tue esigenze</li><li>Tecniche combinate</li><li>Si concorda insieme</li></ul>
+    <div class="tp"><div><span>30 MIN</span><b>30€</b></div><div><span>60 MIN</span><b>55€</b></div></div></div>
+  </article></div>
     <div class="benefits" aria-label="Benefici">
       <span>Riduce stress e ansia</span><span>Rilassa i muscoli e allevia i dolori</span><span>Migliora la circolazione</span><span>Favorisce il benessere generale</span><span>Migliora il sonno e la qualità di vita</span>
     </div>
@@ -970,7 +1054,7 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
       <button data-t="mass" role="tab">Massaggi</button>
       <button data-t="combo" role="tab">Combo</button>
     </div>
-    <div id="plists"></div>
+    <div id="plists"><div class="plist on" data-l="pt"><div class="prow"><h4>Seduta singola</h4><p>One to one con Kone</p><div class="pv">45<small>€</small></div></div><div class="prow"><h4>Pacchetto 4 sedute</h4><p>One to one</p><div class="pv">170<small>€</small></div></div><div class="prow best"><span class="badge">Più scelto</span><h4>Pacchetto 8 sedute</h4><p>One to one</p><div class="pv">320<small>€</small></div></div><div class="prow"><h4>Pacchetto 12 sedute</h4><p>One to one</p><div class="pv">450<small>€</small></div></div><div class="prow"><h4>Coppia · 1 seduta</h4><p>Due persone, stessa seduta</p><div class="pv">65<small>€</small></div></div><div class="prow"><h4>Coppia · 4 sedute</h4><p>Due persone, stessa seduta</p><div class="pv">260<small>€</small></div></div><div class="prow"><h4>Abbonamento Start</h4><p>4 sedute al mese</p><div class="pv">165<small>€</small><s>/ MESE</s></div></div><div class="prow"><h4>Abbonamento Active</h4><p>8 sedute al mese</p><div class="pv">300<small>€</small><s>/ MESE</s></div></div><div class="prow"><h4>Abbonamento Pro</h4><p>12 sedute al mese</p><div class="pv">420<small>€</small><s>/ MESE</s></div></div><div class="prow"><h4>Abbonamento Elite</h4><p>16 sedute al mese</p><div class="pv">520<small>€</small><s>/ MESE</s></div></div></div><div class="plist" data-l="corsi"><div class="prow"><h4>Ingresso singolo</h4><p>Un corso di gruppo a scelta</p><div class="pv">12<small>€</small></div></div><div class="prow"><h4>Carnet 10 ingressi</h4><p>Valido su tutti i corsi</p><div class="pv">100<small>€</small></div></div><div class="prow"><h4>Mensile 2 corsi a settimana</h4><p>8 ingressi nel mese</p><div class="pv">59<small>€</small><s>/ MESE</s></div></div><div class="prow best"><span class="badge">Più scelto</span><h4>Mensile illimitato</h4><p>Tutti i corsi del mese</p><div class="pv">79<small>€</small></div></div></div><div class="plist" data-l="mass"><div class="prow"><h4>Massaggio 30′</h4><p>Qualsiasi trattamento</p><div class="pv">30<small>€</small></div></div><div class="prow"><h4>Massaggio 60′</h4><p>Qualsiasi trattamento</p><div class="pv">55<small>€</small></div></div><div class="prow"><h4>4 massaggi 60′</h4><p>Pacchetto</p><div class="pv">210<small>€</small></div></div><div class="prow"><h4>8 massaggi 60′</h4><p>Pacchetto</p><div class="pv">400<small>€</small></div></div><div class="prow"><h4>12 massaggi 60′</h4><p>Pacchetto</p><div class="pv">570<small>€</small></div></div><div class="prow"><h4>Abbonamento Relax</h4><p>2 massaggi al mese</p><div class="pv">105<small>€</small><s>/ MESE</s></div></div><div class="prow"><h4>Abbonamento Wellness</h4><p>4 massaggi al mese</p><div class="pv">200<small>€</small><s>/ MESE</s></div></div><div class="prow"><h4>Abbonamento Recovery</h4><p>8 massaggi al mese</p><div class="pv">380<small>€</small><s>/ MESE</s></div></div></div><div class="plist" data-l="combo"><div class="prow"><h4>Combo Bronzo</h4><p>4 PT + 4 massaggi</p><div class="pv">370<small>€</small></div></div><div class="prow best"><span class="badge">Più scelto</span><h4>Combo Argento</h4><p>8 PT + 8 massaggi</p><div class="pv">700<small>€</small></div></div><div class="prow"><h4>Combo Oro</h4><p>12 PT + 12 massaggi</p><div class="pv">990<small>€</small></div></div><div class="prow"><h4>Percorso Essential</h4><p>4 PT + 2 massaggi</p><div class="pv">310<small>€</small></div></div><div class="prow"><h4>Percorso Complete</h4><p>8 PT + 4 massaggi</p><div class="pv">490<small>€</small></div></div><div class="prow"><h4>Percorso Premium</h4><p>12 PT + 4 massaggi</p><div class="pv">650<small>€</small></div></div><div class="prow"><h4>Percorso Total Body</h4><p>12 PT + 8 massaggi</p><div class="pv">820<small>€</small></div></div></div></div>
     <p class="pnote">Prezzi in euro. Per dettagli, disponibilità e percorsi personalizzati scrivi a Kone dall'app.</p>
   </div>
 </section>
@@ -1012,7 +1096,7 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
       </div>
       <div><h5>Studio</h5><a href="#servizi">Personal training</a><a href="#servizi">Corsi di gruppo</a><a href="#massaggi">Massaggi</a><a href="#metodo">Il metodo</a></div>
       <div><h5>Clienti</h5><a href="app.html">Entra nell'app</a><a href="#" data-install>Scarica l'app sul telefono</a><a href="#app">Cosa c'è nell'app</a><a href="#listino">Listino</a></div>
-      <div class="footc"><h5>Contatti</h5><div id="footC"></div></div>
+      <div class="footc"><h5>Contatti</h5><div id="footC"><a href="tel:+393922696468">392 269 6468</a><a href="mailto:konemoctar00@gmail.com">konemoctar00@gmail.com</a><a href="https://instagram.com/konemoctar4" rel="noopener">@konemoctar4</a></div></div>
     </div>
     <div class="giant" aria-hidden="true">Kone Moctar</div>
     <div class="bot"><span>© <span id="yr"></span> Kone Moctar Studio</span><span>Movimento · Cura · Risultati</span></div>
@@ -1144,7 +1228,7 @@ if(!hasG||reduce)document.documentElement.classList.add("no-anim");
 $("#yr").textContent=new Date().getFullYear();
 
 /* ---------- render trattamenti ---------- */
-$("#tgrid").innerHTML=TRATT.map((t,i)=>`
+if(!$("#tgrid").children.length)$("#tgrid").innerHTML=TRATT.map((t,i)=>`
   <article class="tcard${t.f?" feature":""}" data-cursor="hov">
     <div class="tim"><img src="assets/img/${t.img}.webp" alt="${t.n}" loading="lazy" decoding="async" width="1600" height="1063" sizes="(max-width:620px) 92vw, (max-width:1100px) 46vw, ${t.f?"640px":"320px"}"></div>
     <div class="tbody"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${ICONS[t.ic]}</svg></div>
@@ -1163,7 +1247,7 @@ $$(".tcard").forEach(c=>{
 });
 
 /* ---------- render listino ---------- */
-$("#plists").innerHTML=Object.entries(LISTINO).map(([k,rows],i)=>`<div class="plist${i?"":" on"}" data-l="${k}">${rows.map(r=>{
+if(!$("#plists").children.length)$("#plists").innerHTML=Object.entries(LISTINO).map(([k,rows],i)=>`<div class="plist${i?"":" on"}" data-l="${k}">${rows.map(r=>{
   const best=r[3]==="Più scelto",per=r[3]==="/mese";
   return `<div class="prow${best?" best":""}">${best?'<span class="badge">Più scelto</span>':""}<h4>${r[0]}</h4><p>${r[1]}</p><div class="pv">${r[2]}<small>€</small>${per?"<s>/ MESE</s>":""}</div></div>`}).join("")}</div>`).join("");
 function movePill(b){const p=$("#pill"),t=$("#tabs").getBoundingClientRect(),r=b.getBoundingClientRect();
@@ -1323,12 +1407,12 @@ function runLoader(done){
   if(!hasG||reduce){$("#loader").remove();$(".curtain").remove();document.body.classList.remove("locked");done();return}
   const o={v:0},n=$("#lnum");
   const tl=gsap.timeline();
-  tl.to(".lring",{strokeDashoffset:0,duration:1.7,ease:"power2.inOut"})
-    .to(o,{v:100,duration:1.7,ease:"power2.inOut",onUpdate:()=>n.textContent=Math.round(o.v)},0)
+  tl.to(".lring",{strokeDashoffset:0,duration:1.2,ease:"power2.inOut"})
+    .to(o,{v:100,duration:1.2,ease:"power2.inOut",onUpdate:()=>n.textContent=Math.round(o.v)},0)
     .to(".lk",{opacity:1,duration:.5},.5).from(".lk",{x:-50,duration:.8,ease:"expo.out"},.5)
     .to(".lm",{opacity:1,duration:.5},.65).from(".lm",{x:50,duration:.8,ease:"expo.out"},.65)
-    .to(".lmark",{scale:1.15,duration:.4,ease:"power2.in"},1.75)
-    .to(".curtain i",{scaleY:1,duration:.55,stagger:.06,ease:"power3.in"},1.8)
+    .to(".lmark",{scale:1.15,duration:.35,ease:"power2.in"},1.2)
+    .to(".curtain i",{scaleY:1,duration:.5,stagger:.05,ease:"power3.in"},1.25)
     .set("#loader",{display:"none"})
     .set(".curtain i",{transformOrigin:"top"})
     .to(".curtain i",{scaleY:0,duration:.7,stagger:.06,ease:"power3.out",onStart:()=>{document.body.classList.remove("locked");done()}})

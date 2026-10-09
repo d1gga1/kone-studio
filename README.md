@@ -14,6 +14,15 @@ Sito statico in un solo file (`index.html`) + una funzione Netlify facoltativa p
   di `index.html`, nell'oggetto `CONTATTI`. I campi vuoti non vengono mostrati.
 - Animazioni: GSAP + ScrollTrigger + Lenis, salvati in `assets/js/` (nessun CDN esterno).
 
+## SEO e Google Search Console
+
+- Già fatto nel sito: titolo e descrizione per Google, link canonico, anteprima per WhatsApp e social
+  (`assets/og-sito.jpg`), dati strutturati (studio, Kone, servizi con prezzi, FAQ), `sitemap.xml`, `robots.txt`.
+  L'app (`app.html`, `/coach`) ha il tag `noindex`: non compare su Google.
+- Verifica in Search Console: dominio `kone-studio.com` (record TXT nel DNS) oppure prefisso URL con meta tag:
+  il codice va incollato in `index.html` al posto del commento `google-site-verification`.
+- Dopo la verifica: Sitemap → invia `sitemap.xml`; Controllo URL → `https://kone-studio.com/` → Richiedi indicizzazione.
+
 ## Due ingressi separati
 
 | Chi | Indirizzo | Accesso |
