@@ -1,0 +1,7 @@
+User-agent: *
+Disallow:
+
+# Demo privata: togli il cancelletto alle due righe qui sotto
+# per impedire che il sito finisca su Google.
+# User-agent: *
+# Disallow: /
