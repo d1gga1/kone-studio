@@ -95,7 +95,6 @@ main,header,footer{position:relative;z-index:2}
 #loader{position:fixed;inset:0;z-index:150;display:grid;place-items:center;background:var(--ink)}
 #loader .lmark{width:min(46vw,230px)}
 #loader .lring{stroke-dasharray:1571;stroke-dashoffset:1571}
-#loader .lk,#loader .lm{opacity:0}
 #loader .lcount{position:absolute;right:var(--gut);bottom:calc(22px + env(safe-area-inset-bottom,0px));font-family:var(--disp);font-weight:300;font-size:clamp(64px,14vw,180px);line-height:.8;color:var(--txt)}
 #loader .lcount small{font-size:.3em;color:var(--gold);vertical-align:top;margin-left:6px}
 #loader .ltag{position:absolute;left:var(--gut);bottom:calc(30px + env(safe-area-inset-bottom,0px));font-family:var(--disp);letter-spacing:.3em;font-size:12px;color:var(--txt-3);text-transform:uppercase}
@@ -109,7 +108,7 @@ main,header,footer{position:relative;z-index:2}
   border-bottom:1px solid rgba(217,169,60,.12);padding-top:calc(10px + env(safe-area-inset-top,0px));padding-bottom:10px}
 .hdr.hide{transform:translateY(-110%)}
 .brand{display:flex;align-items:center;gap:12px;flex:none}
-.brand svg{width:42px;height:42px;transition:transform .8s var(--ease)}
+.brand svg,.brand img{width:42px;height:42px;border-radius:50%;transition:transform .8s var(--ease)}
 .brand:hover svg{transform:rotate(360deg)}
 .brand b{font-family:var(--disp);font-weight:600;font-size:15px;letter-spacing:.14em;text-transform:uppercase;line-height:1.05}
 .brand b span{display:block;font-weight:400;font-size:10px;letter-spacing:.42em;color:var(--gold)}
@@ -180,7 +179,24 @@ main,header,footer{position:relative;z-index:2}
 .emblem{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
 .emblem .halo{position:absolute;inset:-12%;border-radius:50%;background:radial-gradient(circle,rgba(217,169,60,.3),rgba(217,169,60,.08) 40%,transparent 66%);animation:breathe 4.5s ease-in-out infinite;will-change:transform,opacity}
 @keyframes breathe{0%,100%{opacity:.6;transform:scale(.94)}50%{opacity:1;transform:scale(1.06)}}
-.emblem svg.logo{position:absolute;inset:0;width:100%;height:100%;overflow:visible;transform:translateZ(40px)}
+/* logo originale (immagine), costruito a pezzi e poi mostrato intero */
+.klogo{position:absolute;inset:0;transform:translateZ(40px);-webkit-mask:radial-gradient(circle closest-side,#000 97%,transparent 101%);mask:radial-gradient(circle closest-side,#000 97%,transparent 101%)}
+.klogo .kp,.klogo .kl-shine{position:absolute;inset:0}
+.klogo img{width:100%;height:100%;display:block;-webkit-user-select:none;user-select:none;pointer-events:none;-webkit-user-drag:none}
+.klogo .kl-base{position:absolute;inset:3%;border-radius:50%;background:#000}
+.kp-ring{--a:360deg;-webkit-mask:radial-gradient(circle closest-side,transparent 86%,#000 88%),conic-gradient(#000 var(--a),transparent 0);-webkit-mask-composite:source-in;mask:radial-gradient(circle closest-side,transparent 86%,#000 88%),conic-gradient(#000 var(--a),transparent 0);mask-composite:intersect}
+.kp-man{-webkit-mask:radial-gradient(ellipse 19% 23% at 49% 27%,#000 55%,transparent 100%);mask:radial-gradient(ellipse 19% 23% at 49% 27%,#000 55%,transparent 100%)}
+.kp-bar{clip-path:inset(28% 72% 51% 10%)}
+.kp-km{clip-path:inset(0 18.5% 0 19.5%);-webkit-mask:linear-gradient(180deg,transparent 11%,#000 17%,#000 53.2%,transparent 54.4%);mask:linear-gradient(180deg,transparent 11%,#000 17%,#000 53.2%,transparent 54.4%)}
+.kp-mas{clip-path:inset(25% 6% 48% 77%)}
+.kp-std{clip-path:inset(54% 7% 39% 7%)}
+.kp-tag{clip-path:inset(60.5% 9% 35% 9%)}
+.kp-i1{clip-path:inset(65.5% 69% 20.5% 12%)}
+.kp-i2{clip-path:inset(65.5% 49% 20.5% 31%)}
+.kp-i3{clip-path:inset(65.5% 30.5% 20.5% 51%)}
+.kp-i4{clip-path:inset(65.5% 12% 20.5% 69.5%)}
+.kp-mot{clip-path:inset(79.5% 18% 10% 18%)}
+.klogo .kl-shine{opacity:0;mix-blend-mode:soft-light;background:linear-gradient(105deg,transparent 35%,rgba(255,244,214,.9) 50%,transparent 65%);transform:translateX(-120%)}
 .orbit{position:absolute;inset:-6%;border-radius:50%;border:1px dashed rgba(217,169,60,.28);animation:spin2 40s linear infinite;will-change:transform}
 .orbit.o2{inset:-16%;border-style:solid;border-color:rgba(217,169,60,.1);animation-duration:70s;animation-direction:reverse}
 .orbit i{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--gold-hi);box-shadow:0 0 18px 4px rgba(247,227,161,.7);top:-5px;left:calc(50% - 5px)}
@@ -195,7 +211,7 @@ main,header,footer{position:relative;z-index:2}
 @keyframes drip{to{top:110%}}
 @media (max-width:900px){
   .hero-grid{grid-template-columns:1fr}
-  .emblem-wrap{order:-1;max-width:250px;margin-bottom:-10px}
+  .emblem-wrap{order:-1;max-width:340px;margin-bottom:-10px}
   .hero{padding-top:calc(96px + env(safe-area-inset-top,0px))}
   .hero-meta .hm-r{display:none}
 }
@@ -217,7 +233,7 @@ main,header,footer{position:relative;z-index:2}
 .manifesto .big .w{opacity:.14;transition:opacity .2s;display:inline}
 .manifesto .big .w.g{color:var(--gold)}
 .manifesto .sign{display:flex;align-items:center;gap:18px;margin-top:48px;color:var(--txt-2)}
-.manifesto .sign svg{width:56px;height:56px}
+.manifesto .sign svg,.manifesto .sign img{width:56px;height:56px;border-radius:50%}
 .manifesto .sign b{display:block;font-family:var(--disp);letter-spacing:.14em;text-transform:uppercase;color:var(--txt);font-weight:500}
 
 /* ---------- section heads ---------- */
@@ -418,26 +434,99 @@ main,header,footer{position:relative;z-index:2}
   .float-badge.f1{left:-30px}.float-badge.f2{right:-30px}
 }
 
-/* ---------- listino ---------- */
-.prices{padding:clamp(90px,12vw,160px) 0}
-.tabs{display:inline-flex;flex-wrap:wrap;gap:6px;padding:6px;border-radius:99px;border:1px solid var(--line);position:relative;margin-bottom:40px;max-width:100%}
-.tabs button{position:relative;z-index:1;padding:12px 20px;border-radius:99px;font-family:var(--disp);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--txt-2);transition:color .35s}
-.tabs button.on{color:#0a0906}
-.tabs .pill{position:absolute;z-index:0;border-radius:99px;background:var(--grad);transition:all .5s var(--ease)}
-.plist{display:none}
-.plist.on{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
-.prow{position:relative;padding:26px 24px;border-radius:20px;background:var(--surf);border:1px solid var(--line-soft);display:flex;flex-direction:column;gap:6px;overflow:hidden;transition:transform .5s var(--ease),border-color .4s}
-.prow:hover{transform:translateY(-6px);border-color:rgba(217,169,60,.45)}
-.prow::after{content:"";position:absolute;right:-40px;top:-40px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(217,169,60,.18),transparent 70%)}
-.prow h4{font-size:22px;font-weight:600;line-height:1.1}
-.prow p{color:var(--txt-2);font-size:14.5px}
-.prow .pv{margin-top:14px;font-family:var(--disp);font-size:44px;font-weight:500;line-height:1}
-.prow .pv small{font-size:16px;color:var(--gold);margin-left:4px}
-.prow .pv s{font-size:14px;color:var(--txt-3);margin-left:8px;text-decoration:none;letter-spacing:.1em}
-.prow.best{background:linear-gradient(150deg,#2a210d,#141109 60%);border-color:rgba(217,169,60,.45)}
-.prow .badge{position:absolute;right:18px;top:18px;font-family:var(--disp);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;padding:5px 10px;border-radius:99px;background:var(--gold);color:#0a0906;z-index:1}
-@media (max-width:620px){.tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;border-radius:99px}.tabs::-webkit-scrollbar{display:none}.tabs button{padding:11px 15px;font-size:12px;flex:none}}
-.pnote{margin-top:26px;color:var(--txt-3);font-size:14px}
+/* ---------- listino (tabelle) ---------- */
+.prices{position:relative;padding:clamp(90px,12vw,160px) 0;overflow:hidden}
+.pamb{position:absolute;inset:0;pointer-events:none;z-index:-1}
+.pamb i{position:absolute;width:60vmax;height:60vmax;border-radius:50%;background:radial-gradient(circle,rgba(217,169,60,.13),transparent 62%);left:-20vmax;top:10%;animation:pdrift 18s ease-in-out infinite alternate}
+.pamb i+i{left:auto;right:-25vmax;top:55%;animation-duration:24s;animation-direction:alternate-reverse}
+@keyframes pdrift{to{transform:translate(18vmax,-12vmax) scale(1.15)}}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+.pgrid3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:start;margin-top:22px}
+.ptab{--mx:50%;--my:0%;position:relative;border-radius:22px;background:linear-gradient(180deg,#16140f,#0d0c0a 70%);border:1px solid rgba(217,169,60,.22);overflow:hidden;box-shadow:0 30px 60px -30px rgba(0,0,0,.9);transition:border-color .5s,box-shadow .5s;will-change:transform}
+.ptab::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(420px circle at var(--mx) var(--my),rgba(247,227,161,.10),transparent 60%);opacity:0;transition:opacity .5s;z-index:2}
+.ptab:hover{border-color:rgba(217,169,60,.5);box-shadow:0 40px 80px -30px rgba(0,0,0,.95),0 0 0 1px rgba(217,169,60,.12),0 0 60px -20px rgba(217,169,60,.35)}
+.ptab:hover::before{opacity:1}
+.ptab.combo{margin-top:22px}
+.ptab-h{position:relative;display:flex;align-items:center;gap:14px;padding:20px 24px;background:linear-gradient(100deg,#0a0906 30%,#1b170d);overflow:hidden}
+.ptab-h h3{font-size:clamp(20px,2vw,26px);font-weight:600;letter-spacing:.02em;line-height:1.05}
+.ptab-h h3 small{display:block;font-size:.62em;font-weight:500;color:var(--txt-2);letter-spacing:.12em;margin-top:4px}
+.ptab-h .ph-ic{flex:none;display:grid;place-items:center;width:46px;height:46px;border-radius:14px;color:var(--gold);background:rgba(217,169,60,.1);border:1px solid rgba(217,169,60,.3)}
+.ptab-h .ph-ic+.ph-ic{margin-left:-6px}
+.ptab-h .ph-ic svg{width:26px;height:26px}
+.ptab-h .ph-line{position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--grad);transform-origin:left}
+.ptab-h::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(247,227,161,.16) 50%,transparent 60%);transform:translateX(-100%);animation:psheen 6s 2s ease-in-out infinite}
+@keyframes psheen{0%{transform:translateX(-100%)}30%,100%{transform:translateX(100%)}}
+.ptab-h.dark{justify-content:center;background:#050504}
+.ptab-h.dark h3{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;justify-content:center}
+.ptab-h.dark h3 small{display:inline;font-size:.6em;margin:0}
+.cstar{display:inline-block;width:.95em;height:.95em;color:var(--gold);align-self:center;filter:drop-shadow(0 0 10px rgba(217,169,60,.7))}
+.cstar svg{width:100%;height:100%}
+.ptab-h.goldh{background:var(--grad);background-size:200% 100%;animation:pgold 8s ease-in-out infinite alternate}
+.ptab-h.goldh h3,.ptab-h.goldh h3 small{color:#120e05}
+.ptab-h.goldh .ph-ic{color:#120e05;background:rgba(0,0,0,.1);border-color:rgba(0,0,0,.25)}
+.ptab-h.goldh .ph-line{background:#120e05;opacity:.35}
+@keyframes pgold{to{background-position:100% 0}}
+.ptable{position:relative;z-index:1}
+.pth,.ptr{display:grid;grid-template-columns:var(--cols);align-items:center;gap:10px;padding:0 24px}
+.pth{padding-top:14px;padding-bottom:12px;border-bottom:1px solid rgba(217,169,60,.25);font-family:var(--disp);font-size:12px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.pth span:not(:first-child),.ptr>span:not(:first-child){text-align:right}
+.mini .pth span:not(:first-child):not(:last-child),.mini .pc-c,.combo .pc-d{text-align:center!important}
+.combo .pth span:nth-child(2){text-align:center}
+.ptr{position:relative;min-height:64px;padding-top:12px;padding-bottom:12px;border-bottom:1px solid var(--line-soft);transition:background .45s}
+.ptr:last-child{border-bottom:0}
+.ptr::before{content:"";position:absolute;left:0;top:10%;bottom:10%;width:3px;border-radius:0 3px 3px 0;background:var(--grad);transform:scaleY(0);transition:transform .45s var(--ease)}
+.ptr::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(217,169,60,.13),transparent 70%);opacity:0;transition:opacity .45s;pointer-events:none}
+.ptr:hover::before{transform:scaleY(1)}
+.ptr:hover::after{opacity:1}
+.ptr.hl{background:linear-gradient(90deg,rgba(217,169,60,.12),rgba(217,169,60,.04))}
+.pc-n{display:flex;align-items:center;gap:14px;min-width:0}
+.ri{flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;color:var(--gold);border:1px solid rgba(217,169,60,.28);background:rgba(217,169,60,.06);transition:background .4s,color .4s}
+.ri svg{transition:transform .5s var(--ease)}
+.ri svg{width:18px;height:18px}
+.ri.med{border:0;background:none}.ri.med svg{width:30px;height:30px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.6))}
+.ptr:hover .ri svg{transform:scale(1.15) rotate(-10deg)}
+.ptr:hover .ri:not(.med){background:var(--gold);color:#0a0906}
+.nm{min-width:0}
+.nm b{display:block;font-family:var(--disp);font-weight:500;font-size:15.5px;letter-spacing:.05em;text-transform:uppercase;line-height:1.2;color:var(--txt);transition:transform .45s var(--ease)}
+.nm small{display:block;color:var(--txt-3);font-size:13px;line-height:1.3;margin-top:2px}
+.ptr:hover .nm b{transform:translateX(4px)}
+.pc-p{font-family:var(--disp);white-space:nowrap}
+.pc-p b{font-size:clamp(24px,2.3vw,30px);font-weight:500;font-variant-numeric:tabular-nums;color:var(--txt);transition:color .4s,text-shadow .4s}
+.pc-p small{font-size:15px;color:var(--gold);margin-left:4px}
+.ptr:hover .pc-p b{color:var(--gold-hi);text-shadow:0 0 22px rgba(247,227,161,.45)}
+.pc-c b,.pc-d{font-family:var(--disp);font-size:18px;font-weight:500;font-variant-numeric:tabular-nums;color:var(--txt-2)}
+.pc-d{font-size:15px;letter-spacing:.04em}
+.save{display:inline-flex;align-items:baseline;gap:2px;padding:5px 12px;border-radius:99px;font-family:var(--disp);font-size:16px;font-weight:600;color:#0a0906;background:var(--grad);box-shadow:0 0 24px -6px rgba(217,169,60,.7)}
+.m-only{display:none}
+.mini .pth{font-size:10.5px;letter-spacing:.12em;padding-left:18px;padding-right:18px}
+.mini .ptr{padding-left:18px;padding-right:18px;min-height:58px}
+.mini .ptab-h{padding:16px 18px}
+.mini .ptab-h h3{font-size:clamp(17px,1.5vw,20px)}
+.mini .ptab-h .ph-ic{width:40px;height:40px;border-radius:12px}.mini .ptab-h .ph-ic svg{width:22px;height:22px}
+.mini .nm b{font-size:14px}
+.mini .pc-p b{font-size:24px}
+.mini .ri{width:30px;height:30px}.mini .ri svg{width:16px;height:16px}.mini .ri.med svg{width:26px;height:26px}
+.pfoot{position:relative;z-index:1;margin:0;padding:12px 24px 16px;font-size:12.5px;color:var(--txt-3);border-top:1px solid var(--line-soft)}
+.pvals{display:grid;grid-template-columns:repeat(4,1fr);margin-top:clamp(40px,6vw,70px);border-top:1px solid rgba(217,169,60,.3);border-bottom:1px solid rgba(217,169,60,.3)}
+.pv-i{position:relative;display:flex;align-items:center;gap:16px;padding:26px 22px;font-family:var(--disp);font-size:15px;letter-spacing:.1em;text-transform:uppercase;line-height:1.25;color:var(--txt-2)}
+.pv-i+.pv-i::before{content:"";position:absolute;left:0;top:22%;bottom:22%;width:1px;background:var(--gold);opacity:.5;transform-origin:top}
+.pv-i i{flex:none;width:44px;height:44px;color:var(--gold)}
+.pv-i i svg{width:100%;height:100%;stroke-width:1.4}
+.pcta{text-align:center;margin-top:clamp(50px,7vw,90px)}
+.pcta-t{font-family:var(--disp);font-weight:600;text-transform:uppercase;font-size:clamp(28px,4.4vw,64px);line-height:1.05;letter-spacing:.005em;max-width:1100px;margin:0 auto}
+.pcta-t .w{display:inline-block}
+.pcta-t .shim{background:linear-gradient(100deg,#B98A22 0%,#F7E3A1 20%,#D9A93C 40%,#8A6415 60%,#E8C463 80%,#B98A22 100%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:pshim 5s linear infinite}
+@keyframes pshim{to{background-position:-250% 0}}
+.pcta .cta-row{justify-content:center;margin-top:34px}
+.pcta .pnote{margin-top:22px;color:var(--txt-3);font-size:14px}
+@media (max-width:1100px){.pgrid3{grid-template-columns:1fr 1fr}.pgrid3 .ptab:last-child{grid-column:1/-1}}
+@media (max-width:900px){.pgrid{grid-template-columns:1fr}.pvals{grid-template-columns:1fr 1fr}.pv-i:nth-child(3)::before{display:none}.pv-i:nth-child(n+3){border-top:1px solid var(--line-soft)}}
+@media (max-width:700px){.pgrid3{grid-template-columns:1fr}
+  .combo .ptable{--cols:1.5fr auto auto!important}.combo .pc-d,.combo .pth span:nth-child(2){display:none}.m-only{display:block}
+  .pth,.ptr{padding-left:16px;padding-right:16px;gap:8px}.ptab-h{padding:16px}
+  .pc-n{gap:10px}.ri{width:30px;height:30px}.nm b{font-size:14px}.pc-p b{font-size:24px}.save{font-size:14px;padding:4px 9px}
+  .mini .pth{font-size:9.5px;letter-spacing:.08em;padding-left:14px;padding-right:14px}.mini .ptr{padding-left:14px;padding-right:14px}
+  .pv-i{padding:20px 12px;gap:12px;font-size:13px}.pv-i i{width:36px;height:36px}}
 
 /* ---------- faq ---------- */
 .faq{padding:clamp(80px,10vw,140px) 0}
@@ -643,8 +732,6 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
   <svg class="lmark" viewBox="0 0 600 600">
     <circle cx="300" cy="300" r="250" fill="none" stroke="#1d1a12" stroke-width="10"/>
     <circle class="lring" cx="300" cy="300" r="250" fill="none" stroke="url(#gold)" stroke-width="10" stroke-linecap="round" transform="rotate(-90 300 300)"/>
-    <g class="lk" transform="translate(150 200) scale(1.685)" fill="url(#gold)"><path d="M0,0 H21 V40 L50,0 H74 L40,48 L76,100 H52 L21,55 V100 H0 Z"/></g>
-    <g class="lm" transform="translate(294.9 200) scale(1.685)" fill="url(#gold)"><path d="M0,100 V0 H22 L46,44 L70,0 H92 V100 H71 V38 L52,70 H40 L21,38 V100 Z"/></g>
   </svg>
   <div class="ltag">Movimento · Cura · Risultati</div>
   <div class="lcount"><span id="lnum">0</span><small>%</small></div>
@@ -654,7 +741,7 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
 <!-- ============ HEADER ============ -->
 <header class="hdr" id="hdr">
   <a class="brand" href="#top" data-cursor="hov" aria-label="Kone Moctar Studio, torna su">
-    <svg viewBox="0 0 600 600"><use href="#km"/></svg>
+    <img src="assets/img/logo-km-160.webp" alt="" width="56" height="56" decoding="async">
     <b>Kone Moctar<span>Studio</span></b>
   </a>
   <nav class="nav" aria-label="Sezioni">
@@ -705,32 +792,23 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
       <div class="orbit"><i></i></div><div class="orbit o2"><i></i></div>
       <div class="emblem" id="emblem">
         <div class="halo"></div>
-        <svg class="logo" viewBox="0 0 600 600" role="img" aria-label="Logo Kone Moctar Studio">
-          <defs>
-            <mask id="mKM"><rect width="600" height="600" fill="#000"/>
-              <g transform="translate(157.5 184) scale(1.6)" fill="#fff"><path d="M0,0 H21 V40 L50,0 H74 L40,48 L76,100 H52 L21,55 V100 H0 Z"/><g transform="translate(86 0)"><path d="M0,100 V0 H22 L46,44 L70,0 H92 V100 H71 V38 L52,70 H40 L21,38 V100 Z"/></g></g>
-            </mask>
-          </defs>
-          <circle cx="300" cy="300" r="252" fill="#0A0906"/>
-          <circle class="e-ring" cx="300" cy="300" r="250" fill="none" stroke="url(#gold)" stroke-width="7" stroke-linecap="round" transform="rotate(-90 300 300)" stroke-dasharray="1571" stroke-dashoffset="1571"/>
-          <circle class="e-ring2" cx="300" cy="300" r="228" fill="none" stroke="url(#gold2)" stroke-width="1.6" opacity=".55" transform="rotate(-90 300 300)" stroke-dasharray="1433" stroke-dashoffset="1433"/>
-          <g class="e-bar" fill="url(#gold2)">
-            <rect x="128" y="296" width="86" height="14" rx="3"/><rect x="108" y="278" width="14" height="50" rx="4"/><rect x="89" y="264" width="15" height="78" rx="5"/><rect x="74" y="278" width="11" height="50" rx="4"/>
-          </g>
-          <g transform="translate(444 246) scale(.45)"><g class="e-mass" fill="none" stroke="url(#gold2)" stroke-width="13" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 106C68 84 120 88 158 97"/><circle cx="180" cy="106" r="15"/><path d="M8 132C70 148 140 148 196 128"/><circle cx="58" cy="24" r="17"/><path d="M58 44C46 58 44 76 52 90"/><path d="M56 62C74 74 86 86 94 98"/>
-          </g></g>
-          <g class="e-k"><g transform="translate(157.5 184) scale(1.6)"><path d="M0,0 H21 V40 L50,0 H74 L40,48 L76,100 H52 L21,55 V100 H0 Z" fill="url(#gold)"/></g></g>
-          <g class="e-m"><g transform="translate(295.1 184) scale(1.6)"><path d="M0,100 V0 H22 L46,44 L70,0 H92 V100 H71 V38 L52,70 H40 L21,38 V100 Z" fill="url(#gold)"/></g></g>
-          <g mask="url(#mKM)"><rect class="shine" x="160" y="160" width="150" height="220" fill="url(#shineGrad)"/></g>
-          <g class="e-studio">
-            <rect x="120" y="404" width="150" height="2.4" fill="url(#gold2)"/><rect x="330" y="404" width="150" height="2.4" fill="url(#gold2)"/>
-            <text x="300" y="416" text-anchor="middle" fill="url(#gold2)" font-family="Oswald,sans-serif" font-weight="600" font-size="46" letter-spacing=".34em" dx=".17em">STUDIO</text>
-            <text x="300" y="452" text-anchor="middle" fill="#CBBC97" font-family="Barlow,sans-serif" font-weight="500" font-size="13.5" letter-spacing=".06em">PERSONAL TRAINING &amp; MASSAGGI PROFESSIONALI</text>
-            <rect x="186" y="472" width="228" height="1.4" fill="#5E4A1C"/>
-            <text x="300" y="499" text-anchor="middle" fill="#D9A93C" font-family="Barlow,sans-serif" font-weight="600" font-size="12.5" letter-spacing=".17em">MOVIMENTO · CURA · RISULTATI</text>
-          </g>
-        </svg>
+        <div class="klogo" id="klogo" role="img" aria-label="Logo KM Studio – Personal training e massaggi professionali">
+          <div class="kl-base"></div>
+          <div class="kp kp-ring" aria-hidden="true"><img src="assets/img/logo-km.webp" srcset="assets/img/logo-km-720.webp 720w, assets/img/logo-km.webp 1254w" sizes="(max-width:900px) 340px, 560px" alt="" width="1254" height="1254" decoding="async"></div>
+          <div class="kp kp-man" aria-hidden="true"><img src="assets/img/logo-km.webp" srcset="assets/img/logo-km-720.webp 720w, assets/img/logo-km.webp 1254w" sizes="(max-width:900px) 340px, 560px" alt="" width="1254" height="1254" decoding="async"></div>
+          <div class="kp kp-bar" aria-hidden="true"><img src="assets/img/logo-km.webp" srcset="assets/img/logo-km-720.webp 720w, assets/img/logo-km.webp 1254w" sizes="(max-width:900px) 340px, 560px" alt="" width="1254" height="1254" decoding="async"></div>
+          <div class="kp kp-km" aria-hidden="true"><img src="assets/img/logo-km.webp" srcset="assets/img/logo-km-720.webp 720w, assets/img/logo-km.webp 1254w" sizes="(max-width:900px) 340px, 560px" alt="" width="1254" height="1254" decoding="async"></div>
+          <div class="kp kp-mas" aria-hidden="true"><img src="assets/img/logo-km.webp" srcset="assets/img/logo-km-720.webp 720w, assets/img/logo-km.webp 1254w" sizes="(max-width:900px) 340px, 560px" alt="" width="1254" height="1254" decoding="async"></div>
+          <div class="kp kp-std" aria-hidden="true"><img src="assets/img/logo-km.webp" srcset="assets/img/logo-km-720.webp 720w, assets/img/logo-km.webp 1254w" sizes="(max-width:900px) 340px, 560px" alt="" width="1254" height="1254" decoding="async"></div>
+          <div class="kp kp-tag" aria-hidden="true"><img src="assets/img/logo-km.webp" srcset="assets/img/logo-km-720.webp 720w, assets/img/logo-km.webp 1254w" sizes="(max-width:900px) 340px, 560px" alt="" width="1254" height="1254" decoding="async"></div>
+          <div class="kp kp-i1" aria-hidden="true"><img src="assets/img/logo-km.webp" srcset="assets/img/logo-km-720.webp 720w, assets/img/logo-km.webp 1254w" sizes="(max-width:900px) 340px, 560px" alt="" width="1254" height="1254" decoding="async"></div>
+          <div class="kp kp-i2" aria-hidden="true"><img src="assets/img/logo-km.webp" srcset="assets/img/logo-km-720.webp 720w, assets/img/logo-km.webp 1254w" sizes="(max-width:900px) 340px, 560px" alt="" width="1254" height="1254" decoding="async"></div>
+          <div class="kp kp-i3" aria-hidden="true"><img src="assets/img/logo-km.webp" srcset="assets/img/logo-km-720.webp 720w, assets/img/logo-km.webp 1254w" sizes="(max-width:900px) 340px, 560px" alt="" width="1254" height="1254" decoding="async"></div>
+          <div class="kp kp-i4" aria-hidden="true"><img src="assets/img/logo-km.webp" srcset="assets/img/logo-km-720.webp 720w, assets/img/logo-km.webp 1254w" sizes="(max-width:900px) 340px, 560px" alt="" width="1254" height="1254" decoding="async"></div>
+          <div class="kp kp-mot" aria-hidden="true"><img src="assets/img/logo-km.webp" srcset="assets/img/logo-km-720.webp 720w, assets/img/logo-km.webp 1254w" sizes="(max-width:900px) 340px, 560px" alt="" width="1254" height="1254" decoding="async"></div>
+          <div class="kp kp-full"><img src="assets/img/logo-km.webp" srcset="assets/img/logo-km-720.webp 720w, assets/img/logo-km.webp 1254w" sizes="(max-width:900px) 340px, 560px" alt="KM Studio – Personal training &amp; massaggi professionali" width="1254" height="1254" decoding="async" fetchpriority="high"></div>
+          <div class="kl-shine" aria-hidden="true"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -752,7 +830,7 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
     <div class="eyebrow">Lo studio</div>
     <p class="big" id="manif">Ogni corpo è unico. Per questo qui non esistono <span class="g">schede uguali</span>, massaggi uguali, percorsi uguali. Allenamento e trattamento lavorano <span class="g">insieme</span>: uno costruisce, l'altro ripara. Il risultato è un corpo che si muove meglio, recupera prima e <span class="g">dura di più.</span></p>
     <a class="sign" href="#kone">
-      <svg viewBox="0 0 600 600" aria-hidden="true"><use href="#km"/></svg>
+      <img src="assets/img/logo-km-160.webp" alt="" width="56" height="56" decoding="async">
       <div><b>Kone Moctar</b>Personal trainer &amp; massaggiatore · fondatore dello studio</div>
     </a>
   </div>
@@ -1053,20 +1131,28 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
 
 <!-- ============ LISTINO ============ -->
 <section class="prices" id="listino">
+  <div class="pamb" aria-hidden="true"><i></i><i></i></div>
   <div class="wrap">
     <div class="shead">
       <div><div class="eyebrow">Listino</div><h2><span class="reveal-line"><span>Investi</span></span><span class="reveal-line"><span class="outline">su di te</span></span></h2></div>
-      <p>Pacchetti, abbonamenti e combo pensati per ogni ritmo. Più costanza, meno spendi a seduta.</p>
+      <p>Allena il tuo corpo, rigenera la tua mente. Pacchetti, abbonamenti e combo: più costanza, meno spendi a seduta.</p>
     </div>
-    <div class="tabs" id="tabs" role="tablist">
-      <span class="pill" id="pill"></span>
-      <button class="on" data-t="pt" role="tab">Personal</button>
-      <button data-t="corsi" role="tab">Corsi</button>
-      <button data-t="mass" role="tab">Massaggi</button>
-      <button data-t="combo" role="tab">Combo</button>
+    <div class="pgrid">
+      <article class="ptab"><header class="ptab-h"><span class="ph-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 18.5c.6-5 2.6-9.5 5.6-12.5l2.6 1.6-1.3 2.9 2.3.8c.9-1.8 3.1-2.2 4.4-.8 1.8 1.9 2.9 4.6 3.2 7.4-3.6 2.4-9.4 3.3-16.8.6z"/><path d="M11.5 14.5c1.6-.5 3.2-.4 4.6.3"/></svg></span><h3>Personal training</h3><i class="ph-line"></i></header><div class="ptable" role="table" aria-label="Personal training" style="--cols:1fr auto"><div class="pth" role="row"><span role="columnheader">Servizio</span><span role="columnheader">Prezzo</span></div><div class="ptr" role="row"><span role="cell" class="pc-n"><i class="ri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg></i><span class="nm"><b>1 sessione</b></span></span><span role="cell" class="pc-p"><b data-n="45">45</b><small>€</small></span></div><div class="ptr" role="row"><span role="cell" class="pc-n"><i class="ri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21c-4 0-7-2.7-7-6.5 0-3 2-5 3.5-6.5.3 1.6 1.2 2.6 2.3 3C10.5 7.5 12 5 14.5 3c-.3 3 1.2 4.8 2.5 6.3 1.3 1.5 2 3 2 5.2 0 3.8-3 6.5-7 6.5z"/></svg></i><span class="nm"><b>Pacchetto 4 sessioni</b><small>42,50 € a sessione</small></span></span><span role="cell" class="pc-p"><b data-n="170">170</b><small>€</small></span></div><div class="ptr" role="row"><span role="cell" class="pc-n"><i class="ri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4c3-1.5 6-1 6-1s.5 3-1 6l-6 6-4-4z"/><path d="M9 11l-4 1-2 3 4 .5M13 15l-1 4-3 2-.5-4"/><circle cx="15.5" cy="8.5" r="1.3"/></svg></i><span class="nm"><b>Pacchetto 8 sessioni</b><small>40,00 € a sessione</small></span></span><span role="cell" class="pc-p"><b data-n="320">320</b><small>€</small></span></div><div class="ptr" role="row"><span role="cell" class="pc-n"><i class="ri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8.5 20h7M9.5 17h5"/></svg></i><span class="nm"><b>Pacchetto 12 sessioni</b><small>37,50 € a sessione</small></span></span><span role="cell" class="pc-p"><b data-n="450">450</b><small>€</small></span></div><div class="ptr hl" role="row"><span role="cell" class="pc-n"><i class="ri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8.5" cy="8" r="3"/><circle cx="16.5" cy="8.5" r="2.6"/><path d="M3 19c.5-3.5 2.7-5.5 5.5-5.5S13.5 15.5 14 19M14.5 14c2.7-.3 5.6 1.3 6.5 5"/></svg></i><span class="nm"><b>Allenamento in coppia</b><small>1 seduta (a coppia)</small></span></span><span role="cell" class="pc-p"><b data-n="65">65</b><small>€</small></span></div><div class="ptr hl" role="row"><span role="cell" class="pc-n"><i class="ri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8.5" cy="8" r="3"/><circle cx="16.5" cy="8.5" r="2.6"/><path d="M3 19c.5-3.5 2.7-5.5 5.5-5.5S13.5 15.5 14 19M14.5 14c2.7-.3 5.6 1.3 6.5 5"/></svg></i><span class="nm"><b>Pacchetto 4 sedute</b><small>a coppia</small></span></span><span role="cell" class="pc-p"><b data-n="260">260</b><small>€</small></span></div></div><p class="pfoot">*Prezzo riferito alla singola sessione di allenamento in coppia.</p></article>
+      <article class="ptab"><header class="ptab-h"><span class="ph-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="16" cy="5" r="2"/><path d="M14.5 7.5l-3 4.5 3.5 1.5M3 16.5c3-1.2 6.5-1.6 10-1 2.8.5 5.4.3 8-.6M3 20h18"/><circle cx="6" cy="13" r="1.8"/></svg></span><h3>Massaggio professionale<small>60 minuti</small></h3><i class="ph-line"></i></header><div class="ptable" role="table" aria-label="Massaggio professionale" style="--cols:1fr auto"><div class="pth" role="row"><span role="columnheader">Servizio</span><span role="columnheader">Prezzo</span></div><div class="ptr" role="row"><span role="cell" class="pc-n"><i class="ri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></i><span class="nm"><b>Massaggio 30 minuti</b><small>mezza seduta</small></span></span><span role="cell" class="pc-p"><b data-n="30">30</b><small>€</small></span></div><div class="ptr" role="row"><span role="cell" class="pc-n"><i class="ri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19c0-8 5-13 14-14 0 9-5 14-13 14z"/><path d="M5 19c3-4 6-7 10-9"/></svg></i><span class="nm"><b>Massaggio 60 minuti</b></span></span><span role="cell" class="pc-p"><b data-n="55">55</b><small>€</small></span></div><div class="ptr" role="row"><span role="cell" class="pc-n"><i class="ri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 15l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/></svg></i><span class="nm"><b>Pacchetto 4 massaggi 60 minuti</b><small>52,50 € a massaggio</small></span></span><span role="cell" class="pc-p"><b data-n="210">210</b><small>€</small></span></div><div class="ptr" role="row"><span role="cell" class="pc-n"><i class="ri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21c-4 0-7-2.7-7-6.5 0-3 2-5 3.5-6.5.3 1.6 1.2 2.6 2.3 3C10.5 7.5 12 5 14.5 3c-.3 3 1.2 4.8 2.5 6.3 1.3 1.5 2 3 2 5.2 0 3.8-3 6.5-7 6.5z"/></svg></i><span class="nm"><b>Pacchetto 8 massaggi 60 minuti</b><small>50,00 € a massaggio</small></span></span><span role="cell" class="pc-p"><b data-n="400">400</b><small>€</small></span></div><div class="ptr" role="row"><span role="cell" class="pc-n"><i class="ri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8l4 4 4-7 4 7 4-4-1.5 10h-13z"/><path d="M5.5 21h13"/></svg></i><span class="nm"><b>Pacchetto 12 massaggi 60 minuti</b><small>47,50 € a massaggio</small></span></span><span role="cell" class="pc-p"><b data-n="570">570</b><small>€</small></span></div></div></article>
     </div>
-    <div id="plists"><div class="plist on" data-l="pt"><div class="prow"><h4>Seduta singola</h4><p>One to one con Kone</p><div class="pv">45<small>€</small></div></div><div class="prow"><h4>Pacchetto 4 sedute</h4><p>One to one</p><div class="pv">170<small>€</small></div></div><div class="prow best"><span class="badge">Più scelto</span><h4>Pacchetto 8 sedute</h4><p>One to one</p><div class="pv">320<small>€</small></div></div><div class="prow"><h4>Pacchetto 12 sedute</h4><p>One to one</p><div class="pv">450<small>€</small></div></div><div class="prow"><h4>Coppia · 1 seduta</h4><p>Due persone, stessa seduta</p><div class="pv">65<small>€</small></div></div><div class="prow"><h4>Coppia · 4 sedute</h4><p>Due persone, stessa seduta</p><div class="pv">260<small>€</small></div></div><div class="prow"><h4>Abbonamento Start</h4><p>4 sedute al mese</p><div class="pv">165<small>€</small><s>/ MESE</s></div></div><div class="prow"><h4>Abbonamento Active</h4><p>8 sedute al mese</p><div class="pv">300<small>€</small><s>/ MESE</s></div></div><div class="prow"><h4>Abbonamento Pro</h4><p>12 sedute al mese</p><div class="pv">420<small>€</small><s>/ MESE</s></div></div><div class="prow"><h4>Abbonamento Elite</h4><p>16 sedute al mese</p><div class="pv">520<small>€</small><s>/ MESE</s></div></div></div><div class="plist" data-l="corsi"><div class="prow"><h4>Ingresso singolo</h4><p>Un corso di gruppo a scelta</p><div class="pv">12<small>€</small></div></div><div class="prow"><h4>Carnet 10 ingressi</h4><p>Valido su tutti i corsi</p><div class="pv">100<small>€</small></div></div><div class="prow"><h4>Mensile 2 corsi a settimana</h4><p>8 ingressi nel mese</p><div class="pv">59<small>€</small><s>/ MESE</s></div></div><div class="prow best"><span class="badge">Più scelto</span><h4>Mensile illimitato</h4><p>Tutti i corsi del mese</p><div class="pv">79<small>€</small></div></div></div><div class="plist" data-l="mass"><div class="prow"><h4>Massaggio 30′</h4><p>Qualsiasi trattamento</p><div class="pv">30<small>€</small></div></div><div class="prow"><h4>Massaggio 60′</h4><p>Qualsiasi trattamento</p><div class="pv">55<small>€</small></div></div><div class="prow"><h4>4 massaggi 60′</h4><p>Pacchetto</p><div class="pv">210<small>€</small></div></div><div class="prow"><h4>8 massaggi 60′</h4><p>Pacchetto</p><div class="pv">400<small>€</small></div></div><div class="prow"><h4>12 massaggi 60′</h4><p>Pacchetto</p><div class="pv">570<small>€</small></div></div><div class="prow"><h4>Abbonamento Relax</h4><p>2 massaggi al mese</p><div class="pv">105<small>€</small><s>/ MESE</s></div></div><div class="prow"><h4>Abbonamento Wellness</h4><p>4 massaggi al mese</p><div class="pv">200<small>€</small><s>/ MESE</s></div></div><div class="prow"><h4>Abbonamento Recovery</h4><p>8 massaggi al mese</p><div class="pv">380<small>€</small><s>/ MESE</s></div></div></div><div class="plist" data-l="combo"><div class="prow"><h4>Combo Bronzo</h4><p>4 PT + 4 massaggi</p><div class="pv">370<small>€</small></div></div><div class="prow best"><span class="badge">Più scelto</span><h4>Combo Argento</h4><p>8 PT + 8 massaggi</p><div class="pv">700<small>€</small></div></div><div class="prow"><h4>Combo Oro</h4><p>12 PT + 12 massaggi</p><div class="pv">990<small>€</small></div></div><div class="prow"><h4>Percorso Essential</h4><p>4 PT + 2 massaggi</p><div class="pv">310<small>€</small></div></div><div class="prow"><h4>Percorso Complete</h4><p>8 PT + 4 massaggi</p><div class="pv">490<small>€</small></div></div><div class="prow"><h4>Percorso Premium</h4><p>12 PT + 4 massaggi</p><div class="pv">650<small>€</small></div></div><div class="prow"><h4>Percorso Total Body</h4><p>12 PT + 8 massaggi</p><div class="pv">820<small>€</small></div></div></div></div>
-    <p class="pnote">Prezzi in euro. Per dettagli, disponibilità e percorsi personalizzati scrivi a Kone dall'app.</p>
+    <article class="ptab combo"><header class="ptab-h dark"><h3><em class="cstar" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.8l2.8 6 6.5.7-4.9 4.4 1.4 6.4L12 17l-5.8 3.3 1.4-6.4-4.9-4.4 6.5-.7z"/></svg></em>Pacchetti combo<small>PT + massaggio</small></h3><i class="ph-line"></i></header><div class="ptable" role="table" aria-label="Pacchetti combo" style="--cols:1.2fr 1.2fr .8fr .8fr"><div class="pth" role="row"><span role="columnheader">Pacchetto</span><span role="columnheader">Dettaglio</span><span role="columnheader">Prezzo</span><span role="columnheader">Risparmio</span></div><div class="ptr" role="row"><span role="cell" class="pc-n"><i class="ri med"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 2.5l3 7M16.5 2.5l-3 7" stroke="#3E5C9A" stroke-width="2.6" stroke-linecap="round"/><circle cx="12" cy="15" r="6.2" fill="#C98B4E"/><circle cx="12" cy="15" r="3.8" fill="none" stroke="rgba(0,0,0,.28)" stroke-width="1.2"/></svg></i><span class="nm"><b>Combo Bronzo</b><small><span class="m-only">4 PT + 4 Massaggi 60′</span></small></span></span><span role="cell" class="pc-d">4 PT + 4 Massaggi 60′</span><span role="cell" class="pc-p"><b data-n="370">370</b><small>€</small></span><span role="cell" class="pc-s"><span class="save">−<b data-n="40">40</b> €</span></span></div><div class="ptr" role="row"><span role="cell" class="pc-n"><i class="ri med"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 2.5l3 7M16.5 2.5l-3 7" stroke="#3E5C9A" stroke-width="2.6" stroke-linecap="round"/><circle cx="12" cy="15" r="6.2" fill="#CBD1D9"/><circle cx="12" cy="15" r="3.8" fill="none" stroke="rgba(0,0,0,.28)" stroke-width="1.2"/></svg></i><span class="nm"><b>Combo Argento</b><small><span class="m-only">8 PT + 8 Massaggi 60′</span></small></span></span><span role="cell" class="pc-d">8 PT + 8 Massaggi 60′</span><span role="cell" class="pc-p"><b data-n="700">700</b><small>€</small></span><span role="cell" class="pc-s"><span class="save">−<b data-n="90">90</b> €</span></span></div><div class="ptr" role="row"><span role="cell" class="pc-n"><i class="ri med"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 2.5l3 7M16.5 2.5l-3 7" stroke="#3E5C9A" stroke-width="2.6" stroke-linecap="round"/><circle cx="12" cy="15" r="6.2" fill="#EBC562"/><circle cx="12" cy="15" r="3.8" fill="none" stroke="rgba(0,0,0,.28)" stroke-width="1.2"/></svg></i><span class="nm"><b>Combo Oro</b><small><span class="m-only">12 PT + 12 Massaggi 60′</span></small></span></span><span role="cell" class="pc-d">12 PT + 12 Massaggi 60′</span><span role="cell" class="pc-p"><b data-n="990">990</b><small>€</small></span><span role="cell" class="pc-s"><span class="save">−<b data-n="150">150</b> €</span></span></div></div></article>
+    <div class="pgrid3">
+      <article class="ptab mini"><header class="ptab-h"><span class="ph-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4M7.5 13.5h2M11 13.5h2M14.5 13.5h2M7.5 16.5h2M11 16.5h2"/></svg></span><h3>Abbonamenti mensili<small>Personal training</small></h3><i class="ph-line"></i></header><div class="ptable" role="table" aria-label="Abbonamenti mensili personal training" style="--cols:1.3fr .9fr .9fr"><div class="pth" role="row"><span role="columnheader">Abbonamento</span><span role="columnheader">Sedute/mese</span><span role="columnheader">Prezzo</span></div><div class="ptr" role="row"><span role="cell" class="pc-n"><i class="ri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19c0-8 5-13 14-14 0 9-5 14-13 14z"/><path d="M5 19c3-4 6-7 10-9"/></svg></i><span class="nm"><b>Start</b></span></span><span role="cell" class="pc-c"><b data-n="4">4</b></span><span role="cell" class="pc-p"><b data-n="165">165</b><small>€</small></span></div><div class="ptr" role="row"><span role="cell" class="pc-n"><i class="ri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21c-4 0-7-2.7-7-6.5 0-3 2-5 3.5-6.5.3 1.6 1.2 2.6 2.3 3C10.5 7.5 12 5 14.5 3c-.3 3 1.2 4.8 2.5 6.3 1.3 1.5 2 3 2 5.2 0 3.8-3 6.5-7 6.5z"/></svg></i><span class="nm"><b>Active</b></span></span><span role="cell" class="pc-c"><b data-n="8">8</b></span><span role="cell" class="pc-p"><b data-n="300">300</b><small>€</small></span></div><div class="ptr" role="row"><span role="cell" class="pc-n"><i class="ri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8.5 20h7M9.5 17h5"/></svg></i><span class="nm"><b>Pro</b></span></span><span role="cell" class="pc-c"><b data-n="12">12</b></span><span role="cell" class="pc-p"><b data-n="420">420</b><small>€</small></span></div><div class="ptr" role="row"><span role="cell" class="pc-n"><i class="ri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8l4 4 4-7 4 7 4-4-1.5 10h-13z"/><path d="M5.5 21h13"/></svg></i><span class="nm"><b>Elite</b></span></span><span role="cell" class="pc-c"><b data-n="16">16</b></span><span role="cell" class="pc-p"><b data-n="520">520</b><small>€</small></span></div></div></article>
+      <article class="ptab mini"><header class="ptab-h"><span class="ph-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19c-3-2-4.5-5-4.5-8 0-2 2-4.5 4.5-6.5 2.5 2 4.5 4.5 4.5 6.5 0 3-1.5 6-4.5 8z"/><path d="M12 19c-4 0-8-2-9-6 2.5-.5 4.5 0 6 1M12 19c4 0 8-2 9-6-2.5-.5-4.5 0-6 1"/></svg></span><h3>Abbonamenti mensili<small>Massaggio 60 min</small></h3><i class="ph-line"></i></header><div class="ptable" role="table" aria-label="Abbonamenti mensili massaggio" style="--cols:1.3fr .9fr .9fr"><div class="pth" role="row"><span role="columnheader">Abbonamento</span><span role="columnheader">Massaggi/mese</span><span role="columnheader">Prezzo</span></div><div class="ptr" role="row"><span role="cell" class="pc-n"><i class="ri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19c0-8 5-13 14-14 0 9-5 14-13 14z"/><path d="M5 19c3-4 6-7 10-9"/></svg></i><span class="nm"><b>Relax</b></span></span><span role="cell" class="pc-c"><b data-n="2">2</b></span><span role="cell" class="pc-p"><b data-n="105">105</b><small>€</small></span></div><div class="ptr" role="row"><span role="cell" class="pc-n"><i class="ri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 15l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/></svg></i><span class="nm"><b>Wellness</b></span></span><span role="cell" class="pc-c"><b data-n="4">4</b></span><span role="cell" class="pc-p"><b data-n="200">200</b><small>€</small></span></div><div class="ptr" role="row"><span role="cell" class="pc-n"><i class="ri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21c-4 0-7-2.7-7-6.5 0-3 2-5 3.5-6.5.3 1.6 1.2 2.6 2.3 3C10.5 7.5 12 5 14.5 3c-.3 3 1.2 4.8 2.5 6.3 1.3 1.5 2 3 2 5.2 0 3.8-3 6.5-7 6.5z"/></svg></i><span class="nm"><b>Recovery</b></span></span><span role="cell" class="pc-c"><b data-n="8">8</b></span><span role="cell" class="pc-p"><b data-n="380">380</b><small>€</small></span></div></div></article>
+      <article class="ptab mini"><header class="ptab-h goldh"><span class="ph-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg></span><span class="ph-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="16" cy="5" r="2"/><path d="M14.5 7.5l-3 4.5 3.5 1.5M3 16.5c3-1.2 6.5-1.6 10-1 2.8.5 5.4.3 8-.6M3 20h18"/><circle cx="6" cy="13" r="1.8"/></svg></span><h3>Percorsi mensili combinati<small>PT + massaggio</small></h3><i class="ph-line"></i></header><div class="ptable" role="table" aria-label="Percorsi mensili combinati" style="--cols:1.35fr .6fr .8fr .85fr"><div class="pth" role="row"><span role="columnheader">Percorso</span><span role="columnheader">PT/mese</span><span role="columnheader">Massaggi/mese</span><span role="columnheader">Prezzo</span></div><div class="ptr" role="row"><span role="cell" class="pc-n"><i class="ri med"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 2.5l3 7M16.5 2.5l-3 7" stroke="#3E5C9A" stroke-width="2.6" stroke-linecap="round"/><circle cx="12" cy="15" r="6.2" fill="#C98B4E"/><circle cx="12" cy="15" r="3.8" fill="none" stroke="rgba(0,0,0,.28)" stroke-width="1.2"/></svg></i><span class="nm"><b>Essential</b></span></span><span role="cell" class="pc-c"><b data-n="4">4</b></span><span role="cell" class="pc-c"><b data-n="2">2</b></span><span role="cell" class="pc-p"><b data-n="310">310</b><small>€</small></span></div><div class="ptr" role="row"><span role="cell" class="pc-n"><i class="ri med"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 2.5l3 7M16.5 2.5l-3 7" stroke="#3E5C9A" stroke-width="2.6" stroke-linecap="round"/><circle cx="12" cy="15" r="6.2" fill="#CBD1D9"/><circle cx="12" cy="15" r="3.8" fill="none" stroke="rgba(0,0,0,.28)" stroke-width="1.2"/></svg></i><span class="nm"><b>Complete</b></span></span><span role="cell" class="pc-c"><b data-n="8">8</b></span><span role="cell" class="pc-c"><b data-n="4">4</b></span><span role="cell" class="pc-p"><b data-n="490">490</b><small>€</small></span></div><div class="ptr" role="row"><span role="cell" class="pc-n"><i class="ri med"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 2.5l3 7M16.5 2.5l-3 7" stroke="#3E5C9A" stroke-width="2.6" stroke-linecap="round"/><circle cx="12" cy="15" r="6.2" fill="#EBC562"/><circle cx="12" cy="15" r="3.8" fill="none" stroke="rgba(0,0,0,.28)" stroke-width="1.2"/></svg></i><span class="nm"><b>Premium</b></span></span><span role="cell" class="pc-c"><b data-n="12">12</b></span><span role="cell" class="pc-c"><b data-n="4">4</b></span><span role="cell" class="pc-p"><b data-n="650">650</b><small>€</small></span></div><div class="ptr" role="row"><span role="cell" class="pc-n"><i class="ri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8l4 4 4-7 4 7 4-4-1.5 10h-13z"/><path d="M5.5 21h13"/></svg></i><span class="nm"><b>Total Body</b></span></span><span role="cell" class="pc-c"><b data-n="12">12</b></span><span role="cell" class="pc-c"><b data-n="8">8</b></span><span role="cell" class="pc-p"><b data-n="820">820</b><small>€</small></span></div></div></article>
+    </div>
+    <div class="pvals"><div class="pv-i"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M8.5 12.5l2.2 2.2 4.8-4.8"/></svg></i><span>Programmi<br>personalizzati</span></div><div class="pv-i"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h16M7 17v-3M11 17v-6M15 17V9M19 17v-9"/><path d="M5 11l5-4 3 2 6-5M15 4h4v4"/></svg></i><span>Risultati<br>visibili</span></div><div class="pv-i"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.6 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/></svg></i><span>Benessere<br>totale</span></div><div class="pv-i"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></i><span>Flessibilità<br>orari</span></div></div>
+    <div class="pcta">
+      <p class="pcta-t"><span class="w">Prenditi</span> <span class="w">cura</span> <span class="w">di te.</span> <span class="w shim">Investi</span> <span class="w shim">nel tuo</span> <span class="w shim">benessere.</span></p>
+      <div class="cta-row"><a class="btn gold" href="app.html" data-cursor="big" data-label="Via">Prenota dall'app <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="btn line" href="#contatti" data-cursor="hov">Scrivi a Kone</a></div>
+      <p class="pnote">Prezzi in euro. Studio privato su appuntamento · orari flessibili.</p>
+    </div>
   </div>
 </section>
 
@@ -1102,7 +1188,7 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
   <div class="wrap">
     <div class="fgrid2">
       <div>
-        <a class="brand" href="#top" style="padding:0"><svg viewBox="0 0 600 600" aria-hidden="true"><use href="#km"/></svg><b>Kone Moctar<span>Studio</span></b></a>
+        <a class="brand" href="#top" style="padding:0"><img src="assets/img/logo-km-160.webp" alt="" width="56" height="56" decoding="async"><b>Kone Moctar<span>Studio</span></b></a>
         <p style="color:var(--txt-2);margin-top:18px;max-width:340px">Personal training &amp; massaggi professionali. Movimento, cura, risultati.</p>
       </div>
       <div><h5>Studio</h5><a href="#servizi">Personal training</a><a href="#servizi">Corsi di gruppo</a><a href="#massaggi">Massaggi</a><a href="#metodo">Il metodo</a></div>
@@ -1222,15 +1308,6 @@ const ICONS={
   cup:'<path d="M6 9h12l-1.5 9a2 2 0 0 1-2 1.5h-5a2 2 0 0 1-2-1.5z"/><path d="M8 9V6.5a4 4 0 0 1 8 0V9"/>',
   star:'<path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/>'
 };
-const LISTINO={
-  pt:[["Seduta singola","One to one con Kone",45,""],["Pacchetto 4 sedute","One to one",170,""],["Pacchetto 8 sedute","One to one",320,"Più scelto"],["Pacchetto 12 sedute","One to one",450,""],["Coppia · 1 seduta","Due persone, stessa seduta",65,""],["Coppia · 4 sedute","Due persone, stessa seduta",260,""],
-      ["Abbonamento Start","4 sedute al mese",165,"/mese"],["Abbonamento Active","8 sedute al mese",300,"/mese"],["Abbonamento Pro","12 sedute al mese",420,"/mese"],["Abbonamento Elite","16 sedute al mese",520,"/mese"]],
-  corsi:[["Ingresso singolo","Un corso di gruppo a scelta",12,""],["Carnet 10 ingressi","Valido su tutti i corsi",100,""],["Mensile 2 corsi a settimana","8 ingressi nel mese",59,"/mese"],["Mensile illimitato","Tutti i corsi del mese",79,"Più scelto"]],
-  mass:[["Massaggio 30′","Qualsiasi trattamento",30,""],["Massaggio 60′","Qualsiasi trattamento",55,""],["4 massaggi 60′","Pacchetto",210,""],["8 massaggi 60′","Pacchetto",400,""],["12 massaggi 60′","Pacchetto",570,""],
-        ["Abbonamento Relax","2 massaggi al mese",105,"/mese"],["Abbonamento Wellness","4 massaggi al mese",200,"/mese"],["Abbonamento Recovery","8 massaggi al mese",380,"/mese"]],
-  combo:[["Combo Bronzo","4 PT + 4 massaggi",370,""],["Combo Argento","8 PT + 8 massaggi",700,"Più scelto"],["Combo Oro","12 PT + 12 massaggi",990,""],
-         ["Percorso Essential","4 PT + 2 massaggi",310,""],["Percorso Complete","8 PT + 4 massaggi",490,""],["Percorso Premium","12 PT + 4 massaggi",650,""],["Percorso Total Body","12 PT + 8 massaggi",820,""]]
-};
 
 const $=(s,c=document)=>c.querySelector(s), $$=(s,c=document)=>[...c.querySelectorAll(s)];
 const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -1258,18 +1335,13 @@ $$(".tcard").forEach(c=>{
   c.addEventListener("pointerleave",()=>{c.style.transform=""});
 });
 
-/* ---------- render listino ---------- */
-if(!$("#plists").children.length)$("#plists").innerHTML=Object.entries(LISTINO).map(([k,rows],i)=>`<div class="plist${i?"":" on"}" data-l="${k}">${rows.map(r=>{
-  const best=r[3]==="Più scelto",per=r[3]==="/mese";
-  return `<div class="prow${best?" best":""}">${best?'<span class="badge">Più scelto</span>':""}<h4>${r[0]}</h4><p>${r[1]}</p><div class="pv">${r[2]}<small>€</small>${per?"<s>/ MESE</s>":""}</div></div>`}).join("")}</div>`).join("");
-function movePill(b){const p=$("#pill"),t=$("#tabs").getBoundingClientRect(),r=b.getBoundingClientRect();
-  p.style.left=(r.left-t.left)+"px";p.style.top=(r.top-t.top)+"px";p.style.width=r.width+"px";p.style.height=r.height+"px"}
-$$("#tabs button").forEach(b=>b.addEventListener("click",()=>{
-  $$("#tabs button").forEach(x=>x.classList.toggle("on",x===b));movePill(b);
-  $$(".plist").forEach(l=>l.classList.toggle("on",l.dataset.l===b.dataset.t));
-  if(hasG&&!reduce)gsap.from($$(`.plist.on .prow`),{y:40,opacity:0,duration:.7,stagger:.05,ease:"expo.out"});
-}));
-addEventListener("load",()=>movePill($("#tabs .on")));addEventListener("resize",()=>movePill($("#tabs .on")));
+/* ---------- listino: luce che segue il mouse + leggera inclinazione ---------- */
+if(fine&&!reduce)$$(".ptab").forEach(c=>{
+  c.addEventListener("pointermove",e=>{const r=c.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;
+    c.style.setProperty("--mx",x+"px");c.style.setProperty("--my",y+"px");
+    c.style.transform=`perspective(1200px) rotateX(${(y/r.height-.5)*-3.5}deg) rotateY(${(x/r.width-.5)*4.5}deg) translateY(-4px)`});
+  c.addEventListener("pointerleave",()=>{c.style.transition="transform .8s cubic-bezier(.16,.84,.3,1),border-color .5s,box-shadow .5s";c.style.transform="";setTimeout(()=>c.style.transition="",800)});
+});
 
 /* ---------- contatti ---------- */
 const CI={
@@ -1399,20 +1471,35 @@ if("serviceWorker" in navigator&&location.protocol.startsWith("http"))addEventLi
    ANIMAZIONI (GSAP)
    ========================================================= */
 function heroIn(){
-  if(!hasG||reduce){$$(".e-ring,.e-ring2").forEach(r=>r.style.strokeDashoffset=0);return}
+  if(!hasG||reduce)return;
   const tl=gsap.timeline({defaults:{ease:"expo.out"}});
   tl.from(".hero h1 .ch",{yPercent:120,rotate:8,duration:1.3,stagger:.025})
     .from(".h-in",{y:30,opacity:0,duration:1,stagger:.1},"-=.9")
-    .to(".e-ring",{strokeDashoffset:0,duration:1.6,ease:"power2.inOut"},0)
-    .to(".e-ring2",{strokeDashoffset:0,duration:1.6,ease:"power2.inOut"},.15)
-    .from(".e-k",{x:-160,opacity:0,rotateY:-70,duration:1.1,transformOrigin:"30% 50%"},.5)
-    .from(".e-m",{x:160,opacity:0,rotateY:70,duration:1.1,transformOrigin:"70% 50%"},.6)
-    .from(".e-bar",{scale:.4,opacity:0,duration:.9,ease:"back.out(2)",transformOrigin:"22% 50%"},1)
-    .from(".e-mass",{scale:.4,opacity:0,duration:.9,ease:"back.out(2)",transformOrigin:"50% 50%"},1.1)
-    .from(".e-studio",{opacity:0,y:20,duration:1},1.2)
     .from(".orbit",{scale:.6,opacity:0,duration:1.6,stagger:.15},.2)
     .from(".hdr",{y:-80,opacity:0,duration:1,clearProps:"transform,opacity"},.3)
-    .from(".hero-meta",{opacity:0,duration:1},1);
+    .from(".hero-meta",{opacity:0,duration:1},1)
+    .add(buildLogo(),0);
+}
+/* costruzione del logo: ogni pezzo è un ritaglio dell'immagine originale;
+   alla fine compare l'immagine intera, identica al file del logo */
+function buildLogo(){
+  const L="#klogo ",tl=gsap.timeline({defaults:{ease:"expo.out"}});
+  gsap.set(L+".kp-full",{opacity:0});
+  gsap.set(L+".kp:not(.kp-full)",{display:"block"});
+  tl.from(L+".kl-base",{scale:.8,opacity:0,duration:1,ease:"power3.out"},0)
+    .fromTo(L+".kp-ring",{"--a":"0deg"},{"--a":"360deg",duration:1.7,ease:"power2.inOut"},.1)
+    .from(L+".kp-man",{opacity:0,y:24,filter:"brightness(0) blur(10px)",duration:1.4,ease:"power2.out"},.55)
+    .fromTo(L+".kp-km",{clipPath:"inset(0% 49.5% 0% 50.5%)",filter:"brightness(2.2)"},{clipPath:"inset(0% 18.5% 0% 19.5%)",filter:"brightness(1)",duration:1.2,ease:"expo.inOut"},.85)
+    .from(L+".kp-bar",{xPercent:-22,opacity:0,duration:1,ease:"back.out(1.6)"},1.35)
+    .fromTo(L+".kp-mas",{clipPath:"inset(25% 23% 48% 77%)"},{clipPath:"inset(25% 6% 48% 77%)",duration:1.3,ease:"power2.inOut"},1.45)
+    .fromTo(L+".kp-std",{clipPath:"inset(54% 50% 39% 50%)"},{clipPath:"inset(54% 7% 39% 7%)",duration:1,ease:"expo.inOut"},1.75)
+    .from(L+".kp-tag",{opacity:0,y:10,duration:.8},2.05)
+    .from(L+".kp-i1,"+L+".kp-i2,"+L+".kp-i3,"+L+".kp-i4",{opacity:0,y:22,duration:.8,stagger:.1,ease:"back.out(1.8)"},2.2)
+    .from(L+".kp-mot",{opacity:0,duration:.8,ease:"power2.out"},2.6)
+    .to(L+".kp-full",{opacity:1,duration:.5,ease:"none",onComplete:()=>gsap.set(L+".kp:not(.kp-full)",{display:"none",clearProps:"filter,transform,clipPath,opacity"})},3.15)
+    .fromTo(L+".kl-shine",{opacity:1,xPercent:-120},{xPercent:120,duration:1.3,ease:"power2.inOut"},3.2)
+    .set(L+".kl-shine",{opacity:0},4.5);
+  return tl;
 }
 
 function runLoader(done){
@@ -1421,14 +1508,44 @@ function runLoader(done){
   const tl=gsap.timeline();
   tl.to(".lring",{strokeDashoffset:0,duration:1.2,ease:"power2.inOut"})
     .to(o,{v:100,duration:1.2,ease:"power2.inOut",onUpdate:()=>n.textContent=Math.round(o.v)},0)
-    .to(".lk",{opacity:1,duration:.5},.5).from(".lk",{x:-50,duration:.8,ease:"expo.out"},.5)
-    .to(".lm",{opacity:1,duration:.5},.65).from(".lm",{x:50,duration:.8,ease:"expo.out"},.65)
     .to(".lmark",{scale:1.15,duration:.35,ease:"power2.in"},1.2)
     .to(".curtain i",{scaleY:1,duration:.5,stagger:.05,ease:"power3.in"},1.25)
     .set("#loader",{display:"none"})
     .set(".curtain i",{transformOrigin:"top"})
     .to(".curtain i",{scaleY:0,duration:.7,stagger:.06,ease:"power3.out",onStart:()=>{document.body.classList.remove("locked");done()}})
     .set(".curtain",{display:"none"});
+}
+
+/* ---------- listino: motion delle tabelle ---------- */
+function priceFx(){
+  const fmt=n=>Math.round(n).toLocaleString("it-IT");
+  const count=(els,d,st)=>els.forEach((b,i)=>{const n=+b.dataset.n,o={v:0};b.textContent="0";
+    gsap.to(o,{v:n,duration:d,delay:st*i,ease:"power3.out",onUpdate:()=>b.textContent=fmt(o.v),onComplete:()=>b.textContent=fmt(n)})});
+  $$(".ptab").forEach(card=>{
+    const rows=$$(".ptr",card),tl=gsap.timeline({scrollTrigger:{trigger:card,start:"top 84%"},defaults:{ease:"expo.out"}});
+    gsap.set(card,{transformPerspective:1200,transformOrigin:"50% 0%"});
+    tl.from(card,{y:90,rotateX:-16,opacity:0,duration:1.2,clearProps:"transform,opacity"})
+      .from($$(".ph-ic",card),{scale:0,rotate:-120,duration:1,stagger:.08,ease:"back.out(2.2)"},.15)
+      .from($(".ptab-h h3",card),{x:-30,opacity:0,duration:1},.2)
+      .fromTo($(".ph-line",card),{scaleX:0},{scaleX:1,duration:1.3,ease:"power3.inOut"},.25)
+      .from($$(".pth span",card),{y:12,opacity:0,duration:.7,stagger:.06},.45)
+      .fromTo(rows,{clipPath:"inset(0 100% 0 0)",x:-24},{clipPath:"inset(0 0% 0 0)",x:0,duration:1,stagger:.08,ease:"power4.out",clearProps:"clipPath,transform"},.55)
+      .from($$(".ri",card),{scale:0,rotate:-90,duration:.8,stagger:.08,ease:"back.out(2.5)"},.7)
+      .add(()=>count($$(".pc-p b,.pc-c b",card),1.4,.06),.7)
+      .from($$(".save",card),{scale:0,rotate:-12,duration:1.1,stagger:.12,ease:"elastic.out(1,.5)"},1.1)
+      .add(()=>count($$(".save b",card),1.2,.12),1.1);
+    const pf=$(".pfoot",card);if(pf)tl.from(pf,{opacity:0,y:10,duration:.8},1.2);
+  });
+  /* valori */
+  const vt=gsap.timeline({scrollTrigger:{trigger:".pvals",start:"top 88%"}});
+  $$(".pv-i path,.pv-i rect,.pv-i circle").forEach(p=>{p.setAttribute("pathLength","1");p.style.strokeDasharray="1";p.style.strokeDashoffset="1"});
+  vt.from(".pv-i span",{y:20,opacity:0,duration:.9,stagger:.1,ease:"expo.out"},0)
+    .to(".pv-i path,.pv-i rect,.pv-i circle",{strokeDashoffset:0,duration:1.4,stagger:.04,ease:"power2.inOut"},0)
+    .from(".pv-i i",{scale:.6,rotate:-20,duration:1,stagger:.1,ease:"back.out(2)"},0);
+  gsap.from(".pvals",{clipPath:"inset(0 50% 0 50%)",duration:1.4,ease:"expo.inOut",clearProps:"clipPath",scrollTrigger:{trigger:".pvals",start:"top 90%"}});
+  /* frase finale */
+  gsap.from(".pcta-t .w",{yPercent:120,rotate:6,opacity:0,duration:1.2,stagger:.07,ease:"expo.out",scrollTrigger:{trigger:".pcta",start:"top 85%"}});
+  gsap.from(".pcta .cta-row>*,.pcta .pnote",{y:24,opacity:0,duration:1,stagger:.1,ease:"expo.out",scrollTrigger:{trigger:".pcta .cta-row",start:"top 92%"}});
 }
 
 function scrollFx(){
@@ -1523,7 +1640,7 @@ function scrollFx(){
   });
 
   /* listino */
-  gsap.from(".plist.on .prow",{y:60,opacity:0,stagger:.06,duration:1,ease:"expo.out",scrollTrigger:{trigger:"#plists",start:"top 85%"}});
+  priceFx();
   /* faq */
   gsap.from(".qa",{y:30,opacity:0,stagger:.07,duration:.9,ease:"expo.out",scrollTrigger:{trigger:"#faq",start:"top 85%"}});
   /* finale */
