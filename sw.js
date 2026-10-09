@@ -1,10 +1,10 @@
 /* KM Studio - service worker
    Cache della shell: sito e app si aprono anche senza rete.
    Cambia CACHE a ogni pubblicazione per forzare l'aggiornamento. */
-const CACHE = "km-studio-v3";
+const CACHE = "km-studio-v5";
 const SHELL = ["/", "/index.html", "/app.html", "/manifest.webmanifest", "/favicon.svg",
   "/favicon-32.png", "/assets/icon-192.png", "/assets/icon-512.png", "/assets/apple-touch-icon.png",
-  "/assets/js/gsap.min.js", "/assets/js/ScrollTrigger.min.js", "/assets/js/lenis.min.js"];
+  "/assets/js/gsap.min.js", "/assets/js/ScrollTrigger.min.js", "/assets/js/lenis.min.js", "/assets/img/kone.webp"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));

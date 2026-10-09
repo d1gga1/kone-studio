@@ -10,6 +10,11 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="KM Studio">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Kone Moctar Studio — Movimento · Cura · Risultati">
 <meta property="og:description" content="Personal training one to one, corsi di gruppo e massaggi professionali. E un'app tutta tua per schede, allenamenti e chat con Kone.">
@@ -53,20 +58,20 @@ section{position:relative}
 
 /* ---------- grain + canvas ---------- */
 #dust{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
-.grain{position:fixed;inset:-50%;z-index:90;pointer-events:none;opacity:.07;
+.grain{position:fixed;inset:0;z-index:90;pointer-events:none;opacity:.06;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation:grain 1s steps(6) infinite}
+}
 @keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-8%,4%)}40%{transform:translate(5%,-6%)}60%{transform:translate(-4%,9%)}80%{transform:translate(9%,2%)}100%{transform:translate(0,0)}}
 main,header,footer{position:relative;z-index:2}
 
 /* ---------- cursor ---------- */
-.cur,.cur-dot{position:fixed;left:0;top:0;z-index:200;pointer-events:none;border-radius:50%;transform:translate(-50%,-50%)}
-.cur{width:38px;height:38px;border:1px solid rgba(217,169,60,.7);display:grid;place-items:center;
-  transition:width .35s var(--ease),height .35s var(--ease),background .35s,border-color .35s;mix-blend-mode:normal}
-.cur span{font-family:var(--disp);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#000;opacity:0;transition:opacity .2s}
-.cur.big{width:86px;height:86px;background:var(--gold);border-color:var(--gold)}
+.cur,.cur-dot{position:fixed;left:0;top:0;z-index:200;pointer-events:none;border-radius:50%;will-change:transform}
+.cur{width:38px;height:38px;display:grid;place-items:center}
+.cur::before{content:"";position:absolute;inset:0;border-radius:50%;border:1px solid rgba(217,169,60,.7);transition:transform .35s var(--ease),background .35s,border-color .35s}
+.cur span{position:relative;font-family:var(--disp);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#000;opacity:0;transition:opacity .2s}
+.cur.big::before{transform:scale(2.26);background:var(--gold);border-color:var(--gold)}
 .cur.big span{opacity:1}
-.cur.hov{width:62px;height:62px;background:rgba(217,169,60,.12)}
+.cur.hov::before{transform:scale(1.63);background:rgba(217,169,60,.12)}
 .cur-dot{width:5px;height:5px;background:var(--gold-hi)}
 @media (hover:none),(pointer:coarse){.cur,.cur-dot{display:none}}
 
@@ -84,7 +89,7 @@ main,header,footer{position:relative;z-index:2}
 /* ---------- header ---------- */
 .hdr{position:fixed;top:0;left:0;right:0;z-index:60;padding:calc(14px + env(safe-area-inset-top,0px)) var(--gut) 14px;
   display:flex;align-items:center;gap:24px;transition:background .4s,backdrop-filter .4s,transform .5s var(--ease),padding .4s}
-.hdr.solid{background:rgba(8,8,10,.72);-webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%);
+.hdr.solid{background:rgba(8,8,10,.92);
   border-bottom:1px solid rgba(217,169,60,.12);padding-top:calc(10px + env(safe-area-inset-top,0px));padding-bottom:10px}
 .hdr.hide{transform:translateY(-110%)}
 .brand{display:flex;align-items:center;gap:12px;flex:none}
@@ -101,7 +106,8 @@ main,header,footer{position:relative;z-index:2}
   font-family:var(--disp);font-weight:600;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#0a0906;
   padding:12px 20px 12px 16px;border-radius:99px;background:var(--grad);background-size:200% 100%;
   box-shadow:0 10px 30px -10px rgba(217,169,60,.7),inset 0 1px 0 rgba(255,255,255,.5);
-  transition:background-position .6s var(--ease),transform .3s;animation:goldflow 5s linear infinite}
+  transition:background-position .6s var(--ease),transform .3s}
+.app-btn:hover{background-position:100% 0}
 .app-btn:hover{transform:translateY(-2px)}
 .app-btn .pulse{position:relative;width:9px;height:9px;border-radius:50%;background:#0a0906}
 .app-btn .pulse::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:2px solid #0a0906;animation:ping 1.8s ease-out infinite}
@@ -128,8 +134,9 @@ main,header,footer{position:relative;z-index:2}
 .hero-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .hero-bg .sun{position:absolute;width:120vmax;height:120vmax;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;
   background:conic-gradient(from 0deg,transparent 0 20%,rgba(217,169,60,.13) 30%,transparent 42%,transparent 60%,rgba(247,227,161,.08) 72%,transparent 85%);
-  animation:spin 26s linear infinite;filter:blur(30px)}
-.hero-bg .glow{position:absolute;width:70vmax;height:70vmax;right:-14vmax;top:-10vmax;border-radius:50%;background:radial-gradient(circle,rgba(217,169,60,.22),transparent 62%);filter:blur(10px)}
+  animation:spin 40s linear infinite;will-change:transform;
+  -webkit-mask-image:radial-gradient(circle,#000 10%,transparent 62%);mask-image:radial-gradient(circle,#000 10%,transparent 62%)}
+.hero-bg .glow{position:absolute;width:70vmax;height:70vmax;right:-14vmax;top:-10vmax;border-radius:50%;background:radial-gradient(circle,rgba(217,169,60,.22),transparent 62%)}
 .hero-bg .lines{position:absolute;inset:0;background-image:linear-gradient(rgba(217,169,60,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(217,169,60,.06) 1px,transparent 1px);
   background-size:80px 80px;mask-image:radial-gradient(ellipse 70% 60% at 60% 45%,#000 20%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse 70% 60% at 60% 45%,#000 20%,transparent 75%)}
 @keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
@@ -155,10 +162,10 @@ main,header,footer{position:relative;z-index:2}
 .btn:hover svg{transform:translateX(4px) rotate(-45deg)}
 .emblem-wrap{position:relative;aspect-ratio:1;width:100%;max-width:560px;justify-self:center;perspective:1200px}
 .emblem{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
-.emblem .halo{position:absolute;inset:-12%;border-radius:50%;background:radial-gradient(circle,rgba(217,169,60,.32),rgba(217,169,60,.06) 45%,transparent 68%);filter:blur(24px);animation:breathe 4.5s ease-in-out infinite}
+.emblem .halo{position:absolute;inset:-12%;border-radius:50%;background:radial-gradient(circle,rgba(217,169,60,.3),rgba(217,169,60,.08) 40%,transparent 66%);animation:breathe 4.5s ease-in-out infinite;will-change:transform,opacity}
 @keyframes breathe{0%,100%{opacity:.6;transform:scale(.94)}50%{opacity:1;transform:scale(1.06)}}
 .emblem svg.logo{position:absolute;inset:0;width:100%;height:100%;overflow:visible;transform:translateZ(40px)}
-.orbit{position:absolute;inset:-6%;border-radius:50%;border:1px dashed rgba(217,169,60,.28);animation:spin2 40s linear infinite}
+.orbit{position:absolute;inset:-6%;border-radius:50%;border:1px dashed rgba(217,169,60,.28);animation:spin2 40s linear infinite;will-change:transform}
 .orbit.o2{inset:-16%;border-style:solid;border-color:rgba(217,169,60,.1);animation-duration:70s;animation-direction:reverse}
 .orbit i{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--gold-hi);box-shadow:0 0 18px 4px rgba(247,227,161,.7);top:-5px;left:calc(50% - 5px)}
 .orbit.o2 i{width:6px;height:6px;top:calc(50% - 3px);left:-3px}
@@ -180,9 +187,9 @@ main,header,footer{position:relative;z-index:2}
 /* ---------- marquee ---------- */
 .marquees{padding:40px 0;overflow:hidden}
 .mq{display:flex;white-space:nowrap;transform:rotate(-2.2deg);margin:0 -5vw;padding:16px 0}
-.mq.a{background:var(--grad);background-size:200% 100%;animation:goldflow 8s linear infinite;color:#0a0906;box-shadow:0 20px 60px -20px rgba(217,169,60,.5)}
+.mq.a{background:var(--grad);color:#0a0906;box-shadow:0 20px 60px -20px rgba(217,169,60,.5)}
 .mq.b{transform:rotate(1.6deg);margin-top:-6px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--ink)}
-.mq-track{display:flex;flex:none;will-change:transform}
+.mq-track{display:flex;flex:none;will-change:transform;backface-visibility:hidden}
 .mq-track span{font-family:var(--disp);font-weight:700;font-size:clamp(28px,4.4vw,62px);text-transform:uppercase;letter-spacing:.02em;padding:0 22px;display:inline-flex;align-items:center;gap:44px}
 .mq-track span::after{content:"✦";font-size:.5em}
 .mq.b span{color:transparent;-webkit-text-stroke:1px rgba(217,169,60,.7)}
@@ -383,7 +390,7 @@ main,header,footer{position:relative;z-index:2}
 .days span.s{background:var(--grad);color:#0a0906}
 .days span.s small{color:#3a2c0e}
 .pbtn{margin-top:auto;text-align:center;padding:12px;border-radius:99px;background:var(--grad);color:#0a0906;font-family:var(--disp);letter-spacing:.16em;font-weight:600;text-transform:uppercase}
-.float-badge{position:absolute;padding:10px 14px;border-radius:14px;background:rgba(20,20,24,.85);backdrop-filter:blur(10px);border:1px solid rgba(217,169,60,.3);font-size:13px;display:flex;gap:10px;align-items:center;white-space:nowrap;box-shadow:0 20px 40px -20px #000;z-index:6}
+.float-badge{position:absolute;padding:10px 14px;border-radius:14px;background:rgba(20,20,24,.95);border:1px solid rgba(217,169,60,.3);font-size:13px;display:flex;gap:10px;align-items:center;white-space:nowrap;box-shadow:0 20px 40px -20px #000;z-index:6}
 .float-badge b{font-family:var(--disp);color:var(--gold-hi);font-weight:500}
 .float-badge.f1{left:-70px;top:22%;animation:bob 5s ease-in-out infinite}
 .float-badge.f2{right:-80px;bottom:24%;animation:bob 6s ease-in-out infinite reverse}
@@ -439,7 +446,7 @@ main,header,footer{position:relative;z-index:2}
 .final h2{font-size:clamp(56px,13vw,220px);font-weight:700;line-height:.85}
 .final h2 .outline{-webkit-text-stroke-width:2px}
 .final p{color:var(--txt-2);max-width:560px;margin:30px auto 0;font-size:19px}
-.magnet{display:inline-grid;place-items:center;width:clamp(170px,18vw,230px);aspect-ratio:1;border-radius:50%;margin-top:50px;background:var(--grad);background-size:200% 100%;animation:goldflow 6s linear infinite;
+.magnet{display:inline-grid;place-items:center;width:clamp(170px,18vw,230px);aspect-ratio:1;border-radius:50%;margin-top:50px;background:var(--grad);
   color:#0a0906;font-family:var(--disp);font-weight:600;font-size:15px;letter-spacing:.2em;text-transform:uppercase;line-height:1.4;box-shadow:0 30px 80px -20px rgba(217,169,60,.6);position:relative}
 .magnet::before{content:"";position:absolute;inset:-14px;border-radius:50%;border:1px solid rgba(217,169,60,.4);animation:ring 2.6s ease-out infinite}
 @keyframes ring{0%{transform:scale(.9);opacity:1}100%{transform:scale(1.35);opacity:0}}
@@ -448,14 +455,14 @@ main,header,footer{position:relative;z-index:2}
 
 /* ---------- footer ---------- */
 footer{border-top:1px solid var(--line-soft);padding:60px 0 calc(40px + env(safe-area-inset-bottom,0px))}
-.fgrid2{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px}
+.fgrid2{display:grid;grid-template-columns:1.3fr 1fr 1fr 1.2fr;gap:40px}
 footer h5{font-family:var(--disp);font-weight:500;font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin:0 0 16px}
 footer a{display:block;color:var(--txt-2);padding:4px 0;transition:color .3s}
 footer a:hover{color:var(--gold-hi)}
 footer .giant{font-family:var(--disp);font-weight:700;text-transform:uppercase;font-size:clamp(48px,13.5vw,220px);line-height:.8;margin-top:70px;overflow:hidden;text-align:center;letter-spacing:-.01em;white-space:nowrap;
   background:linear-gradient(180deg,rgba(217,169,60,.55),rgba(217,169,60,0) 90%);-webkit-background-clip:text;background-clip:text;color:transparent}
 footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;margin-top:30px;color:var(--txt-3);font-size:13.5px}
-@media (max-width:760px){.fgrid2{grid-template-columns:1fr}}
+@media (max-width:980px){.fgrid2{grid-template-columns:1fr 1fr}}@media (max-width:560px){.fgrid2{grid-template-columns:1fr}}
 
 /* ---------- popup app ---------- */
 .pop{position:fixed;inset:0;z-index:120;display:grid;place-items:center;padding:20px;visibility:hidden;pointer-events:none}
@@ -491,12 +498,82 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
 
 /* toast install hint */
 .mini-app{position:fixed;right:var(--gut);bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:58;display:flex;align-items:center;gap:10px;padding:10px 16px 10px 10px;border-radius:99px;
-  background:rgba(20,20,24,.88);border:1px solid rgba(217,169,60,.35);backdrop-filter:blur(12px);font-family:var(--disp);font-size:13px;letter-spacing:.12em;text-transform:uppercase;
+  background:rgba(18,18,22,.96);border:1px solid rgba(217,169,60,.35);font-family:var(--disp);font-size:13px;letter-spacing:.12em;text-transform:uppercase;
   transform:translateY(140%);transition:transform .6s var(--ease)}
 .mini-app.on{transform:none}
 .mini-app i{width:34px;height:34px;border-radius:50%;background:var(--grad);display:grid;place-items:center;color:#0a0906}
 .mini-app i svg{width:16px;height:16px}
 
+.off *,.off *::before,.off *::after{animation-play-state:paused!important}
+
+/* ---------- Kone (chi è) ---------- */
+.kone{padding:clamp(40px,8vw,120px) 0 clamp(90px,12vw,160px)}
+.kgrid{display:grid;grid-template-columns:.95fr 1.05fr;gap:clamp(30px,6vw,100px);align-items:center}
+.kphoto{position:relative;aspect-ratio:1216/1786;max-width:520px;width:100%;justify-self:center}
+.kphoto .fr{position:absolute;inset:0;border-radius:26px;overflow:hidden;clip-path:inset(0 0 0 0 round 26px);background:#120f09}
+.kphoto img{width:100%;height:118%;object-fit:cover;object-position:50% 20%;display:block;will-change:transform}
+.kphoto::before{content:"";position:absolute;inset:-14px -14px 14px 14px;border:1px solid rgba(217,169,60,.5);border-radius:30px;z-index:-1}
+.kphoto .shade{position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(8,8,10,.85));pointer-events:none}
+.kphoto .tagk{position:absolute;left:22px;bottom:22px;right:22px;font-family:var(--disp);text-transform:uppercase;letter-spacing:.08em}
+.kphoto .tagk b{display:block;font-size:clamp(28px,3vw,40px);font-weight:700;line-height:1}
+.kphoto .tagk span{font-size:12px;letter-spacing:.28em;color:var(--gold)}
+.kphoto .seal{position:absolute;right:-26px;top:-26px;width:110px;height:110px;animation:spin2 18s linear infinite}
+.kphoto .seal text{font-family:var(--disp);font-size:11.5px;letter-spacing:.32em;fill:var(--gold)}
+.kone h2{font-size:clamp(50px,7.4vw,118px);font-weight:700;margin-top:18px}
+.kone .role{font-family:var(--disp);font-size:clamp(16px,1.6vw,20px);letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-top:14px}
+.kone .quote{font-family:var(--sans);font-style:italic;font-size:clamp(24px,2.6vw,36px);line-height:1.25;margin-top:28px;color:var(--txt)}
+.kone .quote em{color:var(--gold-mid)}
+.kone .txt>p.d{color:var(--txt-2);margin-top:18px;max-width:520px}
+.kbadges{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:30px}
+.kbadges div{padding:16px;border-radius:16px;border:1px solid var(--line);background:var(--surf);font-size:14px;line-height:1.35}
+.kbadges i{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:rgba(217,169,60,.1);color:var(--gold);margin-bottom:10px}
+.kbadges i svg{width:20px;height:20px}
+.kbadges b{display:block;font-family:var(--disp);font-weight:500;text-transform:uppercase;letter-spacing:.04em;font-size:15px}
+@media (max-width:900px){.kgrid{grid-template-columns:1fr}.kphoto{max-width:400px}.kphoto .seal{right:-8px;top:-30px;width:90px;height:90px}}
+@media (max-width:560px){.kbadges{grid-template-columns:1fr}.kbadges div{display:flex;gap:14px;align-items:center}.kbadges i{margin:0;flex:none}}
+
+/* ---------- foto nei trattamenti ---------- */
+.tcard{padding:0}
+.tcard .tbody{padding:22px 22px 24px;display:flex;flex-direction:column;flex:1;position:relative}
+.tcard .tim{position:relative;aspect-ratio:16/11;overflow:hidden;background:#140f08}
+.tcard.feature .tim{aspect-ratio:16/8}
+.tcard .tim img{width:100%;height:100%;object-fit:cover;transform:scale(1.04);transition:transform 1.2s var(--ease),filter .6s;filter:saturate(.95) contrast(1.03)}
+.tcard:hover .tim img{transform:scale(1.12);filter:saturate(1.08) contrast(1.06)}
+.tcard .tim::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,var(--surf) 100%)}
+.tcard.feature .tim::after{background:linear-gradient(180deg,transparent 45%,#1c170c 100%)}
+.tcard .ti{position:absolute;top:-30px;left:22px;z-index:2;background:#16130c}
+.tcard .tn{top:18px;right:18px;z-index:2;color:var(--gold-hi);background:rgba(8,8,10,.6);padding:4px 9px;border-radius:99px}
+.tcard h3{margin-top:30px}
+
+/* ---------- contatti ---------- */
+.cbtn{display:inline-flex;align-items:center;gap:12px;padding:15px 22px;border-radius:99px;border:1px solid rgba(217,169,60,.4);font-family:var(--disp);font-size:14px;letter-spacing:.1em;text-transform:uppercase;transition:all .35s var(--ease)}
+.cbtn svg{width:19px;height:19px;color:var(--gold);transition:color .3s}
+.cbtn:hover{background:var(--gold);color:#0a0906;border-color:var(--gold)}
+.cbtn:hover svg{color:#0a0906}
+.cbtn.wa{background:#1f3d29;border-color:#2f6b43}
+.cbtn.wa svg{color:#7FE0A0}
+.footc a{display:flex;align-items:center;gap:10px}
+.footc svg{width:16px;height:16px;color:var(--gold);flex:none}
+
+/* ---------- installazione app ---------- */
+.dl-btn{display:inline-flex;align-items:center;gap:10px}
+.dl-btn svg{width:18px;height:18px}
+.inst .pop-card{grid-template-columns:1fr;width:min(100%,520px)}
+.inst .pop-l{text-align:left}
+.inst .steps-i{list-style:none;padding:0;margin:22px 0 0;display:grid;gap:12px;counter-reset:s}
+.inst .steps-i li{display:flex;gap:14px;align-items:flex-start;opacity:1;transform:none;font-size:15.5px;color:var(--txt-2)}
+.inst .steps-i li::before{counter-increment:s;content:counter(s);flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--grad);color:#0a0906;font-family:var(--disp);font-weight:600}
+.inst .steps-i b{display:inline;color:var(--txt);font-family:inherit;font-weight:600;text-transform:none;letter-spacing:0;font-size:inherit}
+.inst .steps-i li>span{font-size:15.5px;color:var(--txt-2);display:block}
+.inst .ico-i{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:7px;background:var(--surf-2);vertical-align:middle;margin:0 3px}
+.inst .ico-i svg{width:16px;height:16px;color:#5C9BF0}
+.inst .qr{display:flex;gap:20px;align-items:center;margin-top:22px;padding:16px;border-radius:18px;background:var(--surf);border:1px solid var(--line)}
+.inst .qr svg{width:132px;height:132px;flex:none;border-radius:10px}
+.inst .qr p{margin:0;font-size:14.5px}
+.inst [data-os]{display:none}
+.inst[data-mode="prompt"] [data-os~="prompt"],.inst[data-mode="ios"] [data-os~="ios"],.inst[data-mode="android"] [data-os~="android"],.inst[data-mode="desktop"] [data-os~="desktop"],.inst[data-mode="installed"] [data-os~="installed"]{display:block}
+.inst[data-mode="prompt"] .cta-row[data-os~="prompt"],.inst[data-mode="desktop"] .cta-row[data-os~="desktop"]{display:flex}
+@media (max-width:480px){.inst .qr{flex-direction:column;text-align:center}}
 /* ---------- no-js / reduced ---------- */
 .no-anim #loader,.no-anim .curtain{display:none}
 .no-anim .manifesto .big .w{opacity:1}
@@ -550,7 +627,7 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
     <b>Kone Moctar<span>Studio</span></b>
   </a>
   <nav class="nav" aria-label="Sezioni">
-    <a href="#studio"><span data-t="Studio">Studio</span></a>
+    <a href="#kone"><span data-t="Kone">Kone</span></a>
     <a href="#servizi"><span data-t="Training">Training</span></a>
     <a href="#massaggi"><span data-t="Massaggi">Massaggi</span></a>
     <a href="#metodo"><span data-t="Metodo">Metodo</span></a>
@@ -564,13 +641,14 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
   <button class="burger" id="burger" aria-label="Apri il menu" aria-expanded="false"><i></i><i></i></button>
 </header>
 <nav class="mnav" id="mnav" aria-label="Menu">
-  <a href="#studio"><small>01</small>Studio</a>
+  <a href="#kone"><small>01</small>Kone</a>
   <a href="#servizi"><small>02</small>Training</a>
   <a href="#massaggi"><small>03</small>Massaggi</a>
   <a href="#app"><small>04</small>L'app</a>
   <a href="#listino"><small>05</small>Listino</a>
   <a href="#contatti"><small>06</small>Contatti</a>
   <a class="app-btn" href="app.html"><span class="pulse"></span>Apri la tua App</a>
+  <button class="btn line dl-btn" data-install style="margin-top:12px;align-self:flex-start"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Scarica sul telefono</button>
 </nav>
 
 <main id="top">
@@ -642,9 +720,34 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
   <div class="wrap">
     <div class="eyebrow">Lo studio</div>
     <p class="big" id="manif">Ogni corpo è unico. Per questo qui non esistono <span class="g">schede uguali</span>, massaggi uguali, percorsi uguali. Allenamento e trattamento lavorano <span class="g">insieme</span>: uno costruisce, l'altro ripara. Il risultato è un corpo che si muove meglio, recupera prima e <span class="g">dura di più.</span></p>
-    <div class="sign">
+    <a class="sign" href="#kone">
       <svg viewBox="0 0 600 600" aria-hidden="true"><use href="#km"/></svg>
       <div><b>Kone Moctar</b>Personal trainer &amp; massaggiatore · fondatore dello studio</div>
+    </a>
+  </div>
+</section>
+
+
+<!-- ============ KONE ============ -->
+<section class="kone" id="kone">
+  <div class="wrap kgrid">
+    <div class="kphoto" id="kphoto">
+      <div class="fr"><img src="assets/img/kone.webp" srcset="assets/img/kone-sm.webp 608w, assets/img/kone.webp 1216w" sizes="(max-width:900px) 90vw, 520px" width="1216" height="1786" alt="Kone Moctar durante un massaggio nel suo studio" loading="lazy" decoding="async"><div class="shade"></div></div>
+      <div class="tagk"><span>Il tuo coach</span><b>Kone Moctar</b></div>
+      <svg class="seal" viewBox="0 0 120 120" aria-hidden="true"><defs><path id="cpath" d="M60 60m-46 0a46 46 0 1 1 92 0a46 46 0 1 1-92 0"/></defs><circle cx="60" cy="60" r="58" fill="#0a0906" stroke="url(#gold)" stroke-width="1.5"/><text><textPath href="#cpath">MOVIMENTO · CURA · RISULTATI · </textPath></text><g transform="translate(37 44) scale(.24)" fill="url(#gold)"><path d="M0,0 H21 V40 L50,0 H74 L40,48 L76,100 H52 L21,55 V100 H0 Z"/><g transform="translate(86 0)"><path d="M0,100 V0 H22 L46,44 L70,0 H92 V100 H71 V38 L52,70 H40 L21,38 V100 Z"/></g></g></svg>
+    </div>
+    <div class="txt">
+      <div class="eyebrow">Chi è Kone</div>
+      <h2><span class="reveal-line"><span>Kone</span></span><span class="reveal-line"><span class="gold-txt">Moctar</span></span></h2>
+      <div class="role">Massaggiatore professionale &amp; personal trainer</div>
+      <p class="quote">Ascolta il tuo <em>corpo</em>,<br>ritrova il tuo <em>equilibrio</em>.</p>
+      <p class="d"><b style="color:var(--txt)">Il benessere che meriti. Il corpo che ritrovi.</b> Ogni trattamento e ogni allenamento nascono dall'ascolto: di come stai, di come ti muovi, di dove vuoi arrivare.</p>
+      <div class="kbadges">
+        <div><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></i><span><b>Orari flessibili</b>su appuntamento</span></div>
+        <div><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg></i><span><b>Ambiente riservato</b>e professionale</span></div>
+        <div><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg></i><span><b>Risultati reali</b>persone reali</span></div>
+      </div>
+      <div class="cta-row" id="koneCta"></div>
     </div>
   </div>
 </section>
@@ -800,7 +903,7 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
       <div class="eyebrow">La tua app personale</div>
       <h2>Kone,<br><span class="gold-txt">in tasca.</span></h2>
       <p>Ogni cliente dello studio ha la sua app: la scheda di oggi, i carichi, i progressi, le prenotazioni e una chat diretta con Kone. Si installa sul telefono come un'app vera.</p>
-      <div class="cta-row"><a class="btn gold" href="app.html" data-cursor="big" data-label="Entra">Entra nell'app <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      <div class="cta-row"><a class="btn gold" href="app.html" data-cursor="big" data-label="Entra">Entra nell'app <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><button class="btn line dl-btn" data-install data-cursor="hov"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Scarica sul telefono</button></div>
     </div>
     <div class="phone-wrap">
       <div class="phone" id="phone">
@@ -894,6 +997,7 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
     <h2 style="margin-top:24px"><span class="reveal-line"><span>Il tuo corpo.</span></span><span class="reveal-line"><span class="outline">Il tuo</span></span><span class="reveal-line"><span class="gold-txt">percorso.</span></span></h2>
     <p>Entra nella tua app, prenota la prima seduta o scrivi direttamente a Kone. Il primo passo è il più corto.</p>
     <a class="magnet" id="magnet" href="app.html" data-cursor="hov"><span>Apri<br>la tua app</span></a>
+    <div style="margin-top:26px"><button class="btn line dl-btn" data-install data-cursor="hov"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Scarica l'app sul telefono</button></div>
     <div class="contact-row" id="contactRow"></div>
   </div>
 </section>
@@ -907,7 +1011,8 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
         <p style="color:var(--txt-2);margin-top:18px;max-width:340px">Personal training &amp; massaggi professionali. Movimento, cura, risultati.</p>
       </div>
       <div><h5>Studio</h5><a href="#servizi">Personal training</a><a href="#servizi">Corsi di gruppo</a><a href="#massaggi">Massaggi</a><a href="#metodo">Il metodo</a></div>
-      <div><h5>Clienti</h5><a href="app.html">Entra nell'app</a><a href="#app">Cosa c'è nell'app</a><a href="#listino">Listino</a><a href="#contatti">Contatti</a></div>
+      <div><h5>Clienti</h5><a href="app.html">Entra nell'app</a><a href="#" data-install>Scarica l'app sul telefono</a><a href="#app">Cosa c'è nell'app</a><a href="#listino">Listino</a></div>
+      <div class="footc"><h5>Contatti</h5><div id="footC"></div></div>
     </div>
     <div class="giant" aria-hidden="true">Kone Moctar</div>
     <div class="bot"><span>© <span id="yr"></span> Kone Moctar Studio</span><span>Movimento · Cura · Risultati</span></div>
@@ -931,7 +1036,10 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
       </ul>
       <div class="cta-row">
         <a class="btn gold" href="app.html" data-cursor="big" data-label="Sì!">Sì, voglio l'app <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-        <button class="btn line" data-close>Più tardi</button>
+        <button class="btn line dl-btn" data-install><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Scarica</button>
+      </div>
+      <button data-close style="margin-top:16px;color:var(--txt-3);font-size:14px;text-decoration:underline;text-underline-offset:4px">Più tardi</button>
+      <div style="display:none">
       </div>
     </div>
     <div class="pop-r" aria-hidden="true">
@@ -948,6 +1056,37 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
     </div>
   </div>
 </div>
+
+<!-- ============ INSTALLA APP ============ -->
+<div class="pop inst" id="inst" role="dialog" aria-modal="true" aria-labelledby="instT" aria-hidden="true" data-mode="desktop">
+  <div class="scrim" data-iclose></div>
+  <div class="pop-card">
+    <button class="pop-x" data-iclose aria-label="Chiudi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <div class="pop-l">
+      <div class="eyebrow">Scarica l'app</div>
+      <h3 id="instT">KM Studio<br><span class="gold-txt">sul tuo telefono</span></h3>
+      <p>Si installa in pochi secondi, senza passare dagli store: icona nella schermata Home, apertura a tutto schermo come un'app vera.</p>
+      <div data-os="prompt">
+        <div class="cta-row" data-os="prompt"><button class="btn gold" id="doInstall"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Installa ora</button></div>
+      </div>
+      <ol class="steps-i" data-os="ios">
+        <li><span>Apri questa pagina con <b>Safari</b>.</span></li>
+        <li><span>Tocca il tasto <b>Condividi</b> <span class="ico-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M8 7l4-4 4 4"/><path d="M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg></span> in basso.</span></li>
+        <li><span>Scorri e scegli <b>“Aggiungi alla schermata Home”</b>, poi <b>Aggiungi</b>.</span></li>
+      </ol>
+      <ol class="steps-i" data-os="android">
+        <li><span>Apri questa pagina con <b>Chrome</b>.</span></li>
+        <li><span>Tocca il menu <span class="ico-i"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></span> in alto a destra.</span></li>
+        <li><span>Scegli <b>“Installa app”</b> oppure <b>“Aggiungi a schermata Home”</b>.</span></li>
+      </ol>
+      <div data-os="desktop">
+        <div class="qr"><svg viewBox="0 0 31 31" shape-rendering="crispEdges"><rect width="31" height="31" fill="#F3EFE6"/><path d="M1 1h1v1h-1zM2 1h1v1h-1zM3 1h1v1h-1zM4 1h1v1h-1zM5 1h1v1h-1zM6 1h1v1h-1zM7 1h1v1h-1zM9 1h1v1h-1zM10 1h1v1h-1zM12 1h1v1h-1zM16 1h1v1h-1zM17 1h1v1h-1zM19 1h1v1h-1zM23 1h1v1h-1zM24 1h1v1h-1zM25 1h1v1h-1zM26 1h1v1h-1zM27 1h1v1h-1zM28 1h1v1h-1zM29 1h1v1h-1zM1 2h1v1h-1zM7 2h1v1h-1zM9 2h1v1h-1zM12 2h1v1h-1zM13 2h1v1h-1zM17 2h1v1h-1zM20 2h1v1h-1zM23 2h1v1h-1zM29 2h1v1h-1zM1 3h1v1h-1zM3 3h1v1h-1zM4 3h1v1h-1zM5 3h1v1h-1zM7 3h1v1h-1zM9 3h1v1h-1zM10 3h1v1h-1zM11 3h1v1h-1zM13 3h1v1h-1zM16 3h1v1h-1zM17 3h1v1h-1zM21 3h1v1h-1zM23 3h1v1h-1zM25 3h1v1h-1zM26 3h1v1h-1zM27 3h1v1h-1zM29 3h1v1h-1zM1 4h1v1h-1zM3 4h1v1h-1zM4 4h1v1h-1zM5 4h1v1h-1zM7 4h1v1h-1zM11 4h1v1h-1zM12 4h1v1h-1zM17 4h1v1h-1zM18 4h1v1h-1zM19 4h1v1h-1zM20 4h1v1h-1zM21 4h1v1h-1zM23 4h1v1h-1zM25 4h1v1h-1zM26 4h1v1h-1zM27 4h1v1h-1zM29 4h1v1h-1zM1 5h1v1h-1zM3 5h1v1h-1zM4 5h1v1h-1zM5 5h1v1h-1zM7 5h1v1h-1zM9 5h1v1h-1zM11 5h1v1h-1zM12 5h1v1h-1zM15 5h1v1h-1zM16 5h1v1h-1zM17 5h1v1h-1zM19 5h1v1h-1zM20 5h1v1h-1zM23 5h1v1h-1zM25 5h1v1h-1zM26 5h1v1h-1zM27 5h1v1h-1zM29 5h1v1h-1zM1 6h1v1h-1zM7 6h1v1h-1zM13 6h1v1h-1zM16 6h1v1h-1zM17 6h1v1h-1zM21 6h1v1h-1zM23 6h1v1h-1zM29 6h1v1h-1zM1 7h1v1h-1zM2 7h1v1h-1zM3 7h1v1h-1zM4 7h1v1h-1zM5 7h1v1h-1zM6 7h1v1h-1zM7 7h1v1h-1zM9 7h1v1h-1zM11 7h1v1h-1zM13 7h1v1h-1zM15 7h1v1h-1zM17 7h1v1h-1zM19 7h1v1h-1zM21 7h1v1h-1zM23 7h1v1h-1zM24 7h1v1h-1zM25 7h1v1h-1zM26 7h1v1h-1zM27 7h1v1h-1zM28 7h1v1h-1zM29 7h1v1h-1zM10 8h1v1h-1zM11 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM17 8h1v1h-1zM21 8h1v1h-1zM1 9h1v1h-1zM4 9h1v1h-1zM5 9h1v1h-1zM6 9h1v1h-1zM7 9h1v1h-1zM8 9h1v1h-1zM9 9h1v1h-1zM12 9h1v1h-1zM13 9h1v1h-1zM14 9h1v1h-1zM18 9h1v1h-1zM20 9h1v1h-1zM22 9h1v1h-1zM25 9h1v1h-1zM27 9h1v1h-1zM28 9h1v1h-1zM29 9h1v1h-1zM2 10h1v1h-1zM4 10h1v1h-1zM6 10h1v1h-1zM8 10h1v1h-1zM11 10h1v1h-1zM14 10h1v1h-1zM17 10h1v1h-1zM19 10h1v1h-1zM20 10h1v1h-1zM25 10h1v1h-1zM27 10h1v1h-1zM28 10h1v1h-1zM3 11h1v1h-1zM4 11h1v1h-1zM5 11h1v1h-1zM7 11h1v1h-1zM8 11h1v1h-1zM10 11h1v1h-1zM12 11h1v1h-1zM13 11h1v1h-1zM14 11h1v1h-1zM16 11h1v1h-1zM17 11h1v1h-1zM18 11h1v1h-1zM19 11h1v1h-1zM21 11h1v1h-1zM23 11h1v1h-1zM25 11h1v1h-1zM27 11h1v1h-1zM1 12h1v1h-1zM2 12h1v1h-1zM3 12h1v1h-1zM4 12h1v1h-1zM9 12h1v1h-1zM10 12h1v1h-1zM11 12h1v1h-1zM13 12h1v1h-1zM14 12h1v1h-1zM17 12h1v1h-1zM18 12h1v1h-1zM20 12h1v1h-1zM21 12h1v1h-1zM22 12h1v1h-1zM23 12h1v1h-1zM25 12h1v1h-1zM26 12h1v1h-1zM29 12h1v1h-1zM1 13h1v1h-1zM3 13h1v1h-1zM5 13h1v1h-1zM6 13h1v1h-1zM7 13h1v1h-1zM8 13h1v1h-1zM9 13h1v1h-1zM10 13h1v1h-1zM12 13h1v1h-1zM13 13h1v1h-1zM14 13h1v1h-1zM16 13h1v1h-1zM17 13h1v1h-1zM21 13h1v1h-1zM23 13h1v1h-1zM24 13h1v1h-1zM29 13h1v1h-1zM1 14h1v1h-1zM4 14h1v1h-1zM5 14h1v1h-1zM9 14h1v1h-1zM12 14h1v1h-1zM13 14h1v1h-1zM14 14h1v1h-1zM15 14h1v1h-1zM17 14h1v1h-1zM21 14h1v1h-1zM22 14h1v1h-1zM23 14h1v1h-1zM24 14h1v1h-1zM25 14h1v1h-1zM26 14h1v1h-1zM27 14h1v1h-1zM28 14h1v1h-1zM29 14h1v1h-1zM2 15h1v1h-1zM3 15h1v1h-1zM4 15h1v1h-1zM6 15h1v1h-1zM7 15h1v1h-1zM8 15h1v1h-1zM9 15h1v1h-1zM11 15h1v1h-1zM12 15h1v1h-1zM14 15h1v1h-1zM17 15h1v1h-1zM19 15h1v1h-1zM20 15h1v1h-1zM21 15h1v1h-1zM22 15h1v1h-1zM23 15h1v1h-1zM27 15h1v1h-1zM29 15h1v1h-1zM3 16h1v1h-1zM4 16h1v1h-1zM5 16h1v1h-1zM8 16h1v1h-1zM11 16h1v1h-1zM12 16h1v1h-1zM16 16h1v1h-1zM19 16h1v1h-1zM20 16h1v1h-1zM22 16h1v1h-1zM24 16h1v1h-1zM27 16h1v1h-1zM29 16h1v1h-1zM3 17h1v1h-1zM4 17h1v1h-1zM7 17h1v1h-1zM8 17h1v1h-1zM15 17h1v1h-1zM20 17h1v1h-1zM21 17h1v1h-1zM24 17h1v1h-1zM26 17h1v1h-1zM1 18h1v1h-1zM2 18h1v1h-1zM5 18h1v1h-1zM6 18h1v1h-1zM10 18h1v1h-1zM12 18h1v1h-1zM14 18h1v1h-1zM15 18h1v1h-1zM17 18h1v1h-1zM18 18h1v1h-1zM20 18h1v1h-1zM21 18h1v1h-1zM22 18h1v1h-1zM25 18h1v1h-1zM27 18h1v1h-1zM28 18h1v1h-1zM1 19h1v1h-1zM2 19h1v1h-1zM3 19h1v1h-1zM4 19h1v1h-1zM5 19h1v1h-1zM6 19h1v1h-1zM7 19h1v1h-1zM11 19h1v1h-1zM12 19h1v1h-1zM16 19h1v1h-1zM17 19h1v1h-1zM18 19h1v1h-1zM19 19h1v1h-1zM20 19h1v1h-1zM23 19h1v1h-1zM26 19h1v1h-1zM29 19h1v1h-1zM1 20h1v1h-1zM2 20h1v1h-1zM5 20h1v1h-1zM6 20h1v1h-1zM8 20h1v1h-1zM9 20h1v1h-1zM10 20h1v1h-1zM12 20h1v1h-1zM15 20h1v1h-1zM17 20h1v1h-1zM19 20h1v1h-1zM20 20h1v1h-1zM21 20h1v1h-1zM24 20h1v1h-1zM26 20h1v1h-1zM27 20h1v1h-1zM1 21h1v1h-1zM2 21h1v1h-1zM4 21h1v1h-1zM6 21h1v1h-1zM7 21h1v1h-1zM8 21h1v1h-1zM11 21h1v1h-1zM13 21h1v1h-1zM14 21h1v1h-1zM15 21h1v1h-1zM17 21h1v1h-1zM18 21h1v1h-1zM19 21h1v1h-1zM21 21h1v1h-1zM22 21h1v1h-1zM23 21h1v1h-1zM24 21h1v1h-1zM25 21h1v1h-1zM26 21h1v1h-1zM27 21h1v1h-1zM28 21h1v1h-1zM9 22h1v1h-1zM10 22h1v1h-1zM11 22h1v1h-1zM15 22h1v1h-1zM16 22h1v1h-1zM18 22h1v1h-1zM19 22h1v1h-1zM21 22h1v1h-1zM25 22h1v1h-1zM26 22h1v1h-1zM1 23h1v1h-1zM2 23h1v1h-1zM3 23h1v1h-1zM4 23h1v1h-1zM5 23h1v1h-1zM6 23h1v1h-1zM7 23h1v1h-1zM9 23h1v1h-1zM10 23h1v1h-1zM11 23h1v1h-1zM15 23h1v1h-1zM16 23h1v1h-1zM17 23h1v1h-1zM20 23h1v1h-1zM21 23h1v1h-1zM23 23h1v1h-1zM25 23h1v1h-1zM26 23h1v1h-1zM1 24h1v1h-1zM7 24h1v1h-1zM9 24h1v1h-1zM12 24h1v1h-1zM13 24h1v1h-1zM15 24h1v1h-1zM18 24h1v1h-1zM19 24h1v1h-1zM20 24h1v1h-1zM21 24h1v1h-1zM25 24h1v1h-1zM29 24h1v1h-1zM1 25h1v1h-1zM3 25h1v1h-1zM4 25h1v1h-1zM5 25h1v1h-1zM7 25h1v1h-1zM9 25h1v1h-1zM10 25h1v1h-1zM11 25h1v1h-1zM14 25h1v1h-1zM15 25h1v1h-1zM17 25h1v1h-1zM20 25h1v1h-1zM21 25h1v1h-1zM22 25h1v1h-1zM23 25h1v1h-1zM24 25h1v1h-1zM25 25h1v1h-1zM26 25h1v1h-1zM28 25h1v1h-1zM29 25h1v1h-1zM1 26h1v1h-1zM3 26h1v1h-1zM4 26h1v1h-1zM5 26h1v1h-1zM7 26h1v1h-1zM9 26h1v1h-1zM11 26h1v1h-1zM12 26h1v1h-1zM13 26h1v1h-1zM16 26h1v1h-1zM17 26h1v1h-1zM18 26h1v1h-1zM19 26h1v1h-1zM20 26h1v1h-1zM21 26h1v1h-1zM22 26h1v1h-1zM29 26h1v1h-1zM1 27h1v1h-1zM3 27h1v1h-1zM4 27h1v1h-1zM5 27h1v1h-1zM7 27h1v1h-1zM10 27h1v1h-1zM12 27h1v1h-1zM16 27h1v1h-1zM17 27h1v1h-1zM19 27h1v1h-1zM24 27h1v1h-1zM25 27h1v1h-1zM27 27h1v1h-1zM28 27h1v1h-1zM29 27h1v1h-1zM1 28h1v1h-1zM7 28h1v1h-1zM10 28h1v1h-1zM11 28h1v1h-1zM13 28h1v1h-1zM15 28h1v1h-1zM19 28h1v1h-1zM22 28h1v1h-1zM23 28h1v1h-1zM24 28h1v1h-1zM26 28h1v1h-1zM27 28h1v1h-1zM29 28h1v1h-1zM1 29h1v1h-1zM2 29h1v1h-1zM3 29h1v1h-1zM4 29h1v1h-1zM5 29h1v1h-1zM6 29h1v1h-1zM7 29h1v1h-1zM9 29h1v1h-1zM10 29h1v1h-1zM11 29h1v1h-1zM15 29h1v1h-1zM16 29h1v1h-1zM17 29h1v1h-1zM20 29h1v1h-1zM21 29h1v1h-1zM24 29h1v1h-1z" fill="#0a0906"/></svg><p><b style="color:var(--txt)">Inquadra con la fotocamera del telefono</b><br>Si apre l'app: poi segui le istruzioni per aggiungerla alla schermata Home.</p></div>
+      </div>
+      <div data-os="installed"><p style="color:var(--gold-hi);margin-top:20px">L'app è già installata su questo dispositivo: cercala tra le tue app come <b>KM Studio</b>.</p></div>
+      <div class="cta-row"><a class="btn line" href="app.html">Apri l'app nel browser</a></div>
+    </div>
+  </div>
+</div>
 <a class="mini-app" id="miniApp" href="app.html" aria-label="Apri la tua app"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M11 18h2"/></svg></i>La tua app</a>
 
 <script src="assets/js/gsap.min.js"></script>
@@ -958,24 +1097,24 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
    CONTATTI DELLO STUDIO — compila qui (i campi vuoti non compaiono)
    ========================================================= */
 const CONTATTI = {
-  whatsapp: "",      // es. "393331234567" (solo numeri, con prefisso 39)
-  telefono: "",      // es. "+39 333 123 4567"
-  email: "",         // es. "info@kone-studio.com"
-  instagram: "",     // es. "konemoctar.studio" (senza @)
-  indirizzo: ""      // es. "Via Roma 1, Milano"
+  whatsapp: "393922696468",          // solo numeri, con prefisso 39
+  telefono: "392 269 6468",
+  email: "konemoctar00@gmail.com",
+  instagram: "konemoctar4",          // senza @
+  indirizzo: ""                      // es. "Via Roma 1, Milano" (vuoto = non mostrato)
 };
 const POPUP_DOPO_MS = 7000;
 
 /* ---------- dati (dal listino e dai trattamenti dell'app) ---------- */
 const TRATT=[
-  {n:"Massaggio decontratturante",ic:"muscle",d:"Scioglie le tensioni muscolari e migliora la mobilità.",b:["Riduce contratture e punti di tensione","Restituisce mobilità a collo, schiena e spalle","Allevia i dolori da sovraccarico"],f:1},
-  {n:"Massaggio sportivo",ic:"run",d:"Prima e dopo l'attività fisica: migliora prestazioni e recupero.",b:["Prepara i muscoli allo sforzo","Accelera il recupero","Aiuta a prevenire sovraccarichi"],f:1},
-  {n:"Rilassante e antistress",ic:"lotus",d:"Riduce lo stress e favorisce il benessere psicofisico.",b:["Abbassa tensione nervosa e ansia","Favorisce un sonno più profondo","Sensazione di leggerezza"]},
-  {n:"Cervico lombare",ic:"spine",d:"Allevia dolori e tensioni a collo, spalle e zona lombare.",b:["Scioglie la rigidità di collo e trapezi","Allenta la zona lombare","Aiuta postura e movimento"]},
-  {n:"Linfodrenante",ic:"drop",d:"Favorisce il drenaggio dei liquidi e migliora la circolazione.",b:["Riduce gonfiore e ritenzione","Gambe più leggere","Migliora la circolazione"]},
-  {n:"Riflessologia plantare",ic:"foot",d:"Stimola i punti riflessi dei piedi per l'equilibrio generale.",b:["Rilassamento profondo","Piedi e gambe più leggeri","Equilibrio e benessere"]},
-  {n:"Coppettazione",ic:"cup",d:"Tecnica antica per tensioni profonde, circolazione e dolori. Può lasciare segni circolari temporanei.",b:["Lavora sulle tensioni ostinate","Migliora la circolazione locale","Riduce i dolori muscolari"],f:1},
-  {n:"Altri massaggi su richiesta",ic:"star",d:"Ogni corpo è unico, ogni trattamento è su misura: parlane con Kone.",b:["Costruito sulle tue esigenze","Tecniche combinate","Si concorda insieme"],f:1}
+  {img:"decon",n:"Massaggio decontratturante",ic:"muscle",d:"Scioglie le tensioni muscolari e migliora la mobilità.",b:["Riduce contratture e punti di tensione","Restituisce mobilità a collo, schiena e spalle","Allevia i dolori da sovraccarico"],f:1},
+  {img:"sport",n:"Massaggio sportivo",ic:"run",d:"Prima e dopo l'attività fisica: migliora prestazioni e recupero.",b:["Prepara i muscoli allo sforzo","Accelera il recupero","Aiuta a prevenire sovraccarichi"],f:1},
+  {img:"relax",n:"Rilassante e antistress",ic:"lotus",d:"Riduce lo stress e favorisce il benessere psicofisico.",b:["Abbassa tensione nervosa e ansia","Favorisce un sonno più profondo","Sensazione di leggerezza"]},
+  {img:"cervi",n:"Cervico lombare",ic:"spine",d:"Allevia dolori e tensioni a collo, spalle e zona lombare.",b:["Scioglie la rigidità di collo e trapezi","Allenta la zona lombare","Aiuta postura e movimento"]},
+  {img:"linfo",n:"Linfodrenante",ic:"drop",d:"Favorisce il drenaggio dei liquidi e migliora la circolazione.",b:["Riduce gonfiore e ritenzione","Gambe più leggere","Migliora la circolazione"]},
+  {img:"rifle",n:"Riflessologia plantare",ic:"foot",d:"Stimola i punti riflessi dei piedi per l'equilibrio generale.",b:["Rilassamento profondo","Piedi e gambe più leggeri","Equilibrio e benessere"]},
+  {img:"coppe",n:"Coppettazione",ic:"cup",d:"Tecnica antica per tensioni profonde, circolazione e dolori. Può lasciare segni circolari temporanei.",b:["Lavora sulle tensioni ostinate","Migliora la circolazione locale","Riduce i dolori muscolari"],f:1},
+  {img:"altri",n:"Altri massaggi su richiesta",ic:"star",d:"Ogni corpo è unico, ogni trattamento è su misura: parlane con Kone.",b:["Costruito sulle tue esigenze","Tecniche combinate","Si concorda insieme"],f:1}
 ];
 const ICONS={
   muscle:'<path d="M5 14c0-4 3-8 7-8 1.5 0 2.5.8 2.5 2 0 1.6-2 2-2 3.5 0 1 1 1.5 2.5 1.5 2.5 0 4 1.5 4 3.5 0 2.5-3 4.5-7 4.5S5 18 5 14z"/>',
@@ -1007,11 +1146,12 @@ $("#yr").textContent=new Date().getFullYear();
 /* ---------- render trattamenti ---------- */
 $("#tgrid").innerHTML=TRATT.map((t,i)=>`
   <article class="tcard${t.f?" feature":""}" data-cursor="hov">
-    <div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${ICONS[t.ic]}</svg></div>
+    <div class="tim"><img src="assets/img/${t.img}.webp" alt="${t.n}" loading="lazy" decoding="async" width="445" height="460"></div>
+    <div class="tbody"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${ICONS[t.ic]}</svg></div>
     <span class="tn">${String(i+1).padStart(2,"0")}</span>
     <h3>${t.n}</h3><p>${t.d}</p>
     <ul>${t.b.map(x=>`<li>${x}</li>`).join("")}</ul>
-    <div class="tp"><div><span>30 MIN</span><b>30€</b></div><div><span>60 MIN</span><b>55€</b></div></div>
+    <div class="tp"><div><span>30 MIN</span><b>30€</b></div><div><span>60 MIN</span><b>55€</b></div></div></div>
   </article>`).join("");
 $$(".tcard").forEach(c=>{
   c.addEventListener("click",()=>c.classList.toggle("open"));
@@ -1036,13 +1176,24 @@ $$("#tabs button").forEach(b=>b.addEventListener("click",()=>{
 addEventListener("load",()=>movePill($("#tabs .on")));addEventListener("resize",()=>movePill($("#tabs .on")));
 
 /* ---------- contatti ---------- */
-(function(){const c=CONTATTI,out=[];
-  if(c.whatsapp)out.push(`<a class="btn line" href="https://wa.me/${c.whatsapp}" target="_blank" rel="noopener">WhatsApp</a>`);
-  if(c.telefono)out.push(`<a class="btn line" href="tel:${c.telefono.replace(/\s/g,"")}">${c.telefono}</a>`);
-  if(c.email)out.push(`<a class="btn line" href="mailto:${c.email}">${c.email}</a>`);
-  if(c.instagram)out.push(`<a class="btn line" href="https://instagram.com/${c.instagram}" target="_blank" rel="noopener">@${c.instagram}</a>`);
-  if(c.indirizzo)out.push(`<a class="btn line" href="https://maps.google.com/?q=${encodeURIComponent(c.indirizzo)}" target="_blank" rel="noopener">${c.indirizzo}</a>`);
-  $("#contactRow").innerHTML=out.join("");
+const CI={
+  wa:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5a9.4 9.4 0 0 0-8.1 14.2L2.6 21.5l4.9-1.3A9.4 9.4 0 1 0 12 2.5zm0 17.1a7.7 7.7 0 0 1-3.9-1.1l-.3-.2-2.9.8.8-2.8-.2-.3A7.7 7.7 0 1 1 12 19.6zm4.3-5.8c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.5.1-.6.8-.8.9-.3.2-.5.1a6.3 6.3 0 0 1-3.1-2.7c-.2-.4.2-.4.7-1.2.1-.1 0-.3 0-.4l-.7-1.7c-.2-.4-.4-.4-.5-.4h-.5a.9.9 0 0 0-.6.3 2.7 2.7 0 0 0-.9 2 4.6 4.6 0 0 0 1 2.5 10.6 10.6 0 0 0 4 3.6c1.5.6 2.1.7 2.8.6.5-.1 1.4-.6 1.6-1.1s.2-1 .1-1.1-.2-.2-.5-.3z"/></svg>',
+  tel:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>',
+  mail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/></svg>',
+  ig:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r=".9" fill="currentColor"/></svg>',
+  map:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>'
+};
+(function(){const c=CONTATTI,L=[];
+  const waMsg=encodeURIComponent("Ciao Kone! Vorrei informazioni sullo studio.");
+  if(c.whatsapp)L.push({k:"wa",cls:" wa",h:`https://wa.me/${c.whatsapp}?text=${waMsg}`,t:"WhatsApp",ext:1});
+  if(c.telefono)L.push({k:"tel",h:`tel:+39${c.telefono.replace(/\D/g,"")}`,t:c.telefono});
+  if(c.instagram)L.push({k:"ig",h:`https://instagram.com/${c.instagram}`,t:"@"+c.instagram,ext:1});
+  if(c.email)L.push({k:"mail",h:`mailto:${c.email}`,t:c.email});
+  if(c.indirizzo)L.push({k:"map",h:`https://maps.google.com/?q=${encodeURIComponent(c.indirizzo)}`,t:c.indirizzo,ext:1});
+  const a=(x,cls)=>`<a class="${cls}" href="${x.h}"${x.ext?' target="_blank" rel="noopener"':""}>${CI[x.k]}<span>${x.t}</span></a>`;
+  $("#contactRow").innerHTML=L.map(x=>a(x,"cbtn"+(x.cls||""))).join("");
+  $("#koneCta").innerHTML=L.filter(x=>x.k==="wa"||x.k==="tel").map(x=>a(x,"cbtn"+(x.cls||""))).join("");
+  $("#footC").innerHTML=L.map(x=>a(x,"")).join("");
 })();
 
 /* ---------- FAQ ---------- */
@@ -1063,26 +1214,39 @@ $$(".split").forEach(el=>{const t=el.textContent;el.innerHTML=[...t].map(c=>`<sp
   m.innerHTML=frag.join("")})();
 
 /* ---------- polvere d'oro (canvas) ---------- */
-(function(){const cv=$("#dust"),cx=cv.getContext("2d");let W,H,P=[],mx=-999,my=-999,dpr=Math.min(devicePixelRatio||1,2);
-  function size(){W=cv.width=innerWidth*dpr;H=cv.height=innerHeight*dpr;cv.style.width=innerWidth+"px";cv.style.height=innerHeight+"px";
-    const n=Math.round(Math.min(110,innerWidth/12));P=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,r:(Math.random()*1.6+.4)*dpr,vx:(Math.random()-.5)*.15*dpr,vy:-(Math.random()*.35+.08)*dpr,a:Math.random()*.6+.15,t:Math.random()*6.28}))}
-  size();addEventListener("resize",size);
-  addEventListener("pointermove",e=>{mx=e.clientX*dpr;my=e.clientY*dpr});
+(function(){const cv=$("#dust"),cx=cv.getContext("2d",{alpha:true});let W,H,P=[],mx=-999,my=-999,run=true;
+  const small=innerWidth<760,dpr=small?1:Math.min(devicePixelRatio||1,1.5);
+  /* una sola "scintilla" disegnata una volta, poi solo copiata: niente shadowBlur per particella */
+  const spr=document.createElement("canvas"),S=32;spr.width=spr.height=S;
+  const sg=spr.getContext("2d"),g=sg.createRadialGradient(S/2,S/2,0,S/2,S/2,S/2);
+  g.addColorStop(0,"rgba(255,240,190,1)");g.addColorStop(.25,"rgba(232,196,99,.9)");g.addColorStop(1,"rgba(232,196,99,0)");
+  sg.fillStyle=g;sg.fillRect(0,0,S,S);
+  function size(){W=cv.width=Math.round(innerWidth*dpr);H=cv.height=Math.round(innerHeight*dpr);cv.style.width=innerWidth+"px";cv.style.height=innerHeight+"px";
+    const n=small?26:Math.round(Math.min(60,innerWidth/24));P=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,r:(Math.random()*5+3)*dpr,vx:(Math.random()-.5)*.15*dpr,vy:-(Math.random()*.35+.08)*dpr,a:Math.random()*.55+.2,t:Math.random()*6.28}))}
+  size();let rt;addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(size,200)});
+  if(fine)addEventListener("pointermove",e=>{mx=e.clientX*dpr;my=e.clientY*dpr},{passive:true});
+  document.addEventListener("visibilitychange",()=>{run=!document.hidden;if(run)requestAnimationFrame(loop)});
   let sv=0;
-  (function loop(){cx.clearRect(0,0,W,H);
+  function loop(){if(!run)return;cx.clearRect(0,0,W,H);
     for(const p of P){p.t+=.02;p.x+=p.vx+Math.sin(p.t)*.15*dpr;p.y+=p.vy-sv*.04*dpr;
-      const dx=p.x-mx,dy=p.y-my,d=Math.hypot(dx,dy);if(d<140*dpr){p.x+=dx/d*1.4*dpr;p.y+=dy/d*1.4*dpr}
-      if(p.y<-10)p.y=H+10;if(p.y>H+10)p.y=-10;if(p.x<-10)p.x=W+10;if(p.x>W+10)p.x=-10;
-      const a=p.a*(.6+.4*Math.sin(p.t*2));cx.beginPath();cx.arc(p.x,p.y,p.r,0,6.283);
-      cx.fillStyle=`rgba(232,196,99,${a})`;cx.shadowColor="rgba(247,227,161,.8)";cx.shadowBlur=6*dpr;cx.fill()}
-    sv*=.92;requestAnimationFrame(loop)})();
+      const dx=p.x-mx,dy=p.y-my,d2=dx*dx+dy*dy,R=140*dpr;if(d2<R*R){const d=Math.sqrt(d2)||1;p.x+=dx/d*1.4*dpr;p.y+=dy/d*1.4*dpr}
+      if(p.y<-10)p.y=H+10;else if(p.y>H+10)p.y=-10;if(p.x<-10)p.x=W+10;else if(p.x>W+10)p.x=-10;
+      cx.globalAlpha=p.a*(.6+.4*Math.sin(p.t*2));cx.drawImage(spr,p.x-p.r,p.y-p.r,p.r*2,p.r*2)}
+    sv*=.92;requestAnimationFrame(loop)}
+  requestAnimationFrame(loop);
   window.__dustKick=v=>{sv=Math.max(-40,Math.min(40,v))};
 })();
 
+/* ---------- metti in pausa ciò che non si vede ---------- */
+const vis={};
+if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>es.forEach(e=>{const k=e.target.dataset.v;vis[k]=e.isIntersecting;e.target.classList.toggle("off",!e.isIntersecting)}),{rootMargin:"100px"});
+  [["hero","#hero"],["mq",".marquees"],["phone","#app"],["final",".final"]].forEach(([k,sel])=>{const el=$(sel);if(el){el.dataset.v=k;vis[k]=true;io.observe(el)}});}
+
 /* ---------- cursore ---------- */
 if(fine){const c=$(".cur"),d=$(".cur-dot"),lab=c.querySelector("span");let x=innerWidth/2,y=innerHeight/2,cx=x,cy=y;
-  addEventListener("pointermove",e=>{x=e.clientX;y=e.clientY;d.style.transform=`translate(${x}px,${y}px) translate(-50%,-50%)`});
-  (function f(){cx+=(x-cx)*.16;cy+=(y-cy)*.16;c.style.transform=`translate(${cx}px,${cy}px) translate(-50%,-50%)`;requestAnimationFrame(f)})();
+  addEventListener("pointermove",e=>{x=e.clientX;y=e.clientY},{passive:true});
+  (function f(){const nx=cx+(x-cx)*.18,ny=cy+(y-cy)*.18;if(Math.abs(nx-cx)>.05||Math.abs(ny-cy)>.05||1){cx=nx;cy=ny;
+    c.style.transform=`translate3d(${cx-19}px,${cy-19}px,0)`;d.style.transform=`translate3d(${x-2.5}px,${y-2.5}px,0)`}requestAnimationFrame(f)})();
   document.addEventListener("pointerover",e=>{const t=e.target.closest("a,button,[data-cursor]");c.classList.remove("big","hov");
     if(!t)return;if(t.dataset.cursor==="big"){c.classList.add("big");lab.textContent=t.dataset.label||"Apri"}else c.classList.add("hov")});
 }
@@ -1094,8 +1258,8 @@ if(fine)$$(".magnet,.btn.gold,.app-btn").forEach(m=>{const s=m.classList.contain
 
 /* ---------- emblema 3D che segue il mouse ---------- */
 if(fine){const em=$("#emblem");let tx=0,ty=0,cx=0,cy=0;
-  addEventListener("pointermove",e=>{tx=(e.clientX/innerWidth-.5);ty=(e.clientY/innerHeight-.5)});
-  (function f(){cx+=(tx-cx)*.06;cy+=(ty-cy)*.06;em.style.transform=`rotateY(${cx*28}deg) rotateX(${-cy*22}deg)`;requestAnimationFrame(f)})();}
+  addEventListener("pointermove",e=>{tx=(e.clientX/innerWidth-.5);ty=(e.clientY/innerHeight-.5)},{passive:true});
+  (function f(){if(vis.hero!==false&&(Math.abs(tx-cx)>.0005||Math.abs(ty-cy)>.0005)){cx+=(tx-cx)*.06;cy+=(ty-cy)*.06;em.style.transform=`rotateY(${cx*28}deg) rotateX(${-cy*22}deg)`}requestAnimationFrame(f)})();}
 
 /* ---------- popup app ---------- */
 const pop=$("#pop");let popShown=false;
@@ -1109,9 +1273,31 @@ function armPop(){let seen=false;try{seen=sessionStorage.getItem("km_pop")==="1"
   if(seen){$("#miniApp").classList.add("on");return}
   setTimeout(openPop,Math.max(1500,POPUP_DOPO_MS-performance.now()))}
 
+
+/* ---------- scarica / installa l'app (PWA) ---------- */
+let deferredPrompt=null;
+const ua=navigator.userAgent,isIOS=/iphone|ipad|ipod/i.test(ua)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1),isAndroid=/android/i.test(ua);
+const isStandalone=()=>matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e});
+addEventListener("appinstalled",()=>{deferredPrompt=null;const m=$("#inst");if(m.classList.contains("on"))m.dataset.mode="installed"});
+const inst=$("#inst");
+function openInstall(e){if(e)e.preventDefault();
+  if(pop.classList.contains("on"))closePop();
+  document.body.classList.remove("menu-open");
+  inst.dataset.mode=isStandalone()?"installed":deferredPrompt?"prompt":isIOS?"ios":isAndroid?"android":"desktop";
+  inst.classList.add("on");inst.setAttribute("aria-hidden","false");if(window.__lenis)window.__lenis.stop()}
+function closeInstall(){inst.classList.remove("on");inst.setAttribute("aria-hidden","true");if(window.__lenis)window.__lenis.start()}
+$$("[data-install]").forEach(b=>b.addEventListener("click",openInstall));
+$$("[data-iclose]").forEach(b=>b.addEventListener("click",closeInstall));
+addEventListener("keydown",e=>{if(e.key==="Escape"&&inst.classList.contains("on"))closeInstall()});
+$("#doInstall").addEventListener("click",async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();const r=await deferredPrompt.userChoice;deferredPrompt=null;
+  inst.dataset.mode=r.outcome==="accepted"?"installed":(isAndroid?"android":"desktop")});
+if("serviceWorker" in navigator&&location.protocol.startsWith("http"))addEventListener("load",()=>navigator.serviceWorker.register("/sw.js").catch(()=>{}));
+
 /* ---------- header che si nasconde ---------- */
-(function(){let last=0;const h=$("#hdr");addEventListener("scroll",()=>{const y=scrollY;h.classList.toggle("solid",y>40);
-  h.classList.toggle("hide",y>last&&y>500&&!document.body.classList.contains("menu-open"));last=y},{passive:true})})();
+(function(){let last=0,tick=false;const h=$("#hdr");addEventListener("scroll",()=>{if(tick)return;tick=true;requestAnimationFrame(()=>{tick=false;const y=scrollY;
+  const so=y>40,hi=y>last+2&&y>500&&!document.body.classList.contains("menu-open"),sh=y<last-2;
+  if(so!==h._so){h.classList.toggle("solid",so);h._so=so}if(hi)h.classList.add("hide");else if(sh||y<500)h.classList.remove("hide");last=y})},{passive:true})})();
 
 /* =========================================================
    ANIMAZIONI (GSAP)
@@ -1155,8 +1341,8 @@ function scrollFx(){
 
   /* smooth scroll */
   if(typeof Lenis!=="undefined"){
-    const lenis=new Lenis({duration:1.15,smoothWheel:true});window.__lenis=lenis;
-    lenis.on("scroll",e=>{ScrollTrigger.update();window.__dustKick&&window.__dustKick(e.velocity||0)});
+    const lenis=new Lenis({lerp:.11,smoothWheel:true,wheelMultiplier:1});window.__lenis=lenis;
+    lenis.on("scroll",ScrollTrigger.update);lenis.on("scroll",e=>{window.__dustKick&&window.__dustKick(e.velocity||0)});
     gsap.ticker.add(t=>lenis.raf(t*1000));gsap.ticker.lagSmoothing(0);
     $$('a[href^="#"]').forEach(a=>a.addEventListener("click",e=>{const id=a.getAttribute("href");if(id.length<2&&id!=="#top")return;
       const t=id==="#top"?0:$(id);if(t===null)return;e.preventDefault();lenis.scrollTo(t,{offset:id==="#top"?0:-70,duration:1.6})}));
@@ -1170,12 +1356,14 @@ function scrollFx(){
   /* marquee guidati dalla velocità di scroll */
   $$(".mq").forEach((mq,i)=>{const tr=mq.querySelector(".mq-track");tr.innerHTML+=tr.innerHTML;mq.appendChild(tr.cloneNode(true));
     const tracks=mq.querySelectorAll(".mq-track");let x=0,dir=i?1:-1,boost=0;
-    ScrollTrigger.create({onUpdate:s=>{boost=Math.min(14,Math.abs(s.getVelocity())/240);dir=(s.direction>0?-1:1)*(i?-1:1)}});
-    gsap.ticker.add(()=>{const w=tracks[0].offsetWidth;x+=(1+boost)*dir;boost*=.94;if(x<-w)x+=w;if(x>0)x-=w;tracks.forEach(t=>t.style.transform=`translateX(${x}px)`)})});
+    ScrollTrigger.create({trigger:".marquees",start:"top bottom",end:"bottom top",onUpdate:s=>{boost=Math.min(14,Math.abs(s.getVelocity())/240);dir=(s.direction>0?-1:1)*(i?-1:1)}});
+    let w=tracks[0].offsetWidth;addEventListener("resize",()=>{w=tracks[0].offsetWidth});addEventListener("load",()=>{w=tracks[0].offsetWidth});
+    gsap.ticker.add(()=>{if(vis.mq===false)return;x+=(1+boost)*dir;boost*=.94;if(x<-w)x+=w;if(x>0)x-=w;const v=`translate3d(${x.toFixed(1)}px,0,0)`;tracks[0].style.transform=v;tracks[1].style.transform=v})});
 
   /* manifesto parola per parola */
   const ws=$$("#manif .w");
-  ScrollTrigger.create({trigger:"#manif",start:"top 80%",end:"bottom 45%",scrub:true,onUpdate:s=>{const k=Math.floor(s.progress*ws.length);ws.forEach((w,i)=>w.style.opacity=i<=k?1:.14)}});
+  let lastK=-1;ScrollTrigger.create({trigger:"#manif",start:"top 80%",end:"bottom 45%",onUpdate:s=>{const k=Math.floor(s.progress*ws.length);if(k===lastK)return;
+    const a=Math.min(k,lastK),b=Math.max(k,lastK);for(let i=Math.max(0,a);i<=Math.min(ws.length-1,b);i++)ws[i].style.opacity=i<=k?1:.14;lastK=k}});
   gsap.from(".manifesto .sign",{y:40,opacity:0,duration:1,ease:"expo.out",scrollTrigger:{trigger:".manifesto .sign",start:"top 90%"}});
 
   /* linee titolo */
@@ -1187,13 +1375,19 @@ function scrollFx(){
   mm.add("(min-width:901px)",()=>{
     const tr=$("#hzTrack");
     const dist=()=>tr.scrollWidth-innerWidth;
-    const tw=gsap.to(tr,{x:()=>-dist(),ease:"none",scrollTrigger:{trigger:".hz",start:"top top",end:()=>"+="+dist(),pin:".hz-pin",scrub:1,invalidateOnRefresh:true,anticipatePin:1,
+    const tw=gsap.to(tr,{x:()=>-dist(),ease:"none",scrollTrigger:{trigger:".hz",start:"top top",end:()=>"+="+dist(),pin:".hz-pin",scrub:.6,invalidateOnRefresh:true,anticipatePin:1,
       onUpdate:s=>$("#hzBar").style.transform=`scaleX(${s.progress})`}});
     $$(".pane").forEach(p=>gsap.from(p.querySelectorAll("h3,p,ul,.price"),{y:60,opacity:0,stagger:.08,ease:"expo.out",duration:1,
       scrollTrigger:{trigger:p,containerAnimation:tw,start:"left 85%"}}));
     $$(".pane .pn").forEach(n=>gsap.fromTo(n,{xPercent:40},{xPercent:-20,ease:"none",scrollTrigger:{trigger:n.parentElement,containerAnimation:tw,start:"left right",end:"right left",scrub:true}}));
   });
   mm.add("(max-width:900px)",()=>{$$(".pane").forEach(p=>gsap.from(p,{y:80,opacity:0,rotateX:-12,duration:1.1,ease:"expo.out",scrollTrigger:{trigger:p,start:"top 90%"}}))});
+
+  /* foto Kone: tendina + parallasse */
+  gsap.fromTo("#kphoto .fr",{clipPath:"inset(100% 0 0 0 round 26px)"},{clipPath:"inset(0% 0 0 0 round 26px)",duration:1.6,ease:"expo.inOut",scrollTrigger:{trigger:"#kphoto",start:"top 80%"}});
+  gsap.fromTo("#kphoto img",{yPercent:-12,scale:1.15},{yPercent:0,scale:1,ease:"none",scrollTrigger:{trigger:"#kphoto",start:"top bottom",end:"bottom top",scrub:true}});
+  gsap.from(".kone .role,.kone .quote,.kone .d,.kbadges>div,#koneCta>*",{y:30,opacity:0,stagger:.08,duration:1,ease:"expo.out",scrollTrigger:{trigger:".kone .txt",start:"top 80%"}});
+  gsap.from(".cbtn",{y:20,opacity:0,stagger:.06,duration:.8,ease:"expo.out",scrollTrigger:{trigger:"#contactRow",start:"top 95%"}});
 
   /* contatori */
   $$(".stat").forEach((s,i)=>ScrollTrigger.create({trigger:s,start:"top 85%",once:true,onEnter:()=>{s.classList.add("in");
