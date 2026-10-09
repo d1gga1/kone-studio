@@ -545,6 +545,17 @@ body{overscroll-behavior-y:none}
 .inst-steps li{display:flex;gap:12px;align-items:flex-start;font-size:15px;color:var(--txt-2)}
 .inst-steps li::before{counter-increment:s;content:counter(s);flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--gold);color:#150F04;font-weight:700;font-size:13px}
 .inst-steps b{color:var(--txt)}
+
+/* ---- Powered by Danova Tech ---- */
+.dnv{display:flex;align-items:center;justify-content:center;gap:16px;padding:22px 0 6px;flex-wrap:wrap}
+.dnv-l{font-family:'Oswald',system-ui,sans-serif;font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:#6E7380}
+.dnv-b{display:inline-flex;align-items:center;gap:11px;padding:9px 18px 9px 13px;border-radius:12px;background:linear-gradient(180deg,#141823,#0d1018);
+  border:1px solid #262c3a;text-decoration:none;transition:border-color .3s,transform .3s,box-shadow .3s}
+.dnv-b:hover{border-color:#2F6BFF;transform:translateY(-2px);box-shadow:0 10px 30px -12px rgba(47,107,255,.55)}
+.dnv-b svg{width:26px;height:26px;flex:none}
+.dnv-t{display:flex;flex-direction:column;line-height:1;text-align:left}
+.dnv-t b{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-weight:800;font-size:15px;letter-spacing:.14em;color:#EEF1F6}
+.dnv-t i{font-style:normal;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-weight:600;font-size:9.5px;letter-spacing:.52em;color:#2F6BFF;margin-top:4px}
 </style>
 </head>
 <body>
@@ -641,6 +652,7 @@ body{overscroll-behavior-y:none}
       <button class="btn ghost" type="button" onclick="demoCliente()">Prova la demo come Marco</button>
     </form>
     <p class="auth-foot">Non hai ancora un accesso? Te lo attiva Kone in studio.<br><a class="linkbtn" href="index.html">← Torna al sito</a><br>Demo dimostrativa · dati di esempio</p>
+    <div class="dnv"><span class="dnv-l">Powered by</span><a class="dnv-b" href="https://danova-tech.com" target="_blank" rel="noopener" title="Danova Tech"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="15.5" height="15.5" rx="3.2" fill="none" stroke="#CDD2DC" stroke-width="2"/><path d="M8.2 8h3.2a3.4 3.4 0 0 1 0 6.8H8.2z" fill="none" stroke="#CDD2DC" stroke-width="1.8"/><path d="M2.5 21.5L21.5 2.5" stroke="#2F6BFF" stroke-width="1.7" stroke-linecap="round"/></svg><span class="dnv-t"><b>DANOVA</b><i>TECH</i></span></a></div>
   </div>
 </div>
 
@@ -659,7 +671,8 @@ body{overscroll-behavior-y:none}
       <div class="auth-err" id="coachErr"></div>
       <button class="btn primary" type="submit" style="padding:13px">Entra nel pannello</button>
     </form>
-    <p class="auth-foot"><a class="linkbtn" href="./">Vai all'app clienti</a></p>
+    <p class="auth-foot"><a class="linkbtn" href="app.html">Vai all'app clienti</a></p>
+    <div class="dnv"><span class="dnv-l">Powered by</span><a class="dnv-b" href="https://danova-tech.com" target="_blank" rel="noopener" title="Danova Tech"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="15.5" height="15.5" rx="3.2" fill="none" stroke="#CDD2DC" stroke-width="2"/><path d="M8.2 8h3.2a3.4 3.4 0 0 1 0 6.8H8.2z" fill="none" stroke="#CDD2DC" stroke-width="1.8"/><path d="M2.5 21.5L21.5 2.5" stroke="#2F6BFF" stroke-width="1.7" stroke-linecap="round"/></svg><span class="dnv-t"><b>DANOVA</b><i>TECH</i></span></a></div>
   </div>
 </div>
 
@@ -688,7 +701,7 @@ body{overscroll-behavior-y:none}
   <div class="areabar" id="areabar"></div>
   <div class="body-row">
     <nav class="rail" id="rail"></nav>
-    <main id="main"><div class="wrap" id="view"></div></main>
+    <main id="main"><div class="wrap" id="view"></div><div style="padding:0 16px 28px"><div class="dnv"><span class="dnv-l">Powered by</span><a class="dnv-b" href="https://danova-tech.com" target="_blank" rel="noopener" title="Danova Tech"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="15.5" height="15.5" rx="3.2" fill="none" stroke="#CDD2DC" stroke-width="2"/><path d="M8.2 8h3.2a3.4 3.4 0 0 1 0 6.8H8.2z" fill="none" stroke="#CDD2DC" stroke-width="1.8"/><path d="M2.5 21.5L21.5 2.5" stroke="#2F6BFF" stroke-width="1.7" stroke-linecap="round"/></svg><span class="dnv-t"><b>DANOVA</b><i>TECH</i></span></a></div></div></main>
   </div>
   <nav class="tabbar" id="tabbar"></nav>
 </div>
