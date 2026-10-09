@@ -509,7 +509,7 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
 /* ---------- Kone (chi è) ---------- */
 .kone{padding:clamp(40px,8vw,120px) 0 clamp(90px,12vw,160px)}
 .kgrid{display:grid;grid-template-columns:.95fr 1.05fr;gap:clamp(30px,6vw,100px);align-items:center}
-.kphoto{position:relative;aspect-ratio:1216/1786;max-width:520px;width:100%;justify-self:center}
+.kphoto{position:relative;aspect-ratio:1216/1786;max-width:400px;width:100%;justify-self:center}
 .kphoto .fr{position:absolute;inset:0;border-radius:26px;overflow:hidden;clip-path:inset(0 0 0 0 round 26px);background:#120f09}
 .kphoto img{width:100%;height:118%;object-fit:cover;object-position:50% 20%;display:block;will-change:transform}
 .kphoto::before{content:"";position:absolute;inset:-14px -14px 14px 14px;border:1px solid rgba(217,169,60,.5);border-radius:30px;z-index:-1}
@@ -529,16 +529,16 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
 .kbadges i{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:rgba(217,169,60,.1);color:var(--gold);margin-bottom:10px}
 .kbadges i svg{width:20px;height:20px}
 .kbadges b{display:block;font-family:var(--disp);font-weight:500;text-transform:uppercase;letter-spacing:.04em;font-size:15px}
-@media (max-width:900px){.kgrid{grid-template-columns:1fr}.kphoto{max-width:400px}.kphoto .seal{right:-8px;top:-30px;width:90px;height:90px}}
+@media (max-width:900px){.kgrid{grid-template-columns:1fr}.kphoto{max-width:340px}.kphoto .seal{right:-8px;top:-30px;width:90px;height:90px}}
 @media (max-width:560px){.kbadges{grid-template-columns:1fr}.kbadges div{display:flex;gap:14px;align-items:center}.kbadges i{margin:0;flex:none}}
 
 /* ---------- foto nei trattamenti ---------- */
 .tcard{padding:0}
 .tcard .tbody{padding:22px 22px 24px;display:flex;flex-direction:column;flex:1;position:relative}
-.tcard .tim{position:relative;aspect-ratio:16/11;overflow:hidden;background:#140f08}
-.tcard.feature .tim{aspect-ratio:16/8}
-.tcard .tim img{width:100%;height:100%;object-fit:cover;transform:scale(1.04);transition:transform 1.2s var(--ease),filter .6s;filter:saturate(.95) contrast(1.03)}
-.tcard:hover .tim img{transform:scale(1.12);filter:saturate(1.08) contrast(1.06)}
+.tcard .tim{position:relative;aspect-ratio:3/2;overflow:hidden;background:#140f08}
+.tcard.feature .tim{aspect-ratio:2/1}
+.tcard .tim img{width:100%;height:100%;object-fit:cover;transform:scale(1.04);transition:transform 1.2s var(--ease),filter .6s;filter:none}
+.tcard:hover .tim img{transform:scale(1.09)}
 .tcard .tim::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,var(--surf) 100%)}
 .tcard.feature .tim::after{background:linear-gradient(180deg,transparent 45%,#1c170c 100%)}
 .tcard .ti{position:absolute;top:-30px;left:22px;z-index:2;background:#16130c}
@@ -1146,7 +1146,7 @@ $("#yr").textContent=new Date().getFullYear();
 /* ---------- render trattamenti ---------- */
 $("#tgrid").innerHTML=TRATT.map((t,i)=>`
   <article class="tcard${t.f?" feature":""}" data-cursor="hov">
-    <div class="tim"><img src="assets/img/${t.img}.webp" alt="${t.n}" loading="lazy" decoding="async" width="445" height="460"></div>
+    <div class="tim"><img src="assets/img/${t.img}.webp" alt="${t.n}" loading="lazy" decoding="async" width="1600" height="1063" sizes="(max-width:620px) 92vw, (max-width:1100px) 46vw, ${t.f?"640px":"320px"}"></div>
     <div class="tbody"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${ICONS[t.ic]}</svg></div>
     <span class="tn">${String(i+1).padStart(2,"0")}</span>
     <h3>${t.n}</h3><p>${t.d}</p>
