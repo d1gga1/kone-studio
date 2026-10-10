@@ -28,11 +28,12 @@
   to = "/app.html"
   status = 200
 
-# Qualsiasi altro indirizzo che non esiste torna al sito
+# Qualsiasi altro indirizzo che non esiste mostra il sito, ma con codice 404:
+# cosi' Google non indicizza pagine inesistenti come copie della home ("soft 404").
 [[redirects]]
   from = "/*"
   to = "/index.html"
-  status = 200
+  status = 404
 
 [[headers]]
   for = "/*"
@@ -63,3 +64,30 @@
   for = "/assets/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# SEO: le pagine dell'app e di prova non devono comparire su Google
+[[headers]]
+  for = "/app.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/app/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/coach/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/intro.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+# Sicurezza HTTPS (segnale di qualita' per Google)
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"

@@ -1,7 +1,7 @@
 /* KM Studio - service worker
    Cache della shell: sito e app si aprono anche senza rete.
    Cambia CACHE a ogni pubblicazione per forzare l'aggiornamento. */
-const CACHE = "km-studio-v10";
+const CACHE = "km-studio-v11";
 const SHELL = ["/", "/index.html", "/app.html", "/manifest.webmanifest", "/favicon.svg",
   "/favicon-32.png", "/assets/icon-192.png", "/assets/icon-512.png", "/assets/apple-touch-icon.png",
   "/assets/js/gsap.min.js", "/assets/js/ScrollTrigger.min.js", "/assets/js/lenis.min.js", "/assets/img/kone.webp",

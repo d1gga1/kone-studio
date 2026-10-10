@@ -1,7 +1,6 @@
 User-agent: *
 Allow: /
-# intro.html è solo una prova dell'animazione del logo
-Disallow: /intro.html
-# L'app (app.html, /coach) ha il tag noindex: Google la vede ma non la mostra nei risultati
+# app.html, /app, /coach, 404 e intro.html hanno il tag noindex:
+# Google deve poterle leggere per vedere il noindex, quindi non vanno bloccate qui.
 
 Sitemap: https://kone-studio.com/sitemap.xml

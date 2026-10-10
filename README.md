@@ -16,12 +16,18 @@ Sito statico in un solo file (`index.html`) + una funzione Netlify facoltativa p
 
 ## SEO e Google Search Console
 
-- Già fatto nel sito: titolo e descrizione per Google, link canonico, anteprima per WhatsApp e social
-  (`assets/og-sito.jpg`), dati strutturati (studio, Kone, servizi con prezzi, FAQ), `sitemap.xml`, `robots.txt`.
-  L'app (`app.html`, `/coach`) ha il tag `noindex`: non compare su Google.
+- Ottimizzato per **Milano** (10/10/2026): titolo, descrizione, H1, testi, footer e dati strutturati
+  (un unico `@graph`: studio con indirizzo/area Milano, Kone, sito, pagina, FAQ con 8 domande uguali a quelle visibili).
+- Instagram dello studio `@km.s.t.u.d.i.o.26` collegato ai dati strutturati; quello di Kone sulla sua scheda.
+- `llms.txt` per i motori di ricerca AI. Pagine app/coach/intro con `noindex` (meta + header Netlify).
+- Su Netlify gli indirizzi inesistenti rispondono **404** (prima 200 = "soft 404" duplicati della home).
+- Il loader animato parte solo alla prima visita della sessione (pagina più veloce dopo).
+- Quando c'è l'indirizzo con la via: aggiungilo in `CONTATTI.indirizzo` e in `address.streetAddress` +
+  `postalCode` nel JSON-LD in `<head>`, e aggiungi `hasMap` con il link della scheda Google.
 - Verifica in Search Console: dominio `kone-studio.com` (record TXT nel DNS) oppure prefisso URL con meta tag:
   il codice va incollato in `index.html` al posto del commento `google-site-verification`.
 - Dopo la verifica: Sitemap → invia `sitemap.xml`; Controllo URL → `https://kone-studio.com/` → Richiedi indicizzazione.
+- Test dati strutturati: https://search.google.com/test/rich-results
 
 ## Due ingressi separati
 
