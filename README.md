@@ -27,6 +27,11 @@ Sito statico in un solo file (`index.html`) + una funzione Netlify facoltativa p
 - Verifica in Search Console: dominio `kone-studio.com` (record TXT nel DNS) oppure prefisso URL con meta tag:
   il codice va incollato in `index.html` al posto del commento `google-site-verification`.
 - Dopo la verifica: Sitemap → invia `sitemap.xml`; Controllo URL → `https://kone-studio.com/` → Richiedi indicizzazione.
+- **13 pagine SEO** (una cartella con `index.html` ciascuna, stile in `assets/css/pagine.css`):
+  personal-trainer-milano, corsi-di-gruppo-milano, allenamento-e-massaggi-milano, massaggi-milano + 7 pagine
+  per ogni massaggio, prezzi, kone-moctar. Ognuna ha titolo/descrizione propri, breadcrumb, FAQ e dati strutturati
+  (Service con prezzi, FAQPage, BreadcrumbList). Sono tutte nella sitemap e collegate da home e footer.
+  Se cambiano i prezzi vanno aggiornati anche lì.
 - Test dati strutturati: https://search.google.com/test/rich-results
 
 ## Due ingressi separati

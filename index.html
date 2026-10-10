@@ -299,6 +299,7 @@ main,header,footer{position:relative;z-index:2}
 
 /* ---------- treatments ---------- */
 .tratt{padding:clamp(90px,12vw,160px) 0}
+.stl::after{content:"";position:absolute;inset:0;z-index:3}.stl:hover{color:var(--gold-hi)}
 .tgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
 .tcard{position:relative;border-radius:22px;padding:26px 24px;min-height:360px;background:var(--surf);border:1px solid var(--line-soft);overflow:hidden;
   display:flex;flex-direction:column;transform-style:preserve-3d;transition:border-color .4s,box-shadow .4s;--mx:50%;--my:50%}
@@ -875,7 +876,7 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
         <div>
           <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg></div>
           <div class="tag">01 · One to one</div>
-          <h3>Personal<br>training</h3>
+          <h3><a class="stl" href="/personal-trainer-milano/">Personal<br>training</a></h3>
           <p>Tu e Kone, nessun altro. Ogni seduta è costruita su obiettivi, storia e infortuni: tecnica, carichi e progressione seguiti da vicino.</p>
           <ul><li>Valutazione iniziale e scheda su misura</li><li>Carichi registrati seduta dopo seduta</li><li>Pacchetti da 4, 8 o 12 sedute</li></ul>
         </div>
@@ -886,7 +887,7 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
         <div>
           <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="7" r="3"/><circle cx="16.5" cy="8" r="2.5"/><path d="M2.5 20c.6-3.6 2.8-5.5 5.5-5.5s4.9 1.9 5.5 5.5M14 14.6c.8-.4 1.6-.6 2.5-.6 2.3 0 4.2 1.6 4.8 4.8"/></svg></div>
           <div class="tag">02 · In coppia</div>
-          <h3>Allenati<br>in due</h3>
+          <h3><a class="stl" href="/personal-trainer-milano/">Allenati<br>in due</a></h3>
           <p>Stessa seduta, due persone. La motivazione raddoppia, il prezzo si divide. Perfetto con il partner, un amico, un collega.</p>
           <ul><li>Programma condiviso, adattato a entrambi</li><li>Seduta singola o pacchetto da 4</li></ul>
         </div>
@@ -897,7 +898,7 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
         <div>
           <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="5.5" r="2.2"/><circle cx="5" cy="9" r="1.8"/><circle cx="19" cy="9" r="1.8"/><path d="M8 20l1-6 3-3 3 3 1 6M2.5 18l1.5-4 2-1.5M21.5 18l-1.5-4-2-1.5"/></svg></div>
           <div class="tag">03 · Massimo 10 persone</div>
-          <h3>Corsi di<br>gruppo</h3>
+          <h3><a class="stl" href="/corsi-di-gruppo-milano/">Corsi di<br>gruppo</a></h3>
           <p>Gruppi piccoli, energia alta. Ogni giorno il programma del corso viene generato su chi c'è, sul livello e sui feedback dell'ultima volta.</p>
           <ul><li>Mai più di 10 persone per corso</li><li>Ingresso singolo, carnet o mensile</li><li>Prenoti il posto dall'app</li></ul>
         </div>
@@ -908,7 +909,7 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
         <div>
           <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 20c-4-2.5-7-5.5-7-9a7 7 0 0 1 14 0c0 3.5-3 6.5-7 9z"/><path d="M9 11c1 1.3 2 2 3 2s2-.7 3-2"/></svg></div>
           <div class="tag">04 · Trattamenti</div>
-          <h3>Massaggi<br>professionali</h3>
+          <h3><a class="stl" href="/massaggi-milano/">Massaggi<br>professionali</a></h3>
           <p>Decontratturante, sportivo, linfodrenante, riflessologia, coppettazione e altro. Da 30 o 60 minuti, da soli o insieme all'allenamento.</p>
           <ul><li>8 trattamenti, ognuno con il suo perché</li><li>Combo allenamento + massaggi</li></ul>
         </div>
@@ -943,7 +944,7 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
     <div class="tim"><img src="assets/img/decon.webp" alt="Massaggio decontratturante" loading="lazy" decoding="async" width="1600" height="1063" sizes="(max-width:620px) 92vw, (max-width:1100px) 46vw, 640px"></div>
     <div class="tbody"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 14c0-4 3-8 7-8 1.5 0 2.5.8 2.5 2 0 1.6-2 2-2 3.5 0 1 1 1.5 2.5 1.5 2.5 0 4 1.5 4 3.5 0 2.5-3 4.5-7 4.5S5 18 5 14z"></path></svg></div>
     <span class="tn">01</span>
-    <h3>Massaggio decontratturante</h3><p>Scioglie le tensioni muscolari e migliora la mobilità.</p>
+    <h3><a class="stl" href="/massaggio-decontratturante-milano/">Massaggio decontratturante</a></h3><p>Scioglie le tensioni muscolari e migliora la mobilità.</p>
     <ul><li>Riduce contratture e punti di tensione</li><li>Restituisce mobilità a collo, schiena e spalle</li><li>Allevia i dolori da sovraccarico</li></ul>
     <div class="tp"><div><span>30 MIN</span><b>30€</b></div><div><span>60 MIN</span><b>55€</b></div></div></div>
   </article>
@@ -951,7 +952,7 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
     <div class="tim"><img src="assets/img/sport.webp" alt="Massaggio sportivo" loading="lazy" decoding="async" width="1600" height="1063" sizes="(max-width:620px) 92vw, (max-width:1100px) 46vw, 640px"></div>
     <div class="tbody"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="4.5" r="2"></circle><path d="M6 21l3.5-6 3 2.5V22M9.5 15l1.5-6 4 2.5 3 .5M11 9l-3 1-2 3"></path></svg></div>
     <span class="tn">02</span>
-    <h3>Massaggio sportivo</h3><p>Prima e dopo l'attività fisica: migliora prestazioni e recupero.</p>
+    <h3><a class="stl" href="/massaggio-sportivo-milano/">Massaggio sportivo</a></h3><p>Prima e dopo l'attività fisica: migliora prestazioni e recupero.</p>
     <ul><li>Prepara i muscoli allo sforzo</li><li>Accelera il recupero</li><li>Aiuta a prevenire sovraccarichi</li></ul>
     <div class="tp"><div><span>30 MIN</span><b>30€</b></div><div><span>60 MIN</span><b>55€</b></div></div></div>
   </article>
@@ -959,7 +960,7 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
     <div class="tim"><img src="assets/img/relax.webp" alt="Rilassante e antistress" loading="lazy" decoding="async" width="1600" height="1063" sizes="(max-width:620px) 92vw, (max-width:1100px) 46vw, 320px"></div>
     <div class="tbody"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19c-3-2-4.5-5-4.5-8 0-2 2-4.5 4.5-6.5 2.5 2 4.5 4.5 4.5 6.5 0 3-1.5 6-4.5 8z"></path><path d="M12 19c-4 0-8-2-9-6 2.5-.5 4.5 0 6 1M12 19c4 0 8-2 9-6-2.5-.5-4.5 0-6 1"></path></svg></div>
     <span class="tn">03</span>
-    <h3>Rilassante e antistress</h3><p>Riduce lo stress e favorisce il benessere psicofisico.</p>
+    <h3><a class="stl" href="/massaggio-rilassante-milano/">Rilassante e antistress</a></h3><p>Riduce lo stress e favorisce il benessere psicofisico.</p>
     <ul><li>Abbassa tensione nervosa e ansia</li><li>Favorisce un sonno più profondo</li><li>Sensazione di leggerezza</li></ul>
     <div class="tp"><div><span>30 MIN</span><b>30€</b></div><div><span>60 MIN</span><b>55€</b></div></div></div>
   </article>
@@ -967,7 +968,7 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
     <div class="tim"><img src="assets/img/cervi.webp" alt="Cervico lombare" loading="lazy" decoding="async" width="1600" height="1063" sizes="(max-width:620px) 92vw, (max-width:1100px) 46vw, 320px"></div>
     <div class="tbody"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5v19"></path><rect x="9" y="4" width="6" height="3" rx="1.2"></rect><rect x="8.5" y="9" width="7" height="3" rx="1.2"></rect><rect x="9" y="14" width="6" height="3" rx="1.2"></rect></svg></div>
     <span class="tn">04</span>
-    <h3>Cervico lombare</h3><p>Allevia dolori e tensioni a collo, spalle e zona lombare.</p>
+    <h3><a class="stl" href="/massaggio-cervicale-milano/">Cervico lombare</a></h3><p>Allevia dolori e tensioni a collo, spalle e zona lombare.</p>
     <ul><li>Scioglie la rigidità di collo e trapezi</li><li>Allenta la zona lombare</li><li>Aiuta postura e movimento</li></ul>
     <div class="tp"><div><span>30 MIN</span><b>30€</b></div><div><span>60 MIN</span><b>55€</b></div></div></div>
   </article>
@@ -975,7 +976,7 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
     <div class="tim"><img src="assets/img/linfo.webp" alt="Linfodrenante" loading="lazy" decoding="async" width="1600" height="1063" sizes="(max-width:620px) 92vw, (max-width:1100px) 46vw, 320px"></div>
     <div class="tbody"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c3 4 6 7.5 6 11a6 6 0 0 1-12 0c0-3.5 3-7 6-11z"></path><path d="M9.5 14.5a2.5 2.5 0 0 0 2.5 2.5"></path></svg></div>
     <span class="tn">05</span>
-    <h3>Linfodrenante</h3><p>Favorisce il drenaggio dei liquidi e migliora la circolazione.</p>
+    <h3><a class="stl" href="/massaggio-linfodrenante-milano/">Linfodrenante</a></h3><p>Favorisce il drenaggio dei liquidi e migliora la circolazione.</p>
     <ul><li>Riduce gonfiore e ritenzione</li><li>Gambe più leggere</li><li>Migliora la circolazione</li></ul>
     <div class="tp"><div><span>30 MIN</span><b>30€</b></div><div><span>60 MIN</span><b>55€</b></div></div></div>
   </article>
@@ -983,7 +984,7 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
     <div class="tim"><img src="assets/img/rifle.webp" alt="Riflessologia plantare" loading="lazy" decoding="async" width="1600" height="1063" sizes="(max-width:620px) 92vw, (max-width:1100px) 46vw, 320px"></div>
     <div class="tbody"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21c-2 0-3-2-3-4 0-3 2-4 2.5-7 .4-2.5 1.5-4.5 3.5-4.5S14 7 13.5 10c-.5 3-1 5 0 7 1 2.5-2.5 4-5.5 4z"></path><circle cx="16" cy="5" r="1.2"></circle><circle cx="18.5" cy="7.5" r="1"></circle><circle cx="19.5" cy="10.5" r=".9"></circle></svg></div>
     <span class="tn">06</span>
-    <h3>Riflessologia plantare</h3><p>Stimola i punti riflessi dei piedi per l'equilibrio generale.</p>
+    <h3><a class="stl" href="/riflessologia-plantare-milano/">Riflessologia plantare</a></h3><p>Stimola i punti riflessi dei piedi per l'equilibrio generale.</p>
     <ul><li>Rilassamento profondo</li><li>Piedi e gambe più leggeri</li><li>Equilibrio e benessere</li></ul>
     <div class="tp"><div><span>30 MIN</span><b>30€</b></div><div><span>60 MIN</span><b>55€</b></div></div></div>
   </article>
@@ -991,7 +992,7 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
     <div class="tim"><img src="assets/img/coppe.webp" alt="Coppettazione" loading="lazy" decoding="async" width="1600" height="1063" sizes="(max-width:620px) 92vw, (max-width:1100px) 46vw, 640px"></div>
     <div class="tbody"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9h12l-1.5 9a2 2 0 0 1-2 1.5h-5a2 2 0 0 1-2-1.5z"></path><path d="M8 9V6.5a4 4 0 0 1 8 0V9"></path></svg></div>
     <span class="tn">07</span>
-    <h3>Coppettazione</h3><p>Tecnica antica per tensioni profonde, circolazione e dolori. Può lasciare segni circolari temporanei.</p>
+    <h3><a class="stl" href="/coppettazione-milano/">Coppettazione</a></h3><p>Tecnica antica per tensioni profonde, circolazione e dolori. Può lasciare segni circolari temporanei.</p>
     <ul><li>Lavora sulle tensioni ostinate</li><li>Migliora la circolazione locale</li><li>Riduce i dolori muscolari</li></ul>
     <div class="tp"><div><span>30 MIN</span><b>30€</b></div><div><span>60 MIN</span><b>55€</b></div></div></div>
   </article>
@@ -999,7 +1000,7 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
     <div class="tim"><img src="assets/img/altri.webp" alt="Altri massaggi su richiesta" loading="lazy" decoding="async" width="1600" height="1063" sizes="(max-width:620px) 92vw, (max-width:1100px) 46vw, 640px"></div>
     <div class="tbody"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"></path></svg></div>
     <span class="tn">08</span>
-    <h3>Altri massaggi su richiesta</h3><p>Ogni corpo è unico, ogni trattamento è su misura: parlane con Kone.</p>
+    <h3><a class="stl" href="/massaggi-milano/">Altri massaggi su richiesta</a></h3><p>Ogni corpo è unico, ogni trattamento è su misura: parlane con Kone.</p>
     <ul><li>Costruito sulle tue esigenze</li><li>Tecniche combinate</li><li>Si concorda insieme</li></ul>
     <div class="tp"><div><span>30 MIN</span><b>30€</b></div><div><span>60 MIN</span><b>55€</b></div></div></div>
   </article></div>
@@ -1196,10 +1197,11 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
         <p style="color:var(--txt-2);margin-top:18px;max-width:340px">Personal trainer e massaggiatore professionale a Milano: allenamento one to one, corsi di gruppo e massaggi. Movimento, cura, risultati.</p>
         <p style="color:var(--txt-3);margin-top:10px;font-size:15px">Milano · su appuntamento</p>
       </div>
-      <div><h5>Studio</h5><a href="#servizi">Personal training</a><a href="#servizi">Corsi di gruppo</a><a href="#massaggi">Massaggi</a><a href="#metodo">Il metodo</a></div>
-      <div><h5>Clienti</h5><a href="app.html">Entra nell'app</a><a href="#" data-install>Scarica l'app sul telefono</a><a href="#app">Cosa c'è nell'app</a><a href="#listino">Listino</a></div>
+      <div><h5>Studio a Milano</h5><a href="/personal-trainer-milano/">Personal trainer</a><a href="/corsi-di-gruppo-milano/">Corsi di gruppo</a><a href="/massaggi-milano/">Massaggi</a><a href="/allenamento-e-massaggi-milano/">Allenamento + massaggi</a><a href="/prezzi/">Prezzi</a><a href="/kone-moctar/">Chi è Kone</a></div>
+      <div><h5>Clienti</h5><a href="app.html">Entra nell'app</a><a href="#" data-install>Scarica l'app sul telefono</a><a href="#app">Cosa c'è nell'app</a><a href="/prezzi/">Listino</a></div>
       <div class="footc"><h5>Contatti</h5><div id="footC"><a href="tel:+393922696468">392 269 6468</a><a href="mailto:konemoctar00@gmail.com">konemoctar00@gmail.com</a><a href="https://www.instagram.com/km.s.t.u.d.i.o.26/" target="_blank" rel="noopener">@km.s.t.u.d.i.o.26</a><a href="https://www.instagram.com/konemoctar4/" target="_blank" rel="noopener">@konemoctar4</a></div></div>
     </div>
+    <p class="fmass" style="margin-top:34px;color:var(--txt-3);font-size:14px;line-height:2">Massaggi a Milano: <a href="/massaggio-decontratturante-milano/">Massaggio decontratturante</a> · <a href="/massaggio-sportivo-milano/">Massaggio sportivo</a> · <a href="/massaggio-rilassante-milano/">Rilassante e antistress</a> · <a href="/massaggio-cervicale-milano/">Cervico lombare</a> · <a href="/massaggio-linfodrenante-milano/">Linfodrenante</a> · <a href="/riflessologia-plantare-milano/">Riflessologia plantare</a> · <a href="/coppettazione-milano/">Coppettazione</a></p>
     <div class="giant" aria-hidden="true">Kone Moctar</div>
     <div class="bot"><span>© <span id="yr"></span> Kone Moctar Studio · Milano</span><span>Movimento · Cura · Risultati</span></div>
     <div class="dnv"><span class="dnv-l">Powered by</span><a class="dnv-b" href="https://danova-tech.com" target="_blank" rel="noopener" title="Danova Tech"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="15.5" height="15.5" rx="3.2" fill="none" stroke="#CDD2DC" stroke-width="2"/><path d="M8.2 8h3.2a3.4 3.4 0 0 1 0 6.8H8.2z" fill="none" stroke="#CDD2DC" stroke-width="1.8"/><path d="M2.5 21.5L21.5 2.5" stroke="#2F6BFF" stroke-width="1.7" stroke-linecap="round"/></svg><span class="dnv-t"><b>DANOVA</b><i>TECH</i></span></a></div>
@@ -1294,14 +1296,14 @@ const POPUP_DOPO_MS = 7000;
 
 /* ---------- dati (dal listino e dai trattamenti dell'app) ---------- */
 const TRATT=[
-  {img:"decon",n:"Massaggio decontratturante",ic:"muscle",d:"Scioglie le tensioni muscolari e migliora la mobilità.",b:["Riduce contratture e punti di tensione","Restituisce mobilità a collo, schiena e spalle","Allevia i dolori da sovraccarico"],f:1},
-  {img:"sport",n:"Massaggio sportivo",ic:"run",d:"Prima e dopo l'attività fisica: migliora prestazioni e recupero.",b:["Prepara i muscoli allo sforzo","Accelera il recupero","Aiuta a prevenire sovraccarichi"],f:1},
-  {img:"relax",n:"Rilassante e antistress",ic:"lotus",d:"Riduce lo stress e favorisce il benessere psicofisico.",b:["Abbassa tensione nervosa e ansia","Favorisce un sonno più profondo","Sensazione di leggerezza"]},
-  {img:"cervi",n:"Cervico lombare",ic:"spine",d:"Allevia dolori e tensioni a collo, spalle e zona lombare.",b:["Scioglie la rigidità di collo e trapezi","Allenta la zona lombare","Aiuta postura e movimento"]},
-  {img:"linfo",n:"Linfodrenante",ic:"drop",d:"Favorisce il drenaggio dei liquidi e migliora la circolazione.",b:["Riduce gonfiore e ritenzione","Gambe più leggere","Migliora la circolazione"]},
-  {img:"rifle",n:"Riflessologia plantare",ic:"foot",d:"Stimola i punti riflessi dei piedi per l'equilibrio generale.",b:["Rilassamento profondo","Piedi e gambe più leggeri","Equilibrio e benessere"]},
-  {img:"coppe",n:"Coppettazione",ic:"cup",d:"Tecnica antica per tensioni profonde, circolazione e dolori. Può lasciare segni circolari temporanei.",b:["Lavora sulle tensioni ostinate","Migliora la circolazione locale","Riduce i dolori muscolari"],f:1},
-  {img:"altri",n:"Altri massaggi su richiesta",ic:"star",d:"Ogni corpo è unico, ogni trattamento è su misura: parlane con Kone.",b:["Costruito sulle tue esigenze","Tecniche combinate","Si concorda insieme"],f:1}
+  {img:"decon",n:"Massaggio decontratturante",u:"massaggio-decontratturante-milano",ic:"muscle",d:"Scioglie le tensioni muscolari e migliora la mobilità.",b:["Riduce contratture e punti di tensione","Restituisce mobilità a collo, schiena e spalle","Allevia i dolori da sovraccarico"],f:1},
+  {img:"sport",n:"Massaggio sportivo",u:"massaggio-sportivo-milano",ic:"run",d:"Prima e dopo l'attività fisica: migliora prestazioni e recupero.",b:["Prepara i muscoli allo sforzo","Accelera il recupero","Aiuta a prevenire sovraccarichi"],f:1},
+  {img:"relax",n:"Rilassante e antistress",u:"massaggio-rilassante-milano",ic:"lotus",d:"Riduce lo stress e favorisce il benessere psicofisico.",b:["Abbassa tensione nervosa e ansia","Favorisce un sonno più profondo","Sensazione di leggerezza"]},
+  {img:"cervi",n:"Cervico lombare",u:"massaggio-cervicale-milano",ic:"spine",d:"Allevia dolori e tensioni a collo, spalle e zona lombare.",b:["Scioglie la rigidità di collo e trapezi","Allenta la zona lombare","Aiuta postura e movimento"]},
+  {img:"linfo",n:"Linfodrenante",u:"massaggio-linfodrenante-milano",ic:"drop",d:"Favorisce il drenaggio dei liquidi e migliora la circolazione.",b:["Riduce gonfiore e ritenzione","Gambe più leggere","Migliora la circolazione"]},
+  {img:"rifle",n:"Riflessologia plantare",u:"riflessologia-plantare-milano",ic:"foot",d:"Stimola i punti riflessi dei piedi per l'equilibrio generale.",b:["Rilassamento profondo","Piedi e gambe più leggeri","Equilibrio e benessere"]},
+  {img:"coppe",n:"Coppettazione",u:"coppettazione-milano",ic:"cup",d:"Tecnica antica per tensioni profonde, circolazione e dolori. Può lasciare segni circolari temporanei.",b:["Lavora sulle tensioni ostinate","Migliora la circolazione locale","Riduce i dolori muscolari"],f:1},
+  {img:"altri",n:"Altri massaggi su richiesta",u:"massaggi-milano",ic:"star",d:"Ogni corpo è unico, ogni trattamento è su misura: parlane con Kone.",b:["Costruito sulle tue esigenze","Tecniche combinate","Si concorda insieme"],f:1}
 ];
 const ICONS={
   muscle:'<path d="M5 14c0-4 3-8 7-8 1.5 0 2.5.8 2.5 2 0 1.6-2 2-2 3.5 0 1 1 1.5 2.5 1.5 2.5 0 4 1.5 4 3.5 0 2.5-3 4.5-7 4.5S5 18 5 14z"/>',
@@ -1327,7 +1329,7 @@ if(!$("#tgrid").children.length)$("#tgrid").innerHTML=TRATT.map((t,i)=>`
     <div class="tim"><img src="assets/img/${t.img}.webp" alt="${t.n}" loading="lazy" decoding="async" width="1600" height="1063" sizes="(max-width:620px) 92vw, (max-width:1100px) 46vw, ${t.f?"640px":"320px"}"></div>
     <div class="tbody"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${ICONS[t.ic]}</svg></div>
     <span class="tn">${String(i+1).padStart(2,"0")}</span>
-    <h3>${t.n}</h3><p>${t.d}</p>
+    <h3><a class="stl" href="/${t.u||"massaggi-milano"}/">${t.n}</a></h3><p>${t.d}</p>
     <ul>${t.b.map(x=>`<li>${x}</li>`).join("")}</ul>
     <div class="tp"><div><span>30 MIN</span><b>30€</b></div><div><span>60 MIN</span><b>55€</b></div></div></div>
   </article>`).join("");
