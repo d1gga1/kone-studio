@@ -34,6 +34,20 @@ Sito statico in un solo file (`index.html`) + una funzione Netlify facoltativa p
   Se cambiano i prezzi vanno aggiornati anche lì.
 - Test dati strutturati: https://search.google.com/test/rich-results
 
+### Ottimizzazione SEO tecnica (15/10/2026)
+
+- **Hosting reale = GitHub Pages** (repo `d1gga1/kone-studio`, file `CNAME`): `netlify.toml` qui NON viene letto.
+  Il noindex di app/coach/404/intro funziona comunque grazie al meta tag nelle pagine.
+- **Font in locale** (`assets/fonts/`, Oswald + Barlow woff2): niente più Google Fonts esterni
+  (più veloce, nessun file bloccante, conforme GDPR). Con font "di riserva" calibrati: il testo non salta più al caricamento (CLS ~0).
+- **Immagini responsive**: ogni foto dei trattamenti ha le versioni `-480`, `-800`, `-1200` (+ originale 1600) con `srcset`;
+  il telefono scarica la versione piccola. Se cambi una foto, rigenera anche le 3 versioni.
+- **Anteprime social per pagina** in `assets/og/<pagina>.jpg` (1200×630) + `twitter:title/description`.
+- Home: H1 con parole chiave **visibili** ("Personal trainer & massaggi professionali a Milano") al posto del testo nascosto;
+  alt delle foto descrittivi; ordine dei titoli corretto; loader iniziale accorciato (~0,7 s in meno).
+- Da fare fuori dal sito (impatto maggiore sulla SEO locale): **Scheda Google Business Profile** con indirizzo, orari, foto e recensioni;
+  poi aggiungere via, CAP, coordinate (`geo`), `openingHoursSpecification` e `hasMap` nel JSON-LD.
+
 ## Due ingressi separati
 
 | Chi | Indirizzo | Accesso |

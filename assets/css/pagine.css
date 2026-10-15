@@ -1,5 +1,5 @@
 :root{--ink:#08080A;--ink-2:#0E0E11;--surf:#141418;--surf-2:#1B1B20;--line:#2A2A31;--gold:#D9A93C;--gold-hi:#F7E3A1;--txt:#F3EFE6;--txt-2:#A9A296;--txt-3:#8a8478;
---sans:'Barlow',system-ui,-apple-system,'Segoe UI',sans-serif;--disp:'Oswald','Barlow Condensed',system-ui,sans-serif;
+--sans:'Barlow','Barlow Fallback',system-ui,-apple-system,'Segoe UI',sans-serif;--disp:'Oswald','Oswald Fallback','Barlow Condensed',system-ui,sans-serif;
 --grad:linear-gradient(120deg,#F7E3A1 0%,#D9A93C 30%,#8A6415 55%,#E8C463 78%,#B98A22 100%);--gut:clamp(16px,4vw,56px);color-scheme:dark}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 body{margin:0;background:var(--ink);color:var(--txt);font-family:var(--sans);font-size:18px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
