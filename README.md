@@ -119,3 +119,17 @@ L'impianto dell'app è già pensato per questo passaggio.
 
 ---
 Danova Tech — info@danova-tech.com
+
+### Calendario, prenotazione a passaggi e PayPal (20/10/2026)
+
+- **Coach · Calendario** (ex Agenda): vista **Giorno / Settimana**, frecce ‹ Oggi ›, **Filtri** (tipo, corso, posti liberi/al completo).
+  Ogni orario ha il menu ⋮: gestisci prenotati, **Sposta** (i prenotati ricevono un messaggio in chat), **Duplica**
+  (giorno dopo, settimana prossima, 4 settimane, data a scelta), chiudi/riapri, elimina. In vista settimana si **trascina**
+  un blocco per spostarlo e con doppio clic su uno spazio vuoto si crea un orario.
+- **Cliente · Prenota** in 4 passaggi (Attività → Giorno → Orario → Conferma) con riepilogo e scelta del pagamento:
+  **PayPal** (QR `assets/img/paypal-qr.webp` + pulsante), scala dal piano, oppure in studio.
+  Kone vede "PayPal · conferma" sul prenotato: un tocco lo segna pagato e lo registra in Contabilità.
+  Il link PayPal si cambia dal Listino (area coach).
+- **Prezzi** allineati al volantino di ottobre 2026 (pacchetti PT 172/336/480, Active 320, Pro 450, combo 370/740/1.040,
+  trattamenti a scelta 30′/50′). Aggiornati app, home, /prezzi e pagine SEO. I dati già salvati nel browser vengono aggiornati da soli.
+- Logo ufficiale (immagine `logo-km`) usato anche nell'app: intro, schermate di accesso e barra in alto.
