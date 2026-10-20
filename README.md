@@ -144,3 +144,15 @@ Danova Tech — info@danova-tech.com
   file PDF/foto caricato; "Nuova scheda" archivia la vecchia; "Salva come modello"; "Avvisa il cliente" scrive in chat.
 - **Chat**: tutti i clienti in elenco con ricerca, risposte con foto allegate (anche dal cliente).
 - Limite demo invariato: i dati restano nel browser del dispositivo, finché non si collega un database condiviso.
+
+### SEO avanzata (20/10/2026, sera)
+
+- **Velocità home** (Lighthouse mobile ~62 → ~75-80, LCP reale < 1 s): loader nero iniziale disattivato, logo visibile
+  da subito in trasparenza mentre si costruisce, GSAP/ScrollTrigger/Lenis caricati con `defer`, animazioni di scroll
+  avviate quando il browser è libero, smooth scroll solo con mouse. Contrasto del manifesto migliorato.
+- **7 pagine nuove**: /allenamento-in-coppia-milano/, /contatti/, /guide/ + 4 guide (quanto costa un personal trainer
+  a Milano, decontratturante o sportivo, ogni quanto fare un massaggio, personal trainer o corsi). Dati strutturati
+  Article/Service/FAQ/ContactPage/BreadcrumbList, autore Kone Moctar.
+- Link interni: "Guide" nel menu, footer aggiornato su tutte le pagine, box "Approfondisci" su prezzi, massaggi, corsi.
+- Sitemap (21 URL, lastmod 2026-10-20) e llms.txt aggiornati. Corretto prezzo Pro (450 €) sulla pagina personal trainer.
+- Dopo la pubblicazione: Search Console → Sitemap → reinvia sitemap.xml; Controllo URL sulle pagine nuove.

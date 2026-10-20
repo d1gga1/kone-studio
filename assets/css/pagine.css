@@ -97,3 +97,6 @@ td small{display:block;color:var(--txt-3);font-size:13px}
 .bot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:40px;padding-top:20px;border-top:1px solid #1d1d23;color:var(--txt-3);font-size:13px}
 .bot a{color:var(--txt-3);text-decoration:none}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+.byline{font-size:14px;color:var(--txt-3);margin:16px 0 0}.byline a{color:var(--txt-2)}
+.content .ptab{margin-top:6px}.content td:last-child{font-family:inherit;font-size:16px;white-space:normal;text-align:left}.content th:last-child{text-align:left}
+.ticks li a b{color:var(--gold-hi)}

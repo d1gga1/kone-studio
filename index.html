@@ -39,7 +39,6 @@
 <meta name="twitter:description" content="Personal training, corsi di gruppo e massaggi professionali a Milano. Prenota dall'app.">
 <meta name="twitter:image" content="https://kone-studio.com/assets/og-sito.jpg">
 <link rel="preload" as="image" href="assets/img/logo-km.webp" imagesrcset="assets/img/logo-km-720.webp 720w, assets/img/logo-km.webp 1254w" imagesizes="(max-width:900px) 340px, 560px" fetchpriority="high">
-<link rel="preload" href="assets/js/gsap.min.js" as="script">
 <style>@font-face{font-family:'Oswald Fallback';src:local('Arial'),local('ArialMT'),local('Helvetica Neue'),local('Helvetica'),local('Roboto'),local('Liberation Sans'),local('FreeSans');size-adjust:81.43%;ascent-override:146.51%;descent-override:35.49%;line-gap-override:0%}@font-face{font-family:'Barlow Fallback';src:local('Arial'),local('ArialMT'),local('Helvetica Neue'),local('Helvetica'),local('Roboto'),local('Liberation Sans'),local('FreeSans');size-adjust:96.68%;ascent-override:103.43%;descent-override:20.69%;line-gap-override:0%}@font-face{font-family:'Oswald';font-style:normal;font-weight:300;font-display:swap;src:url(/assets/fonts/oswald-300.woff2) format('woff2')}@font-face{font-family:'Oswald';font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/oswald-400.woff2) format('woff2')}@font-face{font-family:'Oswald';font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/oswald-500.woff2) format('woff2')}@font-face{font-family:'Oswald';font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/oswald-600.woff2) format('woff2')}@font-face{font-family:'Oswald';font-style:normal;font-weight:700;font-display:swap;src:url(/assets/fonts/oswald-700.woff2) format('woff2')}@font-face{font-family:'Barlow';font-style:normal;font-weight:300;font-display:swap;src:url(/assets/fonts/barlow-300.woff2) format('woff2')}@font-face{font-family:'Barlow';font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/barlow-400.woff2) format('woff2')}@font-face{font-family:'Barlow';font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/barlow-500.woff2) format('woff2')}@font-face{font-family:'Barlow';font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/barlow-600.woff2) format('woff2')}@font-face{font-family:'Barlow';font-style:normal;font-weight:700;font-display:swap;src:url(/assets/fonts/barlow-700.woff2) format('woff2')}@font-face{font-family:'Barlow';font-style:italic;font-weight:400;font-display:swap;src:url(/assets/fonts/barlow-400-italic.woff2) format('woff2')}@font-face{font-family:'Barlow';font-style:italic;font-weight:500;font-display:swap;src:url(/assets/fonts/barlow-500-italic.woff2) format('woff2')}</style><link rel="preload" href="/assets/fonts/oswald-700.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/assets/fonts/barlow-400.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/assets/fonts/oswald-600.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/assets/fonts/oswald-500.woff2" as="font" type="font/woff2" crossorigin>
 <style>
 :root{
@@ -95,7 +94,7 @@ main,header,footer{position:relative;z-index:2}
 @media (hover:none),(pointer:coarse){.cur,.cur-dot{display:none}}
 
 /* ---------- loader ---------- */
-#loader{position:fixed;inset:0;z-index:150;display:grid;place-items:center;background:var(--ink)}
+#loader{position:fixed;inset:0;z-index:150;display:none;place-items:center;background:var(--ink)}
 #loader .lmark{width:min(46vw,230px)}
 #loader .lring{stroke-dasharray:1571;stroke-dashoffset:1571}
 #loader .lcount{position:absolute;right:var(--gut);bottom:calc(22px + env(safe-area-inset-bottom,0px));font-family:var(--disp);font-weight:300;font-size:clamp(64px,14vw,180px);line-height:.8;color:var(--txt)}
@@ -234,7 +233,7 @@ main,header,footer{position:relative;z-index:2}
 /* ---------- manifesto ---------- */
 .manifesto{padding:clamp(100px,16vw,200px) 0}
 .manifesto .big{font-family:var(--disp);font-weight:500;font-size:clamp(30px,4.6vw,72px);line-height:1.08;text-transform:uppercase;max-width:1200px;margin-top:34px}
-.manifesto .big .w{opacity:.14;transition:opacity .2s;display:inline}
+.manifesto .big .w{opacity:.4;transition:opacity .2s;display:inline}
 .manifesto .big .w.g{color:var(--gold)}
 .manifesto .sign{display:flex;align-items:center;gap:18px;margin-top:48px;color:var(--txt-2)}
 .manifesto .sign svg,.manifesto .sign img{width:56px;height:56px;border-radius:50%}
@@ -697,6 +696,11 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
 .dnv-t i{font-style:normal;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-weight:600;font-size:9.5px;letter-spacing:.52em;color:#2F6BFF;margin-top:4px}
 /* ---------- no-js / reduced ---------- */
 .no-anim #loader,.no-anim .curtain{display:none}
+/* logo: parte in trasparenza (niente lampo del logo intero prima della costruzione animata) */
+@media (prefers-reduced-motion:no-preference){.js #klogo .kp-full{opacity:.12}}
+.no-anim #klogo .kp-full{opacity:1!important}
+/* finché non partono le animazioni, nascondi i pezzi che verranno animati (evita il "lampo" iniziale) */
+@media (prefers-reduced-motion:no-preference){.js:not(.go) #klogo .kp:not(.kp-full),.js:not(.go) .hero h1,.js:not(.go) .h-in,.js:not(.go) .hero-meta{visibility:hidden}}
 .no-anim .manifesto .big .w{opacity:1}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important}
@@ -704,8 +708,9 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
 }
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": ["HealthAndBeautyBusiness", "ExerciseGym"], "@id": "https://kone-studio.com/#studio", "name": "Kone Moctar Studio", "alternateName": "KM Studio", "url": "https://kone-studio.com/", "logo": {"@type": "ImageObject", "url": "https://kone-studio.com/assets/icon-512.png", "width": 512, "height": 512}, "image": ["https://kone-studio.com/assets/og-sito.jpg", "https://kone-studio.com/assets/img/kone.webp"], "description": "Studio di personal training e massaggi professionali a Milano: allenamento one to one e in coppia, corsi di gruppo (max 10 persone) e massaggi decontratturanti, sportivi, rilassanti, cervico lombari, linfodrenanti, riflessologia plantare e coppettazione con Kone Moctar.", "slogan": "Movimento · Cura · Risultati", "telephone": "+39 392 269 6468", "email": "konemoctar00@gmail.com", "priceRange": "€€", "currenciesAccepted": "EUR", "sameAs": ["https://www.instagram.com/km.s.t.u.d.i.o.26/"], "founder": {"@id": "https://kone-studio.com/#kone"}, "hasOfferCatalog": {"@type": "OfferCatalog", "name": "Servizi e trattamenti", "itemListElement": [{"@type": "Offer", "price": "45", "priceCurrency": "EUR", "itemOffered": {"@type": "Service", "name": "Personal training one to one", "description": "Seduta individuale con Kone Moctar", "provider": {"@id": "https://kone-studio.com/#studio"}, "areaServed": {"@type": "City", "name": "Milano", "sameAs": "https://it.wikipedia.org/wiki/Milano"}, "serviceType": "Personal training"}}, {"@type": "Offer", "price": "65", "priceCurrency": "EUR", "itemOffered": {"@type": "Service", "name": "Personal training in coppia", "provider": {"@id": "https://kone-studio.com/#studio"}, "areaServed": {"@type": "City", "name": "Milano", "sameAs": "https://it.wikipedia.org/wiki/Milano"}, "serviceType": "Personal training"}}, {"@type": "Offer", "price": "12", "priceCurrency": "EUR", "itemOffered": {"@type": "Service", "name": "Corso di gruppo (max 10 persone)", "provider": {"@id": "https://kone-studio.com/#studio"}, "areaServed": {"@type": "City", "name": "Milano", "sameAs": "https://it.wikipedia.org/wiki/Milano"}, "serviceType": "Personal training"}}, {"@type": "Offer", "price": "30", "priceCurrency": "EUR", "itemOffered": {"@type": "Service", "name": "Massaggio decontratturante", "description": "Scioglie le tensioni muscolari e migliora la mobilità.", "provider": {"@id": "https://kone-studio.com/#studio"}, "areaServed": {"@type": "City", "name": "Milano", "sameAs": "https://it.wikipedia.org/wiki/Milano"}, "serviceType": "Massaggio"}, "description": "Prezzo per 30 minuti; 50 minuti 55 €"}, {"@type": "Offer", "price": "30", "priceCurrency": "EUR", "itemOffered": {"@type": "Service", "name": "Massaggio sportivo", "description": "Prima e dopo l'attività fisica: migliora prestazioni e recupero.", "provider": {"@id": "https://kone-studio.com/#studio"}, "areaServed": {"@type": "City", "name": "Milano", "sameAs": "https://it.wikipedia.org/wiki/Milano"}, "serviceType": "Massaggio"}, "description": "Prezzo per 30 minuti; 50 minuti 55 €"}, {"@type": "Offer", "price": "30", "priceCurrency": "EUR", "itemOffered": {"@type": "Service", "name": "Massaggio rilassante e antistress", "description": "Riduce lo stress e favorisce il benessere psicofisico.", "provider": {"@id": "https://kone-studio.com/#studio"}, "areaServed": {"@type": "City", "name": "Milano", "sameAs": "https://it.wikipedia.org/wiki/Milano"}, "serviceType": "Massaggio"}, "description": "Prezzo per 30 minuti; 50 minuti 55 €"}, {"@type": "Offer", "price": "30", "priceCurrency": "EUR", "itemOffered": {"@type": "Service", "name": "Massaggio cervico lombare", "description": "Allevia dolori e tensioni a collo, spalle e zona lombare.", "provider": {"@id": "https://kone-studio.com/#studio"}, "areaServed": {"@type": "City", "name": "Milano", "sameAs": "https://it.wikipedia.org/wiki/Milano"}, "serviceType": "Massaggio"}, "description": "Prezzo per 30 minuti; 50 minuti 55 €"}, {"@type": "Offer", "price": "30", "priceCurrency": "EUR", "itemOffered": {"@type": "Service", "name": "Massaggio linfodrenante", "description": "Favorisce il drenaggio dei liquidi e migliora la circolazione.", "provider": {"@id": "https://kone-studio.com/#studio"}, "areaServed": {"@type": "City", "name": "Milano", "sameAs": "https://it.wikipedia.org/wiki/Milano"}, "serviceType": "Massaggio"}, "description": "Prezzo per 30 minuti; 50 minuti 55 €"}, {"@type": "Offer", "price": "30", "priceCurrency": "EUR", "itemOffered": {"@type": "Service", "name": "Riflessologia plantare", "description": "Stimola i punti riflessi dei piedi per l'equilibrio generale.", "provider": {"@id": "https://kone-studio.com/#studio"}, "areaServed": {"@type": "City", "name": "Milano", "sameAs": "https://it.wikipedia.org/wiki/Milano"}, "serviceType": "Massaggio"}, "description": "Prezzo per 30 minuti; 50 minuti 55 €"}, {"@type": "Offer", "price": "30", "priceCurrency": "EUR", "itemOffered": {"@type": "Service", "name": "Coppettazione", "description": "Tecnica antica per tensioni profonde, circolazione e dolori.", "provider": {"@id": "https://kone-studio.com/#studio"}, "areaServed": {"@type": "City", "name": "Milano", "sameAs": "https://it.wikipedia.org/wiki/Milano"}, "serviceType": "Massaggio"}, "description": "Prezzo per 30 minuti; 50 minuti 55 €"}]}, "address": {"@type": "PostalAddress", "addressLocality": "Milano", "addressRegion": "MI", "addressCountry": "IT"}, "areaServed": {"@type": "City", "name": "Milano", "sameAs": "https://it.wikipedia.org/wiki/Milano"}, "knowsLanguage": "it", "paymentAccepted": "Contanti, Carta", "contactPoint": {"@type": "ContactPoint", "telephone": "+39 392 269 6468", "email": "konemoctar00@gmail.com", "contactType": "customer service", "areaServed": "IT", "availableLanguage": "Italian"}, "knowsAbout": ["Personal training", "Allenamento funzionale", "Corsi di gruppo", "Massaggio decontratturante", "Massaggio sportivo", "Massaggio linfodrenante", "Riflessologia plantare", "Coppettazione", "Postura", "Recupero muscolare"]}, {"@type": "Person", "@id": "https://kone-studio.com/#kone", "name": "Kone Moctar", "jobTitle": "Personal trainer e massaggiatore professionale", "image": "https://kone-studio.com/assets/img/kone.webp", "worksFor": {"@id": "https://kone-studio.com/#studio"}, "sameAs": ["https://www.instagram.com/konemoctar4/"], "url": "https://kone-studio.com/#kone", "address": {"@type": "PostalAddress", "addressLocality": "Milano", "addressRegion": "MI", "addressCountry": "IT"}, "knowsAbout": ["Personal training", "Allenamento funzionale", "Corsi di gruppo", "Massaggio decontratturante", "Massaggio sportivo", "Massaggio linfodrenante", "Riflessologia plantare", "Coppettazione", "Postura", "Recupero muscolare"]}, {"@type": "WebSite", "@id": "https://kone-studio.com/#web", "name": "Kone Moctar Studio", "url": "https://kone-studio.com/", "inLanguage": "it-IT", "publisher": {"@id": "https://kone-studio.com/#studio"}}, {"@type": "WebPage", "@id": "https://kone-studio.com/#webpage", "url": "https://kone-studio.com/", "name": "Personal Trainer e Massaggiatore a Milano | Kone Moctar Studio", "description": "Personal trainer e massaggiatore professionale a Milano: allenamento one to one, corsi di gruppo e massaggi.", "inLanguage": "it-IT", "isPartOf": {"@id": "https://kone-studio.com/#web"}, "about": {"@id": "https://kone-studio.com/#studio"}, "primaryImageOfPage": {"@type": "ImageObject", "url": "https://kone-studio.com/assets/og-sito.jpg", "width": 1200, "height": 630}, "dateModified": "2026-10-15"}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Dove si trova lo studio?", "acceptedAnswer": {"@type": "Answer", "text": "A Milano. Lo studio riceve su appuntamento: scrivi a Kone su WhatsApp o chiama il 392 269 6468 e ti manda l'indirizzo esatto insieme agli orari liberi."}}, {"@type": "Question", "name": "Quanto costa una seduta di personal training o un massaggio?", "acceptedAnswer": {"@type": "Answer", "text": "Una seduta di personal training one to one costa 45 €, in coppia 65 €. Un trattamento costa 30 € (30 minuti) o 55 € (50 minuti). Con i pacchetti da 4, 8 o 12 sedute il prezzo a seduta scende: trovi tutto nel listino."}}, {"@type": "Question", "name": "Devo essere già allenato?", "acceptedAnswer": {"@type": "Answer", "text": "No. Si parte da dove sei tu: la prima fase serve proprio a conoscere il tuo livello, i tuoi obiettivi e gli eventuali infortuni. La scheda viene costruita su questo."}}, {"@type": "Question", "name": "Come prenoto una seduta o un massaggio?", "acceptedAnswer": {"@type": "Answer", "text": "Dall'app personale: scegli one to one, corso di gruppo o trattamento (30′ o 50′), vedi i posti liberi e prenoti. L'accesso all'app te lo attiva Kone in studio."}}, {"@type": "Question", "name": "Posso unire allenamento e massaggi?", "acceptedAnswer": {"@type": "Answer", "text": "È il cuore del metodo. Ci sono combo e percorsi che uniscono sedute di personal training e massaggi, da Essential a Total Body."}}, {"@type": "Question", "name": "Quante persone ci sono nei corsi?", "acceptedAnswer": {"@type": "Answer", "text": "Al massimo 10. Il programma di ogni corso viene generato ogni giorno in base a chi partecipa e ai feedback dell'ultima lezione."}}, {"@type": "Question", "name": "La coppettazione lascia segni?", "acceptedAnswer": {"@type": "Answer", "text": "Può lasciare segni circolari temporanei sulla pelle. È una tecnica indicata per tensioni profonde e per chi fa sport: se hai dubbi, parlane con Kone prima del trattamento."}}, {"@type": "Question", "name": "Cosa trovo nell'app?", "acceptedAnswer": {"@type": "Answer", "text": "La tua scheda con foto e video degli esercizi, il registro dei carichi e del peso con i grafici, le prenotazioni, il tuo piano e la chat diretta con Kone."}}], "@id": "https://kone-studio.com/#faq"}]}</script>
+<script>document.documentElement.classList.add("js");setTimeout(function(){document.documentElement.classList.add("go")},3500)</script>
 </head>
-<body class="locked">
+<body>
 
 <!-- gradienti condivisi del logo -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
@@ -1195,7 +1200,7 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
         <p style="color:var(--txt-2);margin-top:18px;max-width:340px">Personal trainer e massaggiatore professionale a Milano: allenamento one to one, corsi di gruppo e massaggi. Movimento, cura, risultati.</p>
         <p style="color:var(--txt-3);margin-top:10px;font-size:15px">Milano · su appuntamento</p>
       </div>
-      <div><h2 class="fh">Studio a Milano</h2><a href="/personal-trainer-milano/">Personal trainer</a><a href="/corsi-di-gruppo-milano/">Corsi di gruppo</a><a href="/massaggi-milano/">Massaggi</a><a href="/allenamento-e-massaggi-milano/">Allenamento + massaggi</a><a href="/prezzi/">Prezzi</a><a href="/kone-moctar/">Chi è Kone</a></div>
+      <div><h2 class="fh">Studio a Milano</h2><a href="/personal-trainer-milano/">Personal trainer</a><a href="/corsi-di-gruppo-milano/">Corsi di gruppo</a><a href="/massaggi-milano/">Massaggi</a><a href="/allenamento-in-coppia-milano/">Allenamento in coppia</a><a href="/allenamento-e-massaggi-milano/">Allenamento + massaggi</a><a href="/prezzi/">Prezzi</a><a href="/guide/">Guide e consigli</a><a href="/kone-moctar/">Chi è Kone</a><a href="/contatti/">Contatti</a></div>
       <div><h2 class="fh">Clienti</h2><a href="app.html">Entra nell'app</a><a href="#" data-install>Scarica l'app sul telefono</a><a href="#app">Cosa c'è nell'app</a><a href="/prezzi/">Listino</a></div>
       <div class="footc"><h2 class="fh">Contatti</h2><div id="footC"><a href="tel:+393922696468">392 269 6468</a><a href="mailto:konemoctar00@gmail.com">konemoctar00@gmail.com</a><a href="https://www.instagram.com/km.s.t.u.d.i.o.26/" target="_blank" rel="noopener">@km.s.t.u.d.i.o.26</a><a href="https://www.instagram.com/konemoctar4/" target="_blank" rel="noopener">@konemoctar4</a></div></div>
     </div>
@@ -1276,10 +1281,12 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
 </div>
 <a class="mini-app" id="miniApp" href="app.html" aria-label="Apri la tua app"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M11 18h2"/></svg></i>La tua app</a>
 
-<script src="assets/js/gsap.min.js"></script>
-<script src="assets/js/ScrollTrigger.min.js"></script>
-<script src="assets/js/lenis.min.js"></script>
+<script src="assets/js/gsap.min.js" defer></script>
+<script src="assets/js/ScrollTrigger.min.js" defer></script>
+<script src="assets/js/lenis.min.js" defer></script>
 <script>
+/* parte dopo gli script "defer": il browser può disegnare la pagina prima di eseguire le animazioni */
+document.addEventListener("DOMContentLoaded",function(){
 /* =========================================================
    CONTATTI DELLO STUDIO — compila qui (i campi vuoti non compaiono)
    ========================================================= */
@@ -1476,7 +1483,7 @@ if("serviceWorker" in navigator&&location.protocol.startsWith("http"))addEventLi
    ANIMAZIONI (GSAP)
    ========================================================= */
 function heroIn(){
-  if(!hasG||reduce)return;
+  if(!hasG||reduce){document.documentElement.classList.add("go");return}
   const tl=gsap.timeline({defaults:{ease:"expo.out"}});
   tl.from(".hero h1 .ch",{yPercent:120,rotate:8,duration:1.3,stagger:.025})
     .from(".h-in",{y:30,opacity:0,duration:1,stagger:.1},"-=.9")
@@ -1484,12 +1491,13 @@ function heroIn(){
     .from(".hdr",{y:-80,opacity:0,duration:1,clearProps:"transform,opacity"},.3)
     .from(".hero-meta",{opacity:0,duration:1},1)
     .add(buildLogo(),0);
+  document.documentElement.classList.add("go");
 }
 /* costruzione del logo: ogni pezzo è un ritaglio dell'immagine originale;
    alla fine compare l'immagine intera, identica al file del logo */
 function buildLogo(){
   const L="#klogo ",tl=gsap.timeline({defaults:{ease:"expo.out"}});
-  gsap.set(L+".kp-full",{opacity:0});
+  gsap.set(L+".kp-full",{opacity:.12}); /* il logo intero resta visibile in trasparenza: è l'elemento LCP */
   gsap.set(L+".kp:not(.kp-full)",{display:"block"});
   tl.from(L+".kl-base",{scale:.8,opacity:0,duration:1,ease:"power3.out"},0)
     .fromTo(L+".kp-ring",{"--a":"0deg"},{"--a":"360deg",duration:1.7,ease:"power2.inOut"},.1)
@@ -1509,7 +1517,8 @@ function buildLogo(){
 
 function runLoader(done){
   let seenL=false;try{seenL=sessionStorage.getItem("km_ld")==="1";sessionStorage.setItem("km_ld","1")}catch(e){}
-  if(!hasG||reduce||seenL){$("#loader").remove();$(".curtain").remove();document.body.classList.remove("locked");done();return}
+  /* loader disattivato (20/10/2026): mostrava una schermata nera per ~1,3 s e ritardava LCP. Il logo si costruisce subito nell'hero. */
+  if(true||!hasG||reduce||seenL){$("#loader").remove();$(".curtain").remove();document.body.classList.remove("locked");done();return}
   const o={v:0},n=$("#lnum");
   const tl=gsap.timeline();
   tl.to(".lring",{strokeDashoffset:0,duration:.7,ease:"power2.inOut"})
@@ -1559,7 +1568,7 @@ function scrollFx(){
   gsap.registerPlugin(ScrollTrigger);
 
   /* smooth scroll */
-  if(typeof Lenis!=="undefined"){
+  if(typeof Lenis!=="undefined"&&fine){ /* smooth scroll solo con mouse/trackpad: sul telefono lo scroll nativo è già fluido e costa meno */
     const lenis=new Lenis({lerp:.11,smoothWheel:true,wheelMultiplier:1});window.__lenis=lenis;
     lenis.on("scroll",ScrollTrigger.update);lenis.on("scroll",e=>{window.__dustKick&&window.__dustKick(e.velocity||0)});
     gsap.ticker.add(t=>lenis.raf(t*1000));gsap.ticker.lagSmoothing(0);
@@ -1657,8 +1666,10 @@ function scrollFx(){
 }
 
 /* ---------- avvio ---------- */
-scrollFx();
 runLoader(()=>{heroIn();armPop()});
+/* le animazioni allo scroll partono appena il browser è libero: meno lavoro al caricamento (TBT) */
+(window.requestIdleCallback||(f=>setTimeout(f,200)))(()=>scrollFx(),{timeout:1500});
+});
 </script>
 </body>
 </html>
