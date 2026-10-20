@@ -108,6 +108,12 @@ p{margin:0}
   .stage,#gK,#gM,#gBar,#gMass,#gStudio,#gTag,#gPill,.rule,.ring-outer,.ring-inner,.shine,.spark,.glow{animation:none!important;opacity:1!important;transform:none!important;stroke-dashoffset:0!important}
 }
 
+.logo-off{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;border-radius:50%;
+  animation:logoIn 1.5s .1s cubic-bezier(.16,.84,.34,1) both;filter:drop-shadow(0 0 28px rgba(217,169,60,.35))}
+@keyframes logoIn{0%{opacity:0;transform:scale(.82) rotateY(-28deg);filter:brightness(.3) drop-shadow(0 0 0 rgba(217,169,60,0))}60%{opacity:1;filter:brightness(1.25) drop-shadow(0 0 40px rgba(217,169,60,.6))}100%{opacity:1;transform:none}}
+img.auth-mark{display:block;border-radius:50%;box-shadow:0 0 30px -6px rgba(217,169,60,.45)}
+img.tb-mark{border-radius:50%}
+@media (prefers-reduced-motion:reduce){.logo-off{animation:none}}
 /* ============ AUTH ============ */
 #auth{position:fixed;inset:0;z-index:60;display:none;place-items:center;padding:24px;
   background:radial-gradient(90% 70% at 50% 25%,#15120A 0%,#0A0A0C 60%,#070708 100%);overflow:auto}
@@ -552,6 +558,41 @@ body{overscroll-behavior-y:none}
 .dnv-t{display:flex;flex-direction:column;line-height:1;text-align:left}
 .dnv-t b{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-weight:800;font-size:15px;letter-spacing:.14em;color:#EEF1F6}
 .dnv-t i{font-style:normal;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-weight:600;font-size:9.5px;letter-spacing:.52em;color:#2F6BFF;margin-top:4px}
+/* =================== area titolare (v5) =================== */
+.sch-head{margin-bottom:14px}
+.sch-row{display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap}
+.sch-name{font-family:var(--disp);font-size:17px;letter-spacing:.04em;text-transform:uppercase;max-width:440px}
+.sch-act{gap:6px}
+.sch-file{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+.sch-pick{display:flex;flex-wrap:wrap;gap:6px}
+.act-file{display:flex;align-items:center;gap:13px;text-align:left;padding:12px 14px;border:1px solid var(--line-soft);border-radius:12px;background:var(--ink-2);color:var(--gold-mid);cursor:pointer}
+.act-file:hover{border-color:var(--gold-deep)}
+.act-file span{display:flex;flex-direction:column;color:var(--txt)}.act-file b{font-weight:600;font-size:14.5px}.act-file small{font-size:12.5px;color:var(--txt-3)}
+label.btn{cursor:pointer}
+.cred{border:1px solid var(--gold-deep);background:rgba(217,169,60,.07);border-radius:12px;padding:10px 14px}
+.cred .kv{padding:5px 0}
+.chat-search{padding:10px;border-bottom:1px solid var(--line-soft);position:sticky;top:0;background:var(--surf);z-index:1}
+.chat-search .fi{padding:8px 11px;font-size:14px}
+.ubadge{margin-left:auto;background:var(--crit);color:#fff;font-size:11px;min-width:19px;height:19px;border-radius:99px;display:grid;place-items:center;flex:none}
+.chat-back{display:none}
+.chat-empty{display:grid;place-items:center}
+.chat-in .att{flex:none;cursor:pointer;color:var(--gold-mid)}
+.msg.has-img{padding:5px 5px 8px}
+.msg.has-img>span:not(.ts){display:block;padding:6px 8px 0}
+.msg.has-img .ts{padding:0 8px}
+.mimg{display:block;padding:0;border-radius:10px;overflow:hidden;max-width:260px}
+.mimg img{display:block;width:100%;min-height:80px;background:var(--surf-3);object-fit:cover}
+.saldo .hid{letter-spacing:.12em;color:var(--txt-3)}
+@media (max-width:700px){
+  .chat-wrap{height:calc(100dvh - 250px);min-height:420px;flex-direction:row}
+  .chat-wrap .chat-list{width:100%;max-height:none}
+  .chat-wrap .chat-main{display:none}
+  .chat-wrap.open .chat-list{display:none}
+  .chat-wrap.open .chat-main{display:flex}
+  .chat-back{display:inline-grid}
+  .sch-act .btn{flex:1}
+  .saldo .grid.g4{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.saldo .stat{padding:11px 12px}.saldo .stat .v{font-size:22px}
+}
 /* =================== calendario e prenotazione a passaggi (v4) =================== */
 .cal-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
 .cal-month b{font-family:var(--disp);font-size:20px;font-weight:500;letter-spacing:.02em}
@@ -715,62 +756,7 @@ button.pp.warn:hover{background:rgba(224,151,58,.28)}
 <div id="splash">
   <div class="stage">
     <div class="glow"></div>
-    <svg viewBox="0 0 600 600" aria-label="KM Studio">
-      <defs>
-        <linearGradient id="shineGrad" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stop-color="#fff" stop-opacity="0"/><stop offset="45%" stop-color="#fff" stop-opacity=".75"/>
-          <stop offset="55%" stop-color="#fff" stop-opacity=".75"/><stop offset="100%" stop-color="#fff" stop-opacity="0"/>
-        </linearGradient>
-        <mask id="mKM">
-          <rect x="0" y="0" width="600" height="600" fill="#000"/>
-          <g transform="translate(157.5 184) scale(1.6)" fill="#fff"><path d="M0,0 H21 V40 L50,0 H74 L40,48 L76,100 H52 L21,55 V100 H0 Z"/><g transform="translate(86 0)"><path d="M0,100 V0 H22 L46,44 L70,0 H92 V100 H71 V38 L52,70 H40 L21,38 V100 Z"/></g></g>
-        </mask>
-      </defs>
-
-      <circle cx="300" cy="300" r="252" fill="#0A0906"/>
-      <circle class="ring-outer" cx="300" cy="300" r="250" fill="none" stroke="url(#gold)" stroke-width="7" stroke-linecap="round" transform="rotate(-90 300 300)"/>
-      <circle class="ring-inner" cx="300" cy="300" r="228" fill="none" stroke="url(#gold2)" stroke-width="1.6" opacity=".55" transform="rotate(-90 300 300)"/>
-
-      <!-- barbell -->
-      <g id="gBar" fill="url(#gold2)">
-        <rect x="128" y="296" width="86" height="14" rx="3"/>
-        <rect x="108" y="278" width="14" height="50" rx="4"/>
-        <rect x="89" y="264" width="15" height="78" rx="5"/>
-        <rect x="74" y="278" width="11" height="50" rx="4"/>
-      </g>
-      <!-- massage line figure -->
-      <g transform="translate(444 246) scale(.45)"><g id="gMass" fill="none" stroke="url(#gold2)" stroke-width="13" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M18 106C68 84 120 88 158 97"/>
-        <circle cx="180" cy="106" r="15"/>
-        <path d="M8 132C70 148 140 148 196 128"/>
-        <circle cx="58" cy="24" r="17"/>
-        <path d="M58 44C46 58 44 76 52 90"/>
-        <path d="M56 62C74 74 86 86 94 98"/>
-      </g></g>
-
-      <!-- letters -->
-      <g id="gK"><g transform="translate(157.5 184) scale(1.6)"><path d="M0,0 H21 V40 L50,0 H74 L40,48 L76,100 H52 L21,55 V100 H0 Z" fill="url(#gold)"/></g></g>
-      <g id="gM"><g transform="translate(295.1 184) scale(1.6)"><path d="M0,100 V0 H22 L46,44 L70,0 H92 V100 H71 V38 L52,70 H40 L21,38 V100 Z" fill="url(#gold)"/></g></g>
-      <g mask="url(#mKM)"><rect class="shine" x="160" y="160" width="150" height="220" fill="url(#shineGrad)"/></g>
-
-      <!-- studio -->
-      <g>
-        <rect class="rule" x="120" y="404" width="150" height="2.4" fill="url(#gold2)"/>
-        <rect class="rule" x="330" y="404" width="150" height="2.4" fill="url(#gold2)"/>
-        <text id="gStudio" x="300" y="416" text-anchor="middle" fill="url(#gold2)" font-family="Oswald,sans-serif" font-weight="600" font-size="46" letter-spacing=".34em" dx=".17em">STUDIO</text>
-        <text id="gTag" x="300" y="452" text-anchor="middle" fill="#CBBC97" font-family="Barlow,sans-serif" font-weight="500" font-size="13.5" letter-spacing=".06em">PERSONAL TRAINING &amp; MASSAGGI PROFESSIONALI</text>
-        <g id="gPill">
-          <rect x="186" y="472" width="228" height="1.4" fill="#5E4A1C"/>
-          <text x="300" y="499" text-anchor="middle" fill="#D9A93C" font-family="Barlow,sans-serif" font-weight="600" font-size="12.5" letter-spacing=".17em">MOVIMENTO · CURA · RISULTATI</text>
-        </g>
-      </g>
-      <g fill="#F7E3A1">
-        <circle class="spark" cx="130" cy="470" r="2.6" style="animation-delay:.2s"/>
-        <circle class="spark" cx="470" cy="452" r="2" style="animation-delay:1.1s"/>
-        <circle class="spark" cx="238" cy="500" r="2.2" style="animation-delay:2.1s"/>
-        <circle class="spark" cx="392" cy="492" r="1.8" style="animation-delay:2.8s"/>
-      </g>
-    </svg>
+    <img class="logo-off" src="/assets/img/logo-km-720.webp" srcset="/assets/img/logo-km-720.webp 720w, /assets/img/logo-km.webp 1254w" sizes="(max-width:650px) 86vw, 560px" width="720" height="720" alt="KM Studio · Personal training &amp; massaggi professionali" fetchpriority="high">
   </div>
   <button class="skip" onclick="afterIntro()">Salta intro</button>
 </div>
@@ -778,11 +764,7 @@ button.pp.warn:hover{background:rgba(224,151,58,.28)}
 <!-- ============================ ACCESSO CLIENTI ============================ -->
 <div id="auth">
   <div class="auth-card">
-    <svg class="auth-mark" viewBox="0 0 600 600" aria-hidden="true">
-      <circle cx="300" cy="300" r="250" fill="none" stroke="url(#gold)" stroke-width="12"/>
-      <g transform="translate(150 200) scale(1.685)" fill="url(#gold)"><path d="M0,0 H21 V40 L50,0 H74 L40,48 L76,100 H52 L21,55 V100 H0 Z"/><g transform="translate(86 0)"><path d="M0,100 V0 H22 L46,44 L70,0 H92 V100 H71 V38 L52,70 H40 L21,38 V100 Z"/></g></g>
-      <text x="300" y="432" text-anchor="middle" fill="url(#gold2)" font-family="Oswald,sans-serif" font-weight="600" font-size="46" letter-spacing=".3em" dx=".15em">STUDIO</text>
-    </svg>
+    <img class="auth-mark" src="/assets/img/logo-km-160.webp" width="160" height="160" alt="KM Studio">
     <h1 class="auth-title">Kone <span>Moctar</span></h1>
     <p class="muted" style="margin-top:8px">Personal training &amp; massaggi professionali<br><span class="dim" style="font-size:13px">Movimento · Cura · Risultati</span></p>
     <form class="auth-form" id="cliForm" onsubmit="loginCliente(event)">
@@ -800,11 +782,7 @@ button.pp.warn:hover{background:rgba(224,151,58,.28)}
 <!-- ============================ ACCESSO COACH (solo da /coach) ============================ -->
 <div id="coachAuth">
   <div class="auth-card">
-    <svg class="auth-mark" viewBox="0 0 600 600" aria-hidden="true">
-      <circle cx="300" cy="300" r="250" fill="none" stroke="url(#gold)" stroke-width="12"/>
-      <g transform="translate(150 200) scale(1.685)" fill="url(#gold)"><path d="M0,0 H21 V40 L50,0 H74 L40,48 L76,100 H52 L21,55 V100 H0 Z"/><g transform="translate(86 0)"><path d="M0,100 V0 H22 L46,44 L70,0 H92 V100 H71 V38 L52,70 H40 L21,38 V100 Z"/></g></g>
-      <text x="300" y="432" text-anchor="middle" fill="url(#gold2)" font-family="Oswald,sans-serif" font-weight="600" font-size="46" letter-spacing=".3em" dx=".15em">STUDIO</text>
-    </svg>
+    <img class="auth-mark" src="/assets/img/logo-km-160.webp" width="160" height="160" alt="KM Studio">
     <h1 class="auth-title">Area <span>Coach</span></h1>
     <p class="muted" style="margin-top:8px">Pannello di gestione dello studio</p>
     <form class="auth-form" id="coachForm" onsubmit="loginCoach(event)">
@@ -820,10 +798,7 @@ button.pp.warn:hover{background:rgba(224,151,58,.28)}
 <!-- ============================ APP ============================ -->
 <div id="app">
   <header class="topbar">
-    <svg class="tb-mark" viewBox="0 0 600 600" aria-hidden="true">
-      <circle cx="300" cy="300" r="250" fill="none" stroke="url(#gold)" stroke-width="22"/>
-      <g transform="translate(141 212) scale(1.79)" fill="url(#gold)"><path d="M0,0 H21 V40 L50,0 H74 L40,48 L76,100 H52 L21,55 V100 H0 Z"/><g transform="translate(86 0)"><path d="M0,100 V0 H22 L46,44 L70,0 H92 V100 H71 V38 L52,70 H40 L21,38 V100 Z"/></g></g>
-    </svg>
+    <img class="tb-mark" src="/assets/img/logo-km-112.webp" width="160" height="160" alt="KM Studio">
     <div>
       <div class="tb-name" id="tbName">KM Studio</div>
       <div class="tb-sub" id="tbSub">Pannello coach</div>
@@ -1118,7 +1093,7 @@ const clone=o=>JSON.parse(JSON.stringify(o));
 
 function initDB(){
   const d=LS.get("db",null);
-  if(d&&d.v===DBV){DB=d;migraPrezzi();ensureAgenda(false);autoProgrammi();return}
+  if(d&&d.v===DBV){DB=d;migraSchede();migraPrezzi();ensureAgenda(false);autoProgrammi();return}
   DB={v:DBV,
     settings:{maxCorso:10,maxPT:3,maxTratt:2,motore:"regole",regoleOff:[],pwCoach:hashPw("kone2026"),pwConti:hashPw("conti2026")},
     clienti:clone(CLIENTI_SEED).map(c=>{if(c.pw){c.pw=hashPw(c.pw)}return c}),
@@ -1126,6 +1101,7 @@ function initDB(){
     esercizi:EX_SEED.map((e,i)=>({id:"ex"+i,n:e[0],m:e[1],istr:e[2],foto:null,video:null})),
     scheda:clone(SCHEDA_SEED),chat:clone(CHAT_SEED),
     pesi:{},carichi:{},agenda:{},programmi:{},feedback:[],movimenti:[]};
+  migraSchede();
   seedPesi();seedCarichi();ensureAgenda(true);seedMarco();seedStorico();seedMovimenti();autoProgrammi();migraPrezzi();save();
 }
 function seedPesi(){
@@ -1513,7 +1489,7 @@ function enterApp(role,cid){
 function chrome(){
   const coach=S.role==="coach";
   document.body.classList.toggle("client",!coach);
-  el("tbSub").textContent=coach?"Pannello coach":"La tua app";
+  el("tbSub").textContent=coach?"Area titolare":"La tua app";
   el("tbChip").textContent=coach?"Kone Moctar":me().n;
   el("tbPreview").hidden=!coach;
   const pb=el("previewbar");pb.hidden=!S.preview;
@@ -1529,7 +1505,7 @@ function tornaCoach(){S.role="coach";S.preview=false;S.area="allen";S.view="dash
 /* ---------- navigazione ---------- */
 const NAV={
   coach:{studio:[["dash","Cruscotto","dash"],["agenda","Agenda","cal"],["clienti","Clienti","users"],["chat","Chat","chat"],["listino","Listino prezzi","tag"],["conti","Contabilità","lock"]],
-    allen:[["schede","Schede","plan"],["libreria","Esercizi","dumb"],["corsi","Corsi · IA","spark"],["nutrizione","Nutrizione","food"]],
+    allen:[["schede","Schede clienti","plan"],["libreria","Esercizi","dumb"],["corsi","Corsi · IA","spark"],["nutrizione","Nutrizione","food"]],
     tratt:[["tratt","Trattamenti","lotus"]]},
   client:{allen:[["oggi","Oggi","today"],["scheda","Scheda","plan"],["prenota","Prenota","cal"],["prog","Progressi","chart"],["dieta","Dieta","food"],["listino","Prezzi","tag"],["chat","Chat","chat"]],
     tratt:[["tcat","Trattamenti","lotus"],["tpren","Prenota","cal"],["listino","Prezzi","tag"],["chat","Chat","chat"]]}
@@ -1537,7 +1513,8 @@ const NAV={
 function navItems(){return S.role==="coach"?NAV.coach[S.area].concat(NAV.coach.studio):NAV.client[S.area]}
 function buildNav(){
   const unread=DB.chat.reduce((a,c)=>a+c.unread,0),coach=S.role==="coach";
-  const badge=(n,cls)=>n[0]==="chat"&&unread&&coach?'<span class="'+cls+'">'+unread+'</span>':(n[0]==="conti"&&coach&&!S.contiOk?'':"");
+  const ut=!coach&&DB.chat.find(x=>x.n===me().n),uc=ut?ut.unreadC||0:0;
+  const badge=(n,cls)=>n[0]==="chat"&&uc&&!coach?'<span class="'+cls+'">'+uc+'</span>':n[0]==="chat"&&unread&&coach?'<span class="'+cls+'">'+unread+'</span>':(n[0]==="conti"&&coach&&!S.contiOk?'':"");
   const btn=n=>'<button class="nav '+(S.view===n[0]||(n[0]==="clienti"&&S.view==="cliente")?"on":"")+'" onclick="go(\''+n[0]+'\')">'+ic(n[2])+'<span>'+n[1]+'</span>'+badge(n,"badge")+'</button>';
   el("rail").innerHTML=coach
     ?'<div class="rail-sec">'+(S.area==="allen"?"Allenamenti":"Trattamenti")+'</div>'+NAV.coach[S.area].map(btn).join("")+'<div class="rail-sec">Studio</div>'+NAV.coach.studio.map(btn).join("")
@@ -1553,7 +1530,7 @@ function go(v){if(S.view==="conti"&&v!=="conti")S.contiOk=false;S.view=v;S.open=
 function openClient(id){S.client=id;S.view="cliente";S.tab=0;buildNav();render();el("main").scrollTop=0}
 
 /* =================== MEDIA ESERCIZI =================== */
-function hydrate(){document.querySelectorAll("video[data-vkey]:not([src])").forEach(v=>{IDB.get(v.dataset.vkey).then(b=>{if(b)v.src=URL.createObjectURL(b)}).catch(()=>{})})}
+function hydrate(){hydrateImg();document.querySelectorAll("video[data-vkey]:not([src])").forEach(v=>{IDB.get(v.dataset.vkey).then(b=>{if(b)v.src=URL.createObjectURL(b)}).catch(()=>{})})}
 function safeUrl(u){return /^https?:\/\//i.test(u||"")?u:""}
 function videoHTML(v){
   if(!v)return "";
@@ -1600,7 +1577,7 @@ async function salvaEsercizio(){
   if(EXED.file){try{await IDB.put("v_"+x.id,EXED.file);x.video={t:"file",k:"v_"+x.id,nome:EXED.file.name}}catch(e){toast("Non riesco a salvare il video su questo dispositivo")}}
   else if(link){if(!safeUrl(link))return toast("Il link deve iniziare con https://");x.video={t:"link",u:link}}
   else x.video=EXED.video&&EXED.video.t==="file"?EXED.video:null;
-  if(oldN&&oldN!==n)DB.scheda.giorni.forEach(g=>g.ex.forEach(e=>{if(e.n===oldN)e.n=n}));
+  if(oldN&&oldN!==n)Object.values(DB.schede).concat(DB.modelli).forEach(sc=>sc.giorni.forEach(g=>g.ex.forEach(e=>{if(e.n===oldN)e.n=n})));
   save();closeModal();toast("Esercizio salvato");render();
 }
 
@@ -1629,9 +1606,9 @@ function vDash(){
   const wk=weekDays(),corsiWk=Object.values(DB.agenda).filter(s=>s.tipo==="corso"&&wk.includes(s.d));
   const occ=corsiWk.reduce((a,s)=>a+s.pren.length,0),capT=corsiWk.reduce((a,s)=>a+s.cap,0);
   const fbNew=DB.feedback.filter(f=>f.d>=iso(addD(TODAY,-2))).length;
-  return head("Cruscotto",fmtD(T0,{weekday:"long",day:"numeric",month:"long",year:"numeric"})+" · uno sguardo e sai chi ha bisogno di te")+
+  return head("Ciao Kone",fmtD(T0,{weekday:"long",day:"numeric",month:"long",year:"numeric"})+" · uno sguardo e sai chi ha bisogno di te")+saldoCard()+
   '<div class="grid g4" style="margin-bottom:16px">'+
-   '<div class="stat"><span class="k">Clienti attivi</span><span class="v num">24</span><span class="d">+3 rispetto al mese scorso</span></div>'+
+   '<div class="stat"><span class="k">Clienti</span><span class="v num">'+DB.clienti.length+'</span><span class="d">'+DB.clienti.filter(c=>!DB.schede[c.id]).length+' senza scheda</span></div>'+
    '<div class="stat accent"><span class="k">Prenotazioni oggi</span><span class="v num">'+prenOggi+'</span><span class="d">'+oggi.filter(s=>s.pren.length).length+' slot occupati su '+oggi.length+'</span></div>'+
    '<div class="stat"><span class="k">Posti corsi · settimana</span><span class="v num">'+occ+'<em>/'+capT+'</em></span><span class="d">'+(capT?Math.round(occ/capT*100):0)+'% di riempimento</span></div>'+
    '<div class="stat"><span class="k">Aderenza media</span><span class="v num">82<em>%</em></span><span class="d">sedute svolte su programmate</span></div></div>'+
@@ -1651,10 +1628,10 @@ function vDash(){
   '</div>';
 }
 function vClienti(){
-  return head("Clienti","24 persone seguite · 8 mostrate in questa demo",'<button class="btn primary" onclick="toast(\'Demo: qui si apre il form anagrafica e l\\\'invito all\\\'app\')">+ Nuovo cliente</button>')+
+  return head("Clienti",DB.clienti.length+" clienti · tocca Apri per scheda, peso, carichi, prenotazioni e accesso all'app",'<button class="btn primary" onclick="nuovoCliente()">+ Nuovo cliente</button>')+
   '<div class="card"><div class="scroll-x"><table><thead><tr><th>Cliente</th><th>Piano</th><th>Avanzamento</th><th>Scadenza</th><th>Ultimo allenamento</th><th>Stato</th><th></th></tr></thead><tbody>'+
   DB.clienti.map(c=>{const p=(DB.pesi[c.id]||[]).slice(-1)[0];return '<tr><td><div class="inline"><span class="av">'+c.i+'</span><span><span style="font-weight:600">'+esc(c.n)+'</span><br><span class="dim" style="font-size:12.5px">'+(p?fmtN(p.kg)+" kg · ":"")+'aderenza '+c.ader+'%</span></span></div></td>'+
-   '<td>'+esc(c.piano)+'<br><span class="dim" style="font-size:12.5px">'+esc(c.extra)+'</span></td>'+
+   '<td>'+esc(c.piano)+'<br><span class="dim" style="font-size:12.5px">'+esc(c.extra)+'</span><br>'+(DB.schede[c.id]?'<span class="pill ok" style="margin-top:4px">scheda attiva</span>':'<span class="pill warn" style="margin-top:4px">senza scheda</span>')+'</td>'+
    '<td style="min-width:130px"><div class="num" style="font-size:13px;margin-bottom:5px">'+c.usate+' / '+c.tot+' sedute</div><div class="meter '+(c.usate>=c.tot?"crit":"")+'"><i style="width:'+Math.min(100,c.usate/c.tot*100)+'%"></i></div></td>'+
    '<td class="num">'+c.scad+'</td><td>'+(c.gg===0?"oggi":c.gg+" giorni fa")+'</td><td>'+statoCli(c)+'</td>'+
    '<td><button class="btn sm" onclick="openClient('+c.id+')">Apri</button></td></tr>'}).join("")+'</tbody></table></div></div>';
@@ -1670,7 +1647,7 @@ function vCliente(){
      '<div class="card">'+cardH("chart","Peso corporeo",pp.length?'<span class="chip num">'+fmtN(pp[pp.length-1].kg)+' kg</span>':"")+chartLine(pp.slice(-14).map(p=>[fmtD(p.d,{day:"numeric",month:"short"}),p.kg]),{unit:" kg"})+
      '<p class="hint">Registrato dal cliente nella sua app.</p></div></div>'+
      '<div class="card" style="margin-top:14px">'+cardH("bell","Note private")+'<p class="muted">'+esc(c.note)+'</p></div>';
-  } else if(S.tab===1)body=(c.id!==1?'<div class="note-ph">Demo: le schede di esempio sono tutte su Marco Bellini.</div>':'')+schedaEditor();
+  } else if(S.tab===1)body=schedaPanel(c.id);
   else if(S.tab===2)body=pesoBlock(c.id,true);
   else if(S.tab===3)body=carichiBlock(c.id);
   else if(S.tab===4){const ss=Object.values(DB.agenda).filter(s=>s.pren.some(b=>b.cid===c.id)).sort((a,b)=>(a.d+a.h)<(b.d+b.h)?1:-1);
@@ -1679,7 +1656,7 @@ function vCliente(){
     '<div class="alert"><div><b>Scheda aggiornata</b><p>Passaggio al Blocco 2: più volume sulla spinta, squat in progressione da 92,5 kg.</p></div></div>'+
     '<div class="alert"><div><b>Anamnesi</b><p>Compilata dal cliente in autonomia dall\'app. Nessuna patologia in corso, infortunio pregresso segnalato.</p></div></div></div></div>';
   return '<button class="btn sm ghost" onclick="go(\'clienti\')" style="margin-bottom:14px">← Tutti i clienti</button>'+
-   head(esc(c.n),esc(c.piano)+' · '+esc(c.extra)+' · scadenza '+c.scad,'<button class="btn" onclick="apriVistaCliente('+c.id+')">'+ic("eye",14)+' Vedi la sua app</button><button class="btn primary" onclick="go(\'chat\')">Scrivi</button>')+
+   head(esc(c.n),esc(c.piano)+' · '+esc(c.extra)+' · scadenza '+c.scad,'<button class="btn" onclick="accessoModal('+c.id+')">'+ic("lock",14)+' Accesso app</button><button class="btn" onclick="apriVistaCliente('+c.id+')">'+ic("eye",14)+' Vedi la sua app</button><button class="btn primary" onclick="apriChat('+c.id+')">'+ic("chat",14)+' Scrivi</button>')+
    tabsHTML(tabs,S.tab,"S.tab")+body;
 }
 /* ---------- schede ---------- */
@@ -1701,10 +1678,6 @@ function schedaEditor(){
 function setEx(i,k,v,isNum){const e=DB.scheda.giorni[S.day].ex[i];e[k]=isNum?(num(v)||0):v;save();toast("Scheda aggiornata")}
 function togliEx(i){DB.scheda.giorni[S.day].ex.splice(i,1);save();render()}
 function aggiungiEx(id){const x=DB.esercizi.find(e=>e.id===id);DB.scheda.giorni[S.day].ex.push({n:x.n,s:3,r:"10",kg:0,last:0,rec:60,note:""});save();render();toast(x.n+" aggiunto")}
-function vSchede(){
-  return head("Costruttore di schede",esc(DB.scheda.nome),'<button class="btn" onclick="toast(\'Demo: salvata come modello riutilizzabile\')">Salva come modello</button><button class="btn primary" onclick="toast(\'Scheda inviata a Marco Bellini\')">Invia al cliente</button>')+
-   '<div class="inline" style="margin-bottom:14px"><span class="pill gold">Marco Bellini</span><span class="pill">Blocco 2 · settimana 6 di 8</span><span class="pill ok">Attiva</span></div>'+schedaEditor();
-}
 function vLibreria(){
   const grp={};DB.esercizi.forEach(e=>{(grp[e.m]=grp[e.m]||[]).push(e)});
   const nf=DB.esercizi.filter(e=>e.foto).length,nv=DB.esercizi.filter(e=>e.video).length;
@@ -1826,28 +1799,7 @@ function salvaTratt(id){const t=tratt(id);t.desc=el("tD").value.trim();t.ben=el(
   t.p30=num(el("t30").value)||t.p30;t.p60=num(el("t60").value)||t.p60;save();closeModal();render();toast("Trattamento aggiornato")}
 
 /* ---------- chat ---------- */
-function vChat(){
-  const t=DB.chat.find(c=>c.id===S.chat)||DB.chat[0];
-  return head("Chat","Una conversazione per cliente, separata da WhatsApp")+
-  '<div class="chat-wrap"><div class="chat-list">'+DB.chat.map(c=>'<button class="chat-item '+(c.id===S.chat?"on":"")+'" onclick="S.chat='+c.id+';chatOpen()">'+
-   '<span class="av'+(c.unread?"":" q")+'">'+c.i+'</span><span style="min-width:0"><span class="nm">'+esc(c.n)+'</span><br><span class="pv">'+esc(c.last)+'</span></span>'+
-   (c.unread?'<span style="margin-left:auto;background:var(--crit);color:#fff;font-size:11px;min-width:19px;height:19px;border-radius:99px;display:grid;place-items:center">'+c.unread+'</span>':'')+'</button>').join("")+'</div>'+
-  '<div class="chat-main"><div class="chat-head"><span class="av">'+t.i+'</span><div><div style="font-weight:600">'+esc(t.n)+'</div><div class="dim" style="font-size:12px">'+esc((DB.clienti.find(x=>x.n===t.n)||{piano:"Cliente"}).piano)+'</div></div></div>'+
-  '<div class="msgs" id="msgs">'+t.msgs.map(m=>'<div class="msg '+(m.me?"me":"them")+'">'+esc(m.t)+'<span class="ts">'+m.h+'</span></div>').join("")+'</div>'+
-  '<form class="chat-in" onsubmit="sendMsg(event,'+t.id+')"><input id="mi" placeholder="Scrivi a '+esc(t.n.split(" ")[0])+'…" autocomplete="off"><button class="btn primary" type="submit">Invia</button></form></div></div>';
-}
-function chatOpen(){const t=DB.chat.find(c=>c.id===S.chat);if(t)t.unread=0;save();buildNav();render()}
 function chatDi(cid){const c=cli(cid);let t=DB.chat.find(x=>x.n===c.n);if(!t){t={id:100+cid,n:c.n,i:c.i,unread:0,last:"",msgs:[]};DB.chat.push(t)}return t}
-function sendMsg(e,id){e.preventDefault();const i=el("mi"),v=i.value.trim();if(!v)return;
-  const t=DB.chat.find(c=>c.id===id);t.msgs.push({t:v,me:S.role==="coach"?1:0,h:"ora"});t.last=v;save();render()}
-function vChatC(){
-  const t=chatDi(S.cid);
-  return head("Chat con Kone","Risponde di solito entro un paio d'ore")+
-  '<div class="chat-main" style="height:calc(100vh - 330px);min-height:380px"><div class="chat-head"><span class="av">KM</span><div><div style="font-weight:600">Kone Moctar</div><div class="dim" style="font-size:12px">Personal trainer &amp; massaggiatore</div></div></div>'+
-   '<div class="msgs" id="msgs">'+t.msgs.map(m=>'<div class="msg '+(m.me?"them":"me")+'">'+esc(m.t)+'<span class="ts">'+m.h+'</span></div>').join("")+'</div>'+
-   '<form class="chat-in" onsubmit="sendMsg(event,'+t.id+')"><input id="mi" placeholder="Scrivi a Kone…" autocomplete="off"><button class="btn primary" type="submit">Invia</button></form></div>';
-}
-
 /* ---------- contabilità (password) ---------- */
 function vConti(){
   if(!S.contiOk)return head("Contabilità","Area riservata")+
@@ -2096,7 +2048,7 @@ function startRest(sec){stopRest();let t=sec;el("rest").classList.add("on");cons
   restH=setInterval(()=>{t--;p();if(t<=0){stopRest();toast("Recupero finito: vai con la prossima serie")}},1000)}
 function stopRest(){if(restH)clearInterval(restH);restH=null;const r=el("rest");if(r)r.classList.remove("on")}
 function vScheda(){
-  return head("La tua scheda",esc(DB.scheda.nome))+'<p class="hint" style="margin:-8px 0 14px">Tocca un esercizio per vedere foto, video e come si esegue.</p>'+
+  return head("La tua scheda",esc(DB.scheda.nome))+fileSchedaCliente()+'<p class="hint" style="margin:-8px 0 14px">Tocca un esercizio per vedere foto, video e come si esegue.</p>'+
   '<div class="stack">'+DB.scheda.giorni.map((g,i)=>'<div class="card '+(i===dayIdx()?"":"flat")+'"><div class="card-h"><span class="pill '+(g.ex.length?"gold":"")+'">'+g.g+'</span><h3>'+esc(g.t)+'</h3>'+
    (g.ex.length?'<span class="chip more">'+g.ex.length+' esercizi</span>':'<span class="chip more">riposo</span>')+'</div>'+
    (g.ex.length?'<div class="stack" style="gap:4px">'+g.ex.map(e=>'<button class="inline" style="justify-content:space-between;font-size:14px;width:100%;text-align:left;flex-wrap:nowrap;padding:4px 0" onclick="vediEsercizio(\''+esc(e.n).replace(/'/g,"\\'")+'\')">'+
@@ -2415,6 +2367,149 @@ function migraPrezzi(){
   DB.trattamenti.forEach(t=>{t.p30=30;t.p60=55});
   Object.values(DB.agenda).forEach(s=>{if(s.tipo==="tratt"){if(s.dur===60)s.dur=50;s.pren.forEach(b=>{if(b.dur===60)b.dur=50})}});
   DB.settings.listino2026=true;DB.settings.paypal=DB.settings.paypal||PAYPAL_DEF;save();
+}
+
+/* =================== AREA TITOLARE · schede per cliente, chat con foto, saldo, nuovi clienti =================== */
+const GIORNI7=["Lun","Mar","Mer","Gio","Ven","Sab","Dom"];
+const schedaVuota=nome=>({nome:nome||"Nuova scheda",creata:T0,giorni:GIORNI7.map(g=>({g,t:"Riposo",ex:[]}))});
+const VUOTA=schedaVuota("Nessuna scheda assegnata");
+function schedaCid(){return S.role==="coach"&&!S.preview?(S.view==="cliente"?S.client:(S.sclient||1)):S.cid}
+function migraSchede(){
+  if(!DB.schede){DB.schede={};const d=Object.getOwnPropertyDescriptor(DB,"scheda");if(d&&d.value&&d.value.giorni)DB.schede[1]=d.value}
+  delete DB.scheda;DB.modelli=DB.modelli||[];DB.schedeArch=DB.schedeArch||{};
+  Object.defineProperty(DB,"scheda",{get(){return DB.schede[schedaCid()]||VUOTA},configurable:true,enumerable:false});
+}
+const oraLabel=()=>{const n=new Date();return fmtD(T0,{day:"numeric",month:"short"})+" "+pad(n.getHours())+":"+pad(n.getMinutes())};
+
+/* ---------- schede per cliente ---------- */
+function schedaOpzioni(cid,sost){const c=cli(cid);
+  return '<div class="act-list">'+
+   '<button onclick="nuovaScheda('+cid+')">'+ic("plus",18)+'<span><b>Scheda vuota</b><small>7 giorni: aggiungi gli esercizi dalla libreria</small></span></button>'+
+   '<button onclick="copiaSchedaModal('+cid+')">'+ic("copy",18)+'<span><b>Parti da un modello o da un altro cliente</b><small>'+DB.modelli.length+' modelli salvati · '+Object.keys(DB.schede).filter(k=>+k!==cid).length+' schede di altri clienti</small></span></button>'+
+   '<label class="act-file">'+ic("download",18)+'<span><b>Carica un file (PDF o foto)</b><small>'+esc(c.n.split(" ")[0])+' lo apre dalla sua app, nella sezione Scheda</small></span><input type="file" accept="application/pdf,image/*" hidden onchange="caricaFileScheda('+cid+',this)"></label>'+
+   '</div>'+(sost?'<p class="hint">La scheda attuale non si perde: va nell\'archivio di '+esc(c.n.split(" ")[0])+'.</p>':'')}
+function schedaPanel(cid){
+  const c=cli(cid),sc=DB.schede[cid],arch=(DB.schedeArch[cid]||[]).length;
+  if(!sc)return '<div class="card">'+cardH("plan","Nessuna scheda per "+esc(c.n))+'<p class="muted" style="margin-bottom:12px">Scegli come partire.</p>'+schedaOpzioni(cid)+'</div>';
+  return '<div class="card sch-head"><div class="sch-row"><div style="flex:1;min-width:220px"><div class="flabel" style="margin-bottom:5px">Scheda di '+esc(c.n)+'</div>'+
+    '<input class="fi sch-name" value="'+esc(sc.nome)+'" onchange="DB.schede['+cid+'].nome=this.value.trim()||\'Scheda\';save();toast(\'Nome salvato\')" aria-label="Nome della scheda">'+
+    '<div class="dim" style="font-size:12.5px;margin-top:6px">Creata il '+fmtD(sc.creata||T0,{day:"numeric",month:"long"})+(sc.inviata?' · inviata il '+fmtD(sc.inviata,{day:"numeric",month:"long"}):'')+(arch?' · '+arch+' in archivio':'')+'</div></div>'+
+    '<div class="inline sch-act"><button class="btn sm" onclick="nuovaSchedaModal('+cid+')">'+ic("plus",13)+' Nuova scheda</button>'+
+    '<button class="btn sm" onclick="salvaModello('+cid+')">'+ic("copy",13)+' Salva come modello</button>'+
+    '<button class="btn sm primary" onclick="inviaScheda('+cid+')">'+ic("chat",13)+' Avvisa il cliente</button></div></div>'+
+   '<div class="sch-file">'+(sc.file?'<span class="pill gold">'+ic(sc.file.tipo&&sc.file.tipo.indexOf("pdf")>-1?"plan":"img",12)+' '+esc(sc.file.nome)+'</span><button class="btn sm ghost" onclick="apriFile(\''+sc.file.k+'\')">Apri</button><button class="btn sm ghost" onclick="DB.schede['+cid+'].file=null;save();render()">Togli</button>':'<span class="dim" style="font-size:13px">Nessun file allegato.</span>')+
+    '<label class="btn sm ghost">'+ic("download",13)+' '+(sc.file?"Sostituisci file":"Allega PDF o foto")+'<input type="file" accept="application/pdf,image/*" hidden onchange="caricaFileScheda('+cid+',this)"></label></div></div>'+
+   schedaEditor();
+}
+function nuovaSchedaModal(cid){openModal('<h3>Nuova scheda</h3><p class="muted" style="margin-bottom:14px">Per '+esc(cli(cid).n)+'</p>'+schedaOpzioni(cid,1))}
+function nuovaScheda(cid,base,nome){
+  const old=DB.schede[cid];if(old)(DB.schedeArch[cid]=DB.schedeArch[cid]||[]).push(Object.assign(clone(old),{archiviata:T0}));
+  const sc=base?Object.assign(clone(base),{creata:T0,inviata:null,file:null}):schedaVuota("Scheda "+fmtD(T0,{month:"long",year:"numeric"}));
+  if(nome)sc.nome=nome;sc.giorni.forEach(g=>g.ex.forEach(e=>e.last=0));
+  DB.schede[cid]=sc;S.day=-1;save();closeModal();render();toast(base?"Scheda creata da “"+(base.nome||"modello")+"”":"Scheda vuota creata");
+}
+function copiaSchedaModal(cid){
+  const altri=Object.keys(DB.schede).map(Number).filter(k=>k!==cid&&cli(k));
+  openModal('<h3>Parti da…</h3><p class="muted" style="margin-bottom:14px">La copia è indipendente: puoi modificarla senza toccare l\'originale.</p>'+
+   (DB.modelli.length?'<div class="flabel" style="margin-bottom:8px">I tuoi modelli</div><div class="act-list" style="margin-bottom:14px">'+DB.modelli.map((m,i)=>'<button onclick="nuovaScheda('+cid+',DB.modelli['+i+'])">'+ic("plan",18)+'<span><b>'+esc(m.nome)+'</b><small>'+m.giorni.filter(g=>g.ex.length).length+' giorni di allenamento</small></span></button>').join("")+'</div>':'')+
+   (altri.length?'<div class="flabel" style="margin-bottom:8px">Schede di altri clienti</div><div class="act-list">'+altri.map(k=>'<button onclick="nuovaScheda('+cid+',DB.schede['+k+'])">'+ic("users",18)+'<span><b>'+esc(cli(k).n)+'</b><small>'+esc(DB.schede[k].nome)+'</small></span></button>').join("")+'</div>':'')+
+   (!DB.modelli.length&&!altri.length?'<p class="muted">Non ci sono ancora modelli: crea una scheda e usa “Salva come modello”.</p>':''))}
+async function caricaFileScheda(cid,inp){const f=inp.files[0];if(!f)return;if(f.size>20*1024*1024)return toast("File troppo grande (max 20 MB)");
+  const k="sf_"+cid+"_"+uid();try{await IDB.put(k,f)}catch(e){return toast("Non riesco a salvare il file su questo dispositivo")}
+  if(!DB.schede[cid])DB.schede[cid]=schedaVuota(f.name.replace(/\.[a-z0-9]+$/i,""));
+  DB.schede[cid].file={k,nome:f.name,tipo:f.type,d:T0};save();closeModal();render();toast("File caricato nella scheda di "+cli(cid).n.split(" ")[0])}
+function apriFile(k){IDB.get(k).then(b=>{if(!b)return toast("File non disponibile su questo dispositivo");const u=URL.createObjectURL(b);const w=window.open(u,"_blank");if(!w)location.href=u}).catch(()=>toast("File non disponibile"))}
+function salvaModello(cid){const sc=DB.schede[cid];if(!sc)return;const m=clone(sc);m.file=null;m.nome=sc.nome;DB.modelli.push(m);save();toast("Salvata tra i modelli: “"+sc.nome+"”")}
+function inviaScheda(cid){const sc=DB.schede[cid];if(!sc)return;const t=chatDi(cid),msg="Ciao "+cli(cid).n.split(" ")[0]+"! Ti ho preparato la scheda “"+sc.nome+"”: la trovi nella sezione Scheda dell'app."+(sc.file?" C'è anche il file "+sc.file.nome+".":"")+" — Kone";
+  t.msgs.push({t:msg,me:1,h:oraLabel()});t.last=msg;t.unreadC=(t.unreadC||0)+1;sc.inviata=T0;save();render();toast("Messaggio inviato in chat")}
+function vSchede(){const cid=S.sclient||1;
+  return head("Schede dei clienti","Scegli il cliente, poi modifica la sua scheda o caricane una nuova")+
+   '<div class="card" style="margin-bottom:14px"><div class="sch-pick">'+DB.clienti.map(c=>'<button class="chk'+(c.id===cid?" on":"")+'" onclick="S.sclient='+c.id+';S.day=-1;render()">'+esc(c.n)+(DB.schede[c.id]?'':' <span class="dim">· da fare</span>')+'</button>').join("")+'</div></div>'+
+   schedaPanel(cid)+
+   (DB.modelli.length?'<div class="card" style="margin-top:14px">'+cardH("copy","I tuoi modelli",'<span class="chip">'+DB.modelli.length+'</span>')+DB.modelli.map((m,i)=>'<div class="row"><span style="flex:1"><span class="nm">'+esc(m.nome)+'</span><span class="mt">'+m.giorni.filter(g=>g.ex.length).length+' giorni di allenamento</span></span><button class="btn sm" onclick="nuovaScheda('+cid+',DB.modelli['+i+'])">Usa per '+esc(cli(cid).n.split(" ")[0])+'</button><button class="icon-btn" onclick="DB.modelli.splice('+i+',1);save();render()" aria-label="Elimina modello">'+ic("trash",15)+'</button></div>').join("")+'</div>':'');
+}
+function fileSchedaCliente(){const sc=DB.schede[S.cid];if(!sc||!sc.file)return "";
+  return '<div class="alert info" style="margin-bottom:14px"><div><b>Kone ti ha caricato un file</b><p>'+esc(sc.file.nome)+'</p></div><button class="btn sm primary" onclick="apriFile(\''+sc.file.k+'\')">Apri</button></div>'}
+
+/* ---------- nuovo cliente e accesso all'app ---------- */
+function nuovoCliente(){const pw="km"+Math.floor(1000+Math.random()*9000);
+  openModal('<h3>Nuovo cliente</h3><p class="muted" style="margin-bottom:14px">Crei la scheda anagrafica e le credenziali per entrare nell\'app.</p>'+
+   '<div class="frow"><div class="field"><label>Nome e cognome</label><input class="fi" id="ncN" autocomplete="off"></div><div class="field"><label>Email (per entrare)</label><input class="fi" id="ncE" type="email" autocomplete="off"></div></div>'+
+   '<div class="frow"><div class="field"><label>Password iniziale</label><input class="fi" id="ncP" value="'+pw+'"></div><div class="field"><label>Telefono</label><input class="fi" id="ncT" type="tel"></div></div>'+
+   '<div class="frow"><div class="field"><label>Cosa fa</label><select class="fi" id="ncTipo"><option value="pacchetto">Personal training (pacchetto)</option><option value="abb">Personal training (abbonamento)</option><option value="mass">Solo trattamenti</option><option value="combo">Allenamento + trattamenti</option></select></div>'+
+   '<div class="field"><label>Piano</label><input class="fi" id="ncPiano" value="Pacchetto 4 sedute"></div><div class="field"><label>Sedute</label><input class="fi" id="ncTot" inputmode="numeric" value="4"></div></div>'+
+   '<div class="field"><label>Note private (solo tu le vedi)</label><textarea class="fi" id="ncNote" placeholder="Obiettivo, infortuni, preferenze di orario…"></textarea></div>'+
+   '<div class="inline" style="justify-content:flex-end"><button class="btn primary" onclick="salvaCliente()">Crea cliente</button></div>')}
+function salvaCliente(){const n=el("ncN").value.trim(),em=el("ncE").value.trim().toLowerCase(),pw=el("ncP").value.trim();
+  if(n.split(" ").length<2)return toast("Scrivi nome e cognome");if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em))return toast("Email non valida");
+  if(DB.clienti.some(c=>(c.email||"").toLowerCase()===em))return toast("Esiste già un cliente con questa email");if(pw.length<4)return toast("Password troppo corta");
+  const id=Math.max.apply(null,DB.clienti.map(c=>c.id))+1,tot=parseInt(el("ncTot").value)||4;
+  DB.clienti.push({id,n,i:n.split(" ").map(x=>x[0]).join("").slice(0,2).toUpperCase(),email:em,pw:hashPw(pw),tel:el("ncT").value.trim(),piano:el("ncPiano").value.trim()||"Da definire",tipo:el("ncTipo").value,
+    usate:0,tot,extra:tot+" sedute",scad:"—",gg:0,peso:null,start:null,ader:100,note:el("ncNote").value.trim()||"Nuovo cliente."});
+  save();closeModal();openClient(id);
+  openModal('<h3>Cliente creato</h3><p class="muted" style="margin-bottom:14px">Manda a '+esc(n.split(" ")[0])+' queste credenziali per entrare nell\'app:</p>'+credBox(em,pw)+'<p class="hint">Ora puoi creargli la scheda dalla scheda “Scheda”.</p>')}
+function credBox(em,pw){const txt="Ciao! Ecco il tuo accesso all'app di KM Studio: https://kone-studio.com/app — email: "+em+" — password: "+pw;
+  return '<div class="cred"><div class="kv"><span>Indirizzo</span><b>kone-studio.com/app</b></div><div class="kv"><span>Email</span><b>'+esc(em)+'</b></div><div class="kv"><span>Password</span><b>'+esc(pw)+'</b></div></div>'+
+   '<div class="inline" style="margin-top:12px"><a class="btn sm primary" target="_blank" rel="noopener" href="https://wa.me/?text='+encodeURIComponent(txt)+'">Invia su WhatsApp</a><button class="btn sm" onclick="navigator.clipboard&&navigator.clipboard.writeText('+esc(JSON.stringify(txt))+').then(()=>toast(\'Copiato\'))">Copia</button></div>'}
+function accessoModal(cid){const c=cli(cid),pw="km"+Math.floor(1000+Math.random()*9000);
+  openModal('<h3>Accesso all\'app · '+esc(c.n)+'</h3><p class="muted" style="margin-bottom:14px">Imposta email e una nuova password, poi mandagliele.</p>'+
+   '<div class="frow"><div class="field"><label>Email</label><input class="fi" id="acE" type="email" value="'+esc(c.email||"")+'"></div><div class="field"><label>Nuova password</label><input class="fi" id="acP" value="'+pw+'"></div></div>'+
+   '<div class="inline" style="justify-content:flex-end"><button class="btn primary" onclick="salvaAccesso('+cid+')">Salva</button></div>')}
+function salvaAccesso(cid){const c=cli(cid),em=el("acE").value.trim().toLowerCase(),pw=el("acP").value.trim();
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em))return toast("Email non valida");if(DB.clienti.some(x=>x.id!==cid&&(x.email||"").toLowerCase()===em))return toast("Email già usata da un altro cliente");if(pw.length<4)return toast("Password troppo corta");
+  c.email=em;c.pw=hashPw(pw);save();openModal('<h3>Accesso aggiornato</h3>'+credBox(em,pw))}
+
+/* ---------- chat con foto ---------- */
+function msgHTML(m,mine){return '<div class="msg '+(mine?"me":"them")+(m.img?" has-img":"")+'">'+(m.img?'<button class="mimg" onclick="vediFoto(\''+m.img+'\')"><img data-ikey="'+m.img+'" alt="Foto"></button>':'')+(m.t?'<span>'+esc(m.t)+'</span>':'')+'<span class="ts">'+esc(m.h)+'</span></div>'}
+function vediFoto(k){IDB.get(k).then(d=>{if(d)openModal('<img src="'+d+'" alt="Foto" style="width:100%;border-radius:12px;display:block">')})}
+function hydrateImg(){document.querySelectorAll("img[data-ikey]:not([src])").forEach(i=>{IDB.get(i.dataset.ikey).then(d=>{if(d)i.src=d}).catch(()=>{})})}
+async function sendFoto(inp,id){const f=inp.files[0];if(!f)return;if(!/^image\//.test(f.type))return toast("Scegli una foto");
+  let d;try{d=await readPhoto(f)}catch(e){return toast("Non riesco a leggere la foto")}
+  const k="ci_"+uid();try{await IDB.put(k,d)}catch(e){return toast("Non riesco a salvare la foto")}
+  const v=(el("mi").value||"").trim();el("mi").value="";pushMsg(id,{t:v,img:k})}
+function pushMsg(id,m){const t=DB.chat.find(c=>c.id===id);if(!t)return;const coach=S.role==="coach";m.me=coach?1:0;m.h=oraLabel();t.msgs.push(m);t.last=m.t||"📷 Foto";
+  if(coach)t.unreadC=(t.unreadC||0)+1;else t.unread=(t.unread||0)+1;save();render()}
+function sendMsg(e,id){e.preventDefault();const i=el("mi"),v=i.value.trim();if(!v)return;i.value="";pushMsg(id,{t:v})}
+function chatInHTML(id,ph){return '<form class="chat-in" onsubmit="sendMsg(event,'+id+')"><label class="icon-btn att" title="Allega una foto" aria-label="Allega una foto">'+ic("cam",18)+'<input type="file" accept="image/*" hidden onchange="sendFoto(this,'+id+')"></label>'+
+  '<input id="mi" placeholder="'+esc(ph)+'" autocomplete="off"><button class="btn primary" type="submit">Invia</button></form>'}
+function vChat(){
+  const q=(S.chq||"").toLowerCase();
+  const items=DB.clienti.map(c=>({c,t:DB.chat.find(x=>x.n===c.n)})).filter(o=>!q||o.c.n.toLowerCase().includes(q))
+    .sort((a,b)=>((b.t&&b.t.unread)||0)-((a.t&&a.t.unread)||0)||((b.t&&b.t.msgs.length)?1:0)-((a.t&&a.t.msgs.length)?1:0));
+  const t=DB.chat.find(c=>c.id===S.chat);const tc=t&&DB.clienti.find(x=>x.n===t.n);
+  return head("Chat","Tutti i tuoi clienti · rispondi e allega foto")+
+  '<div class="chat-wrap'+(S.chatOn&&t?" open":"")+'"><div class="chat-list"><div class="chat-search"><input class="fi" placeholder="Cerca un cliente…" value="'+esc(S.chq||"")+'" oninput="S.chq=this.value;render();const i=document.querySelector(\'.chat-search input\');i.focus();i.setSelectionRange(i.value.length,i.value.length)"></div>'+
+   items.map(o=>'<button class="chat-item '+(o.t&&o.t.id===S.chat?"on":"")+'" onclick="apriChat('+o.c.id+')"><span class="av'+(o.t&&o.t.unread?"":" q")+'">'+o.c.i+'</span><span style="min-width:0"><span class="nm">'+esc(o.c.n)+'</span><br><span class="pv">'+esc(o.t&&o.t.last?o.t.last:"Nessun messaggio · scrivi per primo")+'</span></span>'+
+    (o.t&&o.t.unread?'<span class="ubadge">'+o.t.unread+'</span>':'')+'</button>').join("")+'</div>'+
+  (t?'<div class="chat-main"><div class="chat-head"><button class="icon-btn chat-back" onclick="S.chatOn=0;render()" aria-label="Tutte le chat">'+ic("chevL",18)+'</button><span class="av">'+t.i+'</span><div style="flex:1;min-width:0"><div style="font-weight:600">'+esc(t.n)+'</div><div class="dim" style="font-size:12px">'+esc(tc?tc.piano:"Cliente")+'</div></div>'+
+    (tc?'<button class="btn sm ghost" onclick="openClient('+tc.id+')">Scheda cliente</button>':'')+'</div>'+
+   '<div class="msgs" id="msgs">'+(t.msgs.length?t.msgs.map(m=>msgHTML(m,m.me)).join(""):'<p class="muted" style="margin:auto;text-align:center">Nessun messaggio con '+esc(t.n.split(" ")[0])+'.<br>Scrivi qualcosa o manda una foto.</p>')+'</div>'+
+   chatInHTML(t.id,"Scrivi a "+t.n.split(" ")[0]+"…")+'</div>':'<div class="chat-main chat-empty"><p class="muted">Scegli un cliente per aprire la chat.</p></div>')+'</div>';
+}
+function apriChat(cid){const t=chatDi(cid);S.chat=t.id;S.chatOn=1;t.unread=0;save();buildNav();render()}
+function chatOpen(){const t=DB.chat.find(c=>c.id===S.chat);if(t)t.unread=0;S.chatOn=1;save();buildNav();render()}
+function vChatC(){
+  const t=chatDi(S.cid);if(t.unreadC){t.unreadC=0;save()}
+  return head("Chat con Kone","Risponde di solito entro un paio d'ore · puoi mandare anche foto")+
+  '<div class="chat-main" style="height:calc(100vh - 330px);min-height:380px"><div class="chat-head"><img src="/assets/img/logo-km-112.webp" width="36" height="36" alt="" style="border-radius:50%"><div><div style="font-weight:600">Kone Moctar</div><div class="dim" style="font-size:12px">Personal trainer &amp; massaggiatore</div></div></div>'+
+   '<div class="msgs" id="msgs">'+t.msgs.map(m=>msgHTML(m,!m.me)).join("")+'</div>'+chatInHTML(t.id,"Scrivi a Kone…")+'</div>';
+}
+
+/* ---------- saldo del titolare (cruscotto) ---------- */
+function paypalDaConfermare(){const out=[];Object.values(DB.agenda).forEach(s=>s.pren.forEach((b,i)=>{if(b.pay&&b.pay.m==="paypal"&&b.pay.stato!=="pagato")out.push({s,b,i})}));return out.sort((a,b)=>(a.s.d+a.s.h)<(b.s.d+b.s.h)?-1:1)}
+function saldoCard(){
+  const m=T0.slice(0,7),mv=DB.movimenti.filter(x=>x.d.slice(0,7)===m),sum=a=>a.reduce((t,x)=>t+x.imp,0);
+  const inc=sum(mv.filter(x=>x.tipo==="entrata"&&x.pag)),usc=sum(mv.filter(x=>x.tipo==="uscita")),da=sum(DB.movimenti.filter(x=>x.tipo==="entrata"&&!x.pag));
+  const pp=paypalDaConfermare(),ppT=pp.reduce((t,o)=>t+o.b.pay.imp,0),show=!!S.saldoOn;
+  const v=n=>show?eur(n):'<span class="hid">••••</span>';
+  const mese=capFirst(fromIso(T0).toLocaleDateString("it-IT",{month:"long"}));
+  return '<div class="card saldo" style="margin-bottom:16px"><div class="card-h">'+ic("card",16)+'<h3>Il tuo saldo · '+mese+'</h3><span class="more"><button class="btn sm ghost" onclick="S.saldoOn=!S.saldoOn;render()">'+ic(show?"eye":"lock",13)+' '+(show?"Nascondi":"Mostra importi")+'</button></span></div>'+
+   '<div class="grid g4"><div class="stat accent"><span class="k">Saldo del mese</span><span class="v num">'+v(inc-usc)+'</span><span class="d">incassato − uscite</span></div>'+
+   '<div class="stat"><span class="k">Incassato</span><span class="v num">'+v(inc)+'</span><span class="d">'+mv.filter(x=>x.tipo==="entrata"&&x.pag).length+' pagamenti</span></div>'+
+   '<div class="stat"><span class="k">Uscite</span><span class="v num">'+v(usc)+'</span><span class="d">affitto, utenze, materiale</span></div>'+
+   '<div class="stat"><span class="k">Da incassare</span><span class="v num">'+v(da+ppT)+'</span><span class="d">'+(pp.length?pp.length+" PayPal da confermare":"tutto in regola")+'</span></div></div>'+
+   (pp.length?'<div class="sep"></div><div class="flabel" style="margin-bottom:6px">PayPal da confermare · controlla l\'app PayPal e conferma</div>'+pp.slice(0,6).map(o=>'<div class="row"><span class="num" style="width:104px;flex:none;color:var(--gold-mid);font-size:13.5px">'+fmtD(o.s.d)+' '+o.s.h+'</span><span style="flex:1;min-width:0"><span class="nm">'+esc(o.b.nome)+'</span><span class="mt">'+esc(slotTitle(o.s,o.b))+'</span></span><b class="num" style="margin-right:6px">'+eur(o.b.pay.imp)+'</b><button class="btn sm primary" onclick="segnaPagato(\''+o.s.id+'\','+o.i+')">Ricevuto</button></div>').join(""):'')+
+   '<div class="inline" style="margin-top:12px"><button class="btn sm" onclick="go(\'conti\')">'+ic("lock",13)+' Apri la contabilità completa</button><button class="btn sm ghost" onclick="nuovoMovimento()">+ Registra un incasso o una spesa</button></div></div>';
 }
 
 /* =================== RENDER =================== */

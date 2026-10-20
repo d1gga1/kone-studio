@@ -133,3 +133,14 @@ Danova Tech — info@danova-tech.com
 - **Prezzi** allineati al volantino di ottobre 2026 (pacchetti PT 172/336/480, Active 320, Pro 450, combo 370/740/1.040,
   trattamenti a scelta 30′/50′). Aggiornati app, home, /prezzi e pagine SEO. I dati già salvati nel browser vengono aggiornati da soli.
 - Logo ufficiale (immagine `logo-km`) usato anche nell'app: intro, schermate di accesso e barra in alto.
+
+### Area titolare (20/10/2026, pomeriggio)
+
+- Accesso: `kone-studio.com/coach` · password demo `kone2026` (da cambiare in Contabilità → Password).
+- **Cruscotto**: "Il tuo saldo" del mese (incassato, uscite, saldo, da incassare; importi nascosti finché non tocchi "Mostra")
+  e i pagamenti PayPal da confermare con il tasto "Ricevuto".
+- **Clienti**: "+ Nuovo cliente" crea anagrafica e credenziali (da mandare su WhatsApp); "Accesso app" reimposta email/password.
+- **Schede per cliente** (prima c'era una sola scheda demo): scheda vuota, copia da modello o da un altro cliente, oppure
+  file PDF/foto caricato; "Nuova scheda" archivia la vecchia; "Salva come modello"; "Avvisa il cliente" scrive in chat.
+- **Chat**: tutti i clienti in elenco con ricerca, risposte con foto allegate (anche dal cliente).
+- Limite demo invariato: i dati restano nel browser del dispositivo, finché non si collega un database condiviso.

@@ -108,6 +108,12 @@ p{margin:0}
   .stage,#gK,#gM,#gBar,#gMass,#gStudio,#gTag,#gPill,.rule,.ring-outer,.ring-inner,.shine,.spark,.glow{animation:none!important;opacity:1!important;transform:none!important;stroke-dashoffset:0!important}
 }
 
+.logo-off{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;border-radius:50%;
+  animation:logoIn 1.5s .1s cubic-bezier(.16,.84,.34,1) both;filter:drop-shadow(0 0 28px rgba(217,169,60,.35))}
+@keyframes logoIn{0%{opacity:0;transform:scale(.82) rotateY(-28deg);filter:brightness(.3) drop-shadow(0 0 0 rgba(217,169,60,0))}60%{opacity:1;filter:brightness(1.25) drop-shadow(0 0 40px rgba(217,169,60,.6))}100%{opacity:1;transform:none}}
+img.auth-mark{display:block;border-radius:50%;box-shadow:0 0 30px -6px rgba(217,169,60,.45)}
+img.tb-mark{border-radius:50%}
+@media (prefers-reduced-motion:reduce){.logo-off{animation:none}}
 /* ============ AUTH ============ */
 #auth{position:fixed;inset:0;z-index:60;display:none;place-items:center;padding:24px;
   background:radial-gradient(90% 70% at 50% 25%,#15120A 0%,#0A0A0C 60%,#070708 100%);overflow:auto}
@@ -715,62 +721,7 @@ button.pp.warn:hover{background:rgba(224,151,58,.28)}
 <div id="splash">
   <div class="stage">
     <div class="glow"></div>
-    <svg viewBox="0 0 600 600" aria-label="KM Studio">
-      <defs>
-        <linearGradient id="shineGrad" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stop-color="#fff" stop-opacity="0"/><stop offset="45%" stop-color="#fff" stop-opacity=".75"/>
-          <stop offset="55%" stop-color="#fff" stop-opacity=".75"/><stop offset="100%" stop-color="#fff" stop-opacity="0"/>
-        </linearGradient>
-        <mask id="mKM">
-          <rect x="0" y="0" width="600" height="600" fill="#000"/>
-          <g transform="translate(157.5 184) scale(1.6)" fill="#fff"><path d="M0,0 H21 V40 L50,0 H74 L40,48 L76,100 H52 L21,55 V100 H0 Z"/><g transform="translate(86 0)"><path d="M0,100 V0 H22 L46,44 L70,0 H92 V100 H71 V38 L52,70 H40 L21,38 V100 Z"/></g></g>
-        </mask>
-      </defs>
-
-      <circle cx="300" cy="300" r="252" fill="#0A0906"/>
-      <circle class="ring-outer" cx="300" cy="300" r="250" fill="none" stroke="url(#gold)" stroke-width="7" stroke-linecap="round" transform="rotate(-90 300 300)"/>
-      <circle class="ring-inner" cx="300" cy="300" r="228" fill="none" stroke="url(#gold2)" stroke-width="1.6" opacity=".55" transform="rotate(-90 300 300)"/>
-
-      <!-- barbell -->
-      <g id="gBar" fill="url(#gold2)">
-        <rect x="128" y="296" width="86" height="14" rx="3"/>
-        <rect x="108" y="278" width="14" height="50" rx="4"/>
-        <rect x="89" y="264" width="15" height="78" rx="5"/>
-        <rect x="74" y="278" width="11" height="50" rx="4"/>
-      </g>
-      <!-- massage line figure -->
-      <g transform="translate(444 246) scale(.45)"><g id="gMass" fill="none" stroke="url(#gold2)" stroke-width="13" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M18 106C68 84 120 88 158 97"/>
-        <circle cx="180" cy="106" r="15"/>
-        <path d="M8 132C70 148 140 148 196 128"/>
-        <circle cx="58" cy="24" r="17"/>
-        <path d="M58 44C46 58 44 76 52 90"/>
-        <path d="M56 62C74 74 86 86 94 98"/>
-      </g></g>
-
-      <!-- letters -->
-      <g id="gK"><g transform="translate(157.5 184) scale(1.6)"><path d="M0,0 H21 V40 L50,0 H74 L40,48 L76,100 H52 L21,55 V100 H0 Z" fill="url(#gold)"/></g></g>
-      <g id="gM"><g transform="translate(295.1 184) scale(1.6)"><path d="M0,100 V0 H22 L46,44 L70,0 H92 V100 H71 V38 L52,70 H40 L21,38 V100 Z" fill="url(#gold)"/></g></g>
-      <g mask="url(#mKM)"><rect class="shine" x="160" y="160" width="150" height="220" fill="url(#shineGrad)"/></g>
-
-      <!-- studio -->
-      <g>
-        <rect class="rule" x="120" y="404" width="150" height="2.4" fill="url(#gold2)"/>
-        <rect class="rule" x="330" y="404" width="150" height="2.4" fill="url(#gold2)"/>
-        <text id="gStudio" x="300" y="416" text-anchor="middle" fill="url(#gold2)" font-family="Oswald,sans-serif" font-weight="600" font-size="46" letter-spacing=".34em" dx=".17em">STUDIO</text>
-        <text id="gTag" x="300" y="452" text-anchor="middle" fill="#CBBC97" font-family="Barlow,sans-serif" font-weight="500" font-size="13.5" letter-spacing=".06em">PERSONAL TRAINING &amp; MASSAGGI PROFESSIONALI</text>
-        <g id="gPill">
-          <rect x="186" y="472" width="228" height="1.4" fill="#5E4A1C"/>
-          <text x="300" y="499" text-anchor="middle" fill="#D9A93C" font-family="Barlow,sans-serif" font-weight="600" font-size="12.5" letter-spacing=".17em">MOVIMENTO · CURA · RISULTATI</text>
-        </g>
-      </g>
-      <g fill="#F7E3A1">
-        <circle class="spark" cx="130" cy="470" r="2.6" style="animation-delay:.2s"/>
-        <circle class="spark" cx="470" cy="452" r="2" style="animation-delay:1.1s"/>
-        <circle class="spark" cx="238" cy="500" r="2.2" style="animation-delay:2.1s"/>
-        <circle class="spark" cx="392" cy="492" r="1.8" style="animation-delay:2.8s"/>
-      </g>
-    </svg>
+    <img class="logo-off" src="/assets/img/logo-km-720.webp" srcset="/assets/img/logo-km-720.webp 720w, /assets/img/logo-km.webp 1254w" sizes="(max-width:650px) 86vw, 560px" width="720" height="720" alt="KM Studio · Personal training &amp; massaggi professionali" fetchpriority="high">
   </div>
   <button class="skip" onclick="afterIntro()">Salta intro</button>
 </div>
@@ -778,11 +729,7 @@ button.pp.warn:hover{background:rgba(224,151,58,.28)}
 <!-- ============================ ACCESSO CLIENTI ============================ -->
 <div id="auth">
   <div class="auth-card">
-    <svg class="auth-mark" viewBox="0 0 600 600" aria-hidden="true">
-      <circle cx="300" cy="300" r="250" fill="none" stroke="url(#gold)" stroke-width="12"/>
-      <g transform="translate(150 200) scale(1.685)" fill="url(#gold)"><path d="M0,0 H21 V40 L50,0 H74 L40,48 L76,100 H52 L21,55 V100 H0 Z"/><g transform="translate(86 0)"><path d="M0,100 V0 H22 L46,44 L70,0 H92 V100 H71 V38 L52,70 H40 L21,38 V100 Z"/></g></g>
-      <text x="300" y="432" text-anchor="middle" fill="url(#gold2)" font-family="Oswald,sans-serif" font-weight="600" font-size="46" letter-spacing=".3em" dx=".15em">STUDIO</text>
-    </svg>
+    <img class="auth-mark" src="/assets/img/logo-km-160.webp" width="160" height="160" alt="KM Studio">
     <h1 class="auth-title">Kone <span>Moctar</span></h1>
     <p class="muted" style="margin-top:8px">Personal training &amp; massaggi professionali<br><span class="dim" style="font-size:13px">Movimento · Cura · Risultati</span></p>
     <form class="auth-form" id="cliForm" onsubmit="loginCliente(event)">
@@ -800,11 +747,7 @@ button.pp.warn:hover{background:rgba(224,151,58,.28)}
 <!-- ============================ ACCESSO COACH (solo da /coach) ============================ -->
 <div id="coachAuth">
   <div class="auth-card">
-    <svg class="auth-mark" viewBox="0 0 600 600" aria-hidden="true">
-      <circle cx="300" cy="300" r="250" fill="none" stroke="url(#gold)" stroke-width="12"/>
-      <g transform="translate(150 200) scale(1.685)" fill="url(#gold)"><path d="M0,0 H21 V40 L50,0 H74 L40,48 L76,100 H52 L21,55 V100 H0 Z"/><g transform="translate(86 0)"><path d="M0,100 V0 H22 L46,44 L70,0 H92 V100 H71 V38 L52,70 H40 L21,38 V100 Z"/></g></g>
-      <text x="300" y="432" text-anchor="middle" fill="url(#gold2)" font-family="Oswald,sans-serif" font-weight="600" font-size="46" letter-spacing=".3em" dx=".15em">STUDIO</text>
-    </svg>
+    <img class="auth-mark" src="/assets/img/logo-km-160.webp" width="160" height="160" alt="KM Studio">
     <h1 class="auth-title">Area <span>Coach</span></h1>
     <p class="muted" style="margin-top:8px">Pannello di gestione dello studio</p>
     <form class="auth-form" id="coachForm" onsubmit="loginCoach(event)">
@@ -820,10 +763,7 @@ button.pp.warn:hover{background:rgba(224,151,58,.28)}
 <!-- ============================ APP ============================ -->
 <div id="app">
   <header class="topbar">
-    <svg class="tb-mark" viewBox="0 0 600 600" aria-hidden="true">
-      <circle cx="300" cy="300" r="250" fill="none" stroke="url(#gold)" stroke-width="22"/>
-      <g transform="translate(141 212) scale(1.79)" fill="url(#gold)"><path d="M0,0 H21 V40 L50,0 H74 L40,48 L76,100 H52 L21,55 V100 H0 Z"/><g transform="translate(86 0)"><path d="M0,100 V0 H22 L46,44 L70,0 H92 V100 H71 V38 L52,70 H40 L21,38 V100 Z"/></g></g>
-    </svg>
+    <img class="tb-mark" src="/assets/img/logo-km-112.webp" width="160" height="160" alt="KM Studio">
     <div>
       <div class="tb-name" id="tbName">KM Studio</div>
       <div class="tb-sub" id="tbSub">Pannello coach</div>
