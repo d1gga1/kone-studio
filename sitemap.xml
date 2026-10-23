@@ -150,4 +150,117 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+  <url>
+    <loc>https://kone-studio.com/esercizi/</loc>
+    <lastmod>2026-10-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/panca-piana-bilanciere-a.webp</image:loc><image:title>Panca piana bilanciere</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/croci-ai-cavi-a.webp</image:loc><image:title>Croci ai cavi</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/panca-inclinata-bilanciere-a.webp</image:loc><image:title>Panca inclinata bilanciere</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/panca-declinata-bilanciere-a.webp</image:loc><image:title>Panca declinata bilanciere</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/panca-piana-manubri-a.webp</image:loc><image:title>Panca piana manubri</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/panca-inclinata-manubri-a.webp</image:loc><image:title>Panca inclinata manubri</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/croci-con-manubri-a.webp</image:loc><image:title>Croci con manubri</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/croci-su-panca-inclinata-a.webp</image:loc><image:title>Croci su panca inclinata</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/pectoral-machine-a.webp</image:loc><image:title>Pectoral machine</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/piegamenti-sulle-braccia-a.webp</image:loc><image:title>Piegamenti sulle braccia</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/piegamenti-su-rialzo-a.webp</image:loc><image:title>Piegamenti su rialzo</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/dip-alle-parallele-petto-a.webp</image:loc><image:title>Dip alle parallele (petto)</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/panca-piana-al-multipower-a.webp</image:loc><image:title>Panca piana al multipower</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/lat-machine-presa-larga-a.webp</image:loc><image:title>Lat machine presa larga</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/rematore-bilanciere-a.webp</image:loc><image:title>Rematore bilanciere</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/pulley-basso-a.webp</image:loc><image:title>Pulley basso</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/lat-machine-presa-stretta-a.webp</image:loc><image:title>Lat machine presa stretta</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/trazioni-alla-sbarra-a.webp</image:loc><image:title>Trazioni alla sbarra</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/trazioni-presa-supina-a.webp</image:loc><image:title>Trazioni presa supina</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/rematore-con-manubrio-a.webp</image:loc><image:title>Rematore con manubrio</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/rematore-t-bar-a.webp</image:loc><image:title>Rematore T-bar</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/pulldown-a-braccia-tese-a.webp</image:loc><image:title>Pulldown a braccia tese</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/hyperextension-a.webp</image:loc><image:title>Hyperextension</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/rematore-al-multipower-a.webp</image:loc><image:title>Rematore al multipower</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/stacco-da-terra-a.webp</image:loc><image:title>Stacco da terra</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/military-press-a.webp</image:loc><image:title>Military press</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/alzate-laterali-a.webp</image:loc><image:title>Alzate laterali</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/lento-avanti-manubri-seduto-a.webp</image:loc><image:title>Lento avanti manubri seduto</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/shoulder-press-manubri-a.webp</image:loc><image:title>Shoulder press manubri</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/arnold-press-a.webp</image:loc><image:title>Arnold press</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/alzate-frontali-a.webp</image:loc><image:title>Alzate frontali</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/alzate-posteriori-a.webp</image:loc><image:title>Alzate posteriori</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/face-pull-ai-cavi-a.webp</image:loc><image:title>Face pull ai cavi</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/tirate-al-mento-a.webp</image:loc><image:title>Tirate al mento</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/scrollate-bilanciere-a.webp</image:loc><image:title>Scrollate bilanciere</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/squat-bilanciere-a.webp</image:loc><image:title>Squat bilanciere</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/affondi-con-manubri-a.webp</image:loc><image:title>Affondi con manubri</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/leg-press-45-a.webp</image:loc><image:title>Leg press 45°</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/front-squat-a.webp</image:loc><image:title>Front squat</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/goblet-squat-a.webp</image:loc><image:title>Goblet squat</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/squat-a-corpo-libero-a.webp</image:loc><image:title>Squat a corpo libero</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/squat-al-multipower-a.webp</image:loc><image:title>Squat al multipower</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/hack-squat-a.webp</image:loc><image:title>Hack squat</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/affondi-camminati-bilanciere-a.webp</image:loc><image:title>Affondi camminati bilanciere</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/split-squat-con-manubri-a.webp</image:loc><image:title>Split squat con manubri</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/affondi-indietro-a.webp</image:loc><image:title>Affondi indietro</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/step-up-con-manubri-a.webp</image:loc><image:title>Step-up con manubri</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/leg-extension-a.webp</image:loc><image:title>Leg extension</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/squat-sumo-con-manubrio-a.webp</image:loc><image:title>Squat sumo con manubrio</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/adductor-machine-a.webp</image:loc><image:title>Adductor machine</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/hip-thrust-a.webp</image:loc><image:title>Hip thrust</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/stacco-sumo-a.webp</image:loc><image:title>Stacco sumo</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/ponte-glutei-con-bilanciere-a.webp</image:loc><image:title>Ponte glutei con bilanciere</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/slanci-dietro-kickback-a.webp</image:loc><image:title>Slanci dietro (kickback)</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/abductor-machine-a.webp</image:loc><image:title>Abductor machine</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/stacco-rumeno-a.webp</image:loc><image:title>Stacco rumeno</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/leg-curl-sdraiato-a.webp</image:loc><image:title>Leg curl sdraiato</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/stacco-gambe-tese-manubri-a.webp</image:loc><image:title>Stacco gambe tese manubri</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/leg-curl-seduto-a.webp</image:loc><image:title>Leg curl seduto</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/good-morning-a.webp</image:loc><image:title>Good morning</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/calf-raise-in-piedi-a.webp</image:loc><image:title>Calf raise in piedi</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/calf-raise-seduto-a.webp</image:loc><image:title>Calf raise seduto</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/curl-bilanciere-ez-a.webp</image:loc><image:title>Curl bilanciere EZ</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/curl-bilanciere-a.webp</image:loc><image:title>Curl bilanciere</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/curl-con-manubri-a.webp</image:loc><image:title>Curl con manubri</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/curl-a-martello-a.webp</image:loc><image:title>Curl a martello</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/curl-alla-panca-scott-a.webp</image:loc><image:title>Curl alla panca Scott</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/curl-di-concentrazione-a.webp</image:loc><image:title>Curl di concentrazione</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/curl-a-martello-ai-cavi-a.webp</image:loc><image:title>Curl a martello ai cavi</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/french-press-manubrio-a.webp</image:loc><image:title>French press manubrio</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/pushdown-tricipiti-a.webp</image:loc><image:title>Pushdown tricipiti</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/pushdown-con-corda-a.webp</image:loc><image:title>Pushdown con corda</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/skull-crusher-bilanciere-ez-a.webp</image:loc><image:title>Skull crusher bilanciere EZ</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/panca-presa-stretta-a.webp</image:loc><image:title>Panca presa stretta</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/dip-su-panca-a.webp</image:loc><image:title>Dip su panca</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/kickback-tricipiti-a.webp</image:loc><image:title>Kickback tricipiti</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/plank-frontale-a.webp</image:loc><image:title>Plank frontale</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/plank-laterale-a.webp</image:loc><image:title>Plank laterale</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/crunch-a.webp</image:loc><image:title>Crunch</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/crunch-obliqui-a.webp</image:loc><image:title>Crunch obliqui</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/sollevamento-gambe-alla-sbarra-a.webp</image:loc><image:title>Sollevamento gambe alla sbarra</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/sforbiciate-a.webp</image:loc><image:title>Sforbiciate</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/russian-twist-a.webp</image:loc><image:title>Russian twist</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/ruota-per-addominali-a.webp</image:loc><image:title>Ruota per addominali</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/dead-bug-a.webp</image:loc><image:title>Dead bug</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/crunch-ai-cavi-a.webp</image:loc><image:title>Crunch ai cavi</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/superman-a.webp</image:loc><image:title>Superman</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/mountain-climber-a.webp</image:loc><image:title>Mountain climber</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/crunch-a-bicicletta-a.webp</image:loc><image:title>Crunch a bicicletta</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/thruster-con-kettlebell-a.webp</image:loc><image:title>Thruster con kettlebell</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/box-jump-a.webp</image:loc><image:title>Box jump</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/salto-della-corda-a.webp</image:loc><image:title>Salto della corda</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/vogatore-a.webp</image:loc><image:title>Vogatore</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/battle-rope-a.webp</image:loc><image:title>Battle rope</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/farmer-walk-a.webp</image:loc><image:title>Farmer walk</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/spinta-della-slitta-a.webp</image:loc><image:title>Spinta della slitta</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/inchworm-a.webp</image:loc><image:title>Inchworm</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/world-s-greatest-stretch-a.webp</image:loc><image:title>World's greatest stretch</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/allungamento-femorali-90-90-a.webp</image:loc><image:title>Allungamento femorali 90/90</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/cat-cow-a.webp</image:loc><image:title>Cat-cow</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/posizione-del-bambino-a.webp</image:loc><image:title>Posizione del bambino</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/allungamento-flessori-dell-anca-a.webp</image:loc><image:title>Allungamento flessori dell'anca</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/allungamento-quadricipiti-a.webp</image:loc><image:title>Allungamento quadricipiti</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/allungamento-femorali-a.webp</image:loc><image:title>Allungamento femorali</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/allungamento-pettorali-a.webp</image:loc><image:title>Allungamento pettorali</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/ponte-glutei-a-corpo-libero-a.webp</image:loc><image:title>Ponte glutei a corpo libero</image:title></image:image>
+    <image:image><image:loc>https://kone-studio.com/assets/img/esercizi/allungamento-polpacci-a.webp</image:loc><image:title>Allungamento polpacci</image:title></image:image>
+  </url>
 </urlset>

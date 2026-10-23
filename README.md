@@ -156,3 +156,22 @@ Danova Tech — info@danova-tech.com
 - Link interni: "Guide" nel menu, footer aggiornato su tutte le pagine, box "Approfondisci" su prezzi, massaggi, corsi.
 - Sitemap (21 URL, lastmod 2026-10-20) e llms.txt aggiornati. Corretto prezzo Pro (450 €) sulla pagina personal trainer.
 - Dopo la pubblicazione: Search Console → Sitemap → reinvia sitemap.xml; Controllo URL sulle pagine nuove.
+
+### Listino libero, abbonamenti, libreria esercizi con foto, pagina /esercizi/ (23/10/2026)
+
+Richieste di Kone (video del 22/10): essere completamente indipendente su prezzi, listini e sedute; foto per ogni esercizio; il cliente deve poter prenotare con il suo abbonamento.
+
+- **Listino (area titolare)**: in ogni tabella si modificano nome, dettaglio, **sedute/ingressi** (0 = illimitati) e prezzo; "+ Aggiungi voce" crea un pacchetto nuovo, il cestino lo elimina.
+  **Sconti**: "% sconto" su ogni voce (percentuale + data di fine facoltativa) e "% Sconto su più voci" per una promozione su allenamenti, trattamenti, misti o tutto.
+  Il cliente vede il prezzo pieno barrato e quello scontato (listino, schede trattamenti, prenotazione). Trattamenti: nome modificabile, nuovo trattamento, elimina.
+- **Abbonamento del cliente**: Clienti → Apri → "Modifica abbonamento e sedute": si parte da una voce del listino o si scrive a mano (piano, cosa copre, sedute totali, sedute usate con − / +, scadenza, "Rinnova").
+- **"Hai già un abbonamento? Clicca qui"**: nella home del cliente e nella prenotazione. Mostra piano e sedute rimaste, propone solo le attività incluse,
+  salta il pagamento e scala una seduta; se il cliente annulla la seduta torna nell'abbonamento. Se è esaurito o scaduto lo porta ai prezzi.
+- **Libreria esercizi**: 108 esercizi con 2 foto ciascuno (partenza e arrivo) in `assets/img/esercizi/` (webp, ~3 MB in tutto), da archivio libero di
+  **pubblico dominio** (Free Exercise DB, github.com/yuhonas/free-exercise-db). Ricerca, filtro per gruppo, gruppi nuovi, elimina. Kone può sostituire le foto con le sue.
+  Nei browser con dati già salvati esercizi e foto si aggiungono da soli (una volta sola: quelli eliminati da Kone non tornano).
+- **SEO / AI**: nuova pagina pubblica **/esercizi/** (107 esercizi con foto, alt descrittivi, dati strutturati ItemList + FAQPage + BreadcrumbList,
+  link "Esercizi con foto" nel footer di tutte le pagine), in `sitemap.xml` con le immagini e in `llms.txt`. App e area titolare restano `noindex`.
+- `404.html` e `app.html` ora sono identici (il service worker usa `app.html`, GitHub Pages serve /app e /coach con `404.html`). Cache di `sw.js` → v16.
+- ⚠️ Limite demo invariato: listino e abbonamenti modificati da Kone restano nel suo browser finché non si collega un database condiviso;
+  le pagine pubbliche (/prezzi/ e pagine SEO) hanno i prezzi scritti a mano.

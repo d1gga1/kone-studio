@@ -558,6 +558,71 @@ body{overscroll-behavior-y:none}
 .dnv-t{display:flex;flex-direction:column;line-height:1;text-align:left}
 .dnv-t b{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-weight:800;font-size:15px;letter-spacing:.14em;color:#EEF1F6}
 .dnv-t i{font-style:normal;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-weight:600;font-size:9.5px;letter-spacing:.52em;color:#2F6BFF;margin-top:4px}
+
+/* =================== listino libero, sconti, abbonamenti, libreria (v6) =================== */
+.rt .inp.tl{text-align:left;min-width:150px}
+.rt .inp.sd{width:64px;text-align:center}
+.rt .inp.dt{min-width:170px;font-size:13px;color:var(--txt-2);text-align:left}
+.rt td.tools{white-space:nowrap}
+.tl-b{display:flex;gap:6px;justify-content:flex-end;align-items:center}
+.tl-b.col{flex-direction:column;align-items:flex-end}
+.rt td:has(.pin){white-space:nowrap}
+.rt td.tools .btn{padding:5px 9px}
+.sc-on{color:#7FD49B;border-color:rgba(70,180,110,.45)!important}
+.price s,.pold{color:var(--txt-3);font-weight:400;font-size:.78em;margin-right:5px;text-decoration:line-through}
+.scx{display:block;font-size:11.5px;color:#7FD49B;margin-top:3px}
+.pill.sc{background:rgba(70,180,110,.12);border-color:rgba(70,180,110,.4);color:#7FD49B}
+.addrow{margin-top:10px}
+.lhead-tools{display:flex;gap:8px;flex-wrap:wrap}
+.abb-cta{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:14px 16px;margin-bottom:14px;border-radius:14px;border:1px solid var(--gold-deep);background:linear-gradient(120deg,rgba(217,169,60,.16),rgba(217,169,60,.04));color:var(--txt);cursor:pointer}
+.abb-cta:hover{border-color:var(--gold-hi)}
+.abb-cta .ai{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:rgba(217,169,60,.18);color:var(--gold-hi);flex:none}
+.abb-cta span.t{display:flex;flex-direction:column;flex:1;min-width:0}
+.abb-cta b{font-size:15.5px}.abb-cta small{font-size:13px;color:var(--txt-2)}
+.abb-cta .go{color:var(--gold-hi);flex:none}
+.abb-cta.off{border-color:var(--line);background:var(--ink-2)}
+.abb-cta.on{border-color:#46B46E;background:linear-gradient(120deg,rgba(70,180,110,.14),rgba(70,180,110,.03))}
+.abb-cta.on .ai{background:rgba(70,180,110,.18);color:#7FD49B}
+.exfilter{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.exfilter .fi{max-width:320px}
+.media figure{margin:0;position:relative}
+.media figure figcaption{position:absolute;left:8px;bottom:8px;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;background:rgba(8,8,10,.8);padding:3px 8px;border-radius:99px;color:var(--txt-2)}
+@media (max-width:700px){.exchips{flex-wrap:nowrap;overflow-x:auto;margin-right:-16px;padding-right:16px;scrollbar-width:none}.exchips .chk{flex:none}.rt .inp.tl,.rt .inp.dt{min-width:0}.tl-b,.tl-b.col{justify-content:flex-start;flex-direction:row}.exfilter .fi{max-width:none}}
+/* =================== area titolare (v5) =================== */
+.sch-head{margin-bottom:14px}
+.sch-row{display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap}
+.sch-name{font-family:var(--disp);font-size:17px;letter-spacing:.04em;text-transform:uppercase;max-width:440px}
+.sch-act{gap:6px}
+.sch-file{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+.sch-pick{display:flex;flex-wrap:wrap;gap:6px}
+.act-file{display:flex;align-items:center;gap:13px;text-align:left;padding:12px 14px;border:1px solid var(--line-soft);border-radius:12px;background:var(--ink-2);color:var(--gold-mid);cursor:pointer}
+.act-file:hover{border-color:var(--gold-deep)}
+.act-file span{display:flex;flex-direction:column;color:var(--txt)}.act-file b{font-weight:600;font-size:14.5px}.act-file small{font-size:12.5px;color:var(--txt-3)}
+label.btn{cursor:pointer}
+.cred{border:1px solid var(--gold-deep);background:rgba(217,169,60,.07);border-radius:12px;padding:10px 14px}
+.cred .kv{padding:5px 0}
+.chat-search{padding:10px;border-bottom:1px solid var(--line-soft);position:sticky;top:0;background:var(--surf);z-index:1}
+.chat-search .fi{padding:8px 11px;font-size:14px}
+.ubadge{margin-left:auto;background:var(--crit);color:#fff;font-size:11px;min-width:19px;height:19px;border-radius:99px;display:grid;place-items:center;flex:none}
+.chat-back{display:none}
+.chat-empty{display:grid;place-items:center}
+.chat-in .att{flex:none;cursor:pointer;color:var(--gold-mid)}
+.msg.has-img{padding:5px 5px 8px}
+.msg.has-img>span:not(.ts){display:block;padding:6px 8px 0}
+.msg.has-img .ts{padding:0 8px}
+.mimg{display:block;padding:0;border-radius:10px;overflow:hidden;max-width:260px}
+.mimg img{display:block;width:100%;min-height:80px;background:var(--surf-3);object-fit:cover}
+.saldo .hid{letter-spacing:.12em;color:var(--txt-3)}
+@media (max-width:700px){
+  .chat-wrap{height:calc(100dvh - 250px);min-height:420px;flex-direction:row}
+  .chat-wrap .chat-list{width:100%;max-height:none}
+  .chat-wrap .chat-main{display:none}
+  .chat-wrap.open .chat-list{display:none}
+  .chat-wrap.open .chat-main{display:flex}
+  .chat-back{display:inline-grid}
+  .sch-act .btn{flex:1}
+  .saldo .grid.g4{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.saldo .stat{padding:11px 12px}.saldo .stat .v{font-size:22px}
+}
 /* =================== calendario e prenotazione a passaggi (v4) =================== */
 .cal-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
 .cal-month b{font-family:var(--disp);font-size:20px;font-weight:500;letter-spacing:.02em}
@@ -911,25 +976,8 @@ const TRATT_SEED=[
 ];
 const BENEFICI=[["lotus","Riduce stress e ansia"],["muscle","Rilassa i muscoli e allevia i dolori"],["target","Migliora la circolazione"],["star","Favorisce il benessere generale"],["moon","Migliora il sonno e la qualità di vita"]];
 
-const EX_SEED=[
-  ["Panca piana bilanciere","Petto","Scapole strette e piedi a terra. Il bilanciere scende al petto basso, gomiti a circa 45°."],
-  ["Squat bilanciere","Gambe","Bilanciere sui trapezi, petto alto, scendi finché le anche passano sotto le ginocchia mantenendo la schiena neutra."],
-  ["Stacco rumeno","Femorali","Ginocchia appena flesse, spingi indietro le anche e porta il bilanciere lungo le cosce fino a metà tibia."],
-  ["Lat machine presa larga","Dorso","Petto verso la barra, tira con i gomiti verso i fianchi senza dondolare."],
-  ["Rematore bilanciere","Dorso","Busto a 45°, schiena neutra, porta il bilanciere all'ombelico."],
-  ["Military press","Spalle","In piedi, glutei e addome contratti, spingi sopra la testa senza inarcare la zona lombare."],
-  ["Affondi con manubri","Gambe","Passo lungo, ginocchio posteriore verso terra, busto dritto."],
-  ["Leg press 45°","Gambe","Piedi alla larghezza delle spalle, scendi controllato senza staccare il bacino dallo schienale."],
-  ["Croci ai cavi","Petto","Gomiti leggermente flessi, cerca l'allungamento e chiudi davanti al petto."],
-  ["Curl bilanciere EZ","Bicipiti","Gomiti fermi ai fianchi, sali senza slanci."],
-  ["French press manubrio","Tricipiti","Manubrio dietro la testa, gomiti fermi e rivolti in avanti."],
-  ["Hip thrust","Glutei","Scapole sulla panca, spingi col tallone e chiudi i glutei in alto."],
-  ["Alzate laterali","Spalle","Gomiti morbidi, sali fino all'altezza delle spalle, scendi lento."],
-  ["Plank frontale","Core","Gomiti sotto le spalle, corpo in linea, respira senza far cadere il bacino."],
-  ["Pulley basso","Dorso","Busto fermo, porta la maniglia all'addome e apri il petto."],
-  ["Leg curl sdraiato","Femorali","Bacino schiacciato sulla panca, sali e scendi controllato."],
-  ["Circuito metabolico","Condizionamento","Kettlebell swing, remoergometro, battle rope: lavoro a intervalli."]
-];
+/* nome, gruppo, istruzioni, foto partenza, foto arrivo (foto: archivio libero di pubblico dominio) */
+const EX_SEED=[["Panca piana bilanciere", "Petto", "Scapole strette e piedi a terra. Il bilanciere scende al petto basso, gomiti a circa 45°.", "/assets/img/esercizi/panca-piana-bilanciere-a.webp", "/assets/img/esercizi/panca-piana-bilanciere-b.webp"], ["Squat bilanciere", "Gambe", "Bilanciere sui trapezi, petto alto, scendi finché le anche passano sotto le ginocchia mantenendo la schiena neutra.", "/assets/img/esercizi/squat-bilanciere-a.webp", "/assets/img/esercizi/squat-bilanciere-b.webp"], ["Stacco rumeno", "Femorali", "Ginocchia appena flesse, spingi indietro le anche e porta il bilanciere lungo le cosce fino a metà tibia.", "/assets/img/esercizi/stacco-rumeno-a.webp", "/assets/img/esercizi/stacco-rumeno-b.webp"], ["Lat machine presa larga", "Dorso", "Petto verso la barra, tira con i gomiti verso i fianchi senza dondolare.", "/assets/img/esercizi/lat-machine-presa-larga-a.webp", "/assets/img/esercizi/lat-machine-presa-larga-b.webp"], ["Rematore bilanciere", "Dorso", "Busto a 45°, schiena neutra, porta il bilanciere all'ombelico.", "/assets/img/esercizi/rematore-bilanciere-a.webp", "/assets/img/esercizi/rematore-bilanciere-b.webp"], ["Military press", "Spalle", "In piedi, glutei e addome contratti, spingi sopra la testa senza inarcare la zona lombare.", "/assets/img/esercizi/military-press-a.webp", "/assets/img/esercizi/military-press-b.webp"], ["Affondi con manubri", "Gambe", "Passo lungo, ginocchio posteriore verso terra, busto dritto.", "/assets/img/esercizi/affondi-con-manubri-a.webp", "/assets/img/esercizi/affondi-con-manubri-b.webp"], ["Leg press 45°", "Gambe", "Piedi alla larghezza delle spalle, scendi controllato senza staccare il bacino dallo schienale.", "/assets/img/esercizi/leg-press-45-a.webp", "/assets/img/esercizi/leg-press-45-b.webp"], ["Croci ai cavi", "Petto", "Gomiti leggermente flessi, cerca l'allungamento e chiudi davanti al petto.", "/assets/img/esercizi/croci-ai-cavi-a.webp", "/assets/img/esercizi/croci-ai-cavi-b.webp"], ["Curl bilanciere EZ", "Bicipiti", "Gomiti fermi ai fianchi, sali senza slanci.", "/assets/img/esercizi/curl-bilanciere-ez-a.webp", "/assets/img/esercizi/curl-bilanciere-ez-b.webp"], ["French press manubrio", "Tricipiti", "Manubrio dietro la testa, gomiti fermi e rivolti in avanti.", "/assets/img/esercizi/french-press-manubrio-a.webp", "/assets/img/esercizi/french-press-manubrio-b.webp"], ["Hip thrust", "Glutei", "Scapole sulla panca, spingi col tallone e chiudi i glutei in alto.", "/assets/img/esercizi/hip-thrust-a.webp", "/assets/img/esercizi/hip-thrust-b.webp"], ["Alzate laterali", "Spalle", "Gomiti morbidi, sali fino all'altezza delle spalle, scendi lento.", "/assets/img/esercizi/alzate-laterali-a.webp", "/assets/img/esercizi/alzate-laterali-b.webp"], ["Plank frontale", "Core", "Gomiti sotto le spalle, corpo in linea, respira senza far cadere il bacino.", "/assets/img/esercizi/plank-frontale-a.webp", "/assets/img/esercizi/plank-frontale-b.webp"], ["Pulley basso", "Dorso", "Busto fermo, porta la maniglia all'addome e apri il petto.", "/assets/img/esercizi/pulley-basso-a.webp", "/assets/img/esercizi/pulley-basso-b.webp"], ["Leg curl sdraiato", "Femorali", "Bacino schiacciato sulla panca, sali e scendi controllato.", "/assets/img/esercizi/leg-curl-sdraiato-a.webp", "/assets/img/esercizi/leg-curl-sdraiato-b.webp"], ["Circuito metabolico", "Condizionamento", "Kettlebell swing, remoergometro, battle rope: lavoro a intervalli.", "/assets/img/esercizi/circuito-metabolico-a.webp", "/assets/img/esercizi/circuito-metabolico-b.webp"], ["Panca inclinata bilanciere", "Petto", "Panca a 30-45°. Il bilanciere scende sotto le clavicole, scapole addotte e glutei sulla panca.", "/assets/img/esercizi/panca-inclinata-bilanciere-a.webp", "/assets/img/esercizi/panca-inclinata-bilanciere-b.webp"], ["Panca declinata bilanciere", "Petto", "Piedi bloccati, il bilanciere scende alla parte bassa del petto. Lavora sul fascio inferiore.", "/assets/img/esercizi/panca-declinata-bilanciere-a.webp", "/assets/img/esercizi/panca-declinata-bilanciere-b.webp"], ["Panca piana manubri", "Petto", "Manubri all'altezza del petto, spingi in alto avvicinandoli senza farli sbattere.", "/assets/img/esercizi/panca-piana-manubri-a.webp", "/assets/img/esercizi/panca-piana-manubri-b.webp"], ["Panca inclinata manubri", "Petto", "Panca a 30°, scendi fino a sentire l'allungamento del petto, spingi in alto e leggermente verso l'interno.", "/assets/img/esercizi/panca-inclinata-manubri-a.webp", "/assets/img/esercizi/panca-inclinata-manubri-b.webp"], ["Croci con manubri", "Petto", "Gomiti leggermente flessi e fermi, apri ad arco fino all'allungamento, chiudi stringendo il petto.", "/assets/img/esercizi/croci-con-manubri-a.webp", "/assets/img/esercizi/croci-con-manubri-b.webp"], ["Croci su panca inclinata", "Petto", "Come le croci piane ma su panca a 30°: enfasi sul petto alto.", "/assets/img/esercizi/croci-su-panca-inclinata-a.webp", "/assets/img/esercizi/croci-su-panca-inclinata-b.webp"], ["Pectoral machine", "Petto", "Schiena appoggiata, chiudi le braccia davanti al petto e torna lento senza far toccare i pesi.", "/assets/img/esercizi/pectoral-machine-a.webp", "/assets/img/esercizi/pectoral-machine-b.webp"], ["Piegamenti sulle braccia", "Petto", "Mani sotto le spalle, corpo in linea dalla testa ai talloni, petto a un pugno da terra.", "/assets/img/esercizi/piegamenti-sulle-braccia-a.webp", "/assets/img/esercizi/piegamenti-sulle-braccia-b.webp"], ["Piegamenti su rialzo", "Petto", "Mani su panca o box: versione più facile dei piegamenti, stessa tecnica.", "/assets/img/esercizi/piegamenti-su-rialzo-a.webp", "/assets/img/esercizi/piegamenti-su-rialzo-b.webp"], ["Dip alle parallele (petto)", "Petto", "Busto leggermente in avanti, scendi finché le spalle sono all'altezza dei gomiti, risali spingendo.", "/assets/img/esercizi/dip-alle-parallele-petto-a.webp", "/assets/img/esercizi/dip-alle-parallele-petto-b.webp"], ["Panca piana al multipower", "Petto", "Bilanciere guidato: utile per lavorare in sicurezza vicino al cedimento.", "/assets/img/esercizi/panca-piana-al-multipower-a.webp", "/assets/img/esercizi/panca-piana-al-multipower-b.webp"], ["Lat machine presa stretta", "Dorso", "Presa stretta, tira la barra al petto portando i gomiti in basso e indietro.", "/assets/img/esercizi/lat-machine-presa-stretta-a.webp", "/assets/img/esercizi/lat-machine-presa-stretta-b.webp"], ["Trazioni alla sbarra", "Dorso", "Presa prona poco più larga delle spalle, sali finché il mento supera la sbarra, scendi a braccia distese.", "/assets/img/esercizi/trazioni-alla-sbarra-a.webp", "/assets/img/esercizi/trazioni-alla-sbarra-b.webp"], ["Trazioni presa supina", "Dorso", "Palmi verso di te, sali col petto verso la sbarra: lavorano molto anche i bicipiti.", "/assets/img/esercizi/trazioni-presa-supina-a.webp", "/assets/img/esercizi/trazioni-presa-supina-b.webp"], ["Rematore con manubrio", "Dorso", "Mano e ginocchio sulla panca, schiena piatta, porta il manubrio verso l'anca.", "/assets/img/esercizi/rematore-con-manubrio-a.webp", "/assets/img/esercizi/rematore-con-manubrio-b.webp"], ["Rematore T-bar", "Dorso", "Busto inclinato e fermo, tira la maniglia al petto stringendo le scapole.", "/assets/img/esercizi/rematore-t-bar-a.webp", "/assets/img/esercizi/rematore-t-bar-b.webp"], ["Pulldown a braccia tese", "Dorso", "Braccia quasi tese, porta la barra dalle spalle alle cosce lavorando solo con i dorsali.", "/assets/img/esercizi/pulldown-a-braccia-tese-a.webp", "/assets/img/esercizi/pulldown-a-braccia-tese-b.webp"], ["Hyperextension", "Dorso", "Bacino sul cuscino, scendi con la schiena neutra e risali fino alla linea del corpo, senza iperestendere.", "/assets/img/esercizi/hyperextension-a.webp", "/assets/img/esercizi/hyperextension-b.webp"], ["Rematore al multipower", "Dorso", "Busto a 45°, porta il bilanciere guidato verso l'ombelico.", "/assets/img/esercizi/rematore-al-multipower-a.webp", "/assets/img/esercizi/rematore-al-multipower-b.webp"], ["Stacco da terra", "Dorso", "Bilanciere sopra metà piede, schiena neutra, spingi il pavimento e chiudi le anche in alto.", "/assets/img/esercizi/stacco-da-terra-a.webp", "/assets/img/esercizi/stacco-da-terra-b.webp"], ["Stacco sumo", "Glutei", "Piedi larghi e punte in fuori, presa interna, busto più verticale dello stacco classico.", "/assets/img/esercizi/stacco-sumo-a.webp", "/assets/img/esercizi/stacco-sumo-b.webp"], ["Lento avanti manubri seduto", "Spalle", "Schiena appoggiata, spingi i manubri sopra la testa senza bloccare i gomiti.", "/assets/img/esercizi/lento-avanti-manubri-seduto-a.webp", "/assets/img/esercizi/lento-avanti-manubri-seduto-b.webp"], ["Shoulder press manubri", "Spalle", "Manubri all'altezza delle orecchie, spingi in verticale e scendi controllato.", "/assets/img/esercizi/shoulder-press-manubri-a.webp", "/assets/img/esercizi/shoulder-press-manubri-b.webp"], ["Arnold press", "Spalle", "Parti coi palmi verso di te e ruota mentre spingi in alto: coinvolge tutti i fasci della spalla.", "/assets/img/esercizi/arnold-press-a.webp", "/assets/img/esercizi/arnold-press-b.webp"], ["Alzate frontali", "Spalle", "Braccia quasi tese, sali davanti fino all'altezza delle spalle, senza dondolare.", "/assets/img/esercizi/alzate-frontali-a.webp", "/assets/img/esercizi/alzate-frontali-b.webp"], ["Alzate posteriori", "Spalle", "Busto piegato in avanti, apri le braccia lateralmente stringendo le scapole.", "/assets/img/esercizi/alzate-posteriori-a.webp", "/assets/img/esercizi/alzate-posteriori-b.webp"], ["Face pull ai cavi", "Spalle", "Corda all'altezza del viso, tira verso la fronte aprendo i gomiti: ottimo per la postura.", "/assets/img/esercizi/face-pull-ai-cavi-a.webp", "/assets/img/esercizi/face-pull-ai-cavi-b.webp"], ["Tirate al mento", "Spalle", "Presa media, porta il bilanciere fino al petto alto con i gomiti che guidano.", "/assets/img/esercizi/tirate-al-mento-a.webp", "/assets/img/esercizi/tirate-al-mento-b.webp"], ["Scrollate bilanciere", "Spalle", "Braccia tese, alza le spalle verso le orecchie e tieni un secondo in alto.", "/assets/img/esercizi/scrollate-bilanciere-a.webp", "/assets/img/esercizi/scrollate-bilanciere-b.webp"], ["Front squat", "Gambe", "Bilanciere sulle spalle davanti, gomiti alti, busto verticale mentre scendi.", "/assets/img/esercizi/front-squat-a.webp", "/assets/img/esercizi/front-squat-b.webp"], ["Goblet squat", "Gambe", "Manubrio o kettlebell al petto, scendi tra le ginocchia mantenendo il busto alto.", "/assets/img/esercizi/goblet-squat-a.webp", "/assets/img/esercizi/goblet-squat-b.webp"], ["Squat a corpo libero", "Gambe", "Piedi alla larghezza delle spalle, scendi portando indietro le anche, talloni a terra.", "/assets/img/esercizi/squat-a-corpo-libero-a.webp", "/assets/img/esercizi/squat-a-corpo-libero-b.webp"], ["Squat al multipower", "Gambe", "Piedi leggermente avanti rispetto al bilanciere, scendi controllato a schiena neutra.", "/assets/img/esercizi/squat-al-multipower-a.webp", "/assets/img/esercizi/squat-al-multipower-b.webp"], ["Hack squat", "Gambe", "Schiena contro lo schienale, scendi fino a 90° o più senza staccare i talloni.", "/assets/img/esercizi/hack-squat-a.webp", "/assets/img/esercizi/hack-squat-b.webp"], ["Affondi camminati bilanciere", "Gambe", "Passo lungo e alternato, ginocchio posteriore vicino a terra, busto dritto.", "/assets/img/esercizi/affondi-camminati-bilanciere-a.webp", "/assets/img/esercizi/affondi-camminati-bilanciere-b.webp"], ["Split squat con manubri", "Gambe", "Gambe divaricate avanti-dietro, scendi in verticale e risali spingendo col piede davanti.", "/assets/img/esercizi/split-squat-con-manubri-a.webp", "/assets/img/esercizi/split-squat-con-manubri-b.webp"], ["Affondi indietro", "Gambe", "Fai un passo indietro e scendi: più gentile per le ginocchia degli affondi in avanti.", "/assets/img/esercizi/affondi-indietro-a.webp", "/assets/img/esercizi/affondi-indietro-b.webp"], ["Step-up con manubri", "Gambe", "Sali sul box spingendo col tallone della gamba davanti, scendi controllato.", "/assets/img/esercizi/step-up-con-manubri-a.webp", "/assets/img/esercizi/step-up-con-manubri-b.webp"], ["Leg extension", "Gambe", "Rullo sopra le caviglie, estendi le gambe e tieni un attimo in alto, scendi lento.", "/assets/img/esercizi/leg-extension-a.webp", "/assets/img/esercizi/leg-extension-b.webp"], ["Squat sumo con manubrio", "Gambe", "Piedi larghi e punte in fuori, manubrio tra le gambe, scendi con il busto dritto.", "/assets/img/esercizi/squat-sumo-con-manubrio-a.webp", "/assets/img/esercizi/squat-sumo-con-manubrio-b.webp"], ["Adductor machine", "Gambe", "Chiudi le gambe contro la resistenza e torna lento: lavora l'interno coscia.", "/assets/img/esercizi/adductor-machine-a.webp", "/assets/img/esercizi/adductor-machine-b.webp"], ["Calf raise in piedi", "Polpacci", "Sali sulle punte il più in alto possibile, tieni un secondo, scendi sotto il livello del gradino.", "/assets/img/esercizi/calf-raise-in-piedi-a.webp", "/assets/img/esercizi/calf-raise-in-piedi-b.webp"], ["Calf raise seduto", "Polpacci", "Ginocchia sotto il cuscino, sali sulle punte: lavora il soleo.", "/assets/img/esercizi/calf-raise-seduto-a.webp", "/assets/img/esercizi/calf-raise-seduto-b.webp"], ["Ponte glutei con bilanciere", "Glutei", "Schiena a terra, bilanciere sulle anche, spingi coi talloni e chiudi i glutei in alto.", "/assets/img/esercizi/ponte-glutei-con-bilanciere-a.webp", "/assets/img/esercizi/ponte-glutei-con-bilanciere-b.webp"], ["Slanci dietro (kickback)", "Glutei", "In quadrupedia, spingi una gamba indietro e in alto senza inarcare la schiena.", "/assets/img/esercizi/slanci-dietro-kickback-a.webp", "/assets/img/esercizi/slanci-dietro-kickback-b.webp"], ["Abductor machine", "Glutei", "Apri le gambe contro la resistenza: lavora gluteo medio e fianchi.", "/assets/img/esercizi/abductor-machine-a.webp", "/assets/img/esercizi/abductor-machine-b.webp"], ["Stacco gambe tese manubri", "Femorali", "Gambe quasi tese, scendi coi manubri vicini alle gambe finché senti tirare i femorali.", "/assets/img/esercizi/stacco-gambe-tese-manubri-a.webp", "/assets/img/esercizi/stacco-gambe-tese-manubri-b.webp"], ["Leg curl seduto", "Femorali", "Piega le ginocchia portando i talloni sotto la seduta, torna controllato.", "/assets/img/esercizi/leg-curl-seduto-a.webp", "/assets/img/esercizi/leg-curl-seduto-b.webp"], ["Good morning", "Femorali", "Bilanciere sulle spalle, ginocchia morbide, piega le anche con la schiena neutra.", "/assets/img/esercizi/good-morning-a.webp", "/assets/img/esercizi/good-morning-b.webp"], ["Curl bilanciere", "Bicipiti", "Gomiti fermi ai fianchi, sali fino alle spalle e scendi lento senza slanci.", "/assets/img/esercizi/curl-bilanciere-a.webp", "/assets/img/esercizi/curl-bilanciere-b.webp"], ["Curl con manubri", "Bicipiti", "Alterna o insieme, ruota il palmo verso l'alto mentre sali.", "/assets/img/esercizi/curl-con-manubri-a.webp", "/assets/img/esercizi/curl-con-manubri-b.webp"], ["Curl a martello", "Bicipiti", "Palmi uno di fronte all'altro, sali senza muovere i gomiti: lavora anche l'avambraccio.", "/assets/img/esercizi/curl-a-martello-a.webp", "/assets/img/esercizi/curl-a-martello-b.webp"], ["Curl alla panca Scott", "Bicipiti", "Braccia appoggiate al cuscino, scendi fino quasi a distendere e risali stringendo.", "/assets/img/esercizi/curl-alla-panca-scott-a.webp", "/assets/img/esercizi/curl-alla-panca-scott-b.webp"], ["Curl di concentrazione", "Bicipiti", "Seduto, gomito appoggiato all'interno coscia, sali lento e stringi in alto.", "/assets/img/esercizi/curl-di-concentrazione-a.webp", "/assets/img/esercizi/curl-di-concentrazione-b.webp"], ["Curl a martello ai cavi", "Bicipiti", "Corda al cavo basso, gomiti fermi, porta le mani verso le spalle.", "/assets/img/esercizi/curl-a-martello-ai-cavi-a.webp", "/assets/img/esercizi/curl-a-martello-ai-cavi-b.webp"], ["Pushdown tricipiti", "Tricipiti", "Gomiti incollati ai fianchi, spingi la barra in basso fino a distendere le braccia.", "/assets/img/esercizi/pushdown-tricipiti-a.webp", "/assets/img/esercizi/pushdown-tricipiti-b.webp"], ["Pushdown con corda", "Tricipiti", "Come il pushdown, ma in basso apri la corda verso l'esterno.", "/assets/img/esercizi/pushdown-con-corda-a.webp", "/assets/img/esercizi/pushdown-con-corda-b.webp"], ["Skull crusher bilanciere EZ", "Tricipiti", "Sdraiato, porta il bilanciere verso la fronte piegando solo i gomiti, poi distendi.", "/assets/img/esercizi/skull-crusher-bilanciere-ez-a.webp", "/assets/img/esercizi/skull-crusher-bilanciere-ez-b.webp"], ["Panca presa stretta", "Tricipiti", "Mani alla larghezza delle spalle, gomiti vicini al corpo mentre scendi.", "/assets/img/esercizi/panca-presa-stretta-a.webp", "/assets/img/esercizi/panca-presa-stretta-b.webp"], ["Dip su panca", "Tricipiti", "Mani sulla panca dietro di te, scendi piegando i gomiti a 90° e risali.", "/assets/img/esercizi/dip-su-panca-a.webp", "/assets/img/esercizi/dip-su-panca-b.webp"], ["Kickback tricipiti", "Tricipiti", "Busto in avanti, gomito alto e fermo, distendi il braccio indietro.", "/assets/img/esercizi/kickback-tricipiti-a.webp", "/assets/img/esercizi/kickback-tricipiti-b.webp"], ["Plank laterale", "Core", "Gomito sotto la spalla, corpo in linea, non far scendere il fianco.", "/assets/img/esercizi/plank-laterale-a.webp", "/assets/img/esercizi/plank-laterale-b.webp"], ["Crunch", "Core", "Ginocchia piegate, solleva le spalle da terra arrotolando la schiena, senza tirare il collo.", "/assets/img/esercizi/crunch-a.webp", "/assets/img/esercizi/crunch-b.webp"], ["Crunch obliqui", "Core", "Porta il gomito verso il ginocchio opposto ruotando il busto.", "/assets/img/esercizi/crunch-obliqui-a.webp", "/assets/img/esercizi/crunch-obliqui-b.webp"], ["Sollevamento gambe alla sbarra", "Core", "Appeso alla sbarra, porta le gambe in alto senza dondolare.", "/assets/img/esercizi/sollevamento-gambe-alla-sbarra-a.webp", "/assets/img/esercizi/sollevamento-gambe-alla-sbarra-b.webp"], ["Sforbiciate", "Core", "Schiena bassa schiacciata a terra, gambe tese che si alternano su e giù.", "/assets/img/esercizi/sforbiciate-a.webp", "/assets/img/esercizi/sforbiciate-b.webp"], ["Russian twist", "Core", "Busto inclinato indietro, ruota da un lato all'altro tenendo l'addome contratto.", "/assets/img/esercizi/russian-twist-a.webp", "/assets/img/esercizi/russian-twist-b.webp"], ["Ruota per addominali", "Core", "In ginocchio, rotola in avanti mantenendo la schiena piatta e torna con l'addome.", "/assets/img/esercizi/ruota-per-addominali-a.webp", "/assets/img/esercizi/ruota-per-addominali-b.webp"], ["Dead bug", "Core", "Schiena a terra, allunga braccio e gamba opposti mantenendo la zona lombare appoggiata.", "/assets/img/esercizi/dead-bug-a.webp", "/assets/img/esercizi/dead-bug-b.webp"], ["Crunch ai cavi", "Core", "In ginocchio, corda dietro la testa, arrotola il busto verso il basso con l'addome.", "/assets/img/esercizi/crunch-ai-cavi-a.webp", "/assets/img/esercizi/crunch-ai-cavi-b.webp"], ["Superman", "Core", "A pancia in giù, solleva insieme braccia e gambe e tieni due secondi.", "/assets/img/esercizi/superman-a.webp", "/assets/img/esercizi/superman-b.webp"], ["Mountain climber", "Core", "In plank alto, porta le ginocchia al petto alternandole a ritmo veloce.", "/assets/img/esercizi/mountain-climber-a.webp", "/assets/img/esercizi/mountain-climber-b.webp"], ["Thruster con kettlebell", "Condizionamento", "Squat con kettlebell al petto e, risalendo, spinta sopra la testa in un unico movimento.", "/assets/img/esercizi/thruster-con-kettlebell-a.webp", "/assets/img/esercizi/thruster-con-kettlebell-b.webp"], ["Box jump", "Condizionamento", "Salta sul box atterrando morbido a ginocchia piegate, scendi camminando.", "/assets/img/esercizi/box-jump-a.webp", "/assets/img/esercizi/box-jump-b.webp"], ["Salto della corda", "Condizionamento", "Salti piccoli sulle punte, polsi che girano la corda, gomiti vicini al corpo.", "/assets/img/esercizi/salto-della-corda-a.webp", "/assets/img/esercizi/salto-della-corda-b.webp"], ["Vogatore", "Condizionamento", "Spingi prima con le gambe, poi apri il busto e tira con le braccia; ritorno nell'ordine inverso.", "/assets/img/esercizi/vogatore-a.webp", "/assets/img/esercizi/vogatore-b.webp"], ["Crunch a bicicletta", "Core", "Schiena a terra, porta il gomito verso il ginocchio opposto alternando i lati come se pedalassi.", "/assets/img/esercizi/crunch-a-bicicletta-a.webp", "/assets/img/esercizi/crunch-a-bicicletta-b.webp"], ["Battle rope", "Condizionamento", "Gambe semipiegate, onde alternate e veloci con le braccia mantenendo il core attivo.", "/assets/img/esercizi/battle-rope-a.webp", "/assets/img/esercizi/battle-rope-b.webp"], ["Farmer walk", "Condizionamento", "Un peso per mano, cammina con passi corti, spalle basse e busto dritto.", "/assets/img/esercizi/farmer-walk-a.webp", "/assets/img/esercizi/farmer-walk-b.webp"], ["Spinta della slitta", "Condizionamento", "Busto inclinato, braccia tese sulla slitta, spingi con passi corti e potenti.", "/assets/img/esercizi/spinta-della-slitta-a.webp", "/assets/img/esercizi/spinta-della-slitta-b.webp"], ["Inchworm", "Condizionamento", "Dalla posizione in piedi cammina con le mani fino al plank e torna indietro.", "/assets/img/esercizi/inchworm-a.webp", "/assets/img/esercizi/inchworm-b.webp"], ["World's greatest stretch", "Mobilità e stretching", "Affondo profondo, gomito verso il piede davanti, poi ruota il busto aprendo il braccio al cielo.", "/assets/img/esercizi/world-s-greatest-stretch-a.webp", "/assets/img/esercizi/world-s-greatest-stretch-b.webp"], ["Allungamento femorali 90/90", "Mobilità e stretching", "Schiena a terra, coscia a 90°, distendi la gamba fino a sentire tirare dietro la coscia.", "/assets/img/esercizi/allungamento-femorali-90-90-a.webp", "/assets/img/esercizi/allungamento-femorali-90-90-b.webp"], ["Cat-cow", "Mobilità e stretching", "In quadrupedia, alterna schiena arrotondata e schiena incavata seguendo il respiro.", "/assets/img/esercizi/cat-cow-a.webp", "/assets/img/esercizi/cat-cow-b.webp"], ["Posizione del bambino", "Mobilità e stretching", "Seduto sui talloni, allunga le braccia in avanti e rilassa la schiena.", "/assets/img/esercizi/posizione-del-bambino-a.webp", "/assets/img/esercizi/posizione-del-bambino-b.webp"], ["Allungamento flessori dell'anca", "Mobilità e stretching", "In affondo con il ginocchio a terra, porta il bacino in avanti mantenendo il busto dritto.", "/assets/img/esercizi/allungamento-flessori-dell-anca-a.webp", "/assets/img/esercizi/allungamento-flessori-dell-anca-b.webp"], ["Allungamento quadricipiti", "Mobilità e stretching", "In piedi, porta il tallone al gluteo tenendo le ginocchia vicine.", "/assets/img/esercizi/allungamento-quadricipiti-a.webp", "/assets/img/esercizi/allungamento-quadricipiti-b.webp"], ["Allungamento femorali", "Mobilità e stretching", "Gamba tesa, piegati in avanti con la schiena lunga finché senti tirare.", "/assets/img/esercizi/allungamento-femorali-a.webp", "/assets/img/esercizi/allungamento-femorali-b.webp"], ["Allungamento pettorali", "Mobilità e stretching", "Apri le braccia all'indietro aprendo il petto, poi richiudi, in modo dinamico.", "/assets/img/esercizi/allungamento-pettorali-a.webp", "/assets/img/esercizi/allungamento-pettorali-b.webp"], ["Ponte glutei a corpo libero", "Mobilità e stretching", "Schiena a terra, arrotola il bacino e solleva le anche vertebra per vertebra.", "/assets/img/esercizi/ponte-glutei-a-corpo-libero-a.webp", "/assets/img/esercizi/ponte-glutei-a-corpo-libero-b.webp"], ["Allungamento polpacci", "Mobilità e stretching", "Mani al muro, gamba dietro tesa e tallone a terra, spingi il bacino in avanti.", "/assets/img/esercizi/allungamento-polpacci-a.webp", "/assets/img/esercizi/allungamento-polpacci-b.webp"]];
 
 const SCHEDA_SEED={
   nome:"Ricomposizione · Blocco 2 — settimana 6/8",
@@ -1058,15 +1106,16 @@ const clone=o=>JSON.parse(JSON.stringify(o));
 
 function initDB(){
   const d=LS.get("db",null);
-  if(d&&d.v===DBV){DB=d;migraPrezzi();ensureAgenda(false);autoProgrammi();return}
+  if(d&&d.v===DBV){DB=d;migraSchede();migraPrezzi();migraEsercizi();ensureAgenda(false);autoProgrammi();return}
   DB={v:DBV,
     settings:{maxCorso:10,maxPT:3,maxTratt:2,motore:"regole",regoleOff:[],pwCoach:hashPw("kone2026"),pwConti:hashPw("conti2026")},
     clienti:clone(CLIENTI_SEED).map(c=>{if(c.pw){c.pw=hashPw(c.pw)}return c}),
     listino:clone(LISTINO_SEED),trattamenti:clone(TRATT_SEED),corsi:clone(CORSI_SEED),
-    esercizi:EX_SEED.map((e,i)=>({id:"ex"+i,n:e[0],m:e[1],istr:e[2],foto:null,video:null})),
+    esercizi:EX_SEED.map((e,i)=>({id:"ex"+i,n:e[0],m:e[1],istr:e[2],foto:e[3]||null,foto2:e[4]||null,video:null})),
     scheda:clone(SCHEDA_SEED),chat:clone(CHAT_SEED),
     pesi:{},carichi:{},agenda:{},programmi:{},feedback:[],movimenti:[]};
-  seedPesi();seedCarichi();ensureAgenda(true);seedMarco();seedStorico();seedMovimenti();autoProgrammi();migraPrezzi();save();
+  migraSchede();
+  seedPesi();seedCarichi();ensureAgenda(true);seedMarco();seedStorico();seedMovimenti();autoProgrammi();migraPrezzi();migraEsercizi();save();
 }
 function seedPesi(){
   const marco=[88.5,88.0,87.4,87.1,86.5,86.2,85.9,85.4,85.5,85.0,84.6,84.2];
@@ -1453,7 +1502,7 @@ function enterApp(role,cid){
 function chrome(){
   const coach=S.role==="coach";
   document.body.classList.toggle("client",!coach);
-  el("tbSub").textContent=coach?"Pannello coach":"La tua app";
+  el("tbSub").textContent=coach?"Area titolare":"La tua app";
   el("tbChip").textContent=coach?"Kone Moctar":me().n;
   el("tbPreview").hidden=!coach;
   const pb=el("previewbar");pb.hidden=!S.preview;
@@ -1469,7 +1518,7 @@ function tornaCoach(){S.role="coach";S.preview=false;S.area="allen";S.view="dash
 /* ---------- navigazione ---------- */
 const NAV={
   coach:{studio:[["dash","Cruscotto","dash"],["agenda","Agenda","cal"],["clienti","Clienti","users"],["chat","Chat","chat"],["listino","Listino prezzi","tag"],["conti","Contabilità","lock"]],
-    allen:[["schede","Schede","plan"],["libreria","Esercizi","dumb"],["corsi","Corsi · IA","spark"],["nutrizione","Nutrizione","food"]],
+    allen:[["schede","Schede clienti","plan"],["libreria","Esercizi","dumb"],["corsi","Corsi · IA","spark"],["nutrizione","Nutrizione","food"]],
     tratt:[["tratt","Trattamenti","lotus"]]},
   client:{allen:[["oggi","Oggi","today"],["scheda","Scheda","plan"],["prenota","Prenota","cal"],["prog","Progressi","chart"],["dieta","Dieta","food"],["listino","Prezzi","tag"],["chat","Chat","chat"]],
     tratt:[["tcat","Trattamenti","lotus"],["tpren","Prenota","cal"],["listino","Prezzi","tag"],["chat","Chat","chat"]]}
@@ -1477,7 +1526,8 @@ const NAV={
 function navItems(){return S.role==="coach"?NAV.coach[S.area].concat(NAV.coach.studio):NAV.client[S.area]}
 function buildNav(){
   const unread=DB.chat.reduce((a,c)=>a+c.unread,0),coach=S.role==="coach";
-  const badge=(n,cls)=>n[0]==="chat"&&unread&&coach?'<span class="'+cls+'">'+unread+'</span>':(n[0]==="conti"&&coach&&!S.contiOk?'':"");
+  const ut=!coach&&DB.chat.find(x=>x.n===me().n),uc=ut?ut.unreadC||0:0;
+  const badge=(n,cls)=>n[0]==="chat"&&uc&&!coach?'<span class="'+cls+'">'+uc+'</span>':n[0]==="chat"&&unread&&coach?'<span class="'+cls+'">'+unread+'</span>':(n[0]==="conti"&&coach&&!S.contiOk?'':"");
   const btn=n=>'<button class="nav '+(S.view===n[0]||(n[0]==="clienti"&&S.view==="cliente")?"on":"")+'" onclick="go(\''+n[0]+'\')">'+ic(n[2])+'<span>'+n[1]+'</span>'+badge(n,"badge")+'</button>';
   el("rail").innerHTML=coach
     ?'<div class="rail-sec">'+(S.area==="allen"?"Allenamenti":"Trattamenti")+'</div>'+NAV.coach[S.area].map(btn).join("")+'<div class="rail-sec">Studio</div>'+NAV.coach.studio.map(btn).join("")
@@ -1493,7 +1543,7 @@ function go(v){if(S.view==="conti"&&v!=="conti")S.contiOk=false;S.view=v;S.open=
 function openClient(id){S.client=id;S.view="cliente";S.tab=0;buildNav();render();el("main").scrollTop=0}
 
 /* =================== MEDIA ESERCIZI =================== */
-function hydrate(){document.querySelectorAll("video[data-vkey]:not([src])").forEach(v=>{IDB.get(v.dataset.vkey).then(b=>{if(b)v.src=URL.createObjectURL(b)}).catch(()=>{})})}
+function hydrate(){hydrateImg();document.querySelectorAll("video[data-vkey]:not([src])").forEach(v=>{IDB.get(v.dataset.vkey).then(b=>{if(b)v.src=URL.createObjectURL(b)}).catch(()=>{})})}
 function safeUrl(u){return /^https?:\/\//i.test(u||"")?u:""}
 function videoHTML(v){
   if(!v)return "";
@@ -1507,8 +1557,9 @@ function videoHTML(v){
 function thumbHTML(x,label){return '<div class="exthumb">'+(x&&x.foto?'<img src="'+x.foto+'" alt="'+esc(x.n)+'">':ic("dumb",34))+(x&&x.video?'<span class="vb">'+ic("play",13)+'</span>':'')+(label&&!(x&&x.foto)?'<span class="ph-l">'+esc(label)+'</span>':'')+'</div>'}
 function miniHTML(n){const x=exLib(n);return '<span class="mini">'+(x&&x.foto?'<img src="'+x.foto+'" alt="">':ic(x&&x.video?"play":"dumb",16))+'</span>'}
 function mediaBlock(n){const x=exLib(n);if(!x)return "";
-  return '<div class="media">'+(x.foto?'<img src="'+x.foto+'" alt="'+esc(x.n)+'">':'<div class="empty">'+ic("img",22)+'<br>Foto non ancora caricata</div>')+
-   (x.video?videoHTML(x.video):'<div class="empty">'+ic("video",22)+'<br>Video non ancora caricato</div>')+'</div>'+(x.istr?'<div class="exnote">'+esc(x.istr)+'</div>':'')}
+  const fig=(src,l)=>'<figure><img src="'+src+'" alt="'+esc(x.n)+' · '+l+'" loading="lazy"><figcaption>'+l+'</figcaption></figure>';
+  return '<div class="media">'+(x.foto?(x.foto2?fig(x.foto,"Partenza")+fig(x.foto2,"Arrivo"):'<img src="'+x.foto+'" alt="'+esc(x.n)+'">'):'<div class="empty">'+ic("img",22)+'<br>Foto non ancora caricata</div>')+
+   (x.video?videoHTML(x.video):(x.foto2?'':'<div class="empty">'+ic("video",22)+'<br>Video non ancora caricato</div>'))+'</div>'+(x.istr?'<div class="exnote">'+esc(x.istr)+'</div>':'')}
 function vediEsercizio(n){const x=exLib(n);openModal('<h3>'+esc(n)+'</h3><p class="dim" style="margin-bottom:12px">'+esc(x?x.m:"")+'</p>'+mediaBlock(n))}
 function readPhoto(file){return new Promise((res,rej)=>{const img=new Image(),u=URL.createObjectURL(file);
   img.onload=()=>{const m=900,sc=Math.min(1,m/Math.max(img.width,img.height)),cv=document.createElement("canvas");cv.width=Math.round(img.width*sc);cv.height=Math.round(img.height*sc);
@@ -1516,39 +1567,55 @@ function readPhoto(file){return new Promise((res,rej)=>{const img=new Image(),u=
 let EXED=null;
 function editEsercizio(id){
   const x=id?DB.esercizi.find(e=>e.id===id):{id:null,n:"",m:"Petto",istr:"",foto:null,video:null};
-  EXED={id:x.id,foto:x.foto,video:x.video,file:null};
-  const gruppi=[...new Set(DB.esercizi.map(e=>e.m).concat(["Petto","Dorso","Spalle","Gambe","Glutei","Femorali","Bicipiti","Tricipiti","Core","Condizionamento"]))];
+  EXED={id:x.id,foto:x.foto,foto2:x.foto2||null,video:x.video,file:null};
+  const gruppi=[...new Set(DB.esercizi.map(e=>e.m).concat(["Petto","Dorso","Spalle","Gambe","Glutei","Femorali","Polpacci","Bicipiti","Tricipiti","Core","Condizionamento","Mobilità e stretching"]))];
   openModal('<h3>'+(id?"Modifica esercizio":"Nuovo esercizio")+'</h3><p class="muted" style="margin-bottom:14px">Foto e video li vedono i clienti nella loro scheda, sotto ogni esercizio.</p>'+
    '<div class="field"><label>Nome</label><input class="fi" id="exN" value="'+esc(x.n)+'"></div>'+
-   '<div class="field"><label>Gruppo muscolare</label><select class="fi" id="exM">'+gruppi.map(g=>'<option'+(g===x.m?" selected":"")+'>'+g+'</option>').join("")+'</select></div>'+
+   '<div class="field"><label>Gruppo muscolare</label><input class="fi" id="exM" list="exML" value="'+esc(x.m)+'" placeholder="Scegli dall\'elenco o scrivi un gruppo nuovo"><datalist id="exML">'+gruppi.map(g=>'<option value="'+esc(g)+'">').join("")+'</datalist></div>'+
    '<div class="field"><label>Istruzioni di esecuzione</label><textarea class="fi" id="exI">'+esc(x.istr)+'</textarea></div>'+
-   '<div class="field"><label>Foto</label><div id="exFP" style="max-width:260px">'+thumbHTML({n:x.n,foto:x.foto},"nessuna foto")+'</div><input class="fi" type="file" accept="image/*" onchange="exFoto(this)"></div>'+
+   '<div class="field"><label>Foto</label><div id="exFP" style="max-width:260px">'+thumbHTML({n:x.n,foto:x.foto},"nessuna foto")+'</div><span class="hint" style="margin:2px 0 4px">Per cambiarla scegli una foto o scattala col telefono:</span><input class="fi" type="file" accept="image/*" onchange="exFoto(this)"></div>'+
    '<div class="field"><label>Video</label><input class="fi" id="exVU" placeholder="Link YouTube, Vimeo o file .mp4" value="'+esc(x.video&&x.video.t==="link"?x.video.u:"")+'">'+
    '<span class="hint" style="margin:2px 0 4px">oppure carica un video dal telefono:</span><input class="fi" type="file" accept="video/*" onchange="exVid(this)"><div id="exVP" class="media" style="margin-top:8px">'+(x.video?videoHTML(x.video):"")+'</div></div>'+
-   '<div class="inline" style="justify-content:flex-end">'+(id?'<button class="btn ghost" onclick="EXED.foto=null;EXED.video=null;EXED.file=null;el(\'exVU\').value=\'\';el(\'exFP\').innerHTML=thumbHTML({},\'nessuna foto\');el(\'exVP\').innerHTML=\'\'">Togli foto e video</button>':'')+
+   '<div class="inline" style="justify-content:flex-end;flex-wrap:wrap">'+(id?'<button class="btn ghost" style="color:#E8807A;margin-right:auto" onclick="eliminaEsercizio(\''+id+'\')">'+ic("trash",14)+' Elimina</button><button class="btn ghost" onclick="EXED.foto=null;EXED.foto2=null;EXED.video=null;EXED.file=null;el(\'exVU\').value=\'\';el(\'exFP\').innerHTML=thumbHTML({},\'nessuna foto\');el(\'exVP\').innerHTML=\'\'">Togli foto e video</button>':'')+
    '<button class="btn primary" onclick="salvaEsercizio()">Salva esercizio</button></div>');
 }
-async function exFoto(inp){const f=inp.files[0];if(!f)return;try{EXED.foto=await readPhoto(f);el("exFP").innerHTML=thumbHTML({foto:EXED.foto})}catch(e){toast("Foto non leggibile")}}
+async function exFoto(inp){const f=inp.files[0];if(!f)return;try{EXED.foto=await readPhoto(f);EXED.foto2=null;el("exFP").innerHTML=thumbHTML({foto:EXED.foto})}catch(e){toast("Foto non leggibile")}}
 function exVid(inp){const f=inp.files[0];if(!f)return;if(f.size>150*1024*1024)return toast("Video troppo grande (max 150 MB)");EXED.file=f;el("exVU").value="";
   el("exVP").innerHTML='<video controls playsinline src="'+URL.createObjectURL(f)+'"></video>'}
 async function salvaEsercizio(){
   const n=el("exN").value.trim();if(!n)return toast("Dai un nome all'esercizio");
   let x=EXED.id?DB.esercizi.find(e=>e.id===EXED.id):null;
   if(!x){if(exLib(n))return toast("Esiste già un esercizio con questo nome");x={id:"ex"+uid()};DB.esercizi.push(x)}
-  const oldN=x.n;x.n=n;x.m=el("exM").value;x.istr=el("exI").value.trim();x.foto=EXED.foto||null;
+  const oldN=x.n;x.n=n;x.m=el("exM").value.trim()||"Altro";x.istr=el("exI").value.trim();x.foto=EXED.foto||null;x.foto2=EXED.foto?EXED.foto2||null:null;
   const link=el("exVU").value.trim();
   if(EXED.file){try{await IDB.put("v_"+x.id,EXED.file);x.video={t:"file",k:"v_"+x.id,nome:EXED.file.name}}catch(e){toast("Non riesco a salvare il video su questo dispositivo")}}
   else if(link){if(!safeUrl(link))return toast("Il link deve iniziare con https://");x.video={t:"link",u:link}}
   else x.video=EXED.video&&EXED.video.t==="file"?EXED.video:null;
-  if(oldN&&oldN!==n)DB.scheda.giorni.forEach(g=>g.ex.forEach(e=>{if(e.n===oldN)e.n=n}));
+  if(oldN&&oldN!==n)Object.values(DB.schede).concat(DB.modelli).forEach(sc=>sc.giorni.forEach(g=>g.ex.forEach(e=>{if(e.n===oldN)e.n=n})));
   save();closeModal();toast("Esercizio salvato");render();
+}
+function eliminaEsercizio(id){const x=DB.esercizi.find(e=>e.id===id);if(!x)return;
+  const usi=Object.values(DB.schede).filter(sc=>sc.giorni.some(g=>g.ex.some(e=>e.n===x.n))).length;
+  openModal('<h3>Eliminare “'+esc(x.n)+'”?</h3><p class="muted" style="margin-bottom:14px">Sparisce dalla libreria'+(usi?'. È in '+usi+(usi===1?' scheda':' schede')+': lì resta scritto, ma senza foto.':'.')+'</p>'+
+   '<div class="inline" style="justify-content:flex-end"><button class="btn ghost" onclick="editEsercizio(\''+id+'\')">Annulla</button><button class="btn primary" onclick="DB.esercizi=DB.esercizi.filter(e=>e.id!==\''+id+'\');save();closeModal();render();toast(\'Esercizio eliminato\')">Elimina</button></div>')}
+function filtraEx(){const q=(el("exQ").value||"").trim().toLowerCase(),g=S.exg||"";let n=0;
+  document.querySelectorAll(".excard[data-n]").forEach(c=>{const ok=(!q||c.dataset.n.includes(q))&&(!g||c.dataset.g===g);c.hidden=!ok;if(ok)n++});
+  document.querySelectorAll(".exgrp").forEach(c=>{c.hidden=!c.querySelector(".excard:not([hidden])")});
+  const r=el("exRes");if(r)r.textContent=n+" esercizi"}
+function migraEsercizi(){
+  if(DB.settings.exLib2)return;
+  EX_SEED.forEach(e=>{const x=DB.esercizi.find(y=>y.n.toLowerCase()===e[0].toLowerCase());
+    if(x){if(!x.foto){x.foto=e[3];x.foto2=e[4]}if(!x.istr)x.istr=e[2]}
+    else DB.esercizi.push({id:"ex"+uid(),n:e[0],m:e[1],istr:e[2],foto:e[3],foto2:e[4],video:null})});
+  DB.settings.exLib2=true;save();
 }
 
 /* =================== VISTE COACH =================== */
 function statoCli(c){
-  if(c.scad==="scaduto")return '<span class="pill crit"><i class="dot"></i>Scaduto</span>';
+  if(c.tipo==="none")return '<span class="pill"><i class="dot"></i>Senza abbonamento</span>';
+  if(abbScaduto(c))return '<span class="pill crit"><i class="dot"></i>Scaduto</span>';
   if(c.gg>=6)return '<span class="pill crit"><i class="dot"></i>Fermo da '+c.gg+' gg</span>';
-  if(c.usate>=c.tot)return '<span class="pill warn"><i class="dot"></i>Pacchetto esaurito</span>';
+  if(!c.illim&&c.usate>=c.tot)return '<span class="pill warn"><i class="dot"></i>Pacchetto esaurito</span>';
   if(c.scad==="12 ott"||c.scad==="18 ott")return '<span class="pill warn"><i class="dot"></i>In scadenza</span>';
   return '<span class="pill ok"><i class="dot"></i>Attivo</span>';
 }
@@ -1563,21 +1630,21 @@ function seats(s){let h='<span class="seats" aria-hidden="true">';for(let i=0;i<
 function weekDays(){const mon=addD(TODAY,-((TODAY.getDay()+6)%7));return [0,1,2,3,4,5,6].map(i=>iso(addD(mon,i)))}
 
 function vDash(){
-  const fermi=DB.clienti.filter(c=>c.gg>=6),scad=DB.clienti.filter(c=>c.usate>=c.tot||c.scad==="12 ott"||c.scad==="18 ott");
+  const fermi=DB.clienti.filter(c=>c.gg>=6),scad=DB.clienti.filter(c=>c.tipo!=="none"&&((!c.illim&&c.usate>=c.tot)||abbScaduto(c)||c.scad==="12 ott"||c.scad==="18 ott"));
   const unread=DB.chat.reduce((a,c)=>a+c.unread,0);
   const oggi=slotsDay(T0),prenOggi=oggi.reduce((a,s)=>a+s.pren.length,0);
   const wk=weekDays(),corsiWk=Object.values(DB.agenda).filter(s=>s.tipo==="corso"&&wk.includes(s.d));
   const occ=corsiWk.reduce((a,s)=>a+s.pren.length,0),capT=corsiWk.reduce((a,s)=>a+s.cap,0);
   const fbNew=DB.feedback.filter(f=>f.d>=iso(addD(TODAY,-2))).length;
-  return head("Cruscotto",fmtD(T0,{weekday:"long",day:"numeric",month:"long",year:"numeric"})+" · uno sguardo e sai chi ha bisogno di te")+
+  return head("Ciao Kone",fmtD(T0,{weekday:"long",day:"numeric",month:"long",year:"numeric"})+" · uno sguardo e sai chi ha bisogno di te")+saldoCard()+
   '<div class="grid g4" style="margin-bottom:16px">'+
-   '<div class="stat"><span class="k">Clienti attivi</span><span class="v num">24</span><span class="d">+3 rispetto al mese scorso</span></div>'+
+   '<div class="stat"><span class="k">Clienti</span><span class="v num">'+DB.clienti.length+'</span><span class="d">'+DB.clienti.filter(c=>!DB.schede[c.id]).length+' senza scheda</span></div>'+
    '<div class="stat accent"><span class="k">Prenotazioni oggi</span><span class="v num">'+prenOggi+'</span><span class="d">'+oggi.filter(s=>s.pren.length).length+' slot occupati su '+oggi.length+'</span></div>'+
    '<div class="stat"><span class="k">Posti corsi · settimana</span><span class="v num">'+occ+'<em>/'+capT+'</em></span><span class="d">'+(capT?Math.round(occ/capT*100):0)+'% di riempimento</span></div>'+
    '<div class="stat"><span class="k">Aderenza media</span><span class="v num">82<em>%</em></span><span class="d">sedute svolte su programmate</span></div></div>'+
   '<div class="card" style="margin-bottom:16px">'+cardH("bell","Richiede la tua attenzione")+'<div class="stack">'+
    '<div class="alert crit"><div><b>'+fermi.length+' clienti non si allenano da 6 giorni o più</b><p>'+fermi.map(c=>esc(c.n)+" ("+c.gg+" gg)").join(" · ")+'</p></div><button class="btn sm" onclick="go(\'chat\')">Scrivi</button></div>'+
-   '<div class="alert warn"><div><b>'+scad.length+' abbonamenti da rinnovare</b><p>'+scad.map(c=>esc(c.n)+" — "+(c.usate>=c.tot?"pacchetto esaurito":"scade il "+c.scad)).join(" · ")+'</p></div><button class="btn sm" onclick="go(\'clienti\')">Vedi</button></div>'+
+   '<div class="alert warn"><div><b>'+scad.length+' abbonamenti da rinnovare</b><p>'+scad.map(c=>esc(c.n)+" — "+(!c.illim&&c.usate>=c.tot?"pacchetto esaurito":abbScaduto(c)?"scaduto":"scade il "+c.scad)).join(" · ")+'</p></div><button class="btn sm" onclick="go(\'clienti\')">Vedi</button></div>'+
    '<div class="alert info"><div><b>'+unread+' messaggi in attesa di risposta</b><p>Il più vecchio aspetta da 3 ore</p></div><button class="btn sm" onclick="go(\'chat\')">Apri chat</button></div>'+
    '<div class="alert"><div><b>Programmi dei corsi di oggi pronti</b><p>Generati in automatico stamattina · '+fbNew+' feedback nuovi dagli ultimi corsi</p></div><button class="btn sm" onclick="S.area=\'allen\';S.ctab=0;S.cday=0;go(\'corsi\')">Controlla</button></div>'+
   '</div></div>'+
@@ -1591,11 +1658,11 @@ function vDash(){
   '</div>';
 }
 function vClienti(){
-  return head("Clienti","24 persone seguite · 8 mostrate in questa demo",'<button class="btn primary" onclick="toast(\'Demo: qui si apre il form anagrafica e l\\\'invito all\\\'app\')">+ Nuovo cliente</button>')+
+  return head("Clienti",DB.clienti.length+" clienti · tocca Apri per scheda, peso, carichi, prenotazioni e accesso all'app",'<button class="btn primary" onclick="nuovoCliente()">+ Nuovo cliente</button>')+
   '<div class="card"><div class="scroll-x"><table><thead><tr><th>Cliente</th><th>Piano</th><th>Avanzamento</th><th>Scadenza</th><th>Ultimo allenamento</th><th>Stato</th><th></th></tr></thead><tbody>'+
   DB.clienti.map(c=>{const p=(DB.pesi[c.id]||[]).slice(-1)[0];return '<tr><td><div class="inline"><span class="av">'+c.i+'</span><span><span style="font-weight:600">'+esc(c.n)+'</span><br><span class="dim" style="font-size:12.5px">'+(p?fmtN(p.kg)+" kg · ":"")+'aderenza '+c.ader+'%</span></span></div></td>'+
-   '<td>'+esc(c.piano)+'<br><span class="dim" style="font-size:12.5px">'+esc(c.extra)+'</span></td>'+
-   '<td style="min-width:130px"><div class="num" style="font-size:13px;margin-bottom:5px">'+c.usate+' / '+c.tot+' sedute</div><div class="meter '+(c.usate>=c.tot?"crit":"")+'"><i style="width:'+Math.min(100,c.usate/c.tot*100)+'%"></i></div></td>'+
+   '<td>'+esc(c.piano)+'<br><span class="dim" style="font-size:12.5px">'+esc(c.extra)+'</span><br>'+(DB.schede[c.id]?'<span class="pill ok" style="margin-top:4px">scheda attiva</span>':'<span class="pill warn" style="margin-top:4px">senza scheda</span>')+'</td>'+
+   '<td style="min-width:130px"><div class="num" style="font-size:13px;margin-bottom:5px">'+usoTxt(c)+' sedute</div><div class="meter '+(!c.illim&&c.tot&&c.usate>=c.tot?"crit":"")+'"><i style="width:'+pctUso(c)+'%"></i></div></td>'+
    '<td class="num">'+c.scad+'</td><td>'+(c.gg===0?"oggi":c.gg+" giorni fa")+'</td><td>'+statoCli(c)+'</td>'+
    '<td><button class="btn sm" onclick="openClient('+c.id+')">Apri</button></td></tr>'}).join("")+'</tbody></table></div></div>';
 }
@@ -1605,12 +1672,13 @@ function vCliente(){
     body='<div class="grid g2"><div class="card">'+cardH("card","Abbonamento")+'<div class="stack">'+
      '<div class="kv"><span>Piano</span><b>'+esc(c.piano)+'</b></div><div class="kv"><span>Contenuto</span><span>'+esc(c.extra)+'</span></div>'+
      '<div class="kv"><span>Scadenza</span><span class="num">'+c.scad+'</span></div>'+
-     '<div><div class="kv"><span>Sedute usate</span><span class="num">'+c.usate+'/'+c.tot+'</span></div><div class="meter"><i style="width:'+Math.min(100,c.usate/c.tot*100)+'%"></i></div></div>'+
-     '<div class="inline">'+statoCli(c)+'<span class="pill gold">Aderenza '+c.ader+'%</span></div></div></div>'+
+     '<div><div class="kv"><span>Sedute usate</span><span class="num">'+usoTxt(c)+'</span></div><div class="meter"><i style="width:'+pctUso(c)+'%"></i></div></div>'+
+     '<div class="inline">'+statoCli(c)+'<span class="pill gold">Aderenza '+c.ader+'%</span></div>'+
+     '<button class="btn primary sm" style="align-self:flex-start" onclick="pianoModal('+c.id+')">'+ic("edit",13)+' Modifica abbonamento e sedute</button></div></div>'+
      '<div class="card">'+cardH("chart","Peso corporeo",pp.length?'<span class="chip num">'+fmtN(pp[pp.length-1].kg)+' kg</span>':"")+chartLine(pp.slice(-14).map(p=>[fmtD(p.d,{day:"numeric",month:"short"}),p.kg]),{unit:" kg"})+
      '<p class="hint">Registrato dal cliente nella sua app.</p></div></div>'+
      '<div class="card" style="margin-top:14px">'+cardH("bell","Note private")+'<p class="muted">'+esc(c.note)+'</p></div>';
-  } else if(S.tab===1)body=(c.id!==1?'<div class="note-ph">Demo: le schede di esempio sono tutte su Marco Bellini.</div>':'')+schedaEditor();
+  } else if(S.tab===1)body=schedaPanel(c.id);
   else if(S.tab===2)body=pesoBlock(c.id,true);
   else if(S.tab===3)body=carichiBlock(c.id);
   else if(S.tab===4){const ss=Object.values(DB.agenda).filter(s=>s.pren.some(b=>b.cid===c.id)).sort((a,b)=>(a.d+a.h)<(b.d+b.h)?1:-1);
@@ -1619,7 +1687,7 @@ function vCliente(){
     '<div class="alert"><div><b>Scheda aggiornata</b><p>Passaggio al Blocco 2: più volume sulla spinta, squat in progressione da 92,5 kg.</p></div></div>'+
     '<div class="alert"><div><b>Anamnesi</b><p>Compilata dal cliente in autonomia dall\'app. Nessuna patologia in corso, infortunio pregresso segnalato.</p></div></div></div></div>';
   return '<button class="btn sm ghost" onclick="go(\'clienti\')" style="margin-bottom:14px">← Tutti i clienti</button>'+
-   head(esc(c.n),esc(c.piano)+' · '+esc(c.extra)+' · scadenza '+c.scad,'<button class="btn" onclick="apriVistaCliente('+c.id+')">'+ic("eye",14)+' Vedi la sua app</button><button class="btn primary" onclick="go(\'chat\')">Scrivi</button>')+
+   head(esc(c.n),esc(c.piano)+' · '+esc(c.extra)+' · scadenza '+c.scad,'<button class="btn" onclick="accessoModal('+c.id+')">'+ic("lock",14)+' Accesso app</button><button class="btn" onclick="apriVistaCliente('+c.id+')">'+ic("eye",14)+' Vedi la sua app</button><button class="btn primary" onclick="apriChat('+c.id+')">'+ic("chat",14)+' Scrivi</button>')+
    tabsHTML(tabs,S.tab,"S.tab")+body;
 }
 /* ---------- schede ---------- */
@@ -1641,17 +1709,15 @@ function schedaEditor(){
 function setEx(i,k,v,isNum){const e=DB.scheda.giorni[S.day].ex[i];e[k]=isNum?(num(v)||0):v;save();toast("Scheda aggiornata")}
 function togliEx(i){DB.scheda.giorni[S.day].ex.splice(i,1);save();render()}
 function aggiungiEx(id){const x=DB.esercizi.find(e=>e.id===id);DB.scheda.giorni[S.day].ex.push({n:x.n,s:3,r:"10",kg:0,last:0,rec:60,note:""});save();render();toast(x.n+" aggiunto")}
-function vSchede(){
-  return head("Costruttore di schede",esc(DB.scheda.nome),'<button class="btn" onclick="toast(\'Demo: salvata come modello riutilizzabile\')">Salva come modello</button><button class="btn primary" onclick="toast(\'Scheda inviata a Marco Bellini\')">Invia al cliente</button>')+
-   '<div class="inline" style="margin-bottom:14px"><span class="pill gold">Marco Bellini</span><span class="pill">Blocco 2 · settimana 6 di 8</span><span class="pill ok">Attiva</span></div>'+schedaEditor();
-}
 function vLibreria(){
   const grp={};DB.esercizi.forEach(e=>{(grp[e.m]=grp[e.m]||[]).push(e)});
   const nf=DB.esercizi.filter(e=>e.foto).length,nv=DB.esercizi.filter(e=>e.video).length;
   return head("Libreria esercizi",DB.esercizi.length+" esercizi · "+nf+" con foto · "+nv+" con video",'<button class="btn primary" onclick="editEsercizio()">+ Nuovo esercizio</button>')+
-   '<div class="alert info" style="margin-bottom:14px"><div><b>Foto e video per ogni esercizio</b><p>Tocca un esercizio per caricare la foto (anche scattandola col telefono) e il video: un link YouTube/Vimeo oppure un file girato in studio.</p></div></div>'+
-   Object.keys(grp).map(m=>'<div class="card" style="margin-bottom:12px">'+cardH("dumb",m,'<span class="chip">'+grp[m].length+'</span>')+
-   '<div class="exgrid">'+grp[m].map(e=>'<button class="excard" onclick="editEsercizio(\''+e.id+'\')">'+thumbHTML(e,"aggiungi foto")+'<b>'+esc(e.n)+'</b>'+
+   '<div class="alert info" style="margin-bottom:14px"><div><b>La libreria è tua</b><p>Aggiungi i tuoi esercizi con “+ Nuovo esercizio”, anche con un gruppo muscolare nuovo. Tocca un esercizio per cambiare nome, istruzioni, foto (anche scattata col telefono) e video, oppure per eliminarlo.</p></div></div>'+
+   '<div class="exfilter"><input class="fi" id="exQ" type="search" placeholder="Cerca un esercizio…" oninput="filtraEx()" aria-label="Cerca esercizio"><span class="dim" id="exRes" style="font-size:13px"></span></div>'+
+   '<div class="chips exchips" style="margin-bottom:14px"><button class="chk'+(!S.exg?" on":"")+'" onclick="S.exg=\'\';render()">Tutti</button>'+Object.keys(grp).map(m=>'<button class="chk'+(S.exg===m?" on":"")+'" onclick="S.exg=\''+esc(m).replace(/'/g,"\\'")+'\';render()">'+esc(m)+' <span class="dim">'+grp[m].length+'</span></button>').join("")+'</div>'+
+   Object.keys(grp).filter(m=>!S.exg||S.exg===m).map(m=>'<div class="card exgrp" style="margin-bottom:12px">'+cardH("dumb",m,'<span class="chip">'+grp[m].length+'</span>')+
+   '<div class="exgrid">'+grp[m].map(e=>'<button class="excard" data-n="'+esc(e.n.toLowerCase())+'" data-g="'+esc(m)+'" onclick="editEsercizio(\''+e.id+'\')">'+thumbHTML(e,"aggiungi foto")+'<b>'+esc(e.n)+'</b>'+
     '<span class="inline" style="gap:5px"><span class="pill '+(e.foto?"ok":"")+'">'+ic("img",11)+' foto</span><span class="pill '+(e.video?"ok":"")+'">'+ic("video",11)+' video</span></span></button>').join("")+'</div></div>').join("");
 }
 function nutriBlock(){
@@ -1698,46 +1764,93 @@ function salvaSlot(d){const h=el("nsH").value;if(!h)return;const t=el("nsT").val
   DB.agenda[id]={id,d,h,tipo:t,corso:c?c.id:null,cap:clamp(parseInt(el("nsCap").value)||1,1,capMax(t)),dur:c?c.durata:60,pren:[],chiuso:false};
   save();closeModal();render();toast("Orario aggiunto")}
 
-/* ---------- listino ---------- */
-function priceCell(path,v,label){
-  return S.role==="coach"?'<input class="inp pin" inputmode="decimal" value="'+v+'" onchange="setPrezzo(\''+path+'\',this.value)" aria-label="'+esc(label)+'"> €':'<span class="price">'+eur(v)+'</span>'}
-function setPrezzo(path,v){const n=num(v);if(n==null||n<0)return toast("Prezzo non valido");const p=path.split(".");let o=DB;for(let i=0;i<p.length-1;i++)o=o[p[i]];o[p[p.length-1]]=n;save();toast("Prezzo salvato · lo vedono subito i clienti")}
-function tabellaServizi(key,rows,colSed){
-  return '<table class="rt"><thead><tr><th>Servizio</th><th>Dettaglio</th>'+(colSed?'<th>'+colSed+'</th>':'')+'<th style="text-align:right">Prezzo</th>'+(colSed?'<th style="text-align:right">A seduta</th>':'')+'</tr></thead><tbody>'+
-   rows.map((r,i)=>'<tr><td data-l="Servizio"><b>'+esc(r.n)+'</b></td><td data-l="Dettaglio" class="muted">'+esc(r.d||"")+'</td>'+
-    (colSed?'<td data-l="'+colSed+'" class="num">'+(r.sed||"illimitati")+'</td>':'')+
-    '<td data-l="Prezzo" style="text-align:right">'+priceCell("listino."+key+"."+i+".p",r.p,r.n)+'</td>'+
-    (colSed?'<td data-l="A seduta" class="num dim" style="text-align:right">'+(r.sed?eur(Math.round(r.p/r.sed*100)/100):"—")+'</td>':'')+'</tr>').join("")+'</tbody></table>';
-}
+/* ---------- listino (tutto modificabile da Kone: voci, sedute, prezzi, sconti) ---------- */
+const scAtt=r=>!!(r&&r.sc>0&&(!r.scFino||r.scFino>=T0));
+const pEff=(r,k)=>{if(!r)return 0;const v=r[k||"p"]||0;return scAtt(r)?Math.round(v*(100-r.sc))/100:v};
+function objAt(path){const p=path.split(".");let o=DB;for(let i=0;i<p.length;i++){if(o==null)return null;o=o[p[i]]}return o}
+function priceTxt(r,k){return scAtt(r)?'<span class="pold">'+eur(r[k||"p"])+'</span>'+eur(pEff(r,k)):eur(pEff(r,k))}
+function priceCell(path,v,label){const p=path.split("."),k=p.pop(),r=objAt(p.join("."));
+  if(S.role==="coach")return '<input class="inp pin" inputmode="decimal" value="'+v+'" onchange="setPrezzo(\''+path+'\',this.value)" aria-label="'+esc(label)+'"> €'+(scAtt(r)?'<span class="scx">scontato '+eur(pEff(r,k))+'</span>':'');
+  return '<span class="price">'+priceTxt(r,k)+'</span>'+(scAtt(r)?' <span class="pill sc">−'+r.sc+'%</span>':'')}
+function setPrezzo(path,v){const n=num(v);if(n==null||n<0)return toast("Prezzo non valido");const p=path.split(".");let o=DB;for(let i=0;i<p.length-1;i++)o=o[p[i]];o[p[p.length-1]]=n;save();render();toast("Prezzo salvato · lo vedono subito i clienti")}
+function setCampo(path,v,t){const p=path.split("."),k=p.pop(),o=objAt(p.join("."));if(!o)return;
+  if(t==="n"){const n=parseInt(v);if(isNaN(n)||n<0)return toast("Numero non valido");o[k]=n;save();render();toast(n?"Sedute aggiornate":"Impostato: illimitati");return}
+  v=String(v).trim();if(k==="n"&&!v)return toast("Il nome non può essere vuoto"),render();o[k]=v;save();toast("Salvato")}
+const SEZ={
+  pt:{t:"Allenamento one to one",ic:"dumb",col:"Servizio",det:1,sed:"Sedute",aSed:1,area:"allen",tipo:"pacchetto"},
+  corsi:{t:"Corsi di gruppo",ic:"users",col:"Servizio",det:1,sed:"Ingressi",aSed:1,area:"allen",tipo:"corsi"},
+  abbPt:{t:"Abbonamenti mensili one to one",ic:"card",col:"Piano",det:1,sed:"Sedute al mese",aSed:1,area:"allen",tipo:"abb",mese:1},
+  combo:{t:"Pacchetti misti · allenamento + massaggi",ic:"card",col:"Pacchetto",det:1,area:"both",tipo:"combo",risp:1},
+  percorsi:{t:"Percorsi mensili · allenamento + massaggi",ic:"card",col:"Percorso",det:1,area:"both",tipo:"combo",mese:1},
+  massPack:{t:"Pacchetti trattamenti 50′",ic:"card",col:"Pacchetto",det:1,sed:"Trattamenti",aSed:1,area:"tratt",tipo:"mass"},
+  abbMass:{t:"Abbonamenti mensili massaggio",ic:"card",col:"Piano",det:1,sed:"Massaggi al mese",aSed:1,area:"tratt",tipo:"mass",mese:1}
+};
+function tabL(key,extraHead){const c=SEZ[key],rows=DB.listino[key]=DB.listino[key]||[],coach=S.role==="coach";
+  if(!coach&&!rows.length)return "";
+  const tin=(path,v,cls,lab)=>'<input class="inp '+cls+'" value="'+esc(v==null?"":v)+'" onchange="setCampo(\''+path+'\',this.value'+(cls==="sd"?',\'n\'':'')+')" aria-label="'+lab+'"'+(cls==="sd"?' inputmode="numeric"':'')+'>';
+  return '<div class="card" style="margin-top:14px">'+cardH(c.ic,c.t,extraHead||"")+
+   (rows.length?'<table class="rt"><thead><tr><th>'+c.col+'</th>'+(c.det?'<th>'+(c.sed?"Dettaglio":"Contenuto")+'</th>':'')+(c.sed?'<th>'+c.sed+'</th>':'')+'<th style="text-align:right">Prezzo</th>'+(c.aSed?'<th style="text-align:right">A seduta</th>':'')+(coach?'<th></th>':(c.risp?'<th></th>':''))+'</tr></thead><tbody>'+
+   rows.map((r,i)=>{const b="listino."+key+"."+i,pe=pEff(r);
+    return '<tr><td data-l="'+c.col+'">'+(coach?tin(b+".n",r.n,"tl",c.col):'<b>'+(key==="percorsi"?"Percorso ":"")+esc(r.n)+'</b>')+'</td>'+
+     (c.det?'<td data-l="'+(c.sed?"Dettaglio":"Contenuto")+'" class="muted">'+(coach?tin(b+".d",r.d||"","dt","Dettaglio"):esc(r.d||""))+'</td>':'')+
+     (c.sed?'<td data-l="'+c.sed+'" class="num">'+(coach?tin(b+".sed",r.sed||0,"sd",c.sed):(r.sed||"illimitati"))+'</td>':'')+
+     '<td data-l="Prezzo" style="text-align:right">'+priceCell(b+".p",r.p,r.n)+'</td>'+
+     (c.aSed?'<td data-l="A seduta" class="num dim" style="text-align:right">'+(r.sed?eur(Math.round(pe/r.sed*100)/100):"—")+'</td>':'')+
+     (coach?'<td class="tools"><div class="tl-b">'+(c.risp?'<button class="btn sm ghost" onclick="rispModal(\''+key+'\','+i+')" title="Risparmio mostrato al cliente">risparmi '+eur(r.r||0)+'</button> ':'')+
+       '<button class="btn sm ghost'+(scAtt(r)?" sc-on":"")+'" onclick="scontoModal(\''+b+'\')">'+(r.sc>0?"−"+r.sc+"%"+(scAtt(r)?"":" scaduto"):"% sconto")+'</button> '+
+       '<button class="icon-btn" onclick="eliminaVoce(\''+key+'\','+i+')" aria-label="Elimina voce">'+ic("trash",15)+'</button></div></td>'
+      :(c.risp?'<td>'+(r.r?'<span class="pill ok">risparmi '+eur(r.r)+'</span>':'')+'</td>':''))+'</tr>'}).join("")+'</tbody></table>':'<p class="muted">Nessuna voce.</p>')+
+   (coach?'<button class="btn sm addrow" onclick="aggiungiVoce(\''+key+'\')">'+ic("plus",13)+' Aggiungi voce</button>':'')+
+   (key==="corsi"?'<p class="hint">Corsi in calendario: '+DB.corsi.map(x=>esc(x.n)).join(" · ")+'.'+(coach?' Sedute/ingressi a 0 = illimitati.':'')+'</p>':'')+'</div>'}
+function aggiungiVoce(key){const c=SEZ[key];const r={n:"Nuova voce",d:"",p:0};if(c.sed)r.sed=1;if(c.risp)r.r=0;DB.listino[key].push(r);save();render();toast("Voce aggiunta in fondo: scrivi nome, sedute e prezzo")}
+function eliminaVoce(key,i){const r=DB.listino[key][i];
+  openModal('<h3>Eliminare “'+esc(r.n)+'”?</h3><p class="muted" style="margin-bottom:14px">Sparisce dal listino dei clienti. I clienti che hanno già questo abbonamento lo tengono.</p>'+
+   '<div class="inline" style="justify-content:flex-end"><button class="btn ghost" onclick="closeModal()">Annulla</button><button class="btn primary" onclick="DB.listino.'+key+'.splice('+i+',1);save();closeModal();render();toast(\'Voce eliminata\')">Elimina</button></div>')}
+function rispModal(key,i){const r=DB.listino[key][i];
+  openModal('<h3>Risparmio · '+esc(r.n)+'</h3><p class="muted" style="margin-bottom:14px">La cifra che il cliente vede come “risparmi”. 0 = non mostrarla.</p><div class="field"><label>Risparmio in €</label><input class="fi" id="rspV" inputmode="decimal" value="'+(r.r||0)+'"></div>'+
+   '<div class="inline" style="justify-content:flex-end"><button class="btn primary" onclick="DB.listino.'+key+'['+i+'].r=Math.max(0,num(el(\'rspV\').value)||0);save();closeModal();render()">Salva</button></div>')}
+function scontoModal(path){const r=objAt(path);if(!r)return;const pr=r.p!=null?r.p:r.p30;
+  openModal('<h3>Sconto · '+esc(r.n)+'</h3><p class="muted" style="margin-bottom:14px">I clienti vedono il prezzo pieno barrato e quello scontato, ovunque compaia questa voce.</p>'+
+   '<div class="chips" style="margin-bottom:12px">'+[10,15,20,25,30,50].map(v=>'<button class="chk" onclick="el(\'scP\').value='+v+';scPrev('+pr+')">−'+v+'%</button>').join("")+'</div>'+
+   '<div class="frow"><div class="field"><label>Sconto %</label><input class="fi" id="scP" inputmode="decimal" value="'+(r.sc||"")+'" oninput="scPrev('+pr+')" placeholder="es. 20"></div>'+
+   '<div class="field"><label>Valido fino al (facoltativo)</label><input class="fi" type="date" id="scF" min="'+T0+'" value="'+(r.scFino||"")+'"></div></div>'+
+   '<p class="hint" id="scPv" style="margin-bottom:14px"></p>'+
+   '<div class="inline" style="justify-content:flex-end">'+(r.sc?'<button class="btn ghost" style="margin-right:auto" onclick="salvaSconto(\''+path+'\',0)">Togli sconto</button>':'')+'<button class="btn primary" onclick="salvaSconto(\''+path+'\')">Applica sconto</button></div>');scPrev(pr)}
+function scPrev(pr){const v=num(el("scP").value),o=el("scPv");if(!o)return;o.textContent=v>0&&v<100?eur(pr)+" → "+eur(Math.round(pr*(100-v))/100):"Scrivi la percentuale di sconto."}
+function salvaSconto(path,forza){const r=objAt(path);const v=forza===0?0:num(el("scP").value);
+  if(forza!==0&&(v==null||v<=0||v>=100))return toast("Sconto tra 1 e 99%");
+  if(v){r.sc=v;r.scFino=el("scF").value||null}else{delete r.sc;delete r.scFino}
+  save();closeModal();render();toast(v?"Sconto del "+v+"% attivo · i clienti lo vedono subito":"Sconto tolto")}
+function scontoTutti(){
+  openModal('<h3>Sconto su più voci</h3><p class="muted" style="margin-bottom:14px">Applica la stessa percentuale a tutto un gruppo di prezzi, per una promozione. Puoi sempre cambiare o togliere lo sconto voce per voce.</p>'+
+   '<div class="field"><label>Su cosa</label><select class="fi" id="stA"><option value="allen">Tutti gli allenamenti (one to one, corsi, abbonamenti)</option><option value="tratt">Tutti i trattamenti e i pacchetti massaggi</option><option value="misti">Pacchetti misti e percorsi</option><option value="tutto">Tutto il listino</option></select></div>'+
+   '<div class="frow"><div class="field"><label>Sconto %</label><input class="fi" id="stP" inputmode="decimal" placeholder="es. 15"></div><div class="field"><label>Valido fino al (facoltativo)</label><input class="fi" type="date" id="stF" min="'+T0+'"></div></div>'+
+   '<div class="inline" style="justify-content:flex-end;flex-wrap:wrap"><button class="btn ghost" style="margin-right:auto" onclick="applicaScontoTutti(0)">Togli gli sconti</button><button class="btn primary" onclick="applicaScontoTutti()">Applica</button></div>')}
+function righeAmbito(a){const L=DB.listino,g=k=>L[k]||[];
+  const al=g("pt").concat(g("corsi"),g("abbPt")),tr=DB.trattamenti.concat(g("massPack"),g("abbMass")),mi=g("combo").concat(g("percorsi"));
+  return a==="allen"?al:a==="tratt"?tr:a==="misti"?mi:al.concat(tr,mi)}
+function applicaScontoTutti(forza){const a=el("stA").value,v=forza===0?0:num(el("stP").value),f=el("stF").value||null;
+  if(forza!==0&&(v==null||v<=0||v>=100))return toast("Sconto tra 1 e 99%");
+  const rr=righeAmbito(a);rr.forEach(r=>{if(v){r.sc=v;r.scFino=f}else{delete r.sc;delete r.scFino}});
+  save();closeModal();render();toast(v?"Sconto del "+v+"% su "+rr.length+" voci":"Sconti tolti da "+rr.length+" voci")}
 function vListino(){
-  const coach=S.role==="coach",L=DB.listino;
-  const misti='<div class="card" style="margin-top:14px">'+cardH("card","Pacchetti misti · allenamento + massaggi")+
-   '<table class="rt"><thead><tr><th>Pacchetto</th><th>Contenuto</th><th style="text-align:right">Prezzo</th><th></th></tr></thead><tbody>'+
-   L.combo.map((r,i)=>'<tr><td data-l="Pacchetto"><b>'+r.n+'</b></td><td data-l="Contenuto" class="muted">'+r.d+'</td><td data-l="Prezzo" style="text-align:right">'+priceCell("listino.combo."+i+".p",r.p,r.n)+'</td><td><span class="pill ok">risparmi '+eur(r.r)+'</span></td></tr>').join("")+
-   L.percorsi.map((r,i)=>'<tr><td data-l="Percorso"><b>Percorso '+r.n+'</b></td><td data-l="Contenuto" class="muted">'+r.d+'</td><td data-l="Prezzo" style="text-align:right">'+priceCell("listino.percorsi."+i+".p",r.p,r.n)+'</td><td></td></tr>').join("")+'</tbody></table></div>';
-  if(S.area==="allen")return head(coach?"Listino · Allenamenti":"Prezzi · Allenamenti",coach?"Modifichi un prezzo e i clienti lo vedono subito nella loro app":"One to one con Kone e corsi di gruppo")+
-   (coach?'<div class="note-ph">I prezzi dei corsi di gruppo sono di esempio: correggili qui prima di andare online.</div>':'')+
-   '<div class="card">'+cardH("dumb","Allenamento one to one")+tabellaServizi("pt",L.pt,"Sedute")+'</div>'+
-   '<div class="card" style="margin-top:14px">'+cardH("users","Corsi di gruppo",'<span class="chip">max '+DB.settings.maxCorso+' persone</span>')+tabellaServizi("corsi",L.corsi,"Ingressi")+
-    '<p class="hint">Corsi in calendario: '+DB.corsi.map(c=>esc(c.n)).join(" · ")+'.</p></div>'+
-   '<div class="card" style="margin-top:14px">'+cardH("card","Abbonamenti mensili one to one")+
-    '<table class="rt"><thead><tr><th>Piano</th><th>Sedute al mese</th><th style="text-align:right">Prezzo</th><th style="text-align:right">A seduta</th></tr></thead><tbody>'+
-    L.abbPt.map((r,i)=>'<tr><td data-l="Piano"><b>'+r.n+'</b></td><td data-l="Sedute al mese" class="num">'+r.sed+'</td><td data-l="Prezzo" style="text-align:right">'+priceCell("listino.abbPt."+i+".p",r.p,r.n)+'</td><td data-l="A seduta" class="num dim" style="text-align:right">'+eur(Math.round(r.p/r.sed*100)/100)+'</td></tr>').join("")+'</tbody></table></div>'+misti+pagamentiCard();
-  return head(coach?"Listino · Trattamenti":"Prezzi · Trattamenti","Ogni trattamento con i suoi benefici, la durata e il prezzo")+
+  const coach=S.role==="coach";
+  const tools=coach?'<div class="lhead-tools"><button class="btn" onclick="scontoTutti()">% Sconto su più voci</button></div>':"";
+  const nSc=righeAmbito("tutto").filter(scAtt).length;
+  const intro=coach?'<div class="alert info" style="margin-bottom:14px"><div><b>Il listino è tuo</b><p>Cambia nomi, descrizioni, sedute e prezzi direttamente nelle tabelle (si salva da solo quando esci dalla casella). Con “+ Aggiungi voce” crei un pacchetto nuovo, col cestino lo togli, con “% sconto” fai una promozione. I clienti vedono tutto subito.'+(nSc?' <b>'+nSc+' sconti attivi.</b>':'')+'</p></div></div>':(nSc?'<div class="alert info" style="margin-bottom:14px"><div><b>Promozioni in corso</b><p>I prezzi scontati sono già indicati qui sotto.</p></div></div>':'');
+  if(S.area==="allen")return head(coach?"Listino · Allenamenti":"Prezzi · Allenamenti",coach?"Modifichi e i clienti lo vedono subito nella loro app":"One to one con Kone e corsi di gruppo",tools)+intro+
+   tabL("pt").replace('style="margin-top:14px"','')+tabL("corsi",'<span class="chip">max '+DB.settings.maxCorso+' persone</span>')+tabL("abbPt")+tabL("combo")+tabL("percorsi")+pagamentiCard();
+  return head(coach?"Listino · Trattamenti":"Prezzi · Trattamenti","Ogni trattamento con i suoi benefici, la durata e il prezzo",tools)+intro+
    '<div class="card">'+cardH("lotus","I trattamenti")+
-   '<table class="rt"><thead><tr><th>Trattamento</th><th>Benefici</th><th>Indicato per</th><th style="text-align:right">30′</th><th style="text-align:right">50′</th></tr></thead><tbody>'+
-   DB.trattamenti.map((t,i)=>'<tr><td data-l="Trattamento"><div class="tname"><span class="ti">'+ic(t.ic,18)+'</span><span><b>'+esc(t.n)+'</b><span>'+esc(t.desc)+'</span></span></div></td>'+
+   '<table class="rt"><thead><tr><th>Trattamento</th><th>Benefici</th><th>Indicato per</th><th style="text-align:right">30′</th><th style="text-align:right">50′</th>'+(coach?'<th></th>':'')+'</tr></thead><tbody>'+
+   DB.trattamenti.map((t,i)=>'<tr><td data-l="Trattamento"><div class="tname"><span class="ti">'+ic(t.ic||"lotus",18)+'</span><span><b>'+esc(t.n)+'</b><span>'+esc(t.desc)+'</span></span></div></td>'+
     '<td data-l="Benefici" style="min-width:230px"><ul class="ben">'+t.ben.map(b=>'<li>'+esc(b)+'</li>').join("")+'</ul></td>'+
     '<td data-l="Indicato per" style="min-width:170px;font-size:13px" class="muted">'+esc(t.per)+'</td>'+
     '<td data-l="30 minuti" style="text-align:right">'+priceCell("trattamenti."+i+".p30",t.p30,t.n+" 30 minuti")+'</td>'+
-    '<td data-l="50 minuti" style="text-align:right">'+priceCell("trattamenti."+i+".p60",t.p60,t.n+" 50 minuti")+'</td></tr>').join("")+'</tbody></table></div>'+
-   '<div class="grid g2" style="margin-top:14px"><div class="card">'+cardH("card","Pacchetti trattamenti 50′")+
-    '<table class="rt"><thead><tr><th>Pacchetto</th><th style="text-align:right">Prezzo</th><th style="text-align:right">A seduta</th></tr></thead><tbody>'+
-    L.massPack.map((r,i)=>'<tr><td data-l="Pacchetto"><b>'+r.n+'</b></td><td data-l="Prezzo" style="text-align:right">'+priceCell("listino.massPack."+i+".p",r.p,r.n)+'</td><td data-l="A seduta" class="num dim" style="text-align:right">'+eur(Math.round(r.p/r.sed*100)/100)+'</td></tr>').join("")+'</tbody></table></div>'+
-   '<div class="card">'+cardH("card","Abbonamenti mensili massaggio")+
-    '<table class="rt"><thead><tr><th>Piano</th><th>Massaggi</th><th style="text-align:right">Prezzo</th></tr></thead><tbody>'+
-    L.abbMass.map((r,i)=>'<tr><td data-l="Piano"><b>'+r.n+'</b></td><td data-l="Massaggi al mese" class="num">'+r.sed+'</td><td data-l="Prezzo" style="text-align:right">'+priceCell("listino.abbMass."+i+".p",r.p,r.n)+'</td></tr>').join("")+'</tbody></table></div></div>'+
-   misti+pagamentiCard()+benStrip();
+    '<td data-l="50 minuti" style="text-align:right">'+priceCell("trattamenti."+i+".p60",t.p60,t.n+" 50 minuti")+'</td>'+
+    (coach?'<td class="tools"><div class="tl-b col"><button class="btn sm ghost" onclick="editTratt(\''+t.id+'\')">'+ic("edit",13)+'</button> <button class="btn sm ghost'+(scAtt(t)?" sc-on":"")+'" onclick="scontoModal(\'trattamenti.'+i+'\')">'+(t.sc>0?"−"+t.sc+"%":"% sconto")+'</button> <button class="icon-btn" onclick="eliminaTratt(\''+t.id+'\')" aria-label="Elimina trattamento">'+ic("trash",15)+'</button></div></td>':'')+'</tr>').join("")+'</tbody></table>'+
+    (coach?'<button class="btn sm addrow" onclick="editTratt()">'+ic("plus",13)+' Nuovo trattamento</button>':'')+'</div>'+
+   tabL("massPack")+tabL("abbMass")+tabL("combo")+tabL("percorsi")+pagamentiCard()+benStrip();
 }
 function benStrip(){return '<div class="card" style="margin-top:14px">'+cardH("star","Benefici dei trattamenti")+'<div class="benstrip">'+BENEFICI.map(b=>'<div><i>'+ic(b[0],17)+'</i>'+b[1]+'</div>').join("")+'</div></div>'}
 
@@ -1749,45 +1862,29 @@ function vTratt(){
    '<div class="grid g2">'+DB.trattamenti.map(t=>tcard(t,true)).join("")+'</div>'+benStrip();
 }
 function tcard(t,coach){
-  return '<div class="card tcard"><div class="tname"><span class="ti">'+ic(t.ic,18)+'</span><span><b>'+esc(t.n)+'</b><span>'+esc(t.desc)+'</span></span></div>'+
+  return '<div class="card tcard"><div class="tname"><span class="ti">'+ic(t.ic||"lotus",18)+'</span><span><b>'+esc(t.n)+'</b><span>'+esc(t.desc)+'</span></span></div>'+
    '<div><div class="flabel" style="margin-bottom:4px">Benefici</div><ul class="ben">'+t.ben.map(b=>'<li>'+esc(b)+'</li>').join("")+'</ul></div>'+
    '<div><div class="flabel" style="margin-bottom:4px">Indicato per</div><p class="muted" style="font-size:13.5px">'+esc(t.per)+'</p></div>'+
-   '<div class="foot"><span class="price">'+eur(t.p30)+'<small>30 minuti</small></span><span class="price">'+eur(t.p60)+'<small>50 minuti</small></span>'+
+   '<div class="foot"><span class="price">'+priceTxt(t,"p30")+'<small>30 minuti</small></span><span class="price">'+priceTxt(t,"p60")+'<small>50 minuti</small></span>'+(scAtt(t)?'<span class="pill sc">−'+t.sc+'%</span>':'')+
    (coach?'<button class="btn sm" style="margin-left:auto" onclick="editTratt(\''+t.id+'\')">'+ic("edit",13)+' Modifica</button>':'<button class="btn sm primary" style="margin-left:auto" onclick="S.w={area:\'tratt\',step:1,att:\'tratt:'+t.id+'\',dur:50,d:null,slot:null,pay:\'paypal\'};go(\'tpren\')">Prenota</button>')+'</div></div>';
 }
-function editTratt(id){const t=tratt(id);
-  openModal('<h3>'+esc(t.n)+'</h3><p class="muted" style="margin-bottom:14px">Quello che scrivi qui compare nel listino e nell\'app dei clienti.</p>'+
+function editTratt(id){const t=id?tratt(id):{n:"",desc:"",ben:[],per:"",p30:30,p60:55};
+  openModal('<h3>'+(id?esc(t.n):"Nuovo trattamento")+'</h3><p class="muted" style="margin-bottom:14px">Quello che scrivi qui compare nel listino e nell\'app dei clienti.</p>'+
+   '<div class="field"><label>Nome</label><input class="fi" id="tN" value="'+esc(t.n)+'"></div>'+
    '<div class="field"><label>Descrizione breve</label><input class="fi" id="tD" value="'+esc(t.desc)+'"></div>'+
    '<div class="field"><label>Benefici · uno per riga</label><textarea class="fi" id="tB">'+esc(t.ben.join("\n"))+'</textarea></div>'+
    '<div class="field"><label>Indicato per</label><input class="fi" id="tP" value="'+esc(t.per)+'"></div>'+
    '<div class="frow"><div class="field"><label>Prezzo 30′</label><input class="fi" id="t30" inputmode="decimal" value="'+t.p30+'"></div><div class="field"><label>Prezzo 50′</label><input class="fi" id="t60" inputmode="decimal" value="'+t.p60+'"></div></div>'+
-   '<div class="inline" style="justify-content:flex-end"><button class="btn primary" onclick="salvaTratt(\''+id+'\')">Salva</button></div>')}
-function salvaTratt(id){const t=tratt(id);t.desc=el("tD").value.trim();t.ben=el("tB").value.split("\n").map(x=>x.trim()).filter(Boolean);t.per=el("tP").value.trim();
+   '<div class="inline" style="justify-content:flex-end"><button class="btn primary" onclick="salvaTratt(\''+(id||"")+'\')">Salva</button></div>')}
+function eliminaTratt(id){const t=tratt(id);
+  openModal('<h3>Eliminare “'+esc(t.n)+'”?</h3><p class="muted" style="margin-bottom:14px">Sparisce dal listino e dalla prenotazione dei clienti. Le prenotazioni già fatte restano.</p>'+
+   '<div class="inline" style="justify-content:flex-end"><button class="btn ghost" onclick="closeModal()">Annulla</button><button class="btn primary" onclick="DB.trattamenti=DB.trattamenti.filter(x=>x.id!==\''+id+'\');save();closeModal();render();toast(\'Trattamento eliminato\')">Elimina</button></div>')}
+function salvaTratt(id){const nn=el("tN").value.trim();if(!nn)return toast("Scrivi il nome del trattamento");
+  let t=id?tratt(id):null;if(!t){t={id:"t"+uid(),ic:"lotus",n:nn,ben:[]};DB.trattamenti.push(t)}t.n=nn;t.desc=el("tD").value.trim();t.ben=el("tB").value.split("\n").map(x=>x.trim()).filter(Boolean);t.per=el("tP").value.trim();
   t.p30=num(el("t30").value)||t.p30;t.p60=num(el("t60").value)||t.p60;save();closeModal();render();toast("Trattamento aggiornato")}
 
 /* ---------- chat ---------- */
-function vChat(){
-  const t=DB.chat.find(c=>c.id===S.chat)||DB.chat[0];
-  return head("Chat","Una conversazione per cliente, separata da WhatsApp")+
-  '<div class="chat-wrap"><div class="chat-list">'+DB.chat.map(c=>'<button class="chat-item '+(c.id===S.chat?"on":"")+'" onclick="S.chat='+c.id+';chatOpen()">'+
-   '<span class="av'+(c.unread?"":" q")+'">'+c.i+'</span><span style="min-width:0"><span class="nm">'+esc(c.n)+'</span><br><span class="pv">'+esc(c.last)+'</span></span>'+
-   (c.unread?'<span style="margin-left:auto;background:var(--crit);color:#fff;font-size:11px;min-width:19px;height:19px;border-radius:99px;display:grid;place-items:center">'+c.unread+'</span>':'')+'</button>').join("")+'</div>'+
-  '<div class="chat-main"><div class="chat-head"><span class="av">'+t.i+'</span><div><div style="font-weight:600">'+esc(t.n)+'</div><div class="dim" style="font-size:12px">'+esc((DB.clienti.find(x=>x.n===t.n)||{piano:"Cliente"}).piano)+'</div></div></div>'+
-  '<div class="msgs" id="msgs">'+t.msgs.map(m=>'<div class="msg '+(m.me?"me":"them")+'">'+esc(m.t)+'<span class="ts">'+m.h+'</span></div>').join("")+'</div>'+
-  '<form class="chat-in" onsubmit="sendMsg(event,'+t.id+')"><input id="mi" placeholder="Scrivi a '+esc(t.n.split(" ")[0])+'…" autocomplete="off"><button class="btn primary" type="submit">Invia</button></form></div></div>';
-}
-function chatOpen(){const t=DB.chat.find(c=>c.id===S.chat);if(t)t.unread=0;save();buildNav();render()}
 function chatDi(cid){const c=cli(cid);let t=DB.chat.find(x=>x.n===c.n);if(!t){t={id:100+cid,n:c.n,i:c.i,unread:0,last:"",msgs:[]};DB.chat.push(t)}return t}
-function sendMsg(e,id){e.preventDefault();const i=el("mi"),v=i.value.trim();if(!v)return;
-  const t=DB.chat.find(c=>c.id===id);t.msgs.push({t:v,me:S.role==="coach"?1:0,h:"ora"});t.last=v;save();render()}
-function vChatC(){
-  const t=chatDi(S.cid);
-  return head("Chat con Kone","Risponde di solito entro un paio d'ore")+
-  '<div class="chat-main" style="height:calc(100vh - 330px);min-height:380px"><div class="chat-head"><span class="av">KM</span><div><div style="font-weight:600">Kone Moctar</div><div class="dim" style="font-size:12px">Personal trainer &amp; massaggiatore</div></div></div>'+
-   '<div class="msgs" id="msgs">'+t.msgs.map(m=>'<div class="msg '+(m.me?"them":"me")+'">'+esc(m.t)+'<span class="ts">'+m.h+'</span></div>').join("")+'</div>'+
-   '<form class="chat-in" onsubmit="sendMsg(event,'+t.id+')"><input id="mi" placeholder="Scrivi a Kone…" autocomplete="off"><button class="btn primary" type="submit">Invia</button></form></div>';
-}
-
 /* ---------- contabilità (password) ---------- */
 function vConti(){
   if(!S.contiOk)return head("Contabilità","Area riservata")+
@@ -1816,7 +1913,7 @@ function vConti(){
     '<td class="num '+(m.tipo==="entrata"?"amt-in":"amt-out")+'" style="text-align:right;font-weight:600">'+(m.tipo==="entrata"?"+":"−")+eur(m.imp)+'</td>'+
     '<td>'+(m.tipo==="entrata"?'<button class="pill '+(m.pag?"ok":"warn")+'" onclick="togglePag(\''+m.id+'\')">'+(m.pag?"Pagato":"Da incassare")+'</button>':'<span class="pill">Uscita</span>')+'</td></tr>').join("")+'</tbody></table></div></div>'+
   '<div class="card" style="margin-bottom:14px">'+cardH("users","Abbonamenti attivi")+'<div class="scroll-x"><table><thead><tr><th>Cliente</th><th>Piano</th><th>Sedute</th><th>Scadenza</th><th>Stato</th></tr></thead><tbody>'+
-   DB.clienti.map(c=>'<tr><td><div class="inline"><span class="av">'+c.i+'</span><b>'+esc(c.n)+'</b></div></td><td>'+esc(c.piano)+'</td><td class="num">'+c.usate+'/'+c.tot+'</td><td class="num">'+c.scad+'</td><td>'+statoCli(c)+'</td></tr>').join("")+'</tbody></table></div></div>'+
+   DB.clienti.map(c=>'<tr><td><div class="inline"><span class="av">'+c.i+'</span><b>'+esc(c.n)+'</b></div></td><td>'+esc(c.piano)+'</td><td class="num">'+usoTxt(c)+'</td><td class="num">'+c.scad+'</td><td>'+statoCli(c)+'</td></tr>').join("")+'</tbody></table></div></div>'+
   '<div class="grid g2"><div class="card">'+cardH("shield","Password contabilità")+
    '<div class="field"><label>Password attuale</label><input class="fi" type="password" id="pwOld" autocomplete="current-password"></div>'+
    '<div class="frow"><div class="field"><label>Nuova</label><input class="fi" type="password" id="pwNew" autocomplete="new-password"></div><div class="field"><label>Ripeti</label><input class="fi" type="password" id="pwNew2" autocomplete="new-password"></div></div>'+
@@ -1995,7 +2092,7 @@ function vOggi(){
   const c=me(),g=DB.scheda.giorni[dayIdx()];
   const corsiOggi=mySlots().filter(s=>s.d===T0&&s.tipo==="corso");
   const prossimo=mySlots().find(s=>!isPast(s));
-  let h=head("Ciao "+esc(c.n.split(" ")[0]),fmtD(T0,{weekday:"long",day:"numeric",month:"long"})+" · "+esc(g.t));
+  let h=head("Ciao "+esc(c.n.split(" ")[0]),fmtD(T0,{weekday:"long",day:"numeric",month:"long"})+" · "+esc(g.t))+abbCTA("home");
   if(prossimo)h+='<div class="alert info" style="margin-bottom:14px"><div><b>Prossimo appuntamento: '+esc(slotTitle(prossimo,prossimo.pren.find(b=>b.cid===S.cid)))+'</b><p>'+fmtD(prossimo.d,{weekday:"long",day:"numeric",month:"long"})+' alle '+prossimo.h+'</p></div><button class="btn sm" onclick="go(\'prenota\')">Prenotazioni</button></div>';
   corsiOggi.forEach(s=>{const p=DB.programmi[s.d+"_"+s.corso];h+='<div class="card" style="margin-bottom:14px">'+cardH("users","Il tuo corso di oggi · "+esc(corso(s.corso).n),'<span class="chip">'+s.h+'</span>')+(p?progHTML(p):'<p class="muted">Kone sta preparando il programma.</p>')+'</div>'});
   if(!g.ex.length)return h+'<div class="card"><p class="muted">Oggi nella tua scheda non c\'è allenamento: '+esc(g.t.toLowerCase())+'.</p><p class="hint">Se ti va di muoverti puoi prenotare un corso di gruppo.</p><button class="btn primary" style="margin-top:10px" onclick="S.pfil=\'corso\';go(\'prenota\')">Vedi i corsi</button></div>';
@@ -2036,7 +2133,7 @@ function startRest(sec){stopRest();let t=sec;el("rest").classList.add("on");cons
   restH=setInterval(()=>{t--;p();if(t<=0){stopRest();toast("Recupero finito: vai con la prossima serie")}},1000)}
 function stopRest(){if(restH)clearInterval(restH);restH=null;const r=el("rest");if(r)r.classList.remove("on")}
 function vScheda(){
-  return head("La tua scheda",esc(DB.scheda.nome))+'<p class="hint" style="margin:-8px 0 14px">Tocca un esercizio per vedere foto, video e come si esegue.</p>'+
+  return head("La tua scheda",esc(DB.scheda.nome))+fileSchedaCliente()+'<p class="hint" style="margin:-8px 0 14px">Tocca un esercizio per vedere foto, video e come si esegue.</p>'+
   '<div class="stack">'+DB.scheda.giorni.map((g,i)=>'<div class="card '+(i===dayIdx()?"":"flat")+'"><div class="card-h"><span class="pill '+(g.ex.length?"gold":"")+'">'+g.g+'</span><h3>'+esc(g.t)+'</h3>'+
    (g.ex.length?'<span class="chip more">'+g.ex.length+' esercizi</span>':'<span class="chip more">riposo</span>')+'</div>'+
    (g.ex.length?'<div class="stack" style="gap:4px">'+g.ex.map(e=>'<button class="inline" style="justify-content:space-between;font-size:14px;width:100%;text-align:left;flex-wrap:nowrap;padding:4px 0" onclick="vediEsercizio(\''+esc(e.n).replace(/'/g,"\\'")+'\')">'+
@@ -2095,7 +2192,8 @@ function vProgC(){
   return head("I tuoi progressi","Peso corporeo e carichi li aggiorni tu, Kone li vede in tempo reale")+tabsHTML(tabs,S.tab,"S.tab")+b;
 }
 /* ---------- prenotazioni ---------- */
-function annulla(id){const s=DB.agenda[id];s.pren=s.pren.filter(b=>b.cid!==S.cid);save();render();toast("Prenotazione annullata")}
+function annulla(id){const s=DB.agenda[id],b=s.pren.find(x=>x.cid===S.cid),c=me();s.pren=s.pren.filter(x=>x.cid!==S.cid);
+  const rest=b&&b.pay&&b.pay.m==="piano"&&c&&c.usate>0;if(rest)c.usate--;save();render();toast("Prenotazione annullata"+(rest?" · la seduta torna nel tuo abbonamento":""))}
 function mieHTML(tipi){
   const all=mySlots().filter(s=>tipi.includes(s.tipo)),fut=all.filter(s=>!isPast(s));
   const da=iso(addD(TODAY,-10)),fbs=all.filter(s=>s.tipo==="corso"&&isPast(s)&&s.d>=da);
@@ -2107,7 +2205,7 @@ function mieHTML(tipi){
     (f?'<span class="pill ok">'+ic("check",11)+' grazie</span>':'<button class="btn sm primary" onclick="feedbackModal(\''+pid+'\')">Lascia un feedback</button>')+'</div>'}).join("");
   return h+'</div>';
 }
-function vTcat(){return head("Trattamenti","Massaggi professionali con Kone: scegli quello giusto per te")+benStrip()+'<div class="grid g2" style="margin-top:14px">'+DB.trattamenti.map(t=>tcard(t,false)).join("")+'</div>'}
+function vTcat(){return head("Trattamenti","Massaggi professionali con Kone: scegli quello giusto per te")+(copre(me(),"tratt")?abbCTA("home"):"")+benStrip()+'<div class="grid g2" style="margin-top:14px">'+DB.trattamenti.map(t=>tcard(t,false)).join("")+'</div>'}
 function vediProgramma(pid){const p=DB.programmi[pid];if(!p)return;openModal('<h3>'+esc(corso(p.corso).n)+'</h3><p class="muted">'+fmtD(p.data,{weekday:"long",day:"numeric",month:"long"})+' · '+p.durata+'′ · intensità '+p.intensita+'/10</p>'+progHTML(p))}
 function feedbackModal(pid){S.fbVoto=4;const p=DB.programmi[pid];
   openModal('<h3>Com\'è andato il corso?</h3><p class="muted" style="margin-bottom:16px">'+esc(corso(pid.split("_")[1]).n)+' · '+fmtD(pid.split("_")[0],{weekday:"long",day:"numeric",month:"long"})+'. Le tue risposte servono a calibrare la prossima lezione.</p>'+
@@ -2262,14 +2360,17 @@ function calFiltri(){const f=calF();
    '<div class="inline" style="justify-content:space-between;margin-top:18px"><button class="btn ghost" onclick="S.cf=null;render();calFiltri()">Azzera</button><button class="btn primary" onclick="closeModal()">Mostra</button></div>')}
 
 /* =================== PRENOTAZIONE CLIENTE · 4 passaggi + pagamento =================== */
-function wAtts(){
-  if(S.area==="tratt")return DB.trattamenti.map(t=>({id:"tratt:"+t.id,tipo:"tratt",tr:t.id,n:t.n,sub:t.desc,img:"/assets/img/"+t.id+"-480.webp",tag:"30′ o 50′",prezzo:t.p30,da:1,col:"#A478C8"}));
-  return [{id:"pt",tipo:"pt",n:"One to one con Kone",sub:"Allenamento su misura, solo tu e Kone",img:"/assets/img/personal-trainer-milano.webp",tag:"60′ · su misura",prezzo:DB.listino.pt[0].p,col:"#5C8BC4"}]
-   .concat(DB.corsi.map(c=>({id:"corso:"+c.id,tipo:"corso",corso:c.id,n:c.n,sub:LIVELLI[c.livello]+" · "+c.obiettivo,tag:c.durata+"′ · max "+DB.settings.maxCorso,prezzo:DB.listino.corsi[0].p,col:CORSO_COL[c.id]||"#D9A93C"})));
+const TRATT_IMG=["decon","relax","sport","cervi","rifle","linfo","coppe","altri"];
+function wAtts(){let l;
+  if(S.area==="tratt")l=DB.trattamenti.map(t=>({id:"tratt:"+t.id,tipo:"tratt",tr:t.id,n:t.n,sub:t.desc,img:TRATT_IMG.includes(t.id)?"/assets/img/"+t.id+"-480.webp":null,tag:"30′ o 50′",prezzo:pEff(t,"p30"),da:1,col:"#A478C8"}));
+  else l=[{id:"pt",tipo:"pt",n:"One to one con Kone",sub:"Allenamento su misura, solo tu e Kone",img:"/assets/img/personal-trainer-milano.webp",tag:"60′ · su misura",prezzo:pEff(DB.listino.pt[0]),col:"#5C8BC4"}]
+   .concat(DB.corsi.map(c=>({id:"corso:"+c.id,tipo:"corso",corso:c.id,n:c.n,sub:LIVELLI[c.livello]+" · "+c.obiettivo,tag:c.durata+"′ · max "+DB.settings.maxCorso,prezzo:pEff((DB.listino.corsi||[])[0]),col:CORSO_COL[c.id]||"#D9A93C"})));
+  if(S.w&&S.w.viaPiano)l=l.filter(x=>copre(me(),x.tipo));
+  return l;
 }
 function W(){if(!S.w||S.w.area!==S.area)S.w={area:S.area,step:1,att:null,dur:50,d:null,slot:null,pay:"paypal"};return S.w}
 function wAtt(){const w=W();return wAtts().find(a=>a.id===w.att)||null}
-function wPrezzo(a,w){a=a||wAtt();w=w||W();if(!a)return 0;if(a.tipo==="tratt"){const t=tratt(a.tr);return w.dur===30?t.p30:t.p60}return a.prezzo}
+function wPrezzo(a,w){a=a||wAtt();w=w||W();if(!a)return 0;if(a.tipo==="tratt"){const t=tratt(a.tr);return pEff(t,w.dur===30?"p30":"p60")}return a.prezzo}
 function wDur(a){a=a||wAtt();if(!a)return 0;if(a.tipo==="tratt")return W().dur;if(a.tipo==="corso")return corso(a.corso).durata;return 60}
 function wSlots(d){const a=wAtt();if(!a)return [];return slotsDay(d,[a.tipo]).filter(s=>(a.tipo!=="corso"||s.corso===a.corso)&&!isPast(s)&&!s.chiuso&&!s.pren.some(b=>b.cid===S.cid))}
 function wFree(d){return wSlots(d).reduce((n,s)=>n+Math.max(0,s.cap-s.pren.length),0)}
@@ -2280,12 +2381,13 @@ function wizard(){
   if(w.step===5)return wFatto();
   let body="";
   if(w.step===1){
-    body='<h2 class="wiz-t">Cosa vuoi fare?</h2><p class="muted">Scegli '+(S.area==="tratt"?"il trattamento":"la tua prossima attività")+'.</p><div class="acts">'+wAtts().map(x=>
+    const lst=wAtts();
+    body=abbCTA("wiz")+'<h2 class="wiz-t">Cosa vuoi fare?</h2><p class="muted">Scegli '+(S.area==="tratt"?"il trattamento":"la tua prossima attività")+(w.viaPiano?" incluso nel tuo abbonamento":"")+'.</p>'+(lst.length?'':'<p class="muted">Il tuo abbonamento non include questa sezione.</p>')+'<div class="acts">'+lst.map(x=>
       '<button class="act'+(w.att===x.id?" on":"")+'" style="--c:'+x.col+'" onclick="wSet(\'att\',\''+x.id+'\')">'+
        (x.img?'<span class="ph"><img src="'+x.img+'" alt="" loading="lazy"></span>':'<span class="ph ph-c">'+ic(x.tipo==="corso"?"users":"dumb",30)+'</span>')+
        (w.att===x.id?'<i class="tick">'+ic("check",13)+'</i>':'')+
-       '<span class="tx"><b>'+esc(x.n)+'</b><small>'+esc(x.tag)+'</small><em>'+(x.da?"da ":"")+eur(x.prezzo)+'</em></span></button>').join("")+'</div>'+
-     (a&&a.tipo==="tratt"?'<div class="flabel" style="margin:16px 0 8px">Durata</div><div class="seg">'+[30,50].map(m=>'<button class="'+(w.dur===m?"on":"")+'" onclick="wSet(\'dur\','+m+')">'+m+' minuti · '+eur(m===30?tratt(a.tr).p30:tratt(a.tr).p60)+'</button>').join("")+'</div>':'')+
+       '<span class="tx"><b>'+esc(x.n)+'</b><small>'+esc(x.tag)+'</small><em>'+(w.viaPiano?"incluso":(x.da?"da ":"")+eur(x.prezzo))+'</em></span></button>').join("")+'</div>'+
+     (a&&a.tipo==="tratt"?'<div class="flabel" style="margin:16px 0 8px">Durata</div><div class="seg">'+[30,50].map(m=>'<button class="'+(w.dur===m?"on":"")+'" onclick="wSet(\'dur\','+m+')">'+m+' minuti'+(w.viaPiano?'':' · '+eur(pEff(tratt(a.tr),m===30?"p30":"p60")))+'</button>').join("")+'</div>':'')+
      (a?'<p class="hint">'+esc(a.sub)+'</p>':'');
   }else if(w.step===2){
     const days=[];for(let i=0;i<14;i++)days.push(iso(addD(TODAY,i)));
@@ -2296,11 +2398,12 @@ function wizard(){
     body='<h2 class="wiz-t">A che ora?</h2><p class="muted">'+capFirst(fmtD(w.d,{weekday:"long",day:"numeric",month:"long"}))+'</p><div class="hours">'+(l.length?l.map(s=>{const fr=s.cap-s.pren.length;
       return '<button class="hbtn'+(w.slot===s.id?" on":"")+(fr?"":" off")+'" '+(fr?'onclick="wSet(\'slot\',\''+s.id+'\',4)"':'disabled')+'><b>'+s.h+'</b><small>'+(fr?(s.tipo==="corso"?fr+" su "+s.cap+" liberi":"libero"):"completo")+'</small>'+(s.tipo==="corso"?seats(s):'')+'</button>'}).join(""):'<p class="muted">Nessun orario libero: scegli un altro giorno.</p>')+'</div>';
   }else{
-    const s=DB.agenda[w.slot],c=me(),imp=wPrezzo(),left=c.tot-c.usate;
+    const s=DB.agenda[w.slot],c=me(),imp=wPrezzo();
     if(!s){w.step=3;return wizard()}
-    const opts=[["paypal","Paga ora con PayPal","Inquadra il QR o apri PayPal · "+eur(imp)]].concat(left>0&&(a.tipo==="tratt"?["mass","combo"].includes(c.tipo):c.tipo!=="mass")?[["piano","Scala dal mio piano",esc(c.piano)+" · "+left+(left===1?" rimasta":" rimaste")]]:[]).concat([["studio","Pago in studio","Contanti o carta il giorno della seduta"]]);
-    if(!opts.some(o=>o[0]===w.pay))w.pay="paypal";
-    body='<h2 class="wiz-t">Conferma e paga</h2><p class="muted">Controlla il riepilogo e scegli come pagare.</p>'+
+    const conPiano=pianoAttivo(c)&&copre(c,a.tipo)?[["piano","Con il mio abbonamento",esc(c.piano)+" · "+rimTxt(c)+" · non paghi nulla"]]:[];
+    const opts=w.viaPiano&&conPiano.length?conPiano:[["paypal","Paga ora con PayPal","Inquadra il QR o apri PayPal · "+eur(imp)]].concat(conPiano).concat([["studio","Pago in studio","Contanti o carta il giorno della seduta"]]);
+    if(!opts.some(o=>o[0]===w.pay))w.pay=opts[0][0];
+    body=(w.viaPiano&&w.pay==="piano"?'<h2 class="wiz-t">Conferma</h2><p class="muted">Controlla il riepilogo: la seduta viene scalata dal tuo abbonamento.</p>':'<h2 class="wiz-t">Conferma e paga</h2><p class="muted">Controlla il riepilogo e scegli come pagare.</p>')+
      '<div class="pays">'+opts.map(o=>'<button class="pay'+(w.pay===o[0]?" on":"")+'" onclick="wSet(\'pay\',\''+o[0]+'\')"><i></i><span><b>'+o[1]+'</b><small>'+o[2]+'</small></span>'+(o[0]==="paypal"?'<span class="pp-logo">PayPal</span>':'')+'</button>').join("")+'</div>'+
      (w.pay==="paypal"?paypalBox(imp,a.n+" "+fmtD(s.d)+" "+s.h):'');
   }
@@ -2315,7 +2418,7 @@ function wRiep(){const w=W(),a=wAtt(),s=w.slot?DB.agenda[w.slot]:null;
   return '<aside class="wiz-side card"><div class="flabel" style="margin-bottom:10px">Il tuo riepilogo</div>'+
    (a&&a.img?'<img class="rimg" src="'+a.img+'" alt="">':'')+
    r("Attività",a?esc(a.n):"")+r("Durata",a?wDur(a)+" minuti":"")+r("Giorno",w.d?capFirst(fmtD(w.d,{weekday:"long",day:"numeric",month:"long"})):"")+r("Orario",s?s.h:"")+
-   '<div class="sep"></div>'+r("Totale",a?'<span class="tot">'+eur(wPrezzo())+'</span>':"")+
+   '<div class="sep"></div>'+r("Totale",a?(w.pay==="piano"&&w.step>=4||w.viaPiano?'<span class="tot">Incluso</span>':'<span class="tot">'+eur(wPrezzo())+'</span>'):"")+
    '<p class="hint" style="margin-top:10px">'+ic("check",11)+' Annulli gratis fino all\'inizio · '+ic("check",11)+' Paghi con PayPal, dal tuo piano o in studio</p></aside>'}
 function paypalBox(imp,causale){return '<div class="ppbox"><img src="/assets/img/paypal-qr.webp" width="200" height="200" alt="QR code PayPal di Kone Moctar Studio">'+
   '<div><div class="flabel">Importo da inviare</div><div class="ppamt">'+eur(imp)+'</div>'+
@@ -2325,18 +2428,66 @@ function paypalBox(imp,causale){return '<div class="ppbox"><img src="/assets/img
 function wConferma(){const w=W(),a=wAtt(),s=DB.agenda[w.slot],c=me();
   if(!s||!a)return wGo(3);if(s.chiuso||isPast(s))return toast("Questo orario non è più prenotabile"),wGo(3);
   if(s.pren.length>=s.cap)return toast("Qualcuno ha preso l'ultimo posto: scegli un altro orario"),wGo(3);
-  const imp=wPrezzo(),b={cid:c.id,nome:c.n,pay:{m:w.pay,imp,stato:w.pay==="piano"?"incluso":"da pagare"}};
+  if(w.pay==="piano"&&!(pianoAttivo(c)&&copre(c,a.tipo))){w.pay="paypal";return toast("Il tuo abbonamento non copre questa prenotazione"),render()}
+  const imp=w.pay==="piano"?0:wPrezzo(),b={cid:c.id,nome:c.n,pay:{m:w.pay,imp,stato:w.pay==="piano"?"incluso":"da pagare"}};
   if(a.tipo==="tratt"){b.tratt=a.tr;b.dur=w.dur}
+  if(w.pay==="piano")c.usate=(c.usate||0)+1;
   s.pren.push(b);save();w.step=5;render();el("main").scrollTop=0}
 function wFatto(){const w=W(),s=DB.agenda[w.slot],b=s&&s.pren.find(x=>x.cid===S.cid);if(!s||!b){S.w=null;return wizard()}
   return '<div class="card wdone"><span class="ok-ic">'+ic("check",30)+'</span><h2 class="wiz-t">Prenotato!</h2>'+
    '<p class="muted">'+esc(slotTitle(s,b))+' · '+capFirst(fmtD(s.d,{weekday:"long",day:"numeric",month:"long"}))+' alle '+s.h+'</p>'+
-   (b.pay.m==="paypal"?paypalBox(b.pay.imp,(wAtt()||{n:""}).n+" "+fmtD(s.d)+" "+s.h):'<p style="margin-top:10px">'+(b.pay.m==="piano"?"Scalato dal tuo piano: non devi pagare nulla.":"Paghi "+eur(b.pay.imp)+" in studio il giorno della seduta.")+'</p>')+
-   '<div class="inline" style="justify-content:center;margin-top:18px"><button class="btn primary" onclick="S.w=null;render()">Prenota un\'altra</button></div></div>'}
+   (b.pay.m==="paypal"?paypalBox(b.pay.imp,(wAtt()||{n:""}).n+" "+fmtD(s.d)+" "+s.h):'<p style="margin-top:10px">'+(b.pay.m==="piano"?"Scalato dal tuo abbonamento: non devi pagare nulla. "+capFirst(rimTxt(me()))+".":"Paghi "+eur(b.pay.imp)+" in studio il giorno della seduta.")+'</p>')+
+   '<div class="inline" style="justify-content:center;margin-top:18px"><button class="btn primary" onclick="const v=S.w&&S.w.viaPiano;S.w=null;if(v&&pianoAttivo(me()))usaAbbonamento();else render()">Prenota un\'altra</button></div></div>'}
 function pagaModal(sid){const s=DB.agenda[sid],b=s&&s.pren.find(x=>x.cid===S.cid);if(!b)return;
   openModal('<h3>Paga con PayPal</h3><p class="muted" style="margin-bottom:12px">'+esc(slotTitle(s,b))+' · '+fmtD(s.d)+' '+s.h+'</p>'+paypalBox(b.pay.imp,slotTitle(s,b)+" "+fmtD(s.d)+" "+s.h))}
 function vPrenota(){return head("Prenota","One to one con Kone o corsi di gruppo · in 4 passaggi")+wizard()+mieHTML(["pt","corso"])}
 function vTpren(){return head("Prenota un trattamento","Scegli il trattamento, il giorno e l'orario")+wizard()+mieHTML(["tratt"])}
+
+
+/* =================== ABBONAMENTI · Kone li assegna, il cliente prenota con il suo =================== */
+const TIPI_ABB=[["pacchetto","Pacchetto one to one"],["abb","Abbonamento mensile one to one"],["corsi","Corsi di gruppo"],["mass","Trattamenti / massaggi"],["combo","Allenamento + trattamenti"],["none","Nessun abbonamento"]];
+function copre(c,tipo){if(!c||!c.tipo)return false;
+  return tipo==="tratt"?["mass","combo"].includes(c.tipo):tipo==="pt"?["pacchetto","abb","combo"].includes(c.tipo):["pacchetto","abb","combo","corsi"].includes(c.tipo)}
+const abbScaduto=c=>c.scad==="scaduto"||!!(c.scadIso&&c.scadIso<T0);
+const rimaste=c=>c.illim?Infinity:Math.max(0,(c.tot||0)-(c.usate||0));
+const pianoAttivo=c=>!!c&&c.tipo&&c.tipo!=="none"&&!abbScaduto(c)&&rimaste(c)>0;
+const pctUso=c=>c.illim||!c.tot?0:Math.min(100,c.usate/c.tot*100);
+const usoTxt=c=>c.tipo==="none"?"—":c.illim?c.usate+" usate · illimitato":c.usate+" / "+c.tot;
+const rimTxt=c=>c.illim?"ingressi illimitati":rimaste(c)+(rimaste(c)===1?" seduta rimasta":" sedute rimaste");
+function vociListino(){const out=[];Object.keys(SEZ).forEach(k=>(DB.listino[k]||[]).forEach((r,i)=>out.push({k,i,r,lab:SEZ[k].t})));return out}
+function pianoModal(cid){const c=cli(cid),voci=vociListino();
+  const grp={};voci.forEach((v,j)=>{(grp[v.lab]=grp[v.lab]||[]).push('<option value="'+j+'">'+esc((v.k==="percorsi"?"Percorso ":"")+v.r.n)+' · '+eur(pEff(v.r))+'</option>')});
+  openModal('<h3>Abbonamento di '+esc(c.n)+'</h3><p class="muted" style="margin-bottom:14px">Scegli una voce del listino oppure scrivi tu piano e sedute. Il cliente vede subito quante sedute gli restano e può prenotare con il suo abbonamento.</p>'+
+   '<div class="field"><label>Parti da una voce del listino</label><select class="fi" id="abL" onchange="abDaListino(this.value)"><option value="">— scegli —</option>'+Object.keys(grp).map(g=>'<optgroup label="'+esc(g)+'">'+grp[g].join("")+'</optgroup>').join("")+'</select></div>'+
+   '<div class="frow"><div class="field"><label>Nome del piano</label><input class="fi" id="abN" value="'+esc(c.piano||"")+'"></div>'+
+   '<div class="field"><label>Cosa copre</label><select class="fi" id="abT">'+TIPI_ABB.map(t=>'<option value="'+t[0]+'"'+(c.tipo===t[0]?" selected":"")+'>'+t[1]+'</option>').join("")+'</select></div></div>'+
+   '<div class="frow"><div class="field"><label>Sedute totali (0 = illimitate)</label><input class="fi" id="abTot" inputmode="numeric" value="'+(c.illim?0:(c.tot||0))+'"></div>'+
+   '<div class="field"><label>Sedute già usate</label><div class="inline" style="flex-wrap:nowrap"><button class="icon-btn" onclick="abUse(-1)" aria-label="Una in meno">'+ic("minus",15)+'</button><input class="fi" id="abU" inputmode="numeric" value="'+(c.usate||0)+'" style="text-align:center"><button class="icon-btn" onclick="abUse(1)" aria-label="Una in più">'+ic("plus",15)+'</button></div></div>'+
+   '<div class="field"><label>Scadenza</label><input class="fi" type="date" id="abS" value="'+(c.scadIso||"")+'"></div></div>'+
+   '<p class="hint" style="margin-bottom:14px">Ogni prenotazione fatta “con l\'abbonamento” scala una seduta da sola; se il cliente annulla, la seduta torna disponibile.</p>'+
+   '<div class="inline" style="justify-content:flex-end;flex-wrap:wrap"><button class="btn ghost" style="margin-right:auto" onclick="el(\'abU\').value=0;toast(\'Sedute azzerate: premi Salva\')">'+ic("refresh",14)+' Rinnova (azzera usate)</button><button class="btn primary" onclick="salvaPiano('+cid+')">Salva abbonamento</button></div>')}
+function abUse(d){const i=el("abU");i.value=Math.max(0,(parseInt(i.value)||0)+d)}
+function abDaListino(j){if(j==="")return;const v=vociListino()[+j],r=v.r,c=SEZ[v.k];
+  let tot=r.sed;if(tot==null){const m=String(r.d||"").match(/\d+/g);tot=m?m.reduce((a,b)=>a+ +b,0):0}
+  el("abN").value=(v.k==="percorsi"?"Percorso ":"")+r.n;el("abT").value=c.tipo;el("abTot").value=tot||0;el("abU").value=0;
+  el("abS").value=iso(addD(TODAY,c.mese?30:90))}
+function salvaPiano(cid){const c=cli(cid),tipo=el("abT").value,tot=parseInt(el("abTot").value),us=parseInt(el("abU").value)||0,sc=el("abS").value;
+  if(tipo!=="none"&&(isNaN(tot)||tot<0))return toast("Sedute non valide");
+  c.tipo=tipo;c.piano=tipo==="none"?"Nessun abbonamento":(el("abN").value.trim()||"Abbonamento");c.illim=tipo!=="none"&&tot===0;c.tot=tipo==="none"?0:tot;c.usate=Math.max(0,us);
+  c.scadIso=sc||null;c.scad=sc?fmtD(sc,{day:"numeric",month:"short"}).replace(".",""):"—";
+  c.extra=tipo==="none"?"—":c.illim?"ingressi illimitati":tot+(tipo==="mass"?" trattamenti":tipo==="corsi"?" ingressi":" sedute");
+  save();closeModal();render();toast("Abbonamento salvato · "+c.n.split(" ")[0]+" lo vede nella sua app")}
+/* lato cliente: "Hai già un abbonamento? Clicca qui" */
+function abbCTA(dove){const c=me();if(!c||!c.tipo||c.tipo==="none")return "";const w=S.w;
+  if(dove==="wiz"&&w&&w.viaPiano)return '<div class="abb-cta on"><span class="ai">'+ic("check",20)+'</span><span class="t"><b>Stai prenotando con il tuo abbonamento</b><small>'+esc(c.piano)+' · '+rimTxt(c)+' · non paghi nulla</small></span><button class="btn sm ghost" onclick="S.w=null;render()">Esci</button></div>';
+  if(!pianoAttivo(c))return '<button class="abb-cta off" onclick="S.w=null;go(\'listino\')"><span class="ai">'+ic("card",20)+'</span><span class="t"><b>Il tuo abbonamento '+(abbScaduto(c)?"è scaduto":"è esaurito")+'</b><small>'+esc(c.piano)+' · guarda i prezzi per rinnovarlo o scrivi a Kone</small></span><span class="go">'+ic("chevR",18)+'</span></button>';
+  return '<button class="abb-cta" onclick="usaAbbonamento()"><span class="ai">'+ic("card",20)+'</span><span class="t"><b>Hai già un abbonamento? Clicca qui</b><small>Prenoti con '+esc(c.piano)+' · '+rimTxt(c)+(c.scadIso?' · scade il '+fmtD(c.scadIso,{day:"numeric",month:"long"}):'')+'</small></span><span class="go">'+ic("chevR",18)+'</span></button>'}
+function usaAbbonamento(){const c=me();if(!pianoAttivo(c))return toast("Abbonamento non attivo: scrivi a Kone per rinnovarlo");
+  const okAllen=copre(c,"pt")||copre(c,"corso"),okTratt=copre(c,"tratt");
+  const area=(S.area==="allen"&&okAllen)||(S.area==="tratt"&&okTratt)?S.area:okAllen?"allen":"tratt";
+  if(area!==S.area){S.area=area;S.aday=0}
+  S.w={area,step:1,att:null,dur:50,d:null,slot:null,pay:"piano",viaPiano:true};
+  go(area==="tratt"?"tpren":"prenota");toast("Scegli cosa prenotare: lo scaliamo dal tuo abbonamento")}
 
 /* ---------- come pagare (listino) ---------- */
 function pagamentiCard(){const coach=S.role==="coach";
@@ -2355,6 +2506,149 @@ function migraPrezzi(){
   DB.trattamenti.forEach(t=>{t.p30=30;t.p60=55});
   Object.values(DB.agenda).forEach(s=>{if(s.tipo==="tratt"){if(s.dur===60)s.dur=50;s.pren.forEach(b=>{if(b.dur===60)b.dur=50})}});
   DB.settings.listino2026=true;DB.settings.paypal=DB.settings.paypal||PAYPAL_DEF;save();
+}
+
+/* =================== AREA TITOLARE · schede per cliente, chat con foto, saldo, nuovi clienti =================== */
+const GIORNI7=["Lun","Mar","Mer","Gio","Ven","Sab","Dom"];
+const schedaVuota=nome=>({nome:nome||"Nuova scheda",creata:T0,giorni:GIORNI7.map(g=>({g,t:"Riposo",ex:[]}))});
+const VUOTA=schedaVuota("Nessuna scheda assegnata");
+function schedaCid(){return S.role==="coach"&&!S.preview?(S.view==="cliente"?S.client:(S.sclient||1)):S.cid}
+function migraSchede(){
+  if(!DB.schede){DB.schede={};const d=Object.getOwnPropertyDescriptor(DB,"scheda");if(d&&d.value&&d.value.giorni)DB.schede[1]=d.value}
+  delete DB.scheda;DB.modelli=DB.modelli||[];DB.schedeArch=DB.schedeArch||{};
+  Object.defineProperty(DB,"scheda",{get(){return DB.schede[schedaCid()]||VUOTA},configurable:true,enumerable:false});
+}
+const oraLabel=()=>{const n=new Date();return fmtD(T0,{day:"numeric",month:"short"})+" "+pad(n.getHours())+":"+pad(n.getMinutes())};
+
+/* ---------- schede per cliente ---------- */
+function schedaOpzioni(cid,sost){const c=cli(cid);
+  return '<div class="act-list">'+
+   '<button onclick="nuovaScheda('+cid+')">'+ic("plus",18)+'<span><b>Scheda vuota</b><small>7 giorni: aggiungi gli esercizi dalla libreria</small></span></button>'+
+   '<button onclick="copiaSchedaModal('+cid+')">'+ic("copy",18)+'<span><b>Parti da un modello o da un altro cliente</b><small>'+DB.modelli.length+' modelli salvati · '+Object.keys(DB.schede).filter(k=>+k!==cid).length+' schede di altri clienti</small></span></button>'+
+   '<label class="act-file">'+ic("download",18)+'<span><b>Carica un file (PDF o foto)</b><small>'+esc(c.n.split(" ")[0])+' lo apre dalla sua app, nella sezione Scheda</small></span><input type="file" accept="application/pdf,image/*" hidden onchange="caricaFileScheda('+cid+',this)"></label>'+
+   '</div>'+(sost?'<p class="hint">La scheda attuale non si perde: va nell\'archivio di '+esc(c.n.split(" ")[0])+'.</p>':'')}
+function schedaPanel(cid){
+  const c=cli(cid),sc=DB.schede[cid],arch=(DB.schedeArch[cid]||[]).length;
+  if(!sc)return '<div class="card">'+cardH("plan","Nessuna scheda per "+esc(c.n))+'<p class="muted" style="margin-bottom:12px">Scegli come partire.</p>'+schedaOpzioni(cid)+'</div>';
+  return '<div class="card sch-head"><div class="sch-row"><div style="flex:1;min-width:220px"><div class="flabel" style="margin-bottom:5px">Scheda di '+esc(c.n)+'</div>'+
+    '<input class="fi sch-name" value="'+esc(sc.nome)+'" onchange="DB.schede['+cid+'].nome=this.value.trim()||\'Scheda\';save();toast(\'Nome salvato\')" aria-label="Nome della scheda">'+
+    '<div class="dim" style="font-size:12.5px;margin-top:6px">Creata il '+fmtD(sc.creata||T0,{day:"numeric",month:"long"})+(sc.inviata?' · inviata il '+fmtD(sc.inviata,{day:"numeric",month:"long"}):'')+(arch?' · '+arch+' in archivio':'')+'</div></div>'+
+    '<div class="inline sch-act"><button class="btn sm" onclick="nuovaSchedaModal('+cid+')">'+ic("plus",13)+' Nuova scheda</button>'+
+    '<button class="btn sm" onclick="salvaModello('+cid+')">'+ic("copy",13)+' Salva come modello</button>'+
+    '<button class="btn sm primary" onclick="inviaScheda('+cid+')">'+ic("chat",13)+' Avvisa il cliente</button></div></div>'+
+   '<div class="sch-file">'+(sc.file?'<span class="pill gold">'+ic(sc.file.tipo&&sc.file.tipo.indexOf("pdf")>-1?"plan":"img",12)+' '+esc(sc.file.nome)+'</span><button class="btn sm ghost" onclick="apriFile(\''+sc.file.k+'\')">Apri</button><button class="btn sm ghost" onclick="DB.schede['+cid+'].file=null;save();render()">Togli</button>':'<span class="dim" style="font-size:13px">Nessun file allegato.</span>')+
+    '<label class="btn sm ghost">'+ic("download",13)+' '+(sc.file?"Sostituisci file":"Allega PDF o foto")+'<input type="file" accept="application/pdf,image/*" hidden onchange="caricaFileScheda('+cid+',this)"></label></div></div>'+
+   schedaEditor();
+}
+function nuovaSchedaModal(cid){openModal('<h3>Nuova scheda</h3><p class="muted" style="margin-bottom:14px">Per '+esc(cli(cid).n)+'</p>'+schedaOpzioni(cid,1))}
+function nuovaScheda(cid,base,nome){
+  const old=DB.schede[cid];if(old)(DB.schedeArch[cid]=DB.schedeArch[cid]||[]).push(Object.assign(clone(old),{archiviata:T0}));
+  const sc=base?Object.assign(clone(base),{creata:T0,inviata:null,file:null}):schedaVuota("Scheda "+fmtD(T0,{month:"long",year:"numeric"}));
+  if(nome)sc.nome=nome;sc.giorni.forEach(g=>g.ex.forEach(e=>e.last=0));
+  DB.schede[cid]=sc;S.day=-1;save();closeModal();render();toast(base?"Scheda creata da “"+(base.nome||"modello")+"”":"Scheda vuota creata");
+}
+function copiaSchedaModal(cid){
+  const altri=Object.keys(DB.schede).map(Number).filter(k=>k!==cid&&cli(k));
+  openModal('<h3>Parti da…</h3><p class="muted" style="margin-bottom:14px">La copia è indipendente: puoi modificarla senza toccare l\'originale.</p>'+
+   (DB.modelli.length?'<div class="flabel" style="margin-bottom:8px">I tuoi modelli</div><div class="act-list" style="margin-bottom:14px">'+DB.modelli.map((m,i)=>'<button onclick="nuovaScheda('+cid+',DB.modelli['+i+'])">'+ic("plan",18)+'<span><b>'+esc(m.nome)+'</b><small>'+m.giorni.filter(g=>g.ex.length).length+' giorni di allenamento</small></span></button>').join("")+'</div>':'')+
+   (altri.length?'<div class="flabel" style="margin-bottom:8px">Schede di altri clienti</div><div class="act-list">'+altri.map(k=>'<button onclick="nuovaScheda('+cid+',DB.schede['+k+'])">'+ic("users",18)+'<span><b>'+esc(cli(k).n)+'</b><small>'+esc(DB.schede[k].nome)+'</small></span></button>').join("")+'</div>':'')+
+   (!DB.modelli.length&&!altri.length?'<p class="muted">Non ci sono ancora modelli: crea una scheda e usa “Salva come modello”.</p>':''))}
+async function caricaFileScheda(cid,inp){const f=inp.files[0];if(!f)return;if(f.size>20*1024*1024)return toast("File troppo grande (max 20 MB)");
+  const k="sf_"+cid+"_"+uid();try{await IDB.put(k,f)}catch(e){return toast("Non riesco a salvare il file su questo dispositivo")}
+  if(!DB.schede[cid])DB.schede[cid]=schedaVuota(f.name.replace(/\.[a-z0-9]+$/i,""));
+  DB.schede[cid].file={k,nome:f.name,tipo:f.type,d:T0};save();closeModal();render();toast("File caricato nella scheda di "+cli(cid).n.split(" ")[0])}
+function apriFile(k){IDB.get(k).then(b=>{if(!b)return toast("File non disponibile su questo dispositivo");const u=URL.createObjectURL(b);const w=window.open(u,"_blank");if(!w)location.href=u}).catch(()=>toast("File non disponibile"))}
+function salvaModello(cid){const sc=DB.schede[cid];if(!sc)return;const m=clone(sc);m.file=null;m.nome=sc.nome;DB.modelli.push(m);save();toast("Salvata tra i modelli: “"+sc.nome+"”")}
+function inviaScheda(cid){const sc=DB.schede[cid];if(!sc)return;const t=chatDi(cid),msg="Ciao "+cli(cid).n.split(" ")[0]+"! Ti ho preparato la scheda “"+sc.nome+"”: la trovi nella sezione Scheda dell'app."+(sc.file?" C'è anche il file "+sc.file.nome+".":"")+" — Kone";
+  t.msgs.push({t:msg,me:1,h:oraLabel()});t.last=msg;t.unreadC=(t.unreadC||0)+1;sc.inviata=T0;save();render();toast("Messaggio inviato in chat")}
+function vSchede(){const cid=S.sclient||1;
+  return head("Schede dei clienti","Scegli il cliente, poi modifica la sua scheda o caricane una nuova")+
+   '<div class="card" style="margin-bottom:14px"><div class="sch-pick">'+DB.clienti.map(c=>'<button class="chk'+(c.id===cid?" on":"")+'" onclick="S.sclient='+c.id+';S.day=-1;render()">'+esc(c.n)+(DB.schede[c.id]?'':' <span class="dim">· da fare</span>')+'</button>').join("")+'</div></div>'+
+   schedaPanel(cid)+
+   (DB.modelli.length?'<div class="card" style="margin-top:14px">'+cardH("copy","I tuoi modelli",'<span class="chip">'+DB.modelli.length+'</span>')+DB.modelli.map((m,i)=>'<div class="row"><span style="flex:1"><span class="nm">'+esc(m.nome)+'</span><span class="mt">'+m.giorni.filter(g=>g.ex.length).length+' giorni di allenamento</span></span><button class="btn sm" onclick="nuovaScheda('+cid+',DB.modelli['+i+'])">Usa per '+esc(cli(cid).n.split(" ")[0])+'</button><button class="icon-btn" onclick="DB.modelli.splice('+i+',1);save();render()" aria-label="Elimina modello">'+ic("trash",15)+'</button></div>').join("")+'</div>':'');
+}
+function fileSchedaCliente(){const sc=DB.schede[S.cid];if(!sc||!sc.file)return "";
+  return '<div class="alert info" style="margin-bottom:14px"><div><b>Kone ti ha caricato un file</b><p>'+esc(sc.file.nome)+'</p></div><button class="btn sm primary" onclick="apriFile(\''+sc.file.k+'\')">Apri</button></div>'}
+
+/* ---------- nuovo cliente e accesso all'app ---------- */
+function nuovoCliente(){const pw="km"+Math.floor(1000+Math.random()*9000);
+  openModal('<h3>Nuovo cliente</h3><p class="muted" style="margin-bottom:14px">Crei la scheda anagrafica e le credenziali per entrare nell\'app.</p>'+
+   '<div class="frow"><div class="field"><label>Nome e cognome</label><input class="fi" id="ncN" autocomplete="off"></div><div class="field"><label>Email (per entrare)</label><input class="fi" id="ncE" type="email" autocomplete="off"></div></div>'+
+   '<div class="frow"><div class="field"><label>Password iniziale</label><input class="fi" id="ncP" value="'+pw+'"></div><div class="field"><label>Telefono</label><input class="fi" id="ncT" type="tel"></div></div>'+
+   '<div class="frow"><div class="field"><label>Cosa fa</label><select class="fi" id="ncTipo"><option value="pacchetto">Personal training (pacchetto)</option><option value="abb">Personal training (abbonamento)</option><option value="mass">Solo trattamenti</option><option value="combo">Allenamento + trattamenti</option><option value="corsi">Corsi di gruppo</option><option value="none">Nessun abbonamento per ora</option></select></div>'+
+   '<div class="field"><label>Piano</label><input class="fi" id="ncPiano" value="Pacchetto 4 sedute"></div><div class="field"><label>Sedute</label><input class="fi" id="ncTot" inputmode="numeric" value="4"></div></div>'+
+   '<div class="field"><label>Note private (solo tu le vedi)</label><textarea class="fi" id="ncNote" placeholder="Obiettivo, infortuni, preferenze di orario…"></textarea></div>'+
+   '<div class="inline" style="justify-content:flex-end"><button class="btn primary" onclick="salvaCliente()">Crea cliente</button></div>')}
+function salvaCliente(){const n=el("ncN").value.trim(),em=el("ncE").value.trim().toLowerCase(),pw=el("ncP").value.trim();
+  if(n.split(" ").length<2)return toast("Scrivi nome e cognome");if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em))return toast("Email non valida");
+  if(DB.clienti.some(c=>(c.email||"").toLowerCase()===em))return toast("Esiste già un cliente con questa email");if(pw.length<4)return toast("Password troppo corta");
+  const id=Math.max.apply(null,DB.clienti.map(c=>c.id))+1,tot=parseInt(el("ncTot").value)||4;
+  DB.clienti.push({id,n,i:n.split(" ").map(x=>x[0]).join("").slice(0,2).toUpperCase(),email:em,pw:hashPw(pw),tel:el("ncT").value.trim(),piano:el("ncPiano").value.trim()||"Da definire",tipo:el("ncTipo").value,
+    usate:0,tot,extra:tot+" sedute",scad:"—",gg:0,peso:null,start:null,ader:100,note:el("ncNote").value.trim()||"Nuovo cliente."});
+  save();closeModal();openClient(id);
+  openModal('<h3>Cliente creato</h3><p class="muted" style="margin-bottom:14px">Manda a '+esc(n.split(" ")[0])+' queste credenziali per entrare nell\'app:</p>'+credBox(em,pw)+'<p class="hint">Ora puoi creargli la scheda dalla scheda “Scheda”.</p>')}
+function credBox(em,pw){const txt="Ciao! Ecco il tuo accesso all'app di KM Studio: https://kone-studio.com/app — email: "+em+" — password: "+pw;
+  return '<div class="cred"><div class="kv"><span>Indirizzo</span><b>kone-studio.com/app</b></div><div class="kv"><span>Email</span><b>'+esc(em)+'</b></div><div class="kv"><span>Password</span><b>'+esc(pw)+'</b></div></div>'+
+   '<div class="inline" style="margin-top:12px"><a class="btn sm primary" target="_blank" rel="noopener" href="https://wa.me/?text='+encodeURIComponent(txt)+'">Invia su WhatsApp</a><button class="btn sm" onclick="navigator.clipboard&&navigator.clipboard.writeText('+esc(JSON.stringify(txt))+').then(()=>toast(\'Copiato\'))">Copia</button></div>'}
+function accessoModal(cid){const c=cli(cid),pw="km"+Math.floor(1000+Math.random()*9000);
+  openModal('<h3>Accesso all\'app · '+esc(c.n)+'</h3><p class="muted" style="margin-bottom:14px">Imposta email e una nuova password, poi mandagliele.</p>'+
+   '<div class="frow"><div class="field"><label>Email</label><input class="fi" id="acE" type="email" value="'+esc(c.email||"")+'"></div><div class="field"><label>Nuova password</label><input class="fi" id="acP" value="'+pw+'"></div></div>'+
+   '<div class="inline" style="justify-content:flex-end"><button class="btn primary" onclick="salvaAccesso('+cid+')">Salva</button></div>')}
+function salvaAccesso(cid){const c=cli(cid),em=el("acE").value.trim().toLowerCase(),pw=el("acP").value.trim();
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em))return toast("Email non valida");if(DB.clienti.some(x=>x.id!==cid&&(x.email||"").toLowerCase()===em))return toast("Email già usata da un altro cliente");if(pw.length<4)return toast("Password troppo corta");
+  c.email=em;c.pw=hashPw(pw);save();openModal('<h3>Accesso aggiornato</h3>'+credBox(em,pw))}
+
+/* ---------- chat con foto ---------- */
+function msgHTML(m,mine){return '<div class="msg '+(mine?"me":"them")+(m.img?" has-img":"")+'">'+(m.img?'<button class="mimg" onclick="vediFoto(\''+m.img+'\')"><img data-ikey="'+m.img+'" alt="Foto"></button>':'')+(m.t?'<span>'+esc(m.t)+'</span>':'')+'<span class="ts">'+esc(m.h)+'</span></div>'}
+function vediFoto(k){IDB.get(k).then(d=>{if(d)openModal('<img src="'+d+'" alt="Foto" style="width:100%;border-radius:12px;display:block">')})}
+function hydrateImg(){document.querySelectorAll("img[data-ikey]:not([src])").forEach(i=>{IDB.get(i.dataset.ikey).then(d=>{if(d)i.src=d}).catch(()=>{})})}
+async function sendFoto(inp,id){const f=inp.files[0];if(!f)return;if(!/^image\//.test(f.type))return toast("Scegli una foto");
+  let d;try{d=await readPhoto(f)}catch(e){return toast("Non riesco a leggere la foto")}
+  const k="ci_"+uid();try{await IDB.put(k,d)}catch(e){return toast("Non riesco a salvare la foto")}
+  const v=(el("mi").value||"").trim();el("mi").value="";pushMsg(id,{t:v,img:k})}
+function pushMsg(id,m){const t=DB.chat.find(c=>c.id===id);if(!t)return;const coach=S.role==="coach";m.me=coach?1:0;m.h=oraLabel();t.msgs.push(m);t.last=m.t||"📷 Foto";
+  if(coach)t.unreadC=(t.unreadC||0)+1;else t.unread=(t.unread||0)+1;save();render()}
+function sendMsg(e,id){e.preventDefault();const i=el("mi"),v=i.value.trim();if(!v)return;i.value="";pushMsg(id,{t:v})}
+function chatInHTML(id,ph){return '<form class="chat-in" onsubmit="sendMsg(event,'+id+')"><label class="icon-btn att" title="Allega una foto" aria-label="Allega una foto">'+ic("cam",18)+'<input type="file" accept="image/*" hidden onchange="sendFoto(this,'+id+')"></label>'+
+  '<input id="mi" placeholder="'+esc(ph)+'" autocomplete="off"><button class="btn primary" type="submit">Invia</button></form>'}
+function vChat(){
+  const q=(S.chq||"").toLowerCase();
+  const items=DB.clienti.map(c=>({c,t:DB.chat.find(x=>x.n===c.n)})).filter(o=>!q||o.c.n.toLowerCase().includes(q))
+    .sort((a,b)=>((b.t&&b.t.unread)||0)-((a.t&&a.t.unread)||0)||((b.t&&b.t.msgs.length)?1:0)-((a.t&&a.t.msgs.length)?1:0));
+  const t=DB.chat.find(c=>c.id===S.chat);const tc=t&&DB.clienti.find(x=>x.n===t.n);
+  return head("Chat","Tutti i tuoi clienti · rispondi e allega foto")+
+  '<div class="chat-wrap'+(S.chatOn&&t?" open":"")+'"><div class="chat-list"><div class="chat-search"><input class="fi" placeholder="Cerca un cliente…" value="'+esc(S.chq||"")+'" oninput="S.chq=this.value;render();const i=document.querySelector(\'.chat-search input\');i.focus();i.setSelectionRange(i.value.length,i.value.length)"></div>'+
+   items.map(o=>'<button class="chat-item '+(o.t&&o.t.id===S.chat?"on":"")+'" onclick="apriChat('+o.c.id+')"><span class="av'+(o.t&&o.t.unread?"":" q")+'">'+o.c.i+'</span><span style="min-width:0"><span class="nm">'+esc(o.c.n)+'</span><br><span class="pv">'+esc(o.t&&o.t.last?o.t.last:"Nessun messaggio · scrivi per primo")+'</span></span>'+
+    (o.t&&o.t.unread?'<span class="ubadge">'+o.t.unread+'</span>':'')+'</button>').join("")+'</div>'+
+  (t?'<div class="chat-main"><div class="chat-head"><button class="icon-btn chat-back" onclick="S.chatOn=0;render()" aria-label="Tutte le chat">'+ic("chevL",18)+'</button><span class="av">'+t.i+'</span><div style="flex:1;min-width:0"><div style="font-weight:600">'+esc(t.n)+'</div><div class="dim" style="font-size:12px">'+esc(tc?tc.piano:"Cliente")+'</div></div>'+
+    (tc?'<button class="btn sm ghost" onclick="openClient('+tc.id+')">Scheda cliente</button>':'')+'</div>'+
+   '<div class="msgs" id="msgs">'+(t.msgs.length?t.msgs.map(m=>msgHTML(m,m.me)).join(""):'<p class="muted" style="margin:auto;text-align:center">Nessun messaggio con '+esc(t.n.split(" ")[0])+'.<br>Scrivi qualcosa o manda una foto.</p>')+'</div>'+
+   chatInHTML(t.id,"Scrivi a "+t.n.split(" ")[0]+"…")+'</div>':'<div class="chat-main chat-empty"><p class="muted">Scegli un cliente per aprire la chat.</p></div>')+'</div>';
+}
+function apriChat(cid){const t=chatDi(cid);S.chat=t.id;S.chatOn=1;t.unread=0;save();buildNav();render()}
+function chatOpen(){const t=DB.chat.find(c=>c.id===S.chat);if(t)t.unread=0;S.chatOn=1;save();buildNav();render()}
+function vChatC(){
+  const t=chatDi(S.cid);if(t.unreadC){t.unreadC=0;save()}
+  return head("Chat con Kone","Risponde di solito entro un paio d'ore · puoi mandare anche foto")+
+  '<div class="chat-main" style="height:calc(100vh - 330px);min-height:380px"><div class="chat-head"><img src="/assets/img/logo-km-112.webp" width="36" height="36" alt="" style="border-radius:50%"><div><div style="font-weight:600">Kone Moctar</div><div class="dim" style="font-size:12px">Personal trainer &amp; massaggiatore</div></div></div>'+
+   '<div class="msgs" id="msgs">'+t.msgs.map(m=>msgHTML(m,!m.me)).join("")+'</div>'+chatInHTML(t.id,"Scrivi a Kone…")+'</div>';
+}
+
+/* ---------- saldo del titolare (cruscotto) ---------- */
+function paypalDaConfermare(){const out=[];Object.values(DB.agenda).forEach(s=>s.pren.forEach((b,i)=>{if(b.pay&&b.pay.m==="paypal"&&b.pay.stato!=="pagato")out.push({s,b,i})}));return out.sort((a,b)=>(a.s.d+a.s.h)<(b.s.d+b.s.h)?-1:1)}
+function saldoCard(){
+  const m=T0.slice(0,7),mv=DB.movimenti.filter(x=>x.d.slice(0,7)===m),sum=a=>a.reduce((t,x)=>t+x.imp,0);
+  const inc=sum(mv.filter(x=>x.tipo==="entrata"&&x.pag)),usc=sum(mv.filter(x=>x.tipo==="uscita")),da=sum(DB.movimenti.filter(x=>x.tipo==="entrata"&&!x.pag));
+  const pp=paypalDaConfermare(),ppT=pp.reduce((t,o)=>t+o.b.pay.imp,0),show=!!S.saldoOn;
+  const v=n=>show?eur(n):'<span class="hid">••••</span>';
+  const mese=capFirst(fromIso(T0).toLocaleDateString("it-IT",{month:"long"}));
+  return '<div class="card saldo" style="margin-bottom:16px"><div class="card-h">'+ic("card",16)+'<h3>Il tuo saldo · '+mese+'</h3><span class="more"><button class="btn sm ghost" onclick="S.saldoOn=!S.saldoOn;render()">'+ic(show?"eye":"lock",13)+' '+(show?"Nascondi":"Mostra importi")+'</button></span></div>'+
+   '<div class="grid g4"><div class="stat accent"><span class="k">Saldo del mese</span><span class="v num">'+v(inc-usc)+'</span><span class="d">incassato − uscite</span></div>'+
+   '<div class="stat"><span class="k">Incassato</span><span class="v num">'+v(inc)+'</span><span class="d">'+mv.filter(x=>x.tipo==="entrata"&&x.pag).length+' pagamenti</span></div>'+
+   '<div class="stat"><span class="k">Uscite</span><span class="v num">'+v(usc)+'</span><span class="d">affitto, utenze, materiale</span></div>'+
+   '<div class="stat"><span class="k">Da incassare</span><span class="v num">'+v(da+ppT)+'</span><span class="d">'+(pp.length?pp.length+" PayPal da confermare":"tutto in regola")+'</span></div></div>'+
+   (pp.length?'<div class="sep"></div><div class="flabel" style="margin-bottom:6px">PayPal da confermare · controlla l\'app PayPal e conferma</div>'+pp.slice(0,6).map(o=>'<div class="row"><span class="num" style="width:104px;flex:none;color:var(--gold-mid);font-size:13.5px">'+fmtD(o.s.d)+' '+o.s.h+'</span><span style="flex:1;min-width:0"><span class="nm">'+esc(o.b.nome)+'</span><span class="mt">'+esc(slotTitle(o.s,o.b))+'</span></span><b class="num" style="margin-right:6px">'+eur(o.b.pay.imp)+'</b><button class="btn sm primary" onclick="segnaPagato(\''+o.s.id+'\','+o.i+')">Ricevuto</button></div>').join(""):'')+
+   '<div class="inline" style="margin-top:12px"><button class="btn sm" onclick="go(\'conti\')">'+ic("lock",13)+' Apri la contabilità completa</button><button class="btn sm ghost" onclick="nuovoMovimento()">+ Registra un incasso o una spesa</button></div></div>';
 }
 
 /* =================== RENDER =================== */
