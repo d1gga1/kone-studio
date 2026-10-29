@@ -1,7 +1,7 @@
 /* KM Studio - service worker
    Cache della shell: sito e app si aprono anche senza rete.
    Cambia CACHE a ogni pubblicazione per forzare l'aggiornamento. */
-const CACHE = "km-studio-v16";
+const CACHE = "km-studio-v18";
 const SHELL = ["/", "/index.html", "/app.html", "/manifest.webmanifest", "/favicon.svg",
   "/favicon-32.png", "/assets/icon-192.png", "/assets/icon-512.png", "/assets/apple-touch-icon.png",
   "/assets/js/gsap.min.js", "/assets/js/ScrollTrigger.min.js", "/assets/js/lenis.min.js", "/assets/img/kone.webp",
@@ -24,6 +24,8 @@ const pageFor = url => {
 self.addEventListener("fetch", e => {
   const r = e.request;
   if (r.method !== "GET") return;
+  /* prezzi pubblicati dal titolare: sempre dalla rete, mai dalla cache */
+  if (new URL(r.url).pathname.indexOf("/assets/data/") === 0) return;
   if (r.mode === "navigate") {
     const key = pageFor(r.url);
     e.respondWith(fetch(r).then(res => {

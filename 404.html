@@ -210,6 +210,10 @@ main{flex:1;overflow:auto;overscroll-behavior:contain}
 .alert.crit{border-left-color:var(--crit)}
 .alert.warn{border-left-color:var(--warn)}
 .alert.info{border-left-color:var(--info)}
+.alert.ok{border-left-color:var(--ok)}
+.pubbar{margin-bottom:14px;align-items:center}.pubbar>div:first-child{flex:1}.pubbar p{margin:2px 0 0}
+.pubdot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ok);margin-right:8px;vertical-align:1px;box-shadow:0 0 0 3px rgba(79,168,106,.2)}
+@media (max-width:600px){.pubbar{flex-wrap:wrap}}
 .alert b{font-weight:600;font-size:14px}
 .alert p{font-size:13px;color:var(--txt-2);margin-top:2px}
 .alert .btn{margin-left:auto;flex:none;align-self:center}
@@ -442,6 +446,31 @@ input[type=range]{accent-color:var(--gold);width:100%}
 .mini{width:40px;height:40px;border-radius:9px;overflow:hidden;flex:none;background:var(--surf-3);display:grid;place-items:center;color:var(--gold-mid)}
 .mini img{width:100%;height:100%;object-fit:cover}
 
+
+/* guida a passaggi */
+#tour{position:fixed;inset:0;z-index:95;display:none}
+#tour.on{display:block}
+#tour .tv{position:fixed;inset:0;background:rgba(5,5,6,.74);opacity:0;transition:opacity .25s}
+#tour.center .tv{opacity:1}
+#tour .ts{position:fixed;border-radius:12px;box-shadow:0 0 0 2px var(--gold),0 0 0 9999px rgba(5,5,6,.74);transition:left .3s ease,top .3s ease,width .3s ease,height .3s ease;pointer-events:none}
+#tour.center .ts{opacity:0}
+#tour .tc{position:fixed;width:min(350px,calc(100vw - 24px));background:linear-gradient(170deg,#211C10,var(--surf) 55%);border:1px solid var(--gold-deep);border-radius:16px;
+  padding:16px 16px 14px;box-shadow:var(--shadow);transition:left .3s ease,top .3s ease;animation:tcIn .3s ease}
+#tour .tc::after{content:"";position:absolute;left:calc(var(--ax,50%) - 7px);top:-7px;width:12px;height:12px;background:#211C10;border-left:1px solid var(--gold-deep);border-top:1px solid var(--gold-deep);transform:rotate(45deg)}
+#tour .tc.up::after{top:auto;bottom:-7px;background:var(--surf);border:none;border-right:1px solid var(--gold-deep);border-bottom:1px solid var(--gold-deep)}
+#tour.center .tc::after{display:none}
+#tour.center .tc{text-align:center}
+@keyframes tcIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.tc-ic{width:52px;height:52px;border-radius:50%;margin:2px auto 10px;display:grid;place-items:center;color:#150F04;background:linear-gradient(150deg,var(--gold-mid),var(--gold-deep))}
+.tc-step{font-family:var(--disp);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+#tour .tc h4{font-family:var(--disp);font-size:19px;text-transform:uppercase;letter-spacing:.04em;margin:3px 0 6px;color:var(--txt)}
+#tour .tc p{margin:0;font-size:14.5px;line-height:1.5;color:var(--txt-2)}
+.tc-dots{display:flex;gap:5px;margin:14px 0 12px}
+#tour.center .tc-dots{justify-content:center}
+.tc-dots i{width:6px;height:6px;border-radius:99px;background:var(--line);transition:all .25s}
+.tc-dots i.ok{background:var(--gold-deep)}.tc-dots i.on{width:18px;background:var(--gold)}
+.tc-b{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+@media (prefers-reduced-motion:reduce){#tour .ts,#tour .tc{transition:none;animation:none}}
 /* listino */
 .price{font-family:var(--disp);font-size:18px;font-weight:600;color:var(--gold-hi);white-space:nowrap;font-variant-numeric:tabular-nums}
 .price small{font-family:var(--sans);font-size:11.5px;font-weight:400;color:var(--txt-3);display:block;letter-spacing:0}
@@ -474,9 +503,25 @@ input[type=range]{accent-color:var(--gold);width:100%}
 .pblock.warm{border-left-color:#5C8BC4}.pblock.cool{border-left-color:#4FA86A}.pblock.finisher{border-left-color:#CE4B45}
 .pblock h4{font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;display:flex;gap:8px;align-items:baseline;margin-bottom:4px}
 .pblock h4 .min{margin-left:auto;color:var(--gold-mid);font-family:var(--disp);font-size:14px}
-.pex{display:flex;gap:10px;font-size:14px;padding:6px 0;border-bottom:1px dashed var(--line-soft)}
+.pex{display:flex;gap:10px;align-items:center;width:100%;text-align:left;font-size:14px;padding:6px 8px;margin:0 -8px;width:calc(100% + 16px);border-bottom:1px dashed var(--line-soft);border-radius:7px;transition:background .15s,color .15s}
 .pex:last-child{border-bottom:none}
 .pex .d{margin-left:auto;color:var(--txt-2);font-size:13px;text-align:right;flex:none;max-width:48%}
+.pex .pf{color:var(--txt-3);opacity:0;transition:opacity .15s;display:inline-flex}
+.pex:hover{background:rgba(217,169,60,.07)}.pex:hover .pf{opacity:1;color:var(--gold-mid)}
+.pex.on{background:rgba(217,169,60,.13);color:var(--gold-hi);border-bottom-color:transparent}.pex.on .pf{opacity:1;color:var(--gold)}
+.pex-hint{display:flex;align-items:center;gap:6px;margin:4px 0 2px}
+.prog-side{min-width:0}
+.pexp{position:sticky;top:14px;margin-top:16px;background:var(--ink-2);border:1px solid var(--line-soft);border-radius:12px;padding:12px}
+.pexp-h{display:flex;flex-direction:column;gap:1px;margin-bottom:10px}.pexp-h b{font-size:16px;color:var(--txt)}.pexp-h .dim{font-size:12.5px;color:var(--txt-3)}
+.pexp-ph{display:grid;gap:8px}.pexp-ph.two{grid-template-columns:1fr 1fr}
+.pexp-ph figure{margin:0;position:relative}
+.pexp-ph img{width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:9px;border:1px solid var(--line-soft);background:#000;display:block}
+.pexp-ph figcaption{position:absolute;left:6px;bottom:6px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:rgba(8,8,10,.8);padding:2px 7px;border-radius:99px;color:var(--txt-2)}
+.pexp-ph .empty{aspect-ratio:3/2;border-radius:9px;border:1px dashed var(--line);display:grid;place-items:center;align-content:center;color:var(--txt-3);font-size:13px;text-align:center;padding:10px}
+.pexp-t{font-size:13.5px;color:var(--txt-2);margin:10px 0 0;line-height:1.5}
+.pexp-empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;padding:26px 14px;color:var(--txt-3);font-size:13px;border:1px dashed var(--line);border-radius:9px}
+.pexp-empty b{color:var(--txt-2);font-family:var(--disp);letter-spacing:.08em;text-transform:uppercase;font-size:12.5px;margin-top:4px}
+@media (max-width:900px){.pexp{display:none}}
 .why{margin:0;padding-left:18px;font-size:13.5px;color:var(--txt-2)}
 .why li{margin:5px 0}
 .rk{display:flex;gap:9px;align-items:flex-start;font-size:13px;padding:6px 0;border-bottom:1px solid var(--line-soft)}
@@ -838,6 +883,9 @@ button.pp.warn:hover{background:rgba(224,151,58,.28)}
       <button class="icon-btn" id="tbPreview" onclick="scegliVistaCliente()" title="Guarda l'app come un cliente" aria-label="Vista cliente" hidden>
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12Z"/><circle cx="12" cy="12" r="3"/></svg>
       </button>
+      <button class="icon-btn tb-help" id="tbHelp" onclick="tourStart()" title="Guida all'app" aria-label="Guida all'app" hidden>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2.5-3 4.5"/><path d="M12 17.5h.01"/></svg>
+      </button>
       <button class="icon-btn" onclick="esci()" title="Esci" aria-label="Esci">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
       </button>
@@ -854,6 +902,7 @@ button.pp.warn:hover{background:rgba(224,151,58,.28)}
 <div id="rest"><div><div class="l">Recupero</div><div class="t" id="restT">1:30</div></div><button class="btn sm" onclick="stopRest()">Salta</button></div>
 <div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="modal-card" id="modalCard" role="dialog" aria-modal="true"></div></div>
 <div class="toast" id="toast"></div>
+<div id="tour" role="dialog" aria-modal="true" aria-labelledby="tourT"><div class="tv"></div><div class="ts"></div><div class="tc" id="tourC"></div></div>
 
 <script>
 /* =====================================================================
@@ -979,6 +1028,9 @@ const BENEFICI=[["lotus","Riduce stress e ansia"],["muscle","Rilassa i muscoli e
 /* nome, gruppo, istruzioni, foto partenza, foto arrivo (foto: archivio libero di pubblico dominio) */
 const EX_SEED=[["Panca piana bilanciere", "Petto", "Scapole strette e piedi a terra. Il bilanciere scende al petto basso, gomiti a circa 45°.", "/assets/img/esercizi/panca-piana-bilanciere-a.webp", "/assets/img/esercizi/panca-piana-bilanciere-b.webp"], ["Squat bilanciere", "Gambe", "Bilanciere sui trapezi, petto alto, scendi finché le anche passano sotto le ginocchia mantenendo la schiena neutra.", "/assets/img/esercizi/squat-bilanciere-a.webp", "/assets/img/esercizi/squat-bilanciere-b.webp"], ["Stacco rumeno", "Femorali", "Ginocchia appena flesse, spingi indietro le anche e porta il bilanciere lungo le cosce fino a metà tibia.", "/assets/img/esercizi/stacco-rumeno-a.webp", "/assets/img/esercizi/stacco-rumeno-b.webp"], ["Lat machine presa larga", "Dorso", "Petto verso la barra, tira con i gomiti verso i fianchi senza dondolare.", "/assets/img/esercizi/lat-machine-presa-larga-a.webp", "/assets/img/esercizi/lat-machine-presa-larga-b.webp"], ["Rematore bilanciere", "Dorso", "Busto a 45°, schiena neutra, porta il bilanciere all'ombelico.", "/assets/img/esercizi/rematore-bilanciere-a.webp", "/assets/img/esercizi/rematore-bilanciere-b.webp"], ["Military press", "Spalle", "In piedi, glutei e addome contratti, spingi sopra la testa senza inarcare la zona lombare.", "/assets/img/esercizi/military-press-a.webp", "/assets/img/esercizi/military-press-b.webp"], ["Affondi con manubri", "Gambe", "Passo lungo, ginocchio posteriore verso terra, busto dritto.", "/assets/img/esercizi/affondi-con-manubri-a.webp", "/assets/img/esercizi/affondi-con-manubri-b.webp"], ["Leg press 45°", "Gambe", "Piedi alla larghezza delle spalle, scendi controllato senza staccare il bacino dallo schienale.", "/assets/img/esercizi/leg-press-45-a.webp", "/assets/img/esercizi/leg-press-45-b.webp"], ["Croci ai cavi", "Petto", "Gomiti leggermente flessi, cerca l'allungamento e chiudi davanti al petto.", "/assets/img/esercizi/croci-ai-cavi-a.webp", "/assets/img/esercizi/croci-ai-cavi-b.webp"], ["Curl bilanciere EZ", "Bicipiti", "Gomiti fermi ai fianchi, sali senza slanci.", "/assets/img/esercizi/curl-bilanciere-ez-a.webp", "/assets/img/esercizi/curl-bilanciere-ez-b.webp"], ["French press manubrio", "Tricipiti", "Manubrio dietro la testa, gomiti fermi e rivolti in avanti.", "/assets/img/esercizi/french-press-manubrio-a.webp", "/assets/img/esercizi/french-press-manubrio-b.webp"], ["Hip thrust", "Glutei", "Scapole sulla panca, spingi col tallone e chiudi i glutei in alto.", "/assets/img/esercizi/hip-thrust-a.webp", "/assets/img/esercizi/hip-thrust-b.webp"], ["Alzate laterali", "Spalle", "Gomiti morbidi, sali fino all'altezza delle spalle, scendi lento.", "/assets/img/esercizi/alzate-laterali-a.webp", "/assets/img/esercizi/alzate-laterali-b.webp"], ["Plank frontale", "Core", "Gomiti sotto le spalle, corpo in linea, respira senza far cadere il bacino.", "/assets/img/esercizi/plank-frontale-a.webp", "/assets/img/esercizi/plank-frontale-b.webp"], ["Pulley basso", "Dorso", "Busto fermo, porta la maniglia all'addome e apri il petto.", "/assets/img/esercizi/pulley-basso-a.webp", "/assets/img/esercizi/pulley-basso-b.webp"], ["Leg curl sdraiato", "Femorali", "Bacino schiacciato sulla panca, sali e scendi controllato.", "/assets/img/esercizi/leg-curl-sdraiato-a.webp", "/assets/img/esercizi/leg-curl-sdraiato-b.webp"], ["Circuito metabolico", "Condizionamento", "Kettlebell swing, remoergometro, battle rope: lavoro a intervalli.", "/assets/img/esercizi/circuito-metabolico-a.webp", "/assets/img/esercizi/circuito-metabolico-b.webp"], ["Panca inclinata bilanciere", "Petto", "Panca a 30-45°. Il bilanciere scende sotto le clavicole, scapole addotte e glutei sulla panca.", "/assets/img/esercizi/panca-inclinata-bilanciere-a.webp", "/assets/img/esercizi/panca-inclinata-bilanciere-b.webp"], ["Panca declinata bilanciere", "Petto", "Piedi bloccati, il bilanciere scende alla parte bassa del petto. Lavora sul fascio inferiore.", "/assets/img/esercizi/panca-declinata-bilanciere-a.webp", "/assets/img/esercizi/panca-declinata-bilanciere-b.webp"], ["Panca piana manubri", "Petto", "Manubri all'altezza del petto, spingi in alto avvicinandoli senza farli sbattere.", "/assets/img/esercizi/panca-piana-manubri-a.webp", "/assets/img/esercizi/panca-piana-manubri-b.webp"], ["Panca inclinata manubri", "Petto", "Panca a 30°, scendi fino a sentire l'allungamento del petto, spingi in alto e leggermente verso l'interno.", "/assets/img/esercizi/panca-inclinata-manubri-a.webp", "/assets/img/esercizi/panca-inclinata-manubri-b.webp"], ["Croci con manubri", "Petto", "Gomiti leggermente flessi e fermi, apri ad arco fino all'allungamento, chiudi stringendo il petto.", "/assets/img/esercizi/croci-con-manubri-a.webp", "/assets/img/esercizi/croci-con-manubri-b.webp"], ["Croci su panca inclinata", "Petto", "Come le croci piane ma su panca a 30°: enfasi sul petto alto.", "/assets/img/esercizi/croci-su-panca-inclinata-a.webp", "/assets/img/esercizi/croci-su-panca-inclinata-b.webp"], ["Pectoral machine", "Petto", "Schiena appoggiata, chiudi le braccia davanti al petto e torna lento senza far toccare i pesi.", "/assets/img/esercizi/pectoral-machine-a.webp", "/assets/img/esercizi/pectoral-machine-b.webp"], ["Piegamenti sulle braccia", "Petto", "Mani sotto le spalle, corpo in linea dalla testa ai talloni, petto a un pugno da terra.", "/assets/img/esercizi/piegamenti-sulle-braccia-a.webp", "/assets/img/esercizi/piegamenti-sulle-braccia-b.webp"], ["Piegamenti su rialzo", "Petto", "Mani su panca o box: versione più facile dei piegamenti, stessa tecnica.", "/assets/img/esercizi/piegamenti-su-rialzo-a.webp", "/assets/img/esercizi/piegamenti-su-rialzo-b.webp"], ["Dip alle parallele (petto)", "Petto", "Busto leggermente in avanti, scendi finché le spalle sono all'altezza dei gomiti, risali spingendo.", "/assets/img/esercizi/dip-alle-parallele-petto-a.webp", "/assets/img/esercizi/dip-alle-parallele-petto-b.webp"], ["Panca piana al multipower", "Petto", "Bilanciere guidato: utile per lavorare in sicurezza vicino al cedimento.", "/assets/img/esercizi/panca-piana-al-multipower-a.webp", "/assets/img/esercizi/panca-piana-al-multipower-b.webp"], ["Lat machine presa stretta", "Dorso", "Presa stretta, tira la barra al petto portando i gomiti in basso e indietro.", "/assets/img/esercizi/lat-machine-presa-stretta-a.webp", "/assets/img/esercizi/lat-machine-presa-stretta-b.webp"], ["Trazioni alla sbarra", "Dorso", "Presa prona poco più larga delle spalle, sali finché il mento supera la sbarra, scendi a braccia distese.", "/assets/img/esercizi/trazioni-alla-sbarra-a.webp", "/assets/img/esercizi/trazioni-alla-sbarra-b.webp"], ["Trazioni presa supina", "Dorso", "Palmi verso di te, sali col petto verso la sbarra: lavorano molto anche i bicipiti.", "/assets/img/esercizi/trazioni-presa-supina-a.webp", "/assets/img/esercizi/trazioni-presa-supina-b.webp"], ["Rematore con manubrio", "Dorso", "Mano e ginocchio sulla panca, schiena piatta, porta il manubrio verso l'anca.", "/assets/img/esercizi/rematore-con-manubrio-a.webp", "/assets/img/esercizi/rematore-con-manubrio-b.webp"], ["Rematore T-bar", "Dorso", "Busto inclinato e fermo, tira la maniglia al petto stringendo le scapole.", "/assets/img/esercizi/rematore-t-bar-a.webp", "/assets/img/esercizi/rematore-t-bar-b.webp"], ["Pulldown a braccia tese", "Dorso", "Braccia quasi tese, porta la barra dalle spalle alle cosce lavorando solo con i dorsali.", "/assets/img/esercizi/pulldown-a-braccia-tese-a.webp", "/assets/img/esercizi/pulldown-a-braccia-tese-b.webp"], ["Hyperextension", "Dorso", "Bacino sul cuscino, scendi con la schiena neutra e risali fino alla linea del corpo, senza iperestendere.", "/assets/img/esercizi/hyperextension-a.webp", "/assets/img/esercizi/hyperextension-b.webp"], ["Rematore al multipower", "Dorso", "Busto a 45°, porta il bilanciere guidato verso l'ombelico.", "/assets/img/esercizi/rematore-al-multipower-a.webp", "/assets/img/esercizi/rematore-al-multipower-b.webp"], ["Stacco da terra", "Dorso", "Bilanciere sopra metà piede, schiena neutra, spingi il pavimento e chiudi le anche in alto.", "/assets/img/esercizi/stacco-da-terra-a.webp", "/assets/img/esercizi/stacco-da-terra-b.webp"], ["Stacco sumo", "Glutei", "Piedi larghi e punte in fuori, presa interna, busto più verticale dello stacco classico.", "/assets/img/esercizi/stacco-sumo-a.webp", "/assets/img/esercizi/stacco-sumo-b.webp"], ["Lento avanti manubri seduto", "Spalle", "Schiena appoggiata, spingi i manubri sopra la testa senza bloccare i gomiti.", "/assets/img/esercizi/lento-avanti-manubri-seduto-a.webp", "/assets/img/esercizi/lento-avanti-manubri-seduto-b.webp"], ["Shoulder press manubri", "Spalle", "Manubri all'altezza delle orecchie, spingi in verticale e scendi controllato.", "/assets/img/esercizi/shoulder-press-manubri-a.webp", "/assets/img/esercizi/shoulder-press-manubri-b.webp"], ["Arnold press", "Spalle", "Parti coi palmi verso di te e ruota mentre spingi in alto: coinvolge tutti i fasci della spalla.", "/assets/img/esercizi/arnold-press-a.webp", "/assets/img/esercizi/arnold-press-b.webp"], ["Alzate frontali", "Spalle", "Braccia quasi tese, sali davanti fino all'altezza delle spalle, senza dondolare.", "/assets/img/esercizi/alzate-frontali-a.webp", "/assets/img/esercizi/alzate-frontali-b.webp"], ["Alzate posteriori", "Spalle", "Busto piegato in avanti, apri le braccia lateralmente stringendo le scapole.", "/assets/img/esercizi/alzate-posteriori-a.webp", "/assets/img/esercizi/alzate-posteriori-b.webp"], ["Face pull ai cavi", "Spalle", "Corda all'altezza del viso, tira verso la fronte aprendo i gomiti: ottimo per la postura.", "/assets/img/esercizi/face-pull-ai-cavi-a.webp", "/assets/img/esercizi/face-pull-ai-cavi-b.webp"], ["Tirate al mento", "Spalle", "Presa media, porta il bilanciere fino al petto alto con i gomiti che guidano.", "/assets/img/esercizi/tirate-al-mento-a.webp", "/assets/img/esercizi/tirate-al-mento-b.webp"], ["Scrollate bilanciere", "Spalle", "Braccia tese, alza le spalle verso le orecchie e tieni un secondo in alto.", "/assets/img/esercizi/scrollate-bilanciere-a.webp", "/assets/img/esercizi/scrollate-bilanciere-b.webp"], ["Front squat", "Gambe", "Bilanciere sulle spalle davanti, gomiti alti, busto verticale mentre scendi.", "/assets/img/esercizi/front-squat-a.webp", "/assets/img/esercizi/front-squat-b.webp"], ["Goblet squat", "Gambe", "Manubrio o kettlebell al petto, scendi tra le ginocchia mantenendo il busto alto.", "/assets/img/esercizi/goblet-squat-a.webp", "/assets/img/esercizi/goblet-squat-b.webp"], ["Squat a corpo libero", "Gambe", "Piedi alla larghezza delle spalle, scendi portando indietro le anche, talloni a terra.", "/assets/img/esercizi/squat-a-corpo-libero-a.webp", "/assets/img/esercizi/squat-a-corpo-libero-b.webp"], ["Squat al multipower", "Gambe", "Piedi leggermente avanti rispetto al bilanciere, scendi controllato a schiena neutra.", "/assets/img/esercizi/squat-al-multipower-a.webp", "/assets/img/esercizi/squat-al-multipower-b.webp"], ["Hack squat", "Gambe", "Schiena contro lo schienale, scendi fino a 90° o più senza staccare i talloni.", "/assets/img/esercizi/hack-squat-a.webp", "/assets/img/esercizi/hack-squat-b.webp"], ["Affondi camminati bilanciere", "Gambe", "Passo lungo e alternato, ginocchio posteriore vicino a terra, busto dritto.", "/assets/img/esercizi/affondi-camminati-bilanciere-a.webp", "/assets/img/esercizi/affondi-camminati-bilanciere-b.webp"], ["Split squat con manubri", "Gambe", "Gambe divaricate avanti-dietro, scendi in verticale e risali spingendo col piede davanti.", "/assets/img/esercizi/split-squat-con-manubri-a.webp", "/assets/img/esercizi/split-squat-con-manubri-b.webp"], ["Affondi indietro", "Gambe", "Fai un passo indietro e scendi: più gentile per le ginocchia degli affondi in avanti.", "/assets/img/esercizi/affondi-indietro-a.webp", "/assets/img/esercizi/affondi-indietro-b.webp"], ["Step-up con manubri", "Gambe", "Sali sul box spingendo col tallone della gamba davanti, scendi controllato.", "/assets/img/esercizi/step-up-con-manubri-a.webp", "/assets/img/esercizi/step-up-con-manubri-b.webp"], ["Leg extension", "Gambe", "Rullo sopra le caviglie, estendi le gambe e tieni un attimo in alto, scendi lento.", "/assets/img/esercizi/leg-extension-a.webp", "/assets/img/esercizi/leg-extension-b.webp"], ["Squat sumo con manubrio", "Gambe", "Piedi larghi e punte in fuori, manubrio tra le gambe, scendi con il busto dritto.", "/assets/img/esercizi/squat-sumo-con-manubrio-a.webp", "/assets/img/esercizi/squat-sumo-con-manubrio-b.webp"], ["Adductor machine", "Gambe", "Chiudi le gambe contro la resistenza e torna lento: lavora l'interno coscia.", "/assets/img/esercizi/adductor-machine-a.webp", "/assets/img/esercizi/adductor-machine-b.webp"], ["Calf raise in piedi", "Polpacci", "Sali sulle punte il più in alto possibile, tieni un secondo, scendi sotto il livello del gradino.", "/assets/img/esercizi/calf-raise-in-piedi-a.webp", "/assets/img/esercizi/calf-raise-in-piedi-b.webp"], ["Calf raise seduto", "Polpacci", "Ginocchia sotto il cuscino, sali sulle punte: lavora il soleo.", "/assets/img/esercizi/calf-raise-seduto-a.webp", "/assets/img/esercizi/calf-raise-seduto-b.webp"], ["Ponte glutei con bilanciere", "Glutei", "Schiena a terra, bilanciere sulle anche, spingi coi talloni e chiudi i glutei in alto.", "/assets/img/esercizi/ponte-glutei-con-bilanciere-a.webp", "/assets/img/esercizi/ponte-glutei-con-bilanciere-b.webp"], ["Slanci dietro (kickback)", "Glutei", "In quadrupedia, spingi una gamba indietro e in alto senza inarcare la schiena.", "/assets/img/esercizi/slanci-dietro-kickback-a.webp", "/assets/img/esercizi/slanci-dietro-kickback-b.webp"], ["Abductor machine", "Glutei", "Apri le gambe contro la resistenza: lavora gluteo medio e fianchi.", "/assets/img/esercizi/abductor-machine-a.webp", "/assets/img/esercizi/abductor-machine-b.webp"], ["Stacco gambe tese manubri", "Femorali", "Gambe quasi tese, scendi coi manubri vicini alle gambe finché senti tirare i femorali.", "/assets/img/esercizi/stacco-gambe-tese-manubri-a.webp", "/assets/img/esercizi/stacco-gambe-tese-manubri-b.webp"], ["Leg curl seduto", "Femorali", "Piega le ginocchia portando i talloni sotto la seduta, torna controllato.", "/assets/img/esercizi/leg-curl-seduto-a.webp", "/assets/img/esercizi/leg-curl-seduto-b.webp"], ["Good morning", "Femorali", "Bilanciere sulle spalle, ginocchia morbide, piega le anche con la schiena neutra.", "/assets/img/esercizi/good-morning-a.webp", "/assets/img/esercizi/good-morning-b.webp"], ["Curl bilanciere", "Bicipiti", "Gomiti fermi ai fianchi, sali fino alle spalle e scendi lento senza slanci.", "/assets/img/esercizi/curl-bilanciere-a.webp", "/assets/img/esercizi/curl-bilanciere-b.webp"], ["Curl con manubri", "Bicipiti", "Alterna o insieme, ruota il palmo verso l'alto mentre sali.", "/assets/img/esercizi/curl-con-manubri-a.webp", "/assets/img/esercizi/curl-con-manubri-b.webp"], ["Curl a martello", "Bicipiti", "Palmi uno di fronte all'altro, sali senza muovere i gomiti: lavora anche l'avambraccio.", "/assets/img/esercizi/curl-a-martello-a.webp", "/assets/img/esercizi/curl-a-martello-b.webp"], ["Curl alla panca Scott", "Bicipiti", "Braccia appoggiate al cuscino, scendi fino quasi a distendere e risali stringendo.", "/assets/img/esercizi/curl-alla-panca-scott-a.webp", "/assets/img/esercizi/curl-alla-panca-scott-b.webp"], ["Curl di concentrazione", "Bicipiti", "Seduto, gomito appoggiato all'interno coscia, sali lento e stringi in alto.", "/assets/img/esercizi/curl-di-concentrazione-a.webp", "/assets/img/esercizi/curl-di-concentrazione-b.webp"], ["Curl a martello ai cavi", "Bicipiti", "Corda al cavo basso, gomiti fermi, porta le mani verso le spalle.", "/assets/img/esercizi/curl-a-martello-ai-cavi-a.webp", "/assets/img/esercizi/curl-a-martello-ai-cavi-b.webp"], ["Pushdown tricipiti", "Tricipiti", "Gomiti incollati ai fianchi, spingi la barra in basso fino a distendere le braccia.", "/assets/img/esercizi/pushdown-tricipiti-a.webp", "/assets/img/esercizi/pushdown-tricipiti-b.webp"], ["Pushdown con corda", "Tricipiti", "Come il pushdown, ma in basso apri la corda verso l'esterno.", "/assets/img/esercizi/pushdown-con-corda-a.webp", "/assets/img/esercizi/pushdown-con-corda-b.webp"], ["Skull crusher bilanciere EZ", "Tricipiti", "Sdraiato, porta il bilanciere verso la fronte piegando solo i gomiti, poi distendi.", "/assets/img/esercizi/skull-crusher-bilanciere-ez-a.webp", "/assets/img/esercizi/skull-crusher-bilanciere-ez-b.webp"], ["Panca presa stretta", "Tricipiti", "Mani alla larghezza delle spalle, gomiti vicini al corpo mentre scendi.", "/assets/img/esercizi/panca-presa-stretta-a.webp", "/assets/img/esercizi/panca-presa-stretta-b.webp"], ["Dip su panca", "Tricipiti", "Mani sulla panca dietro di te, scendi piegando i gomiti a 90° e risali.", "/assets/img/esercizi/dip-su-panca-a.webp", "/assets/img/esercizi/dip-su-panca-b.webp"], ["Kickback tricipiti", "Tricipiti", "Busto in avanti, gomito alto e fermo, distendi il braccio indietro.", "/assets/img/esercizi/kickback-tricipiti-a.webp", "/assets/img/esercizi/kickback-tricipiti-b.webp"], ["Plank laterale", "Core", "Gomito sotto la spalla, corpo in linea, non far scendere il fianco.", "/assets/img/esercizi/plank-laterale-a.webp", "/assets/img/esercizi/plank-laterale-b.webp"], ["Crunch", "Core", "Ginocchia piegate, solleva le spalle da terra arrotolando la schiena, senza tirare il collo.", "/assets/img/esercizi/crunch-a.webp", "/assets/img/esercizi/crunch-b.webp"], ["Crunch obliqui", "Core", "Porta il gomito verso il ginocchio opposto ruotando il busto.", "/assets/img/esercizi/crunch-obliqui-a.webp", "/assets/img/esercizi/crunch-obliqui-b.webp"], ["Sollevamento gambe alla sbarra", "Core", "Appeso alla sbarra, porta le gambe in alto senza dondolare.", "/assets/img/esercizi/sollevamento-gambe-alla-sbarra-a.webp", "/assets/img/esercizi/sollevamento-gambe-alla-sbarra-b.webp"], ["Sforbiciate", "Core", "Schiena bassa schiacciata a terra, gambe tese che si alternano su e giù.", "/assets/img/esercizi/sforbiciate-a.webp", "/assets/img/esercizi/sforbiciate-b.webp"], ["Russian twist", "Core", "Busto inclinato indietro, ruota da un lato all'altro tenendo l'addome contratto.", "/assets/img/esercizi/russian-twist-a.webp", "/assets/img/esercizi/russian-twist-b.webp"], ["Ruota per addominali", "Core", "In ginocchio, rotola in avanti mantenendo la schiena piatta e torna con l'addome.", "/assets/img/esercizi/ruota-per-addominali-a.webp", "/assets/img/esercizi/ruota-per-addominali-b.webp"], ["Dead bug", "Core", "Schiena a terra, allunga braccio e gamba opposti mantenendo la zona lombare appoggiata.", "/assets/img/esercizi/dead-bug-a.webp", "/assets/img/esercizi/dead-bug-b.webp"], ["Crunch ai cavi", "Core", "In ginocchio, corda dietro la testa, arrotola il busto verso il basso con l'addome.", "/assets/img/esercizi/crunch-ai-cavi-a.webp", "/assets/img/esercizi/crunch-ai-cavi-b.webp"], ["Superman", "Core", "A pancia in giù, solleva insieme braccia e gambe e tieni due secondi.", "/assets/img/esercizi/superman-a.webp", "/assets/img/esercizi/superman-b.webp"], ["Mountain climber", "Core", "In plank alto, porta le ginocchia al petto alternandole a ritmo veloce.", "/assets/img/esercizi/mountain-climber-a.webp", "/assets/img/esercizi/mountain-climber-b.webp"], ["Thruster con kettlebell", "Condizionamento", "Squat con kettlebell al petto e, risalendo, spinta sopra la testa in un unico movimento.", "/assets/img/esercizi/thruster-con-kettlebell-a.webp", "/assets/img/esercizi/thruster-con-kettlebell-b.webp"], ["Box jump", "Condizionamento", "Salta sul box atterrando morbido a ginocchia piegate, scendi camminando.", "/assets/img/esercizi/box-jump-a.webp", "/assets/img/esercizi/box-jump-b.webp"], ["Salto della corda", "Condizionamento", "Salti piccoli sulle punte, polsi che girano la corda, gomiti vicini al corpo.", "/assets/img/esercizi/salto-della-corda-a.webp", "/assets/img/esercizi/salto-della-corda-b.webp"], ["Vogatore", "Condizionamento", "Spingi prima con le gambe, poi apri il busto e tira con le braccia; ritorno nell'ordine inverso.", "/assets/img/esercizi/vogatore-a.webp", "/assets/img/esercizi/vogatore-b.webp"], ["Crunch a bicicletta", "Core", "Schiena a terra, porta il gomito verso il ginocchio opposto alternando i lati come se pedalassi.", "/assets/img/esercizi/crunch-a-bicicletta-a.webp", "/assets/img/esercizi/crunch-a-bicicletta-b.webp"], ["Battle rope", "Condizionamento", "Gambe semipiegate, onde alternate e veloci con le braccia mantenendo il core attivo.", "/assets/img/esercizi/battle-rope-a.webp", "/assets/img/esercizi/battle-rope-b.webp"], ["Farmer walk", "Condizionamento", "Un peso per mano, cammina con passi corti, spalle basse e busto dritto.", "/assets/img/esercizi/farmer-walk-a.webp", "/assets/img/esercizi/farmer-walk-b.webp"], ["Spinta della slitta", "Condizionamento", "Busto inclinato, braccia tese sulla slitta, spingi con passi corti e potenti.", "/assets/img/esercizi/spinta-della-slitta-a.webp", "/assets/img/esercizi/spinta-della-slitta-b.webp"], ["Inchworm", "Condizionamento", "Dalla posizione in piedi cammina con le mani fino al plank e torna indietro.", "/assets/img/esercizi/inchworm-a.webp", "/assets/img/esercizi/inchworm-b.webp"], ["World's greatest stretch", "Mobilità e stretching", "Affondo profondo, gomito verso il piede davanti, poi ruota il busto aprendo il braccio al cielo.", "/assets/img/esercizi/world-s-greatest-stretch-a.webp", "/assets/img/esercizi/world-s-greatest-stretch-b.webp"], ["Allungamento femorali 90/90", "Mobilità e stretching", "Schiena a terra, coscia a 90°, distendi la gamba fino a sentire tirare dietro la coscia.", "/assets/img/esercizi/allungamento-femorali-90-90-a.webp", "/assets/img/esercizi/allungamento-femorali-90-90-b.webp"], ["Cat-cow", "Mobilità e stretching", "In quadrupedia, alterna schiena arrotondata e schiena incavata seguendo il respiro.", "/assets/img/esercizi/cat-cow-a.webp", "/assets/img/esercizi/cat-cow-b.webp"], ["Posizione del bambino", "Mobilità e stretching", "Seduto sui talloni, allunga le braccia in avanti e rilassa la schiena.", "/assets/img/esercizi/posizione-del-bambino-a.webp", "/assets/img/esercizi/posizione-del-bambino-b.webp"], ["Allungamento flessori dell'anca", "Mobilità e stretching", "In affondo con il ginocchio a terra, porta il bacino in avanti mantenendo il busto dritto.", "/assets/img/esercizi/allungamento-flessori-dell-anca-a.webp", "/assets/img/esercizi/allungamento-flessori-dell-anca-b.webp"], ["Allungamento quadricipiti", "Mobilità e stretching", "In piedi, porta il tallone al gluteo tenendo le ginocchia vicine.", "/assets/img/esercizi/allungamento-quadricipiti-a.webp", "/assets/img/esercizi/allungamento-quadricipiti-b.webp"], ["Allungamento femorali", "Mobilità e stretching", "Gamba tesa, piegati in avanti con la schiena lunga finché senti tirare.", "/assets/img/esercizi/allungamento-femorali-a.webp", "/assets/img/esercizi/allungamento-femorali-b.webp"], ["Allungamento pettorali", "Mobilità e stretching", "Apri le braccia all'indietro aprendo il petto, poi richiudi, in modo dinamico.", "/assets/img/esercizi/allungamento-pettorali-a.webp", "/assets/img/esercizi/allungamento-pettorali-b.webp"], ["Ponte glutei a corpo libero", "Mobilità e stretching", "Schiena a terra, arrotola il bacino e solleva le anche vertebra per vertebra.", "/assets/img/esercizi/ponte-glutei-a-corpo-libero-a.webp", "/assets/img/esercizi/ponte-glutei-a-corpo-libero-b.webp"], ["Allungamento polpacci", "Mobilità e stretching", "Mani al muro, gamba dietro tesa e tallone a terra, spingi il bacino in avanti.", "/assets/img/esercizi/allungamento-polpacci-a.webp", "/assets/img/esercizi/allungamento-polpacci-b.webp"]];
 
+/* Enciclopedia esercizi KM Studio (446 esercizi e varianti, 19 gruppi): [nome, gruppo]. Senza foto: Kone le aggiunge dalla libreria. */
+const EX_ENC=[["Panca piana bilanciere", "Petto"], ["Panca piana manubri", "Petto"], ["Panca inclinata bilanciere", "Petto"], ["Panca inclinata manubri", "Petto"], ["Panca declinata bilanciere", "Petto"], ["Panca declinata manubri", "Petto"], ["Chest press orizzontale", "Petto"], ["Chest press inclinata", "Petto"], ["Chest press convergente", "Petto"], ["Smith machine incline press", "Petto"], ["Croci ai cavi alti", "Petto"], ["Croci ai cavi medi", "Petto"], ["Croci ai cavi bassi", "Petto"], ["Cable press unilaterale", "Petto"], ["Butterfly machine", "Petto"], ["Push-up sulle ginocchia", "Petto"], ["Push-up declinati", "Petto"], ["Push-up presa larga", "Petto"], ["Push-up stretti", "Petto"], ["Push-up con elastico", "Petto"], ["Push-up zavorrati", "Petto"], ["Push-up pliometrici", "Petto"], ["Svend press", "Petto"], ["Landmine chest press", "Petto"], ["Trazioni presa neutra", "Dorso"], ["Trazioni assistite", "Dorso"], ["Lat machine presa stretta", "Dorso"], ["Lat machine presa inversa", "Dorso"], ["Lat machine unilaterale", "Dorso"], ["Pulldown a braccia tese", "Dorso"], ["Pullover ai cavi", "Dorso"], ["Pullover con manubrio", "Dorso"], ["Pullover machine", "Dorso"], ["Rematore bilanciere", "Dorso"], ["Rematore bilanciere presa inversa", "Dorso"], ["Rematore due manubri", "Dorso"], ["Rematore su panca inclinata", "Dorso"], ["Rematore T-bar", "Dorso"], ["Landmine row", "Dorso"], ["Pendlay row", "Dorso"], ["Seal row", "Dorso"], ["Meadows row", "Dorso"], ["Pulley basso presa larga", "Dorso"], ["Pulley unilaterale", "Dorso"], ["Seated cable row", "Dorso"], ["High row machine", "Dorso"], ["Low row machine", "Dorso"], ["Rematore macchina convergente", "Dorso"], ["Inverted row", "Dorso"], ["Rematore TRX", "Dorso"], ["Rematore con elastico", "Dorso"], ["Reverse pec deck", "Dorso"], ["Scrollate manubri", "Dorso"], ["Scrollate bilanciere", "Dorso"], ["Scrollate alla Smith machine", "Dorso"], ["Rack pull", "Dorso"], ["Shoulder press machine", "Spalle"], ["Shoulder press Smith machine", "Spalle"], ["Arnold press", "Spalle"], ["Push press", "Spalle"], ["Landmine press", "Spalle"], ["Landmine press unilaterale", "Spalle"], ["Z press", "Spalle"], ["Alzate laterali ai cavi", "Spalle"], ["Alzate laterali unilaterali", "Spalle"], ["Alzate laterali da seduto", "Spalle"], ["Alzate laterali alla macchina", "Spalle"], ["Alzate laterali con elastico", "Spalle"], ["Alzate frontali bilanciere", "Spalle"], ["Alzate frontali al cavo", "Spalle"], ["Alzate frontali con disco", "Spalle"], ["Reverse fly panca inclinata", "Spalle"], ["Reverse fly ai cavi", "Spalle"], ["Rear delt row", "Spalle"], ["Alzate a Y su panca", "Spalle"], ["Alzate a T su panca", "Spalle"], ["Scaption raise", "Spalle"], ["Cuban press", "Spalle"], ["Handstand push-up", "Spalle"], ["Pike push-up", "Spalle"], ["Curl bilanciere EZ", "Bicipiti"], ["Curl manubri simultanei", "Bicipiti"], ["Curl manubri panca inclinata", "Bicipiti"], ["Curl martello incrociato", "Bicipiti"], ["Curl inverso bilanciere", "Bicipiti"], ["Curl inverso manubri", "Bicipiti"], ["Curl Scott unilaterale", "Bicipiti"], ["Curl Scott macchina", "Bicipiti"], ["Spider curl", "Bicipiti"], ["Drag curl", "Bicipiti"], ["Curl ai cavi bassi", "Bicipiti"], ["Curl ai cavi alti", "Bicipiti"], ["Curl unilaterale al cavo", "Bicipiti"], ["Bayesian cable curl", "Bicipiti"], ["Curl con elastico", "Bicipiti"], ["Zottman curl", "Bicipiti"], ["Curl 21", "Bicipiti"], ["Pushdown barra V", "Tricipiti"], ["Pushdown presa inversa", "Tricipiti"], ["Pushdown unilaterale", "Tricipiti"], ["French press bilanciere EZ", "Tricipiti"], ["Estensioni sopra testa manubrio", "Tricipiti"], ["Estensioni sopra testa al cavo", "Tricipiti"], ["Estensioni sopra testa con corda", "Tricipiti"], ["Estensioni tricipiti unilaterali", "Tricipiti"], ["Kickback al cavo", "Tricipiti"], ["Panca presa stretta", "Tricipiti"], ["Panca stretta Smith machine", "Tricipiti"], ["Dip alle parallele", "Tricipiti"], ["Dip su panca", "Tricipiti"], ["Diamond push-up", "Tricipiti"], ["JM press", "Tricipiti"], ["Tate press", "Tricipiti"], ["TRX triceps extension", "Tricipiti"], ["Estensioni con elastico", "Tricipiti"], ["Wrist curl bilanciere", "Avambracci e presa"], ["Wrist curl manubri", "Avambracci e presa"], ["Reverse wrist curl", "Avambracci e presa"], ["Reverse curl", "Avambracci e presa"], ["Pronazione avambraccio con manubrio", "Avambracci e presa"], ["Supinazione avambraccio con manubrio", "Avambracci e presa"], ["Deviazione radiale polso", "Avambracci e presa"], ["Deviazione ulnare polso", "Avambracci e presa"], ["Suitcase carry", "Avambracci e presa"], ["Dead hang", "Avambracci e presa"], ["Towel hang", "Avambracci e presa"], ["Plate pinch hold", "Avambracci e presa"], ["Gripper per la presa", "Avambracci e presa"], ["Wrist roller", "Avambracci e presa"], ["Finger extension con elastico", "Avambracci e presa"], ["Front squat", "Gambe"], ["Goblet squat", "Gambe"], ["Zercher squat", "Gambe"], ["Box squat", "Gambe"], ["Pause squat", "Gambe"], ["Heel elevated squat", "Gambe"], ["Cyclist squat", "Gambe"], ["Hack squat", "Gambe"], ["Hack squat macchina", "Gambe"], ["Sissy squat", "Gambe"], ["Spanish squat", "Gambe"], ["Wall sit", "Gambe"], ["Leg press orizzontale", "Gambe"], ["Leg press verticale", "Gambe"], ["Leg press unilaterale", "Gambe"], ["Leg extension", "Gambe"], ["Leg extension unilaterale", "Gambe"], ["Affondi indietro", "Gambe"], ["Affondi laterali", "Gambe"], ["Bulgarian split squat", "Gambe"], ["Step-down", "Gambe"], ["Pistol squat", "Gambe"], ["Squat con elastico", "Gambe"], ["Jump squat", "Gambe"], ["Reverse Nordic curl", "Gambe"], ["Stacco rumeno manubri", "Femorali"], ["Stacco rumeno unilaterale", "Femorali"], ["Good morning con elastico", "Femorali"], ["Leg curl sdraiato", "Femorali"], ["Leg curl seduto", "Femorali"], ["Leg curl in piedi", "Femorali"], ["Leg curl unilaterale", "Femorali"], ["Leg curl fitball", "Femorali"], ["Leg curl slider", "Femorali"], ["Leg curl con elastico", "Femorali"], ["Nordic hamstring curl", "Femorali"], ["Glute ham raise", "Femorali"], ["Cable pull-through", "Femorali"], ["Kettlebell swing", "Femorali"], ["Stacco sumo", "Femorali"], ["Hip hinge con bastone", "Femorali"], ["Single leg hip hinge", "Femorali"], ["Razor curl", "Femorali"], ["Hip thrust manubrio", "Glutei"], ["Hip thrust Smith machine", "Glutei"], ["Hip thrust macchina", "Glutei"], ["Hip thrust monopodalico", "Glutei"], ["Glute bridge monopodalico", "Glutei"], ["Frog pump", "Glutei"], ["Squat profondo", "Glutei"], ["Step-up alto", "Glutei"], ["Stacco rumeno", "Glutei"], ["Kickback glutei al cavo", "Glutei"], ["Kickback macchina", "Glutei"], ["Fire hydrant", "Glutei"], ["Abduzioni al cavo", "Glutei"], ["Abduzioni con elastico", "Glutei"], ["Clamshell", "Glutei"], ["Monster walk", "Glutei"], ["Lateral band walk", "Glutei"], ["Side lying hip abduction", "Glutei"], ["Curtsy lunge", "Glutei"], ["Reverse hyperextension", "Glutei"], ["Back extension enfasi glutei", "Glutei"], ["Single leg Romanian deadlift", "Glutei"], ["Adductor machine", "Adduttori"], ["Adduzione anca al cavo", "Adduttori"], ["Adduzione anca con elastico", "Adduttori"], ["Adduzione laterale da sdraiato", "Adduttori"], ["Copenhagen plank", "Adduttori"], ["Copenhagen plank dinamico", "Adduttori"], ["Affondo laterale", "Adduttori"], ["Cossack squat", "Adduttori"], ["Side lunge manubri", "Adduttori"], ["Scivolamenti laterali slider", "Adduttori"], ["Adductor squeeze con palla", "Adduttori"], ["Isometria palla tra ginocchia", "Adduttori"], ["Abductor machine", "Abduttori e anca"], ["Abduzione anca al cavo", "Abduttori e anca"], ["Abduzione con miniband", "Abduttori e anca"], ["Camminata laterale con elastico", "Abduttori e anca"], ["Clamshell con elastico", "Abduttori e anca"], ["Side lying leg raise", "Abduttori e anca"], ["Standing hip abduction", "Abduttori e anca"], ["Side plank con abduzione", "Abduttori e anca"], ["Single leg balance", "Abduttori e anca"], ["Hip airplane", "Abduttori e anca"], ["Step-down controllato", "Abduttori e anca"], ["Lateral step-up", "Abduttori e anca"], ["Single leg squat assistito", "Abduttori e anca"], ["Calf raise in piedi", "Polpacci"], ["Calf raise seduto", "Polpacci"], ["Calf raise macchina", "Polpacci"], ["Calf raise Smith machine", "Polpacci"], ["Calf raise leg press", "Polpacci"], ["Calf raise unilaterale", "Polpacci"], ["Donkey calf raise", "Polpacci"], ["Calf raise su step", "Polpacci"], ["Calf raise con manubri", "Polpacci"], ["Calf raise ginocchia flesse", "Polpacci"], ["Calf raise isometrico", "Polpacci"], ["Calf raise eccentrico", "Polpacci"], ["Saltelli su avampiedi", "Polpacci"], ["Pogo jumps", "Polpacci"], ["Tibialis raise al muro", "Tibiali e caviglie"], ["Tibialis raise macchina", "Tibiali e caviglie"], ["Dorsiflessione con elastico", "Tibiali e caviglie"], ["Dorsiflessione con cavigliera", "Tibiali e caviglie"], ["Camminata sui talloni", "Tibiali e caviglie"], ["Eversione caviglia con elastico", "Tibiali e caviglie"], ["Inversione caviglia con elastico", "Tibiali e caviglie"], ["Equilibrio monopodalico", "Tibiali e caviglie"], ["Equilibrio superficie instabile", "Tibiali e caviglie"], ["Short foot exercise", "Tibiali e caviglie"], ["Toe raises", "Tibiali e caviglie"], ["Toe yoga", "Tibiali e caviglie"], ["Crunch fitball", "Core"], ["Crunch macchina", "Core"], ["Reverse crunch", "Core"], ["Sit-up", "Core"], ["Sit-up con disco", "Core"], ["V-up", "Core"], ["Jackknife", "Core"], ["Toe touches", "Core"], ["Hollow body hold", "Core"], ["Hollow rock", "Core"], ["Dead bug", "Core"], ["Plank tocco spalle", "Core"], ["Plank sollevamento gamba", "Core"], ["Rollout fitball", "Core"], ["Mountain climber", "Core"], ["Hanging knee raise", "Core"], ["Captain's chair knee raise", "Core"], ["Leg raise a terra", "Core"], ["Side plank dinamico", "Core"], ["Pallof press", "Core"], ["Pallof press in ginocchio", "Core"], ["Pallof hold", "Core"], ["Cable woodchopper alto-basso", "Core"], ["Cable woodchopper basso-alto", "Core"], ["Russian twist", "Core"], ["Heel touches", "Core"], ["Bird dog", "Core"], ["Offset farmer's carry", "Core"], ["Renegade row", "Core"], ["Plank laterale con abduzione", "Core"], ["Landmine rotation", "Core"], ["Cable rotation", "Core"], ["Anti-rotation walkout", "Core"], ["Stir the pot", "Core"], ["Bear plank", "Core"], ["Back extension orizzontale", "Lombari"], ["Roman chair extension", "Lombari"], ["Superman", "Lombari"], ["Good morning", "Lombari"], ["Sorensen hold", "Lombari"], ["Quadruped opposite arm-leg raise", "Lombari"], ["Deadlift isometrico", "Lombari"], ["Rotazione esterna al cavo", "Cuffia rotatori e scapole"], ["Rotazione esterna con elastico", "Cuffia rotatori e scapole"], ["Rotazione esterna sul fianco", "Cuffia rotatori e scapole"], ["Rotazione esterna a 90 gradi", "Cuffia rotatori e scapole"], ["Rotazione interna al cavo", "Cuffia rotatori e scapole"], ["Rotazione interna con elastico", "Cuffia rotatori e scapole"], ["Face pull con rotazione esterna", "Cuffia rotatori e scapole"], ["Wall slide", "Cuffia rotatori e scapole"], ["Wall angel", "Cuffia rotatori e scapole"], ["Push-up plus", "Cuffia rotatori e scapole"], ["Serratus punch", "Cuffia rotatori e scapole"], ["Serratus wall slide", "Cuffia rotatori e scapole"], ["Prone Y raise", "Cuffia rotatori e scapole"], ["Prone T raise", "Cuffia rotatori e scapole"], ["Prone W raise", "Cuffia rotatori e scapole"], ["Scapular pull-up", "Cuffia rotatori e scapole"], ["Scapular push-up", "Cuffia rotatori e scapole"], ["Band pull-apart", "Cuffia rotatori e scapole"], ["Cuban rotation", "Cuffia rotatori e scapole"], ["Bottoms-up kettlebell carry", "Cuffia rotatori e scapole"], ["Trap-3 raise", "Collo e trapezi"], ["Depressione scapolare al cavo", "Collo e trapezi"], ["Chin tuck", "Collo e trapezi"], ["Chin tuck contro parete", "Collo e trapezi"], ["Flessione cervicale isometrica", "Collo e trapezi"], ["Estensione cervicale isometrica", "Collo e trapezi"], ["Flessione laterale cervicale isometrica", "Collo e trapezi"], ["Rotazione cervicale controllata", "Collo e trapezi"], ["Burpee", "Condizionamento"], ["Squat thrust", "Condizionamento"], ["Thruster con manubri", "Condizionamento"], ["Thruster bilanciere", "Condizionamento"], ["Clean and press", "Condizionamento"], ["Hang clean", "Condizionamento"], ["Power clean", "Condizionamento"], ["Kettlebell clean", "Condizionamento"], ["Kettlebell snatch", "Condizionamento"], ["Turkish get-up", "Condizionamento"], ["Man maker", "Condizionamento"], ["Devil press", "Condizionamento"], ["Bear crawl", "Condizionamento"], ["Crab walk", "Condizionamento"], ["Sled pull", "Condizionamento"], ["Battle rope slams", "Condizionamento"], ["Box jump", "Condizionamento"], ["Broad jump", "Condizionamento"], ["Jumping jack", "Condizionamento"], ["High knees", "Condizionamento"], ["Skater jump", "Condizionamento"], ["Jump lunge", "Condizionamento"], ["Step-up con carico", "Condizionamento"], ["Medicine ball slam", "Condizionamento"], ["Medicine ball chest pass", "Condizionamento"], ["Medicine ball rotational throw", "Condizionamento"], ["Treadmill incline walk", "Condizionamento"], ["Treadmill intervals", "Condizionamento"], ["Circuito con manubri", "Condizionamento"], ["Circuito corpo libero", "Condizionamento"]];
+
 const SCHEDA_SEED={
   nome:"Ricomposizione · Blocco 2 — settimana 6/8",
   giorni:[
@@ -1094,10 +1146,143 @@ const TPL={
   0:[]
 };
 
+
+/* Esercizi del motore Corsi · IA: [nome, gruppo, come si fa, foto] — foto = nome file in assets/img/esercizi/ (senza -a/-b), null = da caricare.
+   Foto: Free Exercise DB, pubblico dominio. Si aggiungono alla libreria (Kone può cambiarle da Esercizi). */
+const EX_CORSI=[
+ ["Front squat con manubri","Gambe","Manubri appoggiati sulle spalle, gomiti alti. Scendi con il busto dritto finché le cosce sono parallele, poi spingi sui talloni.","front-squat"],
+ ["Jump squat","Gambe","Scendi in squat, poi salta spingendo forte con le gambe. Atterra morbido sulle punte e torna subito in squat.","jump-squat"],
+ ["Affondi alternati","Gambe","Passo indietro, scendi finché entrambe le ginocchia sono a 90°, poi torna su e cambia gamba. Busto dritto.","affondi-indietro"],
+ ["Step-up sul box","Gambe","Appoggia tutto il piede sul box e sali spingendo con la gamba davanti, senza darti la spinta da terra. Scendi controllando.","step-up-con-manubri"],
+ ["Kettlebell swing","Glutei","Spingi le anche indietro con la schiena piatta, poi chiudi i glutei di scatto: la kettlebell sale fino al petto grazie alle anche, non alle braccia.","kettlebell-swing"],
+ ["Stacco rumeno con manubri","Femorali","Ginocchia appena flesse, porta le anche indietro facendo scorrere i manubri lungo le gambe. Senti i femorali tirare, poi risali stringendo i glutei.","stacco-gambe-tese-manubri"],
+ ["Hip thrust a terra","Glutei","Sdraiato a terra, piedi vicini ai glutei. Spingi sui talloni e solleva il bacino fino ad allineare spalle, anche e ginocchia. Stringi in alto 1 secondo.","ponte-glutei-a-corpo-libero"],
+ ["Good morning con elastico","Femorali","Elastico sotto i piedi e dietro il collo. Schiena dritta, inclinati in avanti portando le anche indietro, poi risali.","good-morning-con-elastico"],
+ ["Distensioni manubri a terra","Petto","Sdraiato a terra, manubri sopra il petto. Scendi finché i gomiti toccano il pavimento, poi spingi in alto.","distensioni-manubri-a-terra"],
+ ["Spinte sopra la testa con manubri","Spalle","Manubri all'altezza delle spalle, addome contratto. Spingi in alto fino a braccia tese, senza inarcare la schiena.","shoulder-press-manubri"],
+ ["Push press con kettlebell","Spalle","Piccola piegata sulle ginocchia, poi spingi con le gambe e porta la kettlebell sopra la testa a braccio teso.","push-press-con-kettlebell"],
+ ["Rematore al TRX","Dorso","Corpo dritto e inclinato all'indietro, braccia tese. Tira il petto verso le maniglie stringendo le scapole, poi scendi lento.","rematore-al-trx"],
+ ["Tirate con elastico","Dorso","Elastico sotto i piedi, tira le mani verso il mento tenendo i gomiti più alti dei polsi. Scendi controllando.","tirate-con-elastico"],
+ ["High pull con kettlebell","Spalle","Gambe larghe, kettlebell a terra tra i piedi. Spingi con le gambe e tira la kettlebell fino al petto con i gomiti alti.","high-pull-con-kettlebell"],
+ ["Renegade row","Dorso","In posizione di piegamento sulle kettlebell o manubri. Tira un peso al fianco senza ruotare il bacino, appoggia e cambia lato.","renegade-row"],
+ ["Plank","Core","Gomiti sotto le spalle, corpo in linea dalla testa ai talloni. Respira senza far cadere il bacino.","plank-frontale"],
+ ["Slam ball","Condizionamento","Porta la palla sopra la testa in punta di piedi, poi scagliala a terra con forza piegando le anche. Riprendila con la schiena dritta.","slam-ball"],
+ ["Burpees","Condizionamento","Scendi in squat, mani a terra, salta indietro in plank, piegamento facoltativo, rientra con i piedi e salta in alto con le braccia sopra la testa.",null],
+ ["Jumping jack","Condizionamento","Salta aprendo gambe e braccia, poi richiudi. Atterra sulle punte con le ginocchia morbide.","jumping-jack"],
+ ["Skip sul posto","Condizionamento","Corri sul posto portando le ginocchia all'altezza dei fianchi, braccia che accompagnano il movimento.","skip-sul-posto"],
+ ["Air bike","Condizionamento","Seduto con la schiena dritta, spingi con le gambe e tira/spingi le maniglie con le braccia. Ritmo costante.","air-bike"],
+ ["Marcia veloce con ginocchia alte","Condizionamento","Marcia sul posto portando le ginocchia in alto, busto dritto e braccia che oscillano. Senza saltare.",null],
+ ["Mobilità articolare dinamica","Mobilità e stretching","Cerchi lenti e ampi con collo, spalle, braccia, anche e caviglie. 8-10 per lato, senza forzare.","mobilita-articolare-dinamica"],
+ ["Camminata con affondo e rotazione","Mobilità e stretching","Fai un affondo in avanti e ruota il busto verso la gamba davanti, poi passo successivo con l'altra gamba.","camminata-con-affondo-e-rotazione"],
+ ["Cat-cow e rotazioni toraciche","Mobilità e stretching","In quadrupedia alterna schiena tonda e schiena incavata col respiro, poi porta una mano dietro la testa e ruota aprendo il gomito verso il soffitto.","cat-cow"],
+ ["Ponte glutei","Glutei","Sdraiato, piedi vicini ai glutei. Solleva il bacino stringendo i glutei, tieni 1 secondo e scendi lento.","ponte-glutei-a-corpo-libero"],
+ ["Andature leggere","Condizionamento","Camminata e corsa leggera alternando calciata dietro, ginocchia alte e passi laterali, per scaldarsi gradualmente.",null],
+ ["Attivazione spalle con elastico","Cuffia rotatori e scapole","Elastico davanti a te a braccia tese. Aprilo fino al petto stringendo le scapole, poi torna lento.","attivazione-spalle-con-elastico"],
+ ["90/90 delle anche","Mobilità e stretching","Seduto con entrambe le gambe piegate a 90°, una davanti e una di lato. Busto dritto, poi ruota le ginocchia dall'altra parte.",null],
+ ["Squat profondo assistito al TRX","Mobilità e stretching","Tieni le maniglie e scendi nello squat più profondo possibile con i talloni a terra. Resta giù respirando, usa il TRX per stare in equilibrio.",null],
+ ["Thoracic bridge","Mobilità e stretching","Da quadrupedia inversa (mani e piedi a terra, pancia in su) solleva il bacino e ruota il busto portando un braccio oltre la testa.",null],
+ ["Cossack squat","Mobilità e stretching","Gambe molto larghe. Scendi su una gamba tenendo l'altra tesa con la punta verso l'alto, poi passa dall'altra parte.",null],
+ ["Wall slide","Cuffia rotatori e scapole","Schiena e braccia appoggiate al muro a forma di W. Fai scivolare le braccia in alto fino a Y senza staccarle dal muro.",null],
+ ["Bird dog","Core","In quadrupedia, allunga braccio destro e gamba sinistra mantenendo il bacino fermo. Torna e cambia lato.",null],
+ ["Rotazioni del bacino in quadrupedia","Mobilità e stretching","In quadrupedia, solleva un ginocchio di lato e disegna cerchi ampi con l'anca. 8 per verso, poi cambia gamba.","rotazioni-del-bacino-in-quadrupedia"],
+ ["Respirazione diaframmatica","Mobilità e stretching","Sdraiato, una mano sulla pancia. Inspira dal naso gonfiando la pancia (non il petto), espira lentamente dalla bocca.",null],
+ ["Allungamento catena posteriore","Mobilità e stretching","Gambe tese, piegati in avanti dalle anche con la schiena lunga finché senti tirare dietro le gambe. Tieni 30 secondi respirando.","allungamento-femorali"],
+ ["Allungamento quadricipiti e flessori","Mobilità e stretching","In piedi, porta il tallone verso il gluteo e spingi leggermente il bacino in avanti. 30 secondi per gamba.","allungamento-quadricipiti"],
+ ["Allungamento pettorali e spalle","Mobilità e stretching","Avambraccio appoggiato al muro, ruota lentamente il busto dalla parte opposta finché senti allungare il petto. 30 secondi per lato.","allungamento-pettorali"]
+];
+
 /* =================== ARCHIVIO =================== */
 const DBV=3;
 let DB=null;
-function save(){if(!LS.set("db",DB))toast("Memoria del browser piena: alcune modifiche potrebbero non restare")}
+function save(){prezziCheck();if(!LS.set("db",DB))toast("Memoria del browser piena: alcune modifiche potrebbero non restare")}
+
+/* =================== PREZZI CONDIVISI · il listino del titolare arriva a tutti i clienti ===================
+   Il listino (voci, sedute, prezzi, sconti, trattamenti, link PayPal) viene pubblicato nel file
+   /assets/data/listino.json del sito. Ogni app (clienti, /prenota/, /prezzi/) lo legge all'apertura e ogni pochi minuti.
+   La pubblicazione parte da sola quando Kone cambia qualcosa nel Listino (serve collegarla una volta: Listino → Collega). */
+const PUB_FILE="assets/data/listino.json",PUB_DEF={repo:"d1gga1/kone-studio",branch:"main"};
+const PUB={st:"",msg:"",again:false};
+let _pSig=null,_pT=null;
+function pubTok(){try{return localStorage.getItem("km2_pubtok")||""}catch(e){return ""}}
+function pubCfg(){return Object.assign({},PUB_DEF,(DB&&DB.settings.pub)||{})}
+function prezziSnap(){return {listino:DB.listino,
+  trattamenti:DB.trattamenti.map(t=>{const o={};Object.keys(t).forEach(k=>{const v=t[k];if(!(typeof v==="string"&&v.slice(0,5)==="data:"))o[k]=v});return o}),
+  paypal:DB.settings.paypal||""}}
+const prezziSig=()=>JSON.stringify(prezziSnap());
+function prezziCheck(){
+  if(!DB||_pSig===null)return;
+  const sig=prezziSig();if(sig===_pSig)return;_pSig=sig;
+  if(S.role!=="coach")return;
+  DB.settings.prezziAgg=new Date().toISOString();DB.settings.prezziPend=true;
+  clearTimeout(_pT);if(pubTok())_pT=setTimeout(pubblicaPrezzi,1800);
+  setTimeout(refreshPubBar,0);
+}
+async function pubblicaPrezzi(){
+  const tok=pubTok();if(!tok){refreshPubBar();return}
+  if(PUB.st==="busy"){PUB.again=true;return}
+  PUB.st="busy";PUB.msg="";refreshPubBar();
+  const cfg=pubCfg(),api="https://api.github.com/repos/"+cfg.repo+"/contents/"+PUB_FILE,
+    H={Authorization:"Bearer "+tok,Accept:"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28"};
+  const agg=DB.settings.prezziAgg||new Date().toISOString();
+  try{
+    for(let tent=0;tent<2;tent++){
+      let sha;const g=await fetch(api+"?ref="+encodeURIComponent(cfg.branch)+"&t="+Date.now(),{headers:H,cache:"no-store"});
+      if(g.ok)sha=(await g.json()).sha;else if(g.status!==404)throw new Error(g.status===401?"chiave di accesso non valida o scaduta":"GitHub risponde "+g.status);
+      const body=Object.assign({agg:agg,nota:"File scritto dal pannello titolare: non modificarlo a mano."},prezziSnap());
+      const content=btoa(unescape(encodeURIComponent(JSON.stringify(body,null,1))));
+      const r=await fetch(api,{method:"PUT",headers:H,body:JSON.stringify({message:"Listino aggiornato dal pannello titolare",content:content,sha:sha,branch:cfg.branch})});
+      if(r.ok){if(DB.settings.prezziAgg===agg)DB.settings.prezziPend=false;DB.settings.prezziPub=new Date().toISOString();LS.set("db",DB);PUB.st="ok";break}
+      if(r.status===409||r.status===422&&tent===0)continue;
+      throw new Error(r.status===401?"chiave di accesso non valida o scaduta":r.status===403||r.status===404?"la chiave non ha il permesso di scrivere nel sito (Contents: Read and write)":"GitHub risponde "+r.status);
+    }
+    if(PUB.st==="busy")throw new Error("conflitto di versione, riprova");
+  }catch(e){PUB.st="err";PUB.msg=e.message||"rete non disponibile"}
+  refreshPubBar();
+  if(PUB.again){PUB.again=false;if(DB.settings.prezziPend)pubblicaPrezzi()}
+}
+async function caricaPrezzi(){
+  if(!/^https?:$/.test(location.protocol)||!DB)return;
+  try{
+    const r=await fetch("/"+PUB_FILE+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;
+    const j=await r.json();if(!j||!j.listino||!j.agg)return;
+    if(j.agg<=(DB.settings.prezziAgg||""))return;
+    if(DB.settings.prezziPend)return; /* modifiche del titolare non ancora pubblicate: vincono le sue */
+    DB.listino=j.listino;
+    if(Array.isArray(j.trattamenti)&&j.trattamenti.length){const old=DB.trattamenti;
+      DB.trattamenti=j.trattamenti.map(t=>{const o=old.find(x=>x.id===t.id);if(o)Object.keys(o).forEach(k=>{if(t[k]===undefined&&typeof o[k]==="string"&&o[k].slice(0,5)==="data:")t[k]=o[k]});return t})}
+    if(j.paypal)DB.settings.paypal=j.paypal;
+    DB.settings.prezziAgg=j.agg;_pSig=prezziSig();LS.set("db",DB);
+    if(el("app").classList.contains("show")&&!el("modal").classList.contains("on")&&!(document.activeElement&&/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)))render();
+  }catch(e){}
+}
+function refreshPubBar(){const b=el("pubBar");if(b)b.innerHTML=pubBarHTML()}
+function pubBarHTML(){
+  const ora=t=>t?new Date(t).toLocaleString("it-IT",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}):"";
+  if(!pubTok())return '<div class="alert warn pubbar"><div><b>I clienti non vedono ancora le tue modifiche</b><p>Per ora i prezzi che cambi restano su questo dispositivo. Collega la pubblicazione una volta sola: da quel momento ogni modifica arriva da sola nell\'app di tutti i clienti, nella pagina Prenota e nella pagina Prezzi del sito.</p></div><button class="btn sm primary" onclick="pubSetup()">Collega</button></div>';
+  if(PUB.st==="busy")return '<div class="alert info pubbar"><div><b>Pubblico i prezzi per tutti i clienti…</b><p>Bastano pochi secondi.</p></div></div>';
+  if(PUB.st==="err"||DB.settings.prezziPend&&PUB.st!=="busy")return '<div class="alert crit pubbar"><div><b>Modifiche non ancora arrivate ai clienti</b><p>'+(PUB.msg?esc(PUB.msg)+'. ':'')+'Le tue modifiche sono salvate qui: tocca Pubblica per mandarle a tutti.</p></div><div class="inline"><button class="btn sm primary" onclick="pubblicaPrezzi()">Pubblica</button><button class="btn sm ghost" onclick="pubSetup()">Impostazioni</button></div></div>';
+  return '<div class="alert ok pubbar"><div><b><i class="pubdot"></i>Prezzi sincronizzati con tutti i clienti</b><p>Ogni modifica si pubblica da sola'+(DB.settings.prezziPub?' · ultima pubblicazione '+ora(DB.settings.prezziPub):'')+'. Sui telefoni dei clienti arriva entro un paio di minuti.</p></div><button class="btn sm ghost" onclick="pubSetup()">Impostazioni</button></div>';
+}
+function pubSetup(){const c=pubCfg(),t=pubTok();
+  openModal('<h3>Pubblicazione automatica dei prezzi</h3><p class="muted" style="margin-bottom:14px">Il listino viene salvato nel sito (file <code>'+PUB_FILE+'</code>) e tutte le app dei clienti lo leggono da lì. Serve una chiave di accesso di GitHub, da creare una volta sola e da usare <b>solo sul dispositivo del titolare</b>.</p>'+
+   '<ol class="inst-steps" style="margin-bottom:14px"><li><span>github.com → <b>Settings</b> → <b>Developer settings</b> → <b>Fine-grained tokens</b> → <b>Generate new token</b>.</span></li><li><span>Repository access: <b>Only select repositories</b> → <b>'+esc(c.repo.split("/")[1]||c.repo)+'</b>.</span></li><li><span>Permissions → Repository → <b>Contents: Read and write</b>. Scadenza a piacere, poi <b>Generate</b> e incolla qui sotto.</span></li></ol>'+
+   '<div class="field"><label>Chiave di accesso (token)</label><input class="fi" id="pubTk" type="password" autocomplete="off" placeholder="github_pat_…" value="'+esc(t)+'"></div>'+
+   '<div class="grid g2"><div class="field"><label>Repository del sito</label><input class="fi" id="pubRp" value="'+esc(c.repo)+'"></div><div class="field"><label>Ramo</label><input class="fi" id="pubBr" value="'+esc(c.branch)+'"></div></div>'+
+   '<p class="hint" id="pubErr" style="color:#F08A84"></p>'+
+   '<div class="inline" style="justify-content:space-between;margin-top:6px">'+(t?'<button class="btn ghost" onclick="pubScollega()">Scollega</button>':'<span></span>')+'<button class="btn primary" id="pubGo" onclick="pubSalva()">Collega e pubblica ora</button></div>')}
+async function pubSalva(){
+  const tk=el("pubTk").value.trim(),rp=el("pubRp").value.trim().replace(/^https:\/\/github\.com\//,"").replace(/\.git$/,""),br=el("pubBr").value.trim()||"main";
+  if(!tk||!/^[\w.-]+\/[\w.-]+$/.test(rp)){el("pubErr").textContent="Controlla chiave e repository (formato: utente/nome-repo).";return}
+  el("pubGo").disabled=true;el("pubGo").textContent="Verifico…";
+  try{const r=await fetch("https://api.github.com/repos/"+rp,{headers:{Authorization:"Bearer "+tk,Accept:"application/vnd.github+json"},cache:"no-store"});
+    if(!r.ok)throw new Error(r.status===401?"Chiave non valida":r.status===404?"Repository non trovato o non incluso nella chiave":"GitHub risponde "+r.status);
+    const j=await r.json();if(j.permissions&&!j.permissions.push)throw new Error("La chiave può solo leggere: serve Contents “Read and write”");
+  }catch(e){el("pubErr").textContent=e.message||"Nessuna connessione";el("pubGo").disabled=false;el("pubGo").textContent="Collega e pubblica ora";return}
+  try{localStorage.setItem("km2_pubtok",tk)}catch(e){}
+  DB.settings.pub={repo:rp,branch:br};if(!DB.settings.prezziAgg)DB.settings.prezziAgg=new Date().toISOString();DB.settings.prezziPend=true;LS.set("db",DB);
+  closeModal();toast("Collegato: pubblico i prezzi");pubblicaPrezzi();
+}
+function pubScollega(){try{localStorage.removeItem("km2_pubtok")}catch(e){}PUB.st="";closeModal();refreshPubBar();toast("Pubblicazione scollegata su questo dispositivo")}
 const corso=id=>DB.corsi.find(c=>c.id===id);
 const cli=id=>DB.clienti.find(c=>c.id===id);
 const exLib=n=>DB.esercizi.find(e=>e.n===n);
@@ -1106,7 +1291,7 @@ const clone=o=>JSON.parse(JSON.stringify(o));
 
 function initDB(){
   const d=LS.get("db",null);
-  if(d&&d.v===DBV){DB=d;migraSchede();migraPrezzi();migraEsercizi();ensureAgenda(false);autoProgrammi();return}
+  if(d&&d.v===DBV){DB=d;migraSchede();migraPrezzi();migraEsercizi();migraEnciclopedia();migraEserciziCorsi();ensureAgenda(false);autoProgrammi();return}
   DB={v:DBV,
     settings:{maxCorso:10,maxPT:3,maxTratt:2,motore:"regole",regoleOff:[],pwCoach:hashPw("kone2026"),pwConti:hashPw("conti2026")},
     clienti:clone(CLIENTI_SEED).map(c=>{if(c.pw){c.pw=hashPw(c.pw)}return c}),
@@ -1115,7 +1300,7 @@ function initDB(){
     scheda:clone(SCHEDA_SEED),chat:clone(CHAT_SEED),
     pesi:{},carichi:{},agenda:{},programmi:{},feedback:[],movimenti:[]};
   migraSchede();
-  seedPesi();seedCarichi();ensureAgenda(true);seedMarco();seedStorico();seedMovimenti();autoProgrammi();migraPrezzi();migraEsercizi();save();
+  seedPesi();seedCarichi();ensureAgenda(true);seedMarco();seedStorico();seedMovimenti();autoProgrammi();migraPrezzi();migraEsercizi();migraEnciclopedia();migraEserciziCorsi();save();
 }
 function seedPesi(){
   const marco=[88.5,88.0,87.4,87.1,86.5,86.2,85.9,85.4,85.5,85.0,84.6,84.2];
@@ -1490,6 +1675,7 @@ function loginCoach(e){e.preventDefault();
   if(hashPw(el("coachPw").value)!==DB.settings.pwCoach)return errShake("coachErr","coachForm","Password non corretta");
   el("coachPw").value="";LS.set("sess",{role:"coach"});enterApp("coach")}
 function esci(){
+  tourEnd(false);
   if(S.preview)return tornaCoach();
   LS.del("sess");S.contiOk=false;
   if(S.role==="coach")showCoachAuth();else showClientAuth();
@@ -1498,13 +1684,14 @@ function enterApp(role,cid){
   hideAll();S.role=role;S.preview=false;S.sets={};S.vals={};S.contiOk=false;
   if(role==="client"){S.cid=cid||1;S.area="allen";S.view="oggi"}else{S.area="allen";S.view="dash"}
   el("app").classList.add("show");chrome();buildNav();render();
+  if(role==="client"&&!LS.get("tour_"+S.cid,0))setTimeout(()=>{if(S.role==="client"&&!S.preview)tourStart()},700);
 }
 function chrome(){
   const coach=S.role==="coach";
   document.body.classList.toggle("client",!coach);
   el("tbSub").textContent=coach?"Area titolare":"La tua app";
   el("tbChip").textContent=coach?"Kone Moctar":me().n;
-  el("tbPreview").hidden=!coach;
+  el("tbPreview").hidden=!coach;el("tbHelp").hidden=coach;
   const pb=el("previewbar");pb.hidden=!S.preview;
   if(S.preview)pb.innerHTML=ic("eye",16)+'<span>Stai guardando l\'app come la vede <b>'+esc(me().n)+'</b></span><button class="btn sm" onclick="tornaCoach()">Torna al pannello coach</button>';
 }
@@ -1568,7 +1755,7 @@ let EXED=null;
 function editEsercizio(id){
   const x=id?DB.esercizi.find(e=>e.id===id):{id:null,n:"",m:"Petto",istr:"",foto:null,video:null};
   EXED={id:x.id,foto:x.foto,foto2:x.foto2||null,video:x.video,file:null};
-  const gruppi=[...new Set(DB.esercizi.map(e=>e.m).concat(["Petto","Dorso","Spalle","Gambe","Glutei","Femorali","Polpacci","Bicipiti","Tricipiti","Core","Condizionamento","Mobilità e stretching"]))];
+  const gruppi=[...new Set(DB.esercizi.map(e=>e.m).concat(["Petto","Dorso","Spalle","Gambe","Glutei","Femorali","Polpacci","Bicipiti","Tricipiti","Avambracci e presa","Adduttori","Abduttori e anca","Tibiali e caviglie","Core","Lombari","Cuffia rotatori e scapole","Collo e trapezi","Condizionamento","Mobilità e stretching"]))];
   openModal('<h3>'+(id?"Modifica esercizio":"Nuovo esercizio")+'</h3><p class="muted" style="margin-bottom:14px">Foto e video li vedono i clienti nella loro scheda, sotto ogni esercizio.</p>'+
    '<div class="field"><label>Nome</label><input class="fi" id="exN" value="'+esc(x.n)+'"></div>'+
    '<div class="field"><label>Gruppo muscolare</label><input class="fi" id="exM" list="exML" value="'+esc(x.m)+'" placeholder="Scegli dall\'elenco o scrivi un gruppo nuovo"><datalist id="exML">'+gruppi.map(g=>'<option value="'+esc(g)+'">').join("")+'</datalist></div>'+
@@ -1602,6 +1789,20 @@ function filtraEx(){const q=(el("exQ").value||"").trim().toLowerCase(),g=S.exg||
   document.querySelectorAll(".excard[data-n]").forEach(c=>{const ok=(!q||c.dataset.n.includes(q))&&(!g||c.dataset.g===g);c.hidden=!ok;if(ok)n++});
   document.querySelectorAll(".exgrp").forEach(c=>{c.hidden=!c.querySelector(".excard:not([hidden])")});
   const r=el("exRes");if(r)r.textContent=n+" esercizi"}
+function migraEnciclopedia(){
+  if(DB.settings.exEnc1)return;
+  const have=new Set(DB.esercizi.map(e=>e.n.toLowerCase()));
+  EX_ENC.forEach(e=>{if(!have.has(e[0].toLowerCase())){DB.esercizi.push({id:"ex"+uid(),n:e[0],m:e[1],istr:"",foto:null,foto2:null,video:null});have.add(e[0].toLowerCase())}});
+  DB.settings.exEnc1=true;save();
+}
+function migraEserciziCorsi(){
+  if(DB.settings.exCorsi1)return;
+  EX_CORSI.forEach(e=>{const f=e[3]?"/assets/img/esercizi/"+e[3]+"-a.webp":null,f2=e[3]?"/assets/img/esercizi/"+e[3]+"-b.webp":null;
+    const x=DB.esercizi.find(y=>y.n.toLowerCase()===e[0].toLowerCase());
+    if(x){if(!x.foto&&f){x.foto=f;x.foto2=f2}if(!x.istr)x.istr=e[2]}
+    else DB.esercizi.push({id:"ex"+uid(),n:e[0],m:e[1],istr:e[2],foto:f,foto2:f2,video:null})});
+  DB.settings.exCorsi1=true;
+}
 function migraEsercizi(){
   if(DB.settings.exLib2)return;
   EX_SEED.forEach(e=>{const x=DB.esercizi.find(y=>y.n.toLowerCase()===e[0].toLowerCase());
@@ -1772,7 +1973,7 @@ function priceTxt(r,k){return scAtt(r)?'<span class="pold">'+eur(r[k||"p"])+'</s
 function priceCell(path,v,label){const p=path.split("."),k=p.pop(),r=objAt(p.join("."));
   if(S.role==="coach")return '<input class="inp pin" inputmode="decimal" value="'+v+'" onchange="setPrezzo(\''+path+'\',this.value)" aria-label="'+esc(label)+'"> €'+(scAtt(r)?'<span class="scx">scontato '+eur(pEff(r,k))+'</span>':'');
   return '<span class="price">'+priceTxt(r,k)+'</span>'+(scAtt(r)?' <span class="pill sc">−'+r.sc+'%</span>':'')}
-function setPrezzo(path,v){const n=num(v);if(n==null||n<0)return toast("Prezzo non valido");const p=path.split(".");let o=DB;for(let i=0;i<p.length-1;i++)o=o[p[i]];o[p[p.length-1]]=n;save();render();toast("Prezzo salvato · lo vedono subito i clienti")}
+function setPrezzo(path,v){const n=num(v);if(n==null||n<0)return toast("Prezzo non valido");const p=path.split(".");let o=DB;for(let i=0;i<p.length-1;i++)o=o[p[i]];o[p[p.length-1]]=n;save();render();toast(pubTok()?"Prezzo salvato · lo pubblico per tutti i clienti":"Prezzo salvato su questo dispositivo")}
 function setCampo(path,v,t){const p=path.split("."),k=p.pop(),o=objAt(p.join("."));if(!o)return;
   if(t==="n"){const n=parseInt(v);if(isNaN(n)||n<0)return toast("Numero non valido");o[k]=n;save();render();toast(n?"Sedute aggiornate":"Impostato: illimitati");return}
   v=String(v).trim();if(k==="n"&&!v)return toast("Il nome non può essere vuoto"),render();o[k]=v;save();toast("Salvato")}
@@ -1838,9 +2039,10 @@ function vListino(){
   const tools=coach?'<div class="lhead-tools"><button class="btn" onclick="scontoTutti()">% Sconto su più voci</button></div>':"";
   const nSc=righeAmbito("tutto").filter(scAtt).length;
   const intro=coach?'<div class="alert info" style="margin-bottom:14px"><div><b>Il listino è tuo</b><p>Cambia nomi, descrizioni, sedute e prezzi direttamente nelle tabelle (si salva da solo quando esci dalla casella). Con “+ Aggiungi voce” crei un pacchetto nuovo, col cestino lo togli, con “% sconto” fai una promozione. I clienti vedono tutto subito.'+(nSc?' <b>'+nSc+' sconti attivi.</b>':'')+'</p></div></div>':(nSc?'<div class="alert info" style="margin-bottom:14px"><div><b>Promozioni in corso</b><p>I prezzi scontati sono già indicati qui sotto.</p></div></div>':'');
-  if(S.area==="allen")return head(coach?"Listino · Allenamenti":"Prezzi · Allenamenti",coach?"Modifichi e i clienti lo vedono subito nella loro app":"One to one con Kone e corsi di gruppo",tools)+intro+
+  const pb=coach?'<div id="pubBar">'+pubBarHTML()+'</div>':"";
+  if(S.area==="allen")return head(coach?"Listino · Allenamenti":"Prezzi · Allenamenti",coach?"Modifichi e i clienti lo vedono subito nella loro app":"One to one con Kone e corsi di gruppo",tools)+pb+intro+
    tabL("pt").replace('style="margin-top:14px"','')+tabL("corsi",'<span class="chip">max '+DB.settings.maxCorso+' persone</span>')+tabL("abbPt")+tabL("combo")+tabL("percorsi")+pagamentiCard();
-  return head(coach?"Listino · Trattamenti":"Prezzi · Trattamenti","Ogni trattamento con i suoi benefici, la durata e il prezzo",tools)+intro+
+  return head(coach?"Listino · Trattamenti":"Prezzi · Trattamenti","Ogni trattamento con i suoi benefici, la durata e il prezzo",tools)+pb+intro+
    '<div class="card">'+cardH("lotus","I trattamenti")+
    '<table class="rt"><thead><tr><th>Trattamento</th><th>Benefici</th><th>Indicato per</th><th style="text-align:right">30′</th><th style="text-align:right">50′</th>'+(coach?'<th></th>':'')+'</tr></thead><tbody>'+
    DB.trattamenti.map((t,i)=>'<tr><td data-l="Trattamento"><div class="tname"><span class="ti">'+ic(t.ic||"lotus",18)+'</span><span><b>'+esc(t.n)+'</b><span>'+esc(t.desc)+'</span></span></div></td>'+
@@ -1950,9 +2152,28 @@ function esportaCSV(){
   const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+t],{type:"text/csv;charset=utf-8"}));a.download="contabilita-km-studio.csv";document.body.appendChild(a);a.click();a.remove()}
 
 /* =================== CORSI · IA (coach) =================== */
-function progHTML(p){
+function progHTML(p,key){
+  const sel=key&&S.pex?S.pex[key]:null;
   return p.blocchi.map(b=>'<div class="pblock '+b.fase+'"><h4>'+esc(b.nome)+'<span class="min">'+b.min+'′</span></h4>'+(b.nota?'<p class="hint" style="margin:0 0 6px">'+esc(b.nota)+'</p>':'')+
-    b.esercizi.map(e=>'<div class="pex"><span>'+esc(e.n)+'</span><span class="d">'+esc(e.d)+'</span></div>').join("")+'</div>').join("");
+    b.esercizi.map(e=>{const x=exLib(e.n);return '<button type="button" class="pex'+(sel===e.n?" on":"")+'" data-n="'+esc(e.n)+'" onclick="pexClick(this'+(key?',\''+key+'\'':'')+')" title="Vedi come si fa"><span class="pn">'+esc(e.n)+'</span>'+
+      '<span class="pf" aria-hidden="true">'+ic(x&&x.foto?"img":"eye",13)+'</span><span class="d">'+esc(e.d)+'</span></button>'}).join("")+'</div>').join("");
+}
+/* esercizio del programma: su schermo largo la foto compare nel pannello a destra, su telefono si apre la scheda */
+function pexClick(b,key){const n=b.dataset.n;
+  if(!key||!matchMedia("(min-width:901px)").matches)return vediEsercizio(n);
+  S.pex=S.pex||{};S.pex[key]=n;
+  const card=b.closest(".card");if(card)card.querySelectorAll(".pex").forEach(x=>x.classList.toggle("on",x.dataset.n===n));
+  const p=el("pexp-"+key);if(p){p.innerHTML=pexPanel(n);hydrate();const r=p.getBoundingClientRect();if(r.top<0||r.bottom>innerHeight)p.scrollIntoView({behavior:"smooth",block:"nearest"})}
+}
+function pexPanel(n){
+  if(!n)return '<div class="pexp-empty">'+ic("img",26)+'<b>Come si fa</b><span>Tocca un esercizio del programma: qui compare la foto con la spiegazione.</span></div>';
+  const x=exLib(n),coach=S.role==="coach";
+  const fig=(src,l)=>'<figure><img src="'+src+'" alt="'+esc(n)+' · '+l+'" loading="lazy"><figcaption>'+l+'</figcaption></figure>';
+  const foto=x&&x.foto?(x.foto2?'<div class="pexp-ph two">'+fig(x.foto,"Partenza")+fig(x.foto2,"Arrivo")+'</div>':'<div class="pexp-ph">'+fig(x.foto,"Esecuzione")+'</div>')
+    :'<div class="pexp-ph"><div class="empty">'+ic("img",22)+'<br>Foto non ancora caricata'+(coach?'<br><small>Aggiungila dalla libreria esercizi</small>':'')+'</div></div>';
+  return '<div class="pexp-h"><span class="flabel">Come si fa</span><b>'+esc(n)+'</b>'+(x?'<span class="dim">'+esc(x.m)+'</span>':'')+'</div>'+foto+
+   (x&&x.istr?'<p class="pexp-t">'+esc(x.istr)+'</p>':'')+(x&&x.video?'<div class="media" style="grid-template-columns:1fr;margin-top:10px">'+videoHTML(x.video)+'</div>':'')+
+   (coach?'<div class="inline" style="margin-top:10px">'+(x?'<button class="btn sm ghost" onclick="editEsercizio(\''+x.id+'\')">'+ic("edit",13)+' '+(x.foto?"Cambia foto o spiegazione":"Carica la foto")+'</button>':'<button class="btn sm ghost" onclick="go(\'libreria\')">Apri la libreria esercizi</button>')+'</div>':'');
 }
 function regoleBadge(p){const fx=p.regole.filter(r=>r.stato==="fix").length,ko=p.regole.filter(r=>r.stato==="ko").length,okn=p.regole.filter(r=>r.stato==="ok").length;
   return ko?'<span class="pill crit">'+ic("x",11)+' '+ko+' regole non rispettate</span>':fx?'<span class="pill warn">'+ic("check",11)+' '+okn+' ok · '+fx+' corrette</span>':'<span class="pill ok">'+ic("check",11)+' '+okn+' regole rispettate</span>'}
@@ -1974,15 +2195,16 @@ function corsiProg(){
    (ss.length?ss.map(s=>progCard(s)).join(""):'<div class="card"><p class="muted">Nessun corso in programma '+(S.cday?"in questo giorno":"oggi")+'.</p></div>');
 }
 function progCard(s){
-  const c=corso(s.corso),p=DB.programmi[s.d+"_"+s.corso],busy=S.busy[s.id];
+  const pk=s.d+"_"+s.corso,c=corso(s.corso),p=DB.programmi[pk],busy=S.busy[s.id];
   const meta='<div class="inline" style="margin:-4px 0 12px"><span class="pill">'+LIVELLI[c.livello]+'</span><span class="pill">'+c.durata+'′</span><span class="pill">'+s.pren.length+'/'+s.cap+' iscritti</span><span class="pill">'+esc(c.obiettivo)+'</span>'+
    (p?'<span class="pill gold">Intensità '+p.intensita+'/10</span><span class="pill '+(p.fonte.startsWith("IA")?"vio":"info")+'">'+esc(p.fonte)+'</span>'+regoleBadge(p):'')+'</div>';
   return '<div class="card '+(busy?"busy":"")+'" style="margin-bottom:14px"><div class="card-h"><span class="num" style="font-family:var(--disp);font-size:19px;color:var(--gold-mid)">'+s.h+'</span><h3>'+esc(c.n)+'</h3>'+
    '</div>'+meta+'<div class="pacts"><button class="btn sm primary" onclick="rigenera(\''+s.id+'\','+(p?"0":"1")+')">'+(busy?"Genero…":p?"Rigenera":"Genera ora")+'</button>'+(p?'<button class="btn sm" onclick="rigenera(\''+s.id+'\')">'+ic("refresh",13)+' Nuova versione</button>':'')+'<button class="btn sm" onclick="editCorso(\''+c.id+'\')">Parametri</button></div>'+
-   (p?'<div class="prog-grid"><div>'+(p.bloccato?'<div class="alert crit" style="margin-bottom:10px"><div><b>Programma bloccato</b><p>Non rispetta una regola obbligatoria: correggi i parametri o la capienza.</p></div></div>':'')+progHTML(p)+'</div>'+
-    '<div><div class="flabel" style="margin:10px 0 6px">Perché così</div><ul class="why">'+(p.why.length?p.why.map(w=>'<li>'+esc(w)+'</li>').join(""):'<li>Parametri del corso, nessun adattamento necessario.</li>')+'</ul>'+
+   (p?'<div class="prog-grid"><div>'+(p.bloccato?'<div class="alert crit" style="margin-bottom:10px"><div><b>Programma bloccato</b><p>Non rispetta una regola obbligatoria: correggi i parametri o la capienza.</p></div></div>':'')+'<p class="hint pex-hint">'+ic("img",13)+' Tocca un esercizio per vedere la foto di come si fa</p>'+progHTML(p,pk)+'</div>'+
+    '<div class="prog-side"><div class="flabel" style="margin:10px 0 6px">Perché così</div><ul class="why">'+(p.why.length?p.why.map(w=>'<li>'+esc(w)+'</li>').join(""):'<li>Parametri del corso, nessun adattamento necessario.</li>')+'</ul>'+
     '<details style="margin-top:14px"><summary class="flabel" style="cursor:pointer">Controllo regole · '+p.regole.length+' verifiche</summary><div style="margin-top:6px">'+regoleList(p)+'</div></details>'+
-    '<p class="hint">Generato '+new Date(p.creato).toLocaleString("it-IT",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})+(p.auto?" in automatico":"")+(p.ver?" · versione "+(p.ver+1):"")+'</p></div></div>'
+    '<p class="hint">Generato '+new Date(p.creato).toLocaleString("it-IT",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})+(p.auto?" in automatico":"")+(p.ver?" · versione "+(p.ver+1):"")+'</p>'+
+    '<div class="pexp" id="pexp-'+pk+'">'+pexPanel(S.pex&&S.pex[pk])+'</div></div></div>'
    :'<p class="muted">Il programma di questo giorno non è ancora stato generato. Si crea in automatico la mattina stessa, oppure puoi prepararlo adesso.</p>')+'</div>';
 }
 async function rigenera(sid,stessa){
@@ -2651,6 +2873,68 @@ function saldoCard(){
    '<div class="inline" style="margin-top:12px"><button class="btn sm" onclick="go(\'conti\')">'+ic("lock",13)+' Apri la contabilità completa</button><button class="btn sm ghost" onclick="nuovoMovimento()">+ Registra un incasso o una spesa</button></div></div>';
 }
 
+
+/* =================== GUIDA A PASSAGGI PER IL CLIENTE ===================
+   Parte da sola al primo accesso di ogni cliente; si rivede col punto interrogativo in alto. */
+const tabBtn=v=>document.querySelector('#tabbar button[onclick*="go(\''+v+'\')"]');
+const TOUR=[
+  {t:"Benvenuto in KM Studio",d:n=>"Ciao "+n+"! Questa è la tua app con Kone: allenamenti, prenotazioni, progressi e chat in un solo posto. Ti mostro come funziona in pochi passaggi.",c:1,ic:"spark"},
+  {t:"Allenamenti e trattamenti",d:()=>"L'app ha due parti. Tocca qui per passare dagli allenamenti ai massaggi e trattamenti: ognuna ha il suo menu in basso.",sel:()=>document.querySelector("#areabar .seg")},
+  {t:"Oggi",d:()=>"La tua seduta del giorno. Apri un esercizio per vedere foto e video di come si fa, scrivi i chili che usi e spunta ogni serie: il timer del recupero parte da solo.",go:"oggi"},
+  {t:"La tua scheda",d:()=>"Il programma della settimana che ha preparato Kone per te, giorno per giorno.",go:"scheda"},
+  {t:"Prenota",d:()=>"Scegli attività, giorno e orario in 4 passaggi. Se hai già un abbonamento tocca “Hai già un abbonamento?”: la seduta si scala da sola senza pagare di nuovo.",go:"prenota"},
+  {t:"Progressi",d:()=>"Registra il tuo peso e guarda il grafico. I carichi che usi in sala finiscono qui da soli quando chiudi la seduta.",go:"prog"},
+  {t:"Dieta",d:()=>"Il tuo piano alimentare, quando Kone te lo prepara.",go:"dieta"},
+  {t:"Prezzi",d:()=>"Pacchetti, abbonamenti e promozioni del momento, sempre aggiornati da Kone.",go:"listino"},
+  {t:"Chat con Kone",d:()=>"Per dubbi, spostamenti o domande scrivi qui, anche con una foto. Kone ti risponde in chat.",go:"chat"},
+  {t:"Rivedi la guida quando vuoi",d:()=>"Se ti serve di nuovo, tocca il punto interrogativo qui in alto.",sel:()=>el("tbHelp")},
+  {t:"Tutto pronto!",d:()=>"Buon allenamento. Consiglio: aggiungi l'app alla schermata Home del telefono, così la apri con un tocco come un'app vera.",c:1,ic:"check",fine:1}
+];
+let TR=null;
+function tourStart(){
+  if(S.role!=="client")return;closeModal();
+  if(S.area!=="allen")setArea("allen");
+  TR={i:0,view:S.view};el("tour").classList.add("on");document.addEventListener("keydown",tourKey);addEventListener("resize",tourPos);tourShow();
+}
+function tourEnd(fatto){
+  if(!TR)return;const v=TR.view;TR=null;
+  el("tour").classList.remove("on");document.removeEventListener("keydown",tourKey);removeEventListener("resize",tourPos);
+  if(!S.preview)LS.set("tour_"+S.cid,1);
+  if(fatto!==false&&S.view!=="oggi")go("oggi");
+}
+function tourKey(e){if(!TR)return;if(e.key==="Escape")tourEnd();else if(e.key==="ArrowRight")tourNext(1);else if(e.key==="ArrowLeft")tourNext(-1)}
+function tourNext(d){if(!TR)return;const n=TR.i+d;if(n<0)return;if(n>=TOUR.length)return tourEnd();TR.i=n;tourShow()}
+function tourTarget(st){return st.c?null:st.sel?st.sel():tabBtn(st.go)}
+function tourShow(){
+  const st=TOUR[TR.i],n=TOUR.length;
+  if(st.go&&S.view!==st.go)go(st.go);
+  const nome=esc((me().n||"").split(" ")[0]);
+  el("tourC").innerHTML=(st.c?'<div class="tc-ic">'+ic(st.ic||"spark",26)+'</div>':'')+
+   '<div class="tc-step">'+(TR.i&&TR.i<n-1?'Passo '+TR.i+' di '+(n-2):TR.i?'Fine':'Guida all\'app')+'</div>'+
+   '<h4 id="tourT">'+esc(st.t)+'</h4><p>'+st.d(nome)+'</p>'+
+   '<div class="tc-dots">'+TOUR.map((x,i)=>'<i class="'+(i===TR.i?"on":i<TR.i?"ok":"")+'"></i>').join("")+'</div>'+
+   '<div class="tc-b">'+(st.fine?'':'<button class="linkbtn" onclick="tourEnd()">Salta la guida</button>')+'<span style="flex:1"></span>'+
+   (TR.i&&!st.fine?'<button class="btn sm ghost" onclick="tourNext(-1)">Indietro</button>':'')+
+   (st.fine&&typeof installApp==="function"&&!(matchMedia("(display-mode: standalone)").matches||navigator.standalone)?'<button class="btn sm" onclick="tourEnd();installApp()">Installa l\'app</button>':'')+
+   '<button class="btn sm primary" id="tourGo" onclick="tourNext(1)">'+(TR.i===0?"Iniziamo":st.fine?"Inizia ad allenarti":"Avanti")+'</button></div>';
+  const t=tourTarget(st);
+  if(t&&t.scrollIntoView)try{t.scrollIntoView({block:"nearest",inline:"center"})}catch(e){}
+  tourPos();setTimeout(tourPos,260);
+  setTimeout(()=>{const b=el("tourGo");if(b&&TR)b.focus({preventScroll:true})},60);
+}
+function tourPos(){
+  if(!TR)return;const st=TOUR[TR.i],T=el("tour"),sp=T.querySelector(".ts"),c=el("tourC"),t=tourTarget(st);
+  const W=innerWidth,H=innerHeight,cw=c.offsetWidth,ch=c.offsetHeight;
+  const r=t&&t.offsetParent!==null?t.getBoundingClientRect():null;
+  T.classList.toggle("center",!r);
+  if(!r){c.style.left=Math.max(12,(W-cw)/2)+"px";c.style.top=Math.max(12,(H-ch)/2)+"px";return}
+  const pad=6;sp.style.left=(r.left-pad)+"px";sp.style.top=(r.top-pad)+"px";sp.style.width=(r.width+pad*2)+"px";sp.style.height=(r.height+pad*2)+"px";
+  let left=r.left+r.width/2-cw/2;left=Math.max(12,Math.min(W-cw-12,left));
+  let top=r.top>H/2?r.top-pad-14-ch:r.bottom+pad+14;top=Math.max(12,Math.min(H-ch-12,top));
+  c.style.left=left+"px";c.style.top=top+"px";
+  const ax=Math.max(18,Math.min(cw-18,r.left+r.width/2-left));c.style.setProperty("--ax",ax+"px");c.classList.toggle("up",r.top>H/2);
+}
+
 /* =================== RENDER =================== */
 function render(){
   const coach=S.role==="coach";
@@ -2661,7 +2945,8 @@ function render(){
   const m=el("msgs");if(m)m.scrollTop=m.scrollHeight;
   hydrate();
 }
-initDB();
+initDB();_pSig=prezziSig();caricaPrezzi();
+setInterval(caricaPrezzi,180000);document.addEventListener("visibilitychange",()=>{if(!document.hidden)caricaPrezzi()});
 
 </script>
 <script>

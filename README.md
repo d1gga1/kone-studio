@@ -175,3 +175,46 @@ Richieste di Kone (video del 22/10): essere completamente indipendente su prezzi
 - `404.html` e `app.html` ora sono identici (il service worker usa `app.html`, GitHub Pages serve /app e /coach con `404.html`). Cache di `sw.js` → v16.
 - ⚠️ Limite demo invariato: listino e abbonamenti modificati da Kone restano nel suo browser finché non si collega un database condiviso;
   le pagine pubbliche (/prezzi/ e pagine SEO) hanno i prezzi scritti a mano.
+
+### Prenotazione e pagamento online + planning corsi + enciclopedia esercizi (26/10/2026)
+
+- **Nuova pagina `/prenota/`**: il cliente prenota e paga da solo, senza dover contattare Kone.
+  - **Planning settimanale** come il volantino (lunedì–sabato, 07–21, corsi colorati): ogni ora vuota è "Libero" con **2 posti**
+    (singola = 1 posto, coppia = 2), i corsi mostrano i posti su 10, le ore passate sono spente. Frecce per le prossime 5 settimane; su telefono un giorno alla volta.
+  - Tocca un'ora libera → PT singola 45 €, coppia 65 € (solo se ci sono 2 posti), massaggio 30′/50′ con scelta del trattamento,
+    oppure "Ho già un pacchetto" (gratis, scala dal pacchetto). Tocca un corso → ingresso 12 € o carnet.
+  - Sezione **Pacchetti e abbonamenti**: si paga il pacchetto e si prenota la prima seduta. Link diretti: `/prenota/?s=pt-8`, `/prenota/?cat=Massaggi`.
+- **Configurazione** in `assets/js/prenota-config.js`: nome utente Cal.com, slug degli eventi, planning corsi (giorno, ora, colore), posti per ora e per corso.
+- **Per attivare il pagamento automatico (Cal.com, gratis):**
+  1. account su cal.com → collega Google Calendar di Kone → imposta gli orari di lavoro;
+  2. App Store di Cal.com → installa **Stripe** (carta, Apple Pay, Google Pay) e/o **PayPal**;
+  3. crea un "Event type" per ogni slug della lista in `prenota-config.js` con prezzo e "Richiedi pagamento";
+     per `pt-singola` attiva **Seats = 2**, per ogni corso **Seats = 10**; gli eventi "inclusi" a 0 €;
+  4. scrivi il nome utente in `calUser`. Da quel momento la griglia legge la disponibilità reale da Cal.com e il pagamento è obbligatorio per confermare.
+  Finché `calUser` è vuoto, la pagina funziona lo stesso: dopo la scelta propone "Paga con PayPal" + messaggio WhatsApp già scritto.
+- **Su tutto il sito**: pulsante oro "Prenota e paga online" in ogni pagina (WhatsApp e telefono restano come secondari), voce "Prenota" nel menu,
+  home → "Prenota e paga online" e "Vedi il planning", pagina corsi con il link al planning, FAQ "Come si paga?" aggiornata. Sitemap, llms.txt, `sw.js` → v17.
+- **Enciclopedia esercizi** (PDF KM Studio, 446 esercizi in 19 gruppi): aggiunti all'app i 313 che mancavano → **421 esercizi** in libreria.
+  Nuovi gruppi: Avambracci e presa, Adduttori, Abduttori e anca, Tibiali e caviglie, Lombari, Cuffia rotatori e scapole, Collo e trapezi.
+  I doppioni (es. "Back squat" = "Squat bilanciere") non sono stati duplicati. I nuovi non hanno ancora foto: Kone le aggiunge dalla libreria.
+  Nei browser con dati già salvati si aggiungono da soli una volta (`exEnc1`).
+
+### Prezzi sincronizzati, foto nei Corsi · IA, guida per i clienti (29/10/2026)
+
+- **Prezzi del titolare → clienti in automatico.** Quando Kone cambia il Listino (prezzi, voci, sedute, sconti, trattamenti, link PayPal)
+  l'app lo pubblica da sola nel file `assets/data/listino.json` del sito (commit tramite API di GitHub). Le app dei clienti lo rileggono
+  all'apertura, quando tornano sull'app e ogni 3 minuti; anche `/prenota/` e `/prezzi/` lo leggono (`assets/js/prezzi-live.js`).
+  - **Da fare una volta sul dispositivo di Kone:** Listino → **Collega** → incolla una chiave GitHub *fine-grained* con accesso solo al repo
+    `d1gga1/kone-studio`, permesso **Contents: Read and write**. La chiave resta solo in quel browser.
+  - In cima al Listino una barra dice se i prezzi sono sincronizzati, in pubblicazione o da ripubblicare.
+  - Finché `agg` nel file è vuoto (nessuna pubblicazione ancora), app e sito usano i prezzi scritti nel codice.
+  - ⚠️ Ogni pubblicazione è un commit su GitHub: prima di fare `git push` dal computer fai `git pull`.
+  - Nella pagina `/prezzi/` le celle con `data-prezzo="sezione.indice"` si aggiornano da sole; le altre pagine SEO e la home restano scritte a mano.
+  - `sw.js` → v18: `/assets/data/` non passa mai dalla cache.
+- **Corsi · IA: foto degli esercizi.** Ogni esercizio del programma è cliccabile: la foto (partenza/arrivo) con la spiegazione compare nel riquadro
+  "Come si fa" sotto a destra, che resta visibile mentre scorri. Su telefono (e per i clienti nella pagina Oggi) si apre la scheda dell'esercizio.
+  Aggiunti alla libreria i 39 esercizi del motore corsi con spiegazione; 31 hanno la foto (17 nuove da Free Exercise DB, pubblico dominio, in
+  `assets/img/esercizi/`). Senza foto per ora: Burpees, Bird dog, Wall slide, 90/90 delle anche, Squat profondo assistito al TRX,
+  Andature leggere, Marcia veloce con ginocchia alte, Respirazione diaframmatica (Kone le carica con "Carica la foto" dal riquadro).
+- **Guida a passaggi per il cliente.** Al primo accesso di ogni cliente parte una guida in 9 passi (benvenuto, Allenamenti/Trattamenti, Oggi, Scheda,
+  Prenota, Progressi, Dieta, Prezzi, Chat) che evidenzia ogni sezione; alla fine propone di installare l'app. Si rivede col **?** in alto a destra.
