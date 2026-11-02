@@ -1,1 +1,283 @@
-{"agg":"","nota":"Questo file lo scrive il pannello titolare (Listino → Collega) la prima volta che pubblica i prezzi. Finché agg è vuoto, app e sito usano i prezzi scritti nel codice."}
+{
+ "agg": "2026-11-02T12:43:41.307Z",
+ "nota": "File scritto dal pannello titolare: non modificarlo a mano.",
+ "listino": {
+  "pt": [
+   {
+    "n": "Seduta singola one to one",
+    "d": "Allenamento individuale con Kone",
+    "sed": 1,
+    "p": 45
+   },
+   {
+    "n": "Pacchetto 4 sedute",
+    "d": "One to one",
+    "sed": 4,
+    "p": 172
+   },
+   {
+    "n": "Pacchetto 8 sedute",
+    "d": "One to one",
+    "sed": 8,
+    "p": 336
+   },
+   {
+    "n": "Pacchetto 12 sedute",
+    "d": "One to one",
+    "sed": 12,
+    "p": 480
+   },
+   {
+    "n": "Coppia · 1 seduta",
+    "d": "Due persone, stessa seduta",
+    "sed": 1,
+    "p": 65
+   },
+   {
+    "n": "Coppia · 4 sedute",
+    "d": "Due persone, stessa seduta",
+    "sed": 4,
+    "p": 260
+   }
+  ],
+  "corsi": [
+   {
+    "n": "Ingresso singolo",
+    "d": "Un corso di gruppo a scelta",
+    "sed": 1,
+    "p": 12
+   },
+   {
+    "n": "Carnet 10 ingressi",
+    "d": "Valido su tutti i corsi",
+    "sed": 10,
+    "p": 100
+   },
+   {
+    "n": "Mensile 2 corsi a settimana",
+    "d": "8 ingressi nel mese",
+    "sed": 8,
+    "p": 59
+   },
+   {
+    "n": "Mensile illimitato",
+    "d": "Tutti i corsi del mese",
+    "sed": 0,
+    "p": 79
+   }
+  ],
+  "abbPt": [
+   {
+    "n": "Start",
+    "sed": 4,
+    "p": 165
+   },
+   {
+    "n": "Active",
+    "sed": 8,
+    "p": 320
+   },
+   {
+    "n": "Pro",
+    "sed": 12,
+    "p": 450
+   },
+   {
+    "n": "Elite",
+    "sed": 16,
+    "p": 520
+   }
+  ],
+  "massPack": [
+   {
+    "n": "4 trattamenti 50′",
+    "sed": 4,
+    "p": 210
+   },
+   {
+    "n": "8 trattamenti 50′",
+    "sed": 8,
+    "p": 400
+   },
+   {
+    "n": "12 trattamenti 50′",
+    "sed": 12,
+    "p": 570
+   }
+  ],
+  "abbMass": [
+   {
+    "n": "Relax",
+    "sed": 2,
+    "p": 105
+   },
+   {
+    "n": "Wellness",
+    "sed": 4,
+    "p": 200
+   },
+   {
+    "n": "Recovery",
+    "sed": 8,
+    "p": 380
+   }
+  ],
+  "combo": [
+   {
+    "n": "Combo Bronzo",
+    "d": "4 PT + 4 trattamenti a scelta 50′",
+    "p": 370,
+    "r": 25
+   },
+   {
+    "n": "Combo Argento",
+    "d": "8 PT + 8 trattamenti a scelta 50′",
+    "p": 740,
+    "r": 60
+   },
+   {
+    "n": "Combo Oro",
+    "d": "12 PT + 12 trattamenti a scelta 50′",
+    "p": 1040,
+    "r": 100
+   }
+  ],
+  "percorsi": [
+   {
+    "n": "Essential",
+    "d": "4 PT + 2 trattamenti al mese",
+    "p": 310
+   },
+   {
+    "n": "Complete",
+    "d": "8 PT + 4 trattamenti al mese",
+    "p": 490
+   },
+   {
+    "n": "Premium",
+    "d": "12 PT + 4 trattamenti al mese",
+    "p": 650
+   },
+   {
+    "n": "Total Body",
+    "d": "12 PT + 8 trattamenti al mese",
+    "p": 820
+   }
+  ]
+ },
+ "trattamenti": [
+  {
+   "id": "decon",
+   "n": "Massaggio decontratturante",
+   "ic": "muscle",
+   "desc": "Scioglie le tensioni muscolari e migliora la mobilità.",
+   "ben": [
+    "Riduce contratture e punti di tensione",
+    "Restituisce mobilità a collo, schiena e spalle",
+    "Allevia i dolori da sovraccarico e da postura scorretta"
+   ],
+   "per": "Muscoli rigidi o contratti, lavoro sedentario o fisico pesante",
+   "p30": 30,
+   "p60": 55
+  },
+  {
+   "id": "relax",
+   "n": "Massaggio rilassante e antistress",
+   "ic": "lotus",
+   "desc": "Riduce lo stress, favorisce il relax e il benessere psicofisico.",
+   "ben": [
+    "Abbassa la tensione nervosa e l'ansia",
+    "Favorisce un sonno più profondo",
+    "Distende la muscolatura e lascia una sensazione di leggerezza"
+   ],
+   "per": "Periodi di stress, stanchezza mentale, difficoltà a staccare",
+   "p30": 30,
+   "p60": 55
+  },
+  {
+   "id": "sport",
+   "n": "Massaggio sportivo",
+   "ic": "run",
+   "desc": "Ideale prima e dopo l'attività fisica, migliora le prestazioni e il recupero.",
+   "ben": [
+    "Prepara i muscoli allo sforzo prima di gara o allenamento",
+    "Accelera il recupero e riduce l'indolenzimento",
+    "Aiuta a prevenire sovraccarichi e piccoli infortuni"
+   ],
+   "per": "Chi si allena con costanza, runner, sport di squadra",
+   "p30": 30,
+   "p60": 55
+  },
+  {
+   "id": "cervi",
+   "n": "Massaggio cervico lombare",
+   "ic": "spine",
+   "desc": "Allevia dolori e tensioni a collo, spalle e zona lombare.",
+   "ben": [
+    "Scioglie la rigidità di collo e trapezi",
+    "Allenta la tensione della zona lombare",
+    "Aiuta postura e movimento nella vita di tutti i giorni"
+   ],
+   "per": "Molte ore al computer o alla guida, cervicalgia e mal di schiena da tensione",
+   "p30": 30,
+   "p60": 55
+  },
+  {
+   "id": "rifle",
+   "n": "Riflessologia plantare",
+   "ic": "foot",
+   "desc": "Stimola punti riflessi dei piedi per favorire l'equilibrio e il benessere generale.",
+   "ben": [
+    "Rilassamento profondo di tutto il corpo",
+    "Piedi e gambe più leggeri",
+    "Sensazione di equilibrio e benessere generale"
+   ],
+   "per": "Chi sta molto in piedi, chi cerca un trattamento dolce",
+   "p30": 30,
+   "p60": 55
+  },
+  {
+   "id": "linfo",
+   "n": "Massaggio linfodrenante",
+   "ic": "drop",
+   "desc": "Favorisce il drenaggio dei liquidi, sgonfia e migliora la circolazione.",
+   "ben": [
+    "Riduce gonfiore e ritenzione idrica",
+    "Gambe più leggere e meno affaticate",
+    "Migliora la circolazione"
+   ],
+   "per": "Ritenzione idrica, gambe pesanti, molte ore in piedi o seduti",
+   "p30": 30,
+   "p60": 55
+  },
+  {
+   "id": "coppe",
+   "n": "Coppettazione",
+   "ic": "cup",
+   "desc": "Tecnica antica che aiuta a sciogliere tensioni, migliorare la circolazione e ridurre i dolori.",
+   "ben": [
+    "Lavora sulle tensioni profonde e ostinate",
+    "Richiama sangue e migliora la circolazione locale",
+    "Aiuta a ridurre i dolori muscolari"
+   ],
+   "per": "Tensioni profonde, sportivi. Può lasciare segni circolari temporanei sulla pelle",
+   "p30": 30,
+   "p60": 55
+  },
+  {
+   "id": "altri",
+   "n": "Altri massaggi su richiesta",
+   "ic": "star",
+   "desc": "Ogni corpo è unico, ogni trattamento è su misura.",
+   "ben": [
+    "Trattamento costruito sulle tue esigenze",
+    "Tecniche combinate in base a come stai",
+    "Si concorda insieme prima di iniziare"
+   ],
+   "per": "Esigenze particolari: parlane con Kone",
+   "p30": 30,
+   "p60": 55
+  }
+ ],
+ "paypal": "https://www.paypal.com/qrcodes/p2pqrc/BAHYS4B2HYL2G"
+}
