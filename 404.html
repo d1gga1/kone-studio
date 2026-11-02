@@ -1132,6 +1132,136 @@ const POOL=[
   ["Allungamento quadricipiti e flessori","stretch","tappetino",0,1,1,null,"cool"],["Allungamento pettorali e spalle","stretch","corpo libero",0,1,1,null,"cool"],
   ["Posizione del bambino","stretch","tappetino",0,1,1,null,"cool"]
 ].map(a=>({n:a[0],p:a[1],a:a[2],imp:a[3],liv:a[4],int:a[5],z:a[6],f:a[7]}));
+/* =================== COACH AUTOMATICO · TIPI DI CORSO =================== */
+/* Esercizi dedicati ai tipi di corso: [nome, schema, attrezzo, alto impatto, livello minimo, intensità, zona a rischio, fase, tipi (D dolce · S senior · P postura · C circuit · F functional · T tabata · B total body · X bootcamp), gruppo, come si fa] */
+const POOL_TEMI=[
+ ["Alzate dalla sedia","squat","corpo libero",0,1,4,"ginocchia","main","DS","Gambe","Seduto sul bordo della sedia, piedi alla larghezza delle anche. Inclina un po' il busto in avanti e alzati spingendo sui talloni, senza aiutarti con le mani se puoi. Risiediti lentamente, senza lasciarti cadere."],
+ ["Mini squat con appoggio alla sedia","squat","corpo libero",0,1,3,"ginocchia","main","DS","Gambe","In piedi dietro la sedia, mani sullo schienale. Piega poco le ginocchia portando il bacino indietro come per sederti, poi torna su stringendo i glutei."],
+ ["Estensioni del ginocchio da seduti","squat","corpo libero",0,1,2,null,"main","D","Gambe","Seduto con la schiena appoggiata, distendi una gamba fino ad avere il ginocchio dritto, tieni 2 secondi e riabbassa piano. Alterna le gambe."],
+ ["Elevazioni sulle punte con appoggio","squat","corpo libero",0,1,2,null,"main","DS","Gambe","In piedi dietro la sedia con le mani sullo schienale. Sali sulle punte lentamente, tieni 1 secondo e scendi piano sui talloni."],
+ ["Marcia da seduti","cardio","corpo libero",0,1,3,null,"main","D","Condizionamento","Seduto dritto, solleva alternando le ginocchia come se camminassi, accompagnando con le braccia. Ritmo regolare, respira con calma."],
+ ["Spinte al muro","push","corpo libero",0,1,3,"spalle","main","DSP","Petto","Mani al muro all'altezza delle spalle, piedi un passo indietro. Piega i gomiti avvicinando il petto al muro e spingi per tornare. Corpo dritto come una tavola."],
+ ["Remata con elastico da seduti","pull","elastici",0,1,3,null,"main","DSP","Dorso","Seduto dritto, elastico agganciato davanti o passato sotto i piedi. Tira i gomiti indietro stringendo le scapole, petto aperto, poi torna lentamente."],
+ ["Aperture delle braccia con elastico","pull","elastici",0,1,3,null,"main","DSP","Spalle","Braccia tese davanti all'altezza del petto, elastico tra le mani. Apri le braccia di lato stringendo le scapole, poi richiudi controllando."],
+ ["Alzate laterali leggere","push","manubri",0,1,3,"spalle","main","DSB","Spalle","Manubri leggeri (o bottigliette d'acqua), braccia lungo i fianchi. Solleva le braccia di lato fino all'altezza delle spalle con i gomiti morbidi, poi scendi lento."],
+ ["Presa e apertura delle mani","carry","corpo libero",0,1,1,null,"main","DS","Mani e avambracci","Stringi forte una pallina morbida o un asciugamano arrotolato per 3 secondi, poi apri bene le dita. Mantiene la forza della presa per i gesti di tutti i giorni."],
+ ["Equilibrio su un piede con appoggio","equilibrio","corpo libero",0,1,2,null,"main","DSP","Equilibrio","Accanto alla sedia o al muro, una mano appoggiata. Solleva un piede e resta in equilibrio 15-20 secondi guardando avanti. Cambia piede. Quando ti senti sicuro, appoggia solo un dito."],
+ ["Camminata tallone-punta","equilibrio","corpo libero",0,1,2,null,"main","DS","Equilibrio","Cammina in linea retta mettendo il tallone di un piede subito davanti alle punte dell'altro, come su una corda. Braccia aperte, sguardo avanti, vicino a un muro per sicurezza."],
+ ["Passi laterali","equilibrio","corpo libero",0,1,3,null,"main","DS","Equilibrio","Cammina di lato per 6-8 passi aprendo e chiudendo i piedi, ginocchia leggermente piegate, poi torna indietro. I piedi non si incrociano."],
+ ["Passo avanti e indietro con stop","equilibrio","corpo libero",0,1,3,null,"main","DSP","Equilibrio","Fai un passo avanti, fermati 2 secondi in equilibrio sulla gamba davanti, poi torna indietro. Alterna le gambe, vicino a un appoggio."],
+ ["Rotazioni delle spalle da seduti","mobilita","corpo libero",0,1,1,null,"warm","DS","Mobilità","Seduto dritto, braccia rilassate. Disegna cerchi ampi con le spalle, 10 in avanti e 10 indietro, respirando con calma."],
+ ["Circonduzioni di polsi e caviglie","mobilita","corpo libero",0,1,1,null,"warm","DS","Mobilità","Seduto, ruota lentamente polsi e caviglie in entrambi i sensi. Poi apri e chiudi le mani più volte."],
+ ["Inclinazioni laterali del collo","mobilita","corpo libero",0,1,1,null,"warm","DP","Mobilità","Spalle basse, porta l'orecchio verso la spalla senza forzare, tieni 10 secondi e cambia lato. Movimento lento, mai a scatti."],
+ ["Chin tuck","mobilita","corpo libero",0,1,1,null,"warm","PS","Postura","Seduto o in piedi con la schiena dritta, porta il mento indietro come a fare un doppio mento, allungando la nuca. Tieni 3 secondi e rilascia."],
+ ["Rotazioni del busto da seduti","mobilita","corpo libero",0,1,2,null,"mob","DSP","Mobilità","Seduto dritto, mani incrociate sul petto. Ruota il busto a destra e a sinistra lentamente, il bacino resta fermo. Espira mentre ruoti."],
+ ["Open book sul fianco","mobilita","tappetino",0,1,2,null,"mob","PS","Mobilità","Sul fianco, ginocchia piegate, braccia tese davanti. Apri il braccio di sopra come la pagina di un libro ruotando il torace e seguendolo con lo sguardo, poi richiudi."],
+ ["Rock back in quadrupedia","mobilita","tappetino",0,1,2,null,"mob","P","Mobilità","In quadrupedia, schiena neutra. Porta il bacino verso i talloni mantenendo la schiena lunga, poi torna avanti."],
+ ["Respirazione 90/90 con piedi al muro","core","tappetino",0,1,2,null,"main","P","Core","Sdraiato con i piedi al muro e le ginocchia a 90°. Schiaccia leggermente la zona lombare a terra, inspira dal naso allargando le costole, espira lungo dalla bocca attivando l'addome."],
+ ["Pallof press con elastico","core","elastici",0,1,4,null,"main","PFB","Core","Elastico agganciato di lato all'altezza del petto. Mani al centro del petto, spingi le braccia in avanti resistendo alla rotazione, tieni 2 secondi e torna."],
+ ["Side plank sulle ginocchia","core","tappetino",0,1,3,"spalle","main","PS","Core","Sul fianco, appoggio su avambraccio e ginocchia. Solleva il bacino in linea con spalle e ginocchia e tieni respirando."],
+ ["Y-T-W a terra","pull","tappetino",0,1,3,null,"main","PF","Dorso","Prono sul tappetino, fronte appoggiata. Solleva le braccia formando una Y, poi una T, poi una W, portando le scapole indietro e in basso. 2 secondi per posizione."],
+ ["Superman alternato","hinge","tappetino",0,1,3,"schiena","main","PB","Schiena","Prono, braccia avanti. Solleva insieme braccio destro e gamba sinistra di pochi centimetri, tieni 2 secondi e cambia. Sguardo a terra, collo lungo."],
+ ["Clamshell con elastico","hinge","elastici",0,1,3,null,"main","PBS","Glutei","Sdraiato su un fianco, ginocchia piegate, elastico sopra le ginocchia. Apri il ginocchio di sopra tenendo i piedi uniti e il bacino fermo, poi richiudi lento."],
+ ["Ponte glutei con marcia","hinge","tappetino",0,1,4,null,"main","PB","Glutei","In posizione di ponte con il bacino alto, solleva un piede alla volta senza far scendere o ruotare il bacino."],
+ ["Wall angel","pull","corpo libero",0,1,2,null,"main","PS","Postura","Schiena, nuca e glutei al muro, braccia a candeliere appoggiate. Scivola con le braccia in alto e poi in basso senza staccare la schiena dal muro."],
+ ["Allungamento da seduti della catena posteriore","stretch","corpo libero",0,1,1,null,"cool","DS","Mobilità e stretching","Seduto sul bordo della sedia, una gamba tesa con il tallone a terra. Busto dritto, inclinati in avanti dalle anche finché senti tirare dietro la coscia. 20-30 secondi per gamba."],
+ ["Respirazione con apertura delle braccia","stretch","corpo libero",0,1,1,null,"cool","DSP","Mobilità e stretching","Inspira dal naso aprendo lentamente le braccia di lato, espira dalla bocca richiudendole. 6-8 respiri lenti."],
+ ["Allungamento del flessore dell'anca","stretch","tappetino",0,1,1,null,"cool","PBFC","Mobilità e stretching","In ginocchio in affondo, glutei stretti e bacino leggermente in dentro. Spingi un po' in avanti finché senti allungare davanti all'anca. 30 secondi per lato."],
+ ["Step sul gradino basso","lunge","box",0,1,4,"ginocchia","main","S","Gambe","Sali e scendi da un gradino basso un piede alla volta, con una mano al muro se serve. Tutto il piede ben appoggiato."],
+ ["Raccogli la spesa da terra","hinge","kettlebell",0,1,4,"schiena","main","S","Funzionale","Kettlebell leggera a terra tra i piedi. Piega anche e ginocchia con la schiena dritta, prendila e alzati spingendo con le gambe, come quando sollevi la spesa. Riappoggiala allo stesso modo."],
+ ["Trasporto della spesa","carry","manubri",0,1,4,null,"main","S","Funzionale","Un manubrio per mano lungo i fianchi, spalle basse e petto aperto. Cammina per 20-30 metri a passo sicuro."],
+ ["Alzarsi e scendere da terra","squat","tappetino",0,1,5,"ginocchia","main","S","Funzionale","Da sdraiato sul tappetino alzati in piedi usando gli appoggi che ti servono (mano, ginocchio), poi torna giù con controllo. Insegna a rialzarsi in sicurezza."],
+ ["Sumo squat con manubrio","squat","manubri",0,1,5,"ginocchia","main","BS","Gambe","Piedi larghi e punte verso l'esterno, manubrio tenuto davanti. Scendi dritto con le ginocchia in linea con le punte e risali stringendo i glutei."],
+ ["Thruster con manubri","squat","manubri",0,2,8,"ginocchia","main","CFXT","Total body","Manubri sulle spalle, scendi in squat e risalendo spingi i manubri sopra la testa in un unico movimento."],
+ ["Clean con kettlebell","hinge","kettlebell",0,2,7,"schiena","main","FX","Total body","Kettlebell tra i piedi, spingi con le anche e portala sul petto con il gomito stretto al busto, senza farla sbattere sul polso."],
+ ["Turkish get-up parziale","core","kettlebell",0,2,5,"spalle","main","F","Core","Sdraiato, kettlebell tesa sopra la spalla. Sali sul gomito e poi sulla mano tenendo il braccio verticale e lo sguardo sul peso, poi torna giù lento."],
+ ["Affondi con rotazione","lunge","manubri",0,2,6,"ginocchia","main","FB","Gambe","Affondo in avanti e, in basso, ruota il busto verso la gamba davanti portando il manubrio di lato. Torna al centro e risali."],
+ ["Suitcase carry","carry","kettlebell",0,1,5,null,"main","FX","Core","Una kettlebell in una mano sola, cammina dritto senza piegarti di lato. Cambia mano a metà."],
+ ["Pistol assistito al TRX","squat","trx",0,2,6,"ginocchia","main","F","Gambe","Tieni le maniglie, una gamba tesa davanti. Scendi su una gamba sola fin dove controlli il movimento, aiutandoti con le braccia, e risali."],
+ ["Bear crawl","core","corpo libero",0,1,6,"spalle","main","CFXT","Core","A quattro zampe con le ginocchia sollevate di pochi centimetri. Avanza muovendo mano e piede opposti, schiena piatta."],
+ ["Skater jump","lunge","corpo libero",1,2,7,"ginocchia","main","CTX","Condizionamento","Salta lateralmente da una gamba all'altra, atterrando morbido con l'altra gamba che va dietro. Le braccia accompagnano."],
+ ["Squat in tenuta isometrica","squat","corpo libero",0,1,5,"ginocchia","main","BC","Gambe","Scendi in squat a cosce parallele e resta fermo, schiena dritta e peso sui talloni."],
+ ["Plank con tocco delle spalle","core","corpo libero",0,1,5,"spalle","main","BCT","Core","In plank sulle mani, tocca la spalla opposta alternando senza far ruotare il bacino. Piedi larghi per più stabilità."],
+ ["Curl e press con manubri","push","manubri",0,1,5,"spalle","main","B","Braccia e spalle","Fletti i gomiti portando i manubri alle spalle, poi spingili sopra la testa. Riporta giù in due tempi."],
+ ["Kickback tricipiti con manubri","push","manubri",0,1,4,null,"main","B","Braccia","Busto inclinato in avanti con la schiena dritta, gomito fermo vicino al fianco. Distendi il braccio indietro e torna lento."],
+ ["Crunch inverso","core","tappetino",0,1,4,null,"main","BT","Core","Sdraiato, gambe piegate a 90°. Porta le ginocchia verso il petto staccando il bacino da terra, poi scendi piano."],
+ ["Sprint sul posto","cardio","corpo libero",1,2,8,"ginocchia","main","TC","Condizionamento","Corri sul posto più veloce che puoi sulle punte, con le braccia che spingono forte."],
+ ["Squat jack","cardio","corpo libero",1,1,7,"ginocchia","main","TC","Condizionamento","Salta aprendo i piedi e atterra in mezzo squat, poi salta richiudendo. Petto alto."],
+ ["Wall ball con slam ball","squat","slam ball",0,2,8,"ginocchia","main","CXF","Total body","Palla al petto, scendi in squat e risalendo lanciala in alto contro il muro. Riprendila e scendi subito nello squat successivo."],
+ ["Shuttle run","cardio","corpo libero",0,1,7,"ginocchia","main","XC","Condizionamento","Corri tra due coni a 5-10 metri, tocca terra e torna indietro. Cambi di direzione rapidi e controllati."]
+];
+const TEMA_COD={D:"dolce",S:"senior",P:"postura",C:"circuit",F:"functional",T:"tabata",B:"totalbody",X:"bootcamp"};
+POOL_TEMI.forEach(a=>POOL.push({n:a[0],p:a[1],a:a[2],imp:a[3],liv:a[4],int:a[5],z:a[6],f:a[7],t:a[8].split("").map(k=>TEMA_COD[k])}));
+
+const TEMI={
+  dolce:{n:"Ginnastica dolce",formato:"flusso",cap:4,gentle:2,d:"seduta a bassa intensità con mobilità da seduti, forza dolce con sedia ed elastico ed equilibrio con appoggio."},
+  senior:{n:"Senior fit",formato:"circuito",cap:6,gentle:1,d:"forza per i gesti di tutti i giorni, equilibrio contro le cadute e un po' di fiato."},
+  postura:{n:"Mobilità e postura",formato:"flusso",cap:5,gentle:1,d:"respirazione, core profondo, mobilità di colonna e anche, rinforzo di schiena alta e glutei."},
+  circuit:{n:"Circuit",formato:"stazioni",d:"stazioni che alternano forza e cardio, con tempi di lavoro che crescono con l'intensità."},
+  functional:{n:"Functional",formato:"circuito",d:"schemi motori completi in superserie (spingere, tirare, piegarsi, trasportare) e un EMOM di condizionamento."},
+  tabata:{n:"Tabata",formato:"tabata",d:"blocchi 20″/10″ che accoppiano un esercizio di forza e uno cardio."},
+  totalbody:{n:"Total body",formato:"circuito",d:"circuito a ripetizioni che alterna parte bassa, parte alta e core, con un blocco finale di addome."},
+  bootcamp:{n:"Bootcamp",formato:"stazioni",d:"stazioni varie con corsa, trasporti e attrezzi, ritmo alto."}
+};
+function temaCorso(c){
+  if(c.tema&&TEMI[c.tema])return c.tema;
+  const chk=t=>{t=(t||"").toLowerCase();
+    if(/over ?[78]|dolce|terza et|anzian/.test(t))return "dolce";
+    if(/senior|over ?[56]/.test(t))return "senior";
+    if(/postur|mobilit|pilates|stretch|schiena sana|allungament/.test(t))return "postura";
+    if(/tabata|hiit|interval/.test(t))return "tabata";
+    if(/circuit/.test(t))return "circuit";
+    if(/function|funzional|cross/.test(t))return "functional";
+    if(/total ?body|full ?body|tonific/.test(t))return "totalbody";
+    if(/boot/.test(t))return "bootcamp";
+    return null};
+  return chk(c.n)||chk(c.focus)||({stazioni:"circuit",tabata:"tabata",circuito:"totalbody",flusso:"postura"})[c.formato]||"totalbody";
+}
+/* legge il "Focus del corso" scritto da Kone */
+function focusInfo(c){
+  const t=(c.focus||"").toLowerCase(),F={p:new Set(),noImp:false,soloCL:false,zone:[],letto:[]};
+  const add=(re,ps,lab)=>{if(re.test(t)){ps.forEach(x=>F.p.add(x));F.letto.push(lab)}};
+  add(/equilibri|cadut|stabilit/,["equilibrio"],"equilibrio");
+  add(/glute/,["hinge","lunge"],"glutei");
+  add(/gamb|cosce/,["squat","lunge"],"gambe");
+  add(/braccia|spalle|parte alta/,["push","pull"],"parte alta");
+  add(/core|addom|pancia/,["core"],"core");
+  add(/cardio|fiato|resistenz|brucia|dimagr/,["cardio"],"fiato");
+  add(/schiena|postur|lombar|dorsal/,["pull","core"],"schiena");
+  add(/mobilit|flessibil|allung|articol/,["mobilita"],"mobilità");
+  add(/forza|potenz/,["squat","hinge","push","pull"],"forza");
+  add(/trasport|presa|carry/,["carry"],"trasporti");
+  if(/(senza|niente|no|evita\w*) (i )?salt|basso impatto/.test(t)){F.noImp=true;F.letto.push("niente salti")}
+  if(/senza attrezzi|solo corpo libero/.test(t)){F.soloCL=true;F.letto.push("senza attrezzi")}
+  ZONE.forEach(z=>{if(new RegExp("(proteg|attenzion|evita|niente|senza|dolor|male)[^.,;]{0,25}"+z).test(t)){F.zone.push(z);F.letto.push("proteggere "+z)}});
+  return F;
+}
+const bonusDi=c=>{const T=temaCorso(c),F=focusInfo(c);return e=>(e.t&&e.t.includes(T)?-1.6:0)+(F.p.has(e.p)?-1.1:0)};
+
+/* varianti: il coach "inventa" esercizi nuovi partendo da quelli che conosce. [nome, come si fa, vietata nei corsi dolci] */
+const VARIANTI={
+  squat:[["con fermo di 2″ in basso","Arrivato in basso resta fermo 2 secondi senza rilassarti, poi risali.",0],["a tempo lento 3-1-1","3 secondi per scendere, 1 di pausa, 1 per salire.",0],["con mezza ripetizione in basso","Scendi, risali a metà, riscendi e poi sali del tutto: conta come una ripetizione.",1]],
+  lunge:[["con fermo a ginocchio basso","Fermati 2 secondi con il ginocchio dietro vicino a terra, poi risali.",0],["con discesa in 3″","Scendi contando 3 secondi, risali con decisione.",0]],
+  hinge:[["con fermo di 2″ in alto","Stringi i glutei e tieni 2 secondi nel punto più alto.",0],["a tempo lento 3-1-1","3 secondi per scendere, 1 di pausa, 1 per tornare.",0]],
+  push:[["con discesa in 3″","Scendi contando 3 secondi, spingi a velocità normale.",0],["con fermo a metà","Fermati 1 secondo a metà discesa e 1 secondo a metà salita.",0]],
+  pull:[["con fermo di 2″ a scapole strette","A fine tirata stringi le scapole e tieni 2 secondi.",0],["a un braccio","Un braccio alla volta, l'altro fermo sul fianco: il busto resta fermo e non ruota.",0]],
+  core:[["con espirazione lunga","Tieni la posizione espirando lentamente dalla bocca per 5-6 secondi a ogni respiro.",0],["con base stretta","Avvicina i piedi: meno appoggio, più lavoro per l'addome.",1]],
+  cardio:[["a bassa ampiezza","Movimento più piccolo e veloce, senza salti alti.",0],["a ritmo crescente","Parti tranquillo e aumenta il ritmo ogni 10 secondi.",1]],
+  carry:[["con un solo peso","Peso in una mano sola: il busto resta dritto senza piegarsi di lato.",0]],
+  equilibrio:[["con sguardo che segue la mano","Mentre sei in equilibrio muovi lentamente una mano e seguila con gli occhi.",0],["contando all'indietro","Mantieni l'equilibrio contando ad alta voce da 20 a 0: allena anche l'attenzione.",0]],
+  mobilita:[["con respirazione guidata","Espira a ogni fase di allungamento e inspira tornando indietro.",0]]
+};
+function regVariante(nome,base,mod){
+  if(!DB.exVar)DB.exVar={};const b=PM[base];
+  DB.exVar[nome]={base,mod};if(b)PM[nome]=Object.assign({},b,{n:nome,v:1});
+}
+function caricaVarianti(){Object.keys(DB.exVar||{}).forEach(n=>{const b=PM[DB.exVar[n].base];if(b&&!PM[n])PM[n]=Object.assign({},b,{n,v:1})})}
+function migraEserciziTemi(){
+  if(DB.settings.exTemi1)return;
+  POOL_TEMI.forEach(a=>{if(!DB.esercizi.some(y=>y.n.toLowerCase()===a[0].toLowerCase()))DB.esercizi.push({id:"ex"+uid(),n:a[0],m:a[9],istr:a[10],foto:null,foto2:null,video:null})});
+  DB.settings.exTemi1=true;
+}
+
 const PM={};POOL.forEach(e=>PM[e.n]=e);
 const ZONE=["ginocchia","schiena","spalle"];
 
@@ -1285,13 +1415,14 @@ async function pubSalva(){
 function pubScollega(){try{localStorage.removeItem("km2_pubtok")}catch(e){}PUB.st="";closeModal();refreshPubBar();toast("Pubblicazione scollegata su questo dispositivo")}
 const corso=id=>DB.corsi.find(c=>c.id===id);
 const cli=id=>DB.clienti.find(c=>c.id===id);
-const exLib=n=>DB.esercizi.find(e=>e.n===n);
+const exLib=n=>DB.esercizi.find(e=>e.n===n)||varLib(n);
+function varLib(n){const v=DB.exVar&&DB.exVar[n];if(!v)return null;const b=DB.esercizi.find(e=>e.n===v.base);return Object.assign({},b||{m:"Variante"},{n,istr:(b&&b.istr?b.istr+" ":"")+"Variante di oggi: "+(v.mod||v.istr||"")})}
 const tratt=id=>DB.trattamenti.find(t=>t.id===id);
 const clone=o=>JSON.parse(JSON.stringify(o));
 
 function initDB(){
   const d=LS.get("db",null);
-  if(d&&d.v===DBV){DB=d;migraSchede();migraPrezzi();migraEsercizi();migraEnciclopedia();migraEserciziCorsi();ensureAgenda(false);autoProgrammi();return}
+  if(d&&d.v===DBV){DB=d;migraSchede();migraPrezzi();migraEsercizi();migraEnciclopedia();migraEserciziCorsi();migraEserciziTemi();caricaVarianti();ensureAgenda(false);autoProgrammi();return}
   DB={v:DBV,
     settings:{maxCorso:10,maxPT:3,maxTratt:2,motore:"regole",regoleOff:[],pwCoach:hashPw("kone2026"),pwConti:hashPw("conti2026")},
     clienti:clone(CLIENTI_SEED).map(c=>{if(c.pw){c.pw=hashPw(c.pw)}return c}),
@@ -1300,7 +1431,7 @@ function initDB(){
     scheda:clone(SCHEDA_SEED),chat:clone(CHAT_SEED),
     pesi:{},carichi:{},agenda:{},programmi:{},feedback:[],movimenti:[]};
   migraSchede();
-  seedPesi();seedCarichi();ensureAgenda(true);seedMarco();seedStorico();seedMovimenti();autoProgrammi();migraPrezzi();migraEsercizi();migraEnciclopedia();migraEserciziCorsi();save();
+  seedPesi();seedCarichi();ensureAgenda(true);seedMarco();seedStorico();seedMovimenti();autoProgrammi();migraPrezzi();migraEsercizi();migraEnciclopedia();migraEserciziCorsi();migraEserciziTemi();caricaVarianti();save();
 }
 function seedPesi(){
   const marco=[88.5,88.0,87.4,87.1,86.5,86.2,85.9,85.4,85.5,85.0,84.6,84.2];
@@ -1408,71 +1539,124 @@ function analisi(c,data){
   st[0].blocchi.forEach(b=>{if(b.fase==="main"||b.fase==="finisher")b.esercizi.forEach(e=>A.recenti.push(e.n))});
   return A;
 }
-function scegli(r,list,patterns,count,I,avoid){
-  const sc=new Map(list.map(e=>[e.n,(avoid.has(e.n)?4:0)+Math.abs(e.int-I)*.35+r()]));
-  const by=(a,b)=>sc.get(a.n)-sc.get(b.n);const out=[],used=new Set();
+function scegli(r,list,patterns,count,I,avoid,bonus,used){
+  used=used||new Set();list=list.filter(e=>!used.has(e.n));
+  const sc=new Map(list.map(e=>[e.n,(avoid.has(e.n)?4:0)+Math.abs(e.int-I)*.35+r()+(bonus?bonus(e):0)]));
+  const by=(a,b)=>sc.get(a.n)-sc.get(b.n);const out=[];
   for(const pat of patterns){if(out.length>=count)break;const c=list.filter(e=>e.p===pat&&!used.has(e.n)).sort(by)[0];if(c){out.push(c);used.add(c.n)}}
   list.filter(e=>!used.has(e.n)).sort(by).forEach(e=>{if(out.length<count){out.push(e);used.add(e.n)}});
   return out;
 }
-function usabile(c,zone){return e=>(e.a==="corpo libero"||c.attrezzi.includes(e.a))&&!c.vietati.includes(e.n)&&e.liv<=c.livello&&!(c.livello===1&&e.imp)&&!(e.z&&zone.includes(e.z))}
+function usabile(c,zone){
+  const T=temaCorso(c),M=TEMI[T]||{},F=focusInfo(c),zz=zone.concat(F.zone);
+  return e=>(e.a==="corpo libero"||(F.soloCL?e.a==="tappetino":c.attrezzi.includes(e.a)))&&!c.vietati.includes(e.n)&&e.liv<=c.livello&&!(c.livello===1&&e.imp)&&!(e.z&&zz.includes(e.z))
+    &&!(e.t&&!e.t.includes(T))&&!((M.gentle||F.noImp)&&e.imp)&&!(M.cap&&e.f==="main"&&e.int>M.cap+1);
+}
 
-/* 2 — generazione */
+/* 2 — generazione: il coach automatico costruisce la seduta sul tipo di corso e sul focus */
 function genera(c,data,part,variante){
   const r=rng(data+"|"+c.id+"|"+(variante||0));
+  const T=temaCorso(c),M=TEMI[T],F=focusInfo(c);
   const A=analisi(c,data);
-  let I=clamp(A.intensita,2,LIV_MAX[c.livello]);
+  let I=clamp(A.intensita,2,Math.min(LIV_MAX[c.livello],M.cap||10));
   if(A.last)I=clamp(I,A.last.intensita-1,A.last.intensita+1);
   const avoid=new Set(A.recenti.concat(A.evita));
-  const ok=usabile(c,A.zone);
-  const main=POOL.filter(e=>e.f==="main"&&ok(e)&&(!c.consentiti.length||c.consentiti.includes(e.n)));
-  const warmL=POOL.filter(e=>e.f==="warm"&&ok(e)),coolL=POOL.filter(e=>e.f==="cool"&&ok(e));
-  const mobL=POOL.filter(e=>(e.f==="mob"||e.f==="warm")&&ok(e)).concat(main.filter(e=>e.int<=4));
-  const D=c.durata,W=Math.max(8,Math.round(D*.16)),C=Math.max(5,Math.round(D*.1));
-  let M=D-W-C;const blocchi=[];
-  const wEx=shuffle(r,warmL).slice(0,4);
-  blocchi.push({nome:"Riscaldamento",fase:"warm",min:W,esercizi:wEx.map(e=>({n:e.n,d:fmtS(W*60/wEx.length)}))});
-  let fin=0;if(I>=7&&c.formato!=="flusso"&&M>=22){fin=4;M-=fin}
-  if(c.formato==="stazioni"){
-    const n=clamp(Math.max(6,Math.ceil(part/2)),6,10);
-    const work=I>=8?45:I>=6?40:35;
-    const ex=scegli(r,main,["squat","push","hinge","pull","core","cardio","lunge","carry","cardio","core"],n,I,avoid);
-    const giri=Math.max(1,Math.floor((M+1)/(ex.length+1)));
-    blocchi.push({nome:"Circuito a "+ex.length+" stazioni · "+giri+" giri",fase:"main",min:M,
-      nota:work+"″ di lavoro, "+(60-work)+"″ per cambiare stazione, 1′ di recupero tra i giri. Al massimo 2 persone per stazione.",
-      esercizi:ex.map((e,i)=>({n:e.n,d:"Stazione "+(i+1)+" · "+e.a}))});
-  } else if(c.formato==="tabata"){
-    const nT=Math.max(2,Math.floor((M+1)/5));
-    const ex=scegli(r,main,["cardio","squat","core","push","cardio","hinge","lunge","pull","cardio","core","squat","push"],nT*2,I,avoid);
-    blocchi.push({nome:nT+" blocchi tabata · 20″ lavoro / 10″ pausa",fase:"main",min:M,
-      nota:"Ogni blocco dura 4′ alternando A e B per 8 round, poi 1′ di recupero. Chi è in difficoltà riduce l'ampiezza, non si ferma.",
+  const ok=usabile(c,A.zone),bon=bonusDi(c),used=new Set();
+  const base=POOL.filter(e=>!e.v&&ok(e)&&!(T==="dolce"&&e.a==="tappetino"));
+  const main=base.filter(e=>e.f==="main"&&(!c.consentiti.length||c.consentiti.includes(e.n)));
+  const mobL=base.filter(e=>e.f==="mob"||e.f==="warm").concat(main.filter(e=>e.p==="mobilita"||e.int<=3));
+  const sc=(L,pats,n,Ix)=>scegli(r,L,pats,n,Ix==null?I:Ix,avoid,bon,used);
+  const pick=(fase,k)=>{const L=shuffle(r,base.filter(e=>e.f===fase&&!used.has(e.n))).sort((a,b)=>bon(a)-bon(b)).slice(0,k);L.forEach(e=>used.add(e.n));return L};
+  const D=c.durata,W=Math.max(8,Math.round(D*.16)),C=Math.max(5,Math.round(D*(M.gentle?.14:.1)));
+  let Mn=D-W-C;const blocchi=[],why=A.why.slice();
+  why.unshift("Corso letto come “"+M.n+"”: "+M.d+(F.letto.length?" Dal focus che hai scritto: "+F.letto.join(", ")+".":""));
+  const split=fr=>{const o=fr.map(f=>Math.max(3,Math.round(Mn*f)));o[o.length-1]+=Mn-o.reduce((a,b)=>a+b,0);return o};
+  const dur=(m,n)=>fmtS(m*60/Math.max(1,n));
+  const reps=I>=7?"15 rip":I>=5?"12 rip":"10 rip";
+  const wEx=pick("warm",4);
+  blocchi.push({nome:M.gentle?"Risveglio articolare":"Riscaldamento",fase:"warm",min:W,esercizi:wEx.map(e=>({n:e.n,d:dur(W,wEx.length)}))});
+  let fin=0;if(I>=7&&!M.gentle&&T!=="tabata"&&Mn>=22){fin=4;Mn-=fin}
+  const equil=main.filter(e=>e.p==="equilibrio");
+  if(T==="dolce"){
+    const m=split([.34,.42,.24]);
+    const a=sc(mobL,["mobilita","mobilita","mobilita","mobilita"],4,2);
+    blocchi.push({nome:"Mobilità articolare dolce",fase:"main",min:m[0],nota:"Da seduti o in piedi vicino alla sedia, movimenti ampi e lenti. Si respira sempre, nessun movimento deve fare male.",esercizi:a.map(e=>({n:e.n,d:dur(m[0],a.length)}))});
+    const b=sc(main.filter(e=>e.p!=="equilibrio"&&e.p!=="cardio"),["squat","pull","push","squat","carry"],5,3);
+    blocchi.push({nome:"Forza dolce · sedia ed elastico · 2 giri",fase:"main",min:m[1],nota:"8-10 ripetizioni lente per esercizio, 1′ di pausa tra un giro e l'altro. Si espira nello sforzo.",esercizi:b.map(e=>({n:e.n,d:e.p==="carry"?"3 × 10″":"8-10 rip"}))});
+    const q=sc(equil,["equilibrio","equilibrio","equilibrio"],3,2);
+    blocchi.push({nome:"Equilibrio e coordinazione",fase:"main",min:m[2],nota:"Sempre vicino a una sedia o al muro. Prima con appoggio, poi con un dito, senza appoggio solo se ci si sente sicuri.",esercizi:q.map(e=>({n:e.n,d:"2 × 20″"}))});
+  } else if(T==="senior"){
+    const m=split([.56,.24,.2]);
+    const a=sc(main.filter(e=>e.p!=="equilibrio"&&e.p!=="cardio"),["squat","pull","hinge","push","core","carry","lunge"],6);
+    const giri=Math.max(2,Math.floor(m[0]/(a.length+2)));
+    blocchi.push({nome:"Forza funzionale · gesti di tutti i giorni · "+giri+" giri",fase:"main",min:m[0],nota:"Un esercizio dopo l'altro, 1′30″ di pausa a fine giro. Carichi leggeri, tecnica pulita, mai trattenere il respiro.",esercizi:a.map(e=>({n:e.n,d:e.p==="carry"?"30 m":"10-12 rip"}))});
+    const q=sc(equil,["equilibrio","equilibrio","equilibrio"],3);
+    blocchi.push({nome:"Equilibrio e prevenzione cadute",fase:"main",min:m[1],nota:"Vicino a un appoggio. Ogni esercizio 3 volte, cambiando lato.",esercizi:q.map(e=>({n:e.n,d:"3 × 20″"}))});
+    const k=sc(main.filter(e=>e.p==="cardio"),["cardio","cardio"],2);
+    blocchi.push({nome:"Passo e fiato",fase:"main",min:m[2],nota:"Ritmo che permette ancora di parlare: si alza il fiato senza affanno.",esercizi:k.map(e=>({n:e.n,d:dur(m[2],k.length)}))});
+  } else if(T==="postura"){
+    const m=split([.3,.35,.35]);
+    const a=sc(main.filter(e=>e.p==="core"),["core","core","core"],3,3);
+    blocchi.push({nome:"Respirazione e core profondo",fase:"main",min:m[0],nota:"Qualità prima di tutto: bacino neutro, costole basse, si espira lungo durante lo sforzo.",esercizi:a.map(e=>({n:e.n,d:"3 × 30″"}))});
+    const b=sc(mobL,["mobilita","mobilita","mobilita","mobilita"],4,2);
+    blocchi.push({nome:"Mobilità di colonna e anche",fase:"main",min:m[1],nota:"Movimento lento e controllato, si cerca l'ampiezza senza forzare.",esercizi:b.map(e=>({n:e.n,d:dur(m[1],b.length)}))});
+    const q=sc(main.filter(e=>e.p!=="cardio"),["pull","hinge","pull","hinge","equilibrio"],4,3);
+    blocchi.push({nome:"Rinforzo posturale · schiena alta e glutei",fase:"main",min:m[2],nota:"2 giri, 12 ripetizioni lente con 2 secondi di tenuta nel punto di massima contrazione.",esercizi:q.map(e=>({n:e.n,d:"2 × 12 rip"}))});
+  } else if(T==="functional"){
+    const m=split([.6,.4]);
+    const n=I>=7&&m[0]>=20?6:4;
+    const a=sc(main.filter(e=>e.p!=="cardio"),["squat","pull","hinge","push","lunge","carry"],n);
+    const s=I>=7?"4 × 8":"3 × 10";
+    blocchi.push({nome:"Forza funzionale · superserie",fase:"main",min:m[0],nota:"Esegui A1 e A2 di seguito, poi 1′ di pausa e ripeti. Stesso schema per B"+(n>4?" e C":"")+". Carico impegnativo ma tecnica pulita.",
+      esercizi:a.map((e,i)=>({n:e.n,d:"ABC"[Math.floor(i/2)]+(i%2+1)+" · "+(e.p==="carry"?"3-4 × 30 m":s)}))});
+    const k=sc(main,["carry","cardio","core"],3);
+    blocchi.push({nome:"EMOM "+m[1]+"′ · condizionamento",fase:"main",min:m[1],nota:"Ogni minuto parte un esercizio: fai il lavoro e recupera nel tempo che resta. Si ruota sui "+k.length+" esercizi.",
+      esercizi:k.map((e,i)=>({n:e.n,d:"Minuto "+(i+1)+" · "+(e.p==="cardio"?"12 cal / 15 rip":e.p==="carry"?"30 m":"10 rip")}))});
+  } else if(T==="tabata"){
+    const nT=Math.max(2,Math.floor((Mn+1)/5));
+    const ex=sc(main,["squat","cardio","push","cardio","pull","cardio","core","cardio","hinge","cardio","lunge","cardio"],nT*2);
+    blocchi.push({nome:nT+" blocchi tabata · 20″ lavoro / 10″ pausa",fase:"main",min:Mn,
+      nota:"Ogni blocco dura 4′ alternando A (forza) e B (cardio) per 8 round, poi 1′ di recupero. Chi è in difficoltà riduce l'ampiezza, non si ferma.",
       esercizi:ex.map((e,i)=>({n:e.n,d:"Blocco "+(Math.floor(i/2)+1)+" · "+(i%2?"B":"A")}))});
-  } else if(c.formato==="circuito"){
-    const ex=scegli(r,main,["squat","push","hinge","pull","lunge","core","carry","cardio"],Math.min(8,main.length),I,avoid);
-    const reps=I>=7?"15 rip":I>=5?"12 rip":"10 rip";
-    const giri=Math.max(2,Math.floor(M/(ex.length+2)));
-    blocchi.push({nome:"Circuito a ripetizioni · "+giri+" giri",fase:"main",min:M,
-      nota:"Un esercizio dopo l'altro, 2′ di recupero a fine giro. Carico che lasci 2-3 ripetizioni di margine.",
-      esercizi:ex.map(e=>({n:e.n,d:["core","carry","cardio"].includes(e.p)?(I>=6?"40″":"30″"):reps}))});
+  } else if(T==="circuit"||T==="bootcamp"){
+    const n=clamp(Math.max(6,Math.ceil(part/2)),6,10),work=I>=8?45:I>=6?40:35;
+    const pats=T==="circuit"?["squat","cardio","pull","push","cardio","core","hinge","cardio","lunge","core"]:["cardio","squat","pull","push","carry","core","cardio","hinge","lunge","cardio"];
+    const ex=sc(main,pats,n);const giri=Math.max(1,Math.floor((Mn+1)/(ex.length+1)));
+    blocchi.push({nome:(T==="circuit"?"Circuit":"Bootcamp")+" · "+ex.length+" stazioni · "+giri+" giri",fase:"main",min:Mn,
+      nota:work+"″ di lavoro, "+(60-work)+"″ per cambiare stazione, 1′ di recupero tra i giri. "+(T==="circuit"?"Forza e cardio si alternano.":"Si corre tra una stazione e l'altra.")+" Al massimo 2 persone per stazione.",
+      esercizi:ex.map((e,i)=>({n:e.n,d:"Stazione "+(i+1)+" · "+e.a}))});
   } else {
-    const ex=scegli(r,mobL,["mobilita","core","mobilita","hinge","mobilita","pull","mobilita","core","mobilita"],9,I,avoid);
-    blocchi.push({nome:"Flusso di mobilità",fase:"main",min:M,nota:"Movimento lento e controllato, respirazione profonda: la qualità conta più delle ripetizioni.",
-      esercizi:ex.map(e=>({n:e.n,d:fmtS(M*60/ex.length)}))});
+    const m=split([.74,.26]);
+    const ex=sc(main.filter(e=>e.p!=="cardio"),["squat","push","hinge","pull","lunge","push","core","pull"],Math.min(8,main.length));
+    const giri=Math.max(2,Math.floor(m[0]/(ex.length+2)));
+    blocchi.push({nome:"Circuito total body · "+giri+" giri",fase:"main",min:m[0],nota:"Parte bassa e parte alta si alternano, così un gruppo muscolare recupera mentre lavora l'altro. 2′ di pausa a fine giro.",
+      esercizi:ex.map(e=>({n:e.n,d:["core","carry"].includes(e.p)?(I>=6?"40″":"30″"):reps}))});
+    const k=sc(main.filter(e=>e.p==="core"),["core","core","core"],3);
+    blocchi.push({nome:"Addome e core · 2 giri",fase:"main",min:m[1],nota:"40″ di lavoro e 20″ di pausa per esercizio.",esercizi:k.map(e=>({n:e.n,d:"40″ / 20″"}))});
   }
-  if(fin){const fx=scegli(r,main.filter(e=>e.int>=6),["cardio","hinge","core"],2,I+1,avoid);
-    blocchi.push({nome:"Finisher · AMRAP 4′",fase:"finisher",min:fin,nota:"Più giri possibili in 4 minuti, tecnica prima di tutto.",
-      esercizi:fx.map(e=>({n:e.n,d:e.p==="cardio"?"12 rip / 15 cal":"10 rip"}))})}
-  const cEx=shuffle(r,coolL).slice(0,3);
-  blocchi.push({nome:"Defaticamento",fase:"cool",min:C,esercizi:cEx.map(e=>({n:e.n,d:fmtS(C*60/cEx.length)}))});
-  return {id:data+"_"+c.id,corso:c.id,data,durata:D,intensita:I,partecipanti:part,formato:c.formato,blocchi,why:A.why,zone:A.zone,
-    fonte:"Motore regole",creato:Date.now(),stat:{rpe:A.rpe,voto:A.voto,nfb:A.nfb},ver:variante||0};
+  if(fin){const fx=sc(main.filter(e=>e.int>=6),["cardio","hinge","core"],2,I+1);
+    if(fx.length)blocchi.push({nome:"Finisher · AMRAP 4′",fase:"finisher",min:fin,nota:"Più giri possibili in 4 minuti, tecnica prima di tutto.",
+      esercizi:fx.map(e=>({n:e.n,d:e.p==="cardio"?"12 rip / 15 cal":"10 rip"}))});else blocchi[blocchi.length-1].min+=fin}
+  /* varianti del giorno: esercizi nuovi costruiti su quelli del catalogo */
+  let nv=0;const maxV=c.livello>=2?2:1;
+  blocchi.filter(b=>b.fase==="main").forEach(b=>{if(nv>=maxV||r()>.7)return;
+    const cand=b.esercizi.map((x,i)=>[x,i]).filter(([x])=>{const e=PM[x.n];return e&&!e.v&&!e.imp&&VARIANTI[e.p]});if(!cand.length)return;
+    const [x,i]=cand[Math.floor(r()*cand.length)],e=PM[x.n];
+    const mods=VARIANTI[e.p].filter(v=>!(v[2]&&M.gentle));if(!mods.length)return;
+    const v=mods[Math.floor(r()*mods.length)],nome=e.n+" "+v[0];
+    regVariante(nome,e.n,v[1]);
+    b.esercizi[i]={n:nome,d:x.d};nv++;why.push("Esercizio nuovo per variare: “"+nome+"”.")});
+  const cEx=pick("cool",3);
+  blocchi.push({nome:M.gentle?"Respirazione e allungamento":"Defaticamento",fase:"cool",min:C,esercizi:cEx.map(e=>({n:e.n,d:dur(C,cEx.length)}))});
+  return {id:data+"_"+c.id,corso:c.id,data,durata:D,intensita:I,partecipanti:part,formato:M.formato,tema:T,blocchi,why,zone:A.zone.concat(F.zone),
+    fonte:"Coach automatico",creato:Date.now(),stat:{rpe:A.rpe,voto:A.voto,nfb:A.nfb},ver:variante||0};
 }
 
 /* 3 — controllo regole (vale anche per i programmi scritti dall'IA) */
 const REGOLE=[
   {id:"capienza",t:"Partecipanti entro la capienza massima del corso",x:"Mai più persone di quelle ammesse (oggi 10). Se succede il programma viene bloccato.",lock:1},
   {id:"vietati",t:"Nessun esercizio vietato per il corso",x:"Gli esercizi che metti nella lista nera del corso non compaiono mai.",lock:1},
-  {id:"attrezzi",t:"Solo esercizi del catalogo e attrezzi presenti in sala",x:"Se l'IA inventa un esercizio o usa un attrezzo che non c'è, viene sostituito.",lock:1},
+  {id:"attrezzi",t:"Solo esercizi conosciuti e attrezzi presenti in sala",x:"Ogni esercizio, comprese le varianti nuove inventate dal coach, deve usare attrezzi che ci sono: altrimenti viene sostituito.",lock:1},
   {id:"livello",t:"Esercizi adatti al livello del corso",x:"Niente esercizi avanzati nei corsi base e niente salti per i principianti.",lock:1},
   {id:"zone",t:"Zone con fastidio segnalato protette",x:"Se qualcuno segnala dolore a ginocchia, schiena o spalle, la seduta dopo evita gli esercizi che le caricano.",lock:1},
   {id:"intmax",t:"Intensità entro il tetto del livello",x:"Principiante massimo 7/10, intermedio 8/10, avanzato 9/10.",lock:1},
@@ -1503,8 +1687,8 @@ function verifica(p,c){
   sweep("zone",e=>e&&e.z&&zone.includes(e.z));
   const mainB=p.blocchi.find(b=>b.fase==="main");
   if(off.includes("schemi"))set("schemi","off");
-  else if(!mainB||c.formato==="flusso")set("schemi","ok","Non richiesto per i corsi di mobilità");
-  else{const pats=new Set(mainB.esercizi.map(e=>(PM[e.n]||{}).p));const need=[["gambe",["squat","lunge","hinge"]],["spinta",["push"]],["tirata",["pull"]],["core",["core"]]];const added=[];
+  else if(!mainB||(p.tema?p.formato==="flusso":c.formato==="flusso"))set("schemi","ok","Non richiesto per i corsi di mobilità e ginnastica dolce");
+  else{const pats=new Set(p.blocchi.filter(b=>b.fase==="main").flatMap(b=>b.esercizi.map(e=>(PM[e.n]||{}).p)));const need=[["gambe",["squat","lunge","hinge"]],["spinta",["push"]],["tirata",["pull"]],["core",["core"]]];const added=[];
     need.forEach(nd=>{if(nd[1].some(x=>pats.has(x)))return;const used=inUse();const e=POOL.find(x=>x.f==="main"&&nd[1].includes(x.p)&&ok(x)&&!used.has(x.n));
       if(e){mainB.esercizi.push({n:e.n,d:mainB.esercizi.length?mainB.esercizi[mainB.esercizi.length-1].d.replace(/Stazione \d+/,"Stazione "+(mainB.esercizi.length+1)):"10 rip"});added.push(nd[0]+": "+e.n)}else added.push(nd[0]+": nessun esercizio disponibile")});
     set("schemi",added.length?(added.some(a=>a.includes("nessun"))?"ko":"fix"):"ok",added.length?"Aggiunto "+added.join(" · "):"")}
@@ -1540,7 +1724,7 @@ function verifica(p,c){
 function autoProgrammi(){
   let n=0;
   Object.values(DB.agenda).filter(s=>s.tipo==="corso"&&s.d===T0).forEach(s=>{
-    const id=s.d+"_"+s.corso;if(DB.programmi[id])return;const c=corso(s.corso);if(!c)return;
+    const id=s.d+"_"+s.corso,old=DB.programmi[id];if(old&&!(old.auto&&old.fonte==="Motore regole"))return;const c=corso(s.corso);if(!c)return;
     DB.programmi[id]=verifica(genera(c,s.d,s.pren.length),c);DB.programmi[id].auto=true;n++});
   if(n)save();return n;
 }
@@ -2179,13 +2363,10 @@ function regoleBadge(p){const fx=p.regole.filter(r=>r.stato==="fix").length,ko=p
   return ko?'<span class="pill crit">'+ic("x",11)+' '+ko+' regole non rispettate</span>':fx?'<span class="pill warn">'+ic("check",11)+' '+okn+' ok · '+fx+' corrette</span>':'<span class="pill ok">'+ic("check",11)+' '+okn+' regole rispettate</span>'}
 function regoleList(p){return p.regole.map(r=>{const R=REGOLE.find(x=>x.id===r.id);return '<div class="rk '+r.stato+'"><span class="s">'+({ok:"✓",fix:"!",ko:"✕",off:"–"})[r.stato]+'</span><span>'+esc(R.t)+(r.dett?'<small>'+esc(r.dett)+'</small>':'')+'</span></div>'}).join("")}
 function vCorsi(){
-  if(S.iaStato==="?")probeIA();
   const tabs=["Programmi","Corsi e parametri","Regole","Storico e feedback","Come funziona"];
   return head("Corsi di gruppo · IA","Ogni mattina il motore prepara la seduta di ogni corso da parametri, storico e feedback. Le regole dello studio la controllano prima che arrivi in sala.",
    '<button class="btn" onclick="rigeneraGiorno()">'+ic("refresh",14)+' Rigenera il giorno</button>')+
-   '<div class="card flat" style="margin-bottom:14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span class="flabel">Motore</span>'+
-    '<div class="seg sm"><button class="'+(DB.settings.motore==="regole"?"on":"")+'" onclick="DB.settings.motore=\'regole\';save();render()">Regole (locale)</button><button class="'+(DB.settings.motore==="ia"?"on":"")+'" onclick="DB.settings.motore=\'ia\';save();render()">IA Claude + regole</button></div>'+
-    '<span class="hint" style="margin:0">'+(S.iaStato==="on"?'<span class="pill ok">IA collegata</span>':S.iaStato==="off"?'<span class="pill">IA non collegata</span> qui gira il motore a regole: per attivare Claude vedi “Come funziona”':'verifico il collegamento…')+'</span></div>'+
+   '<div class="card flat" style="margin-bottom:14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span class="pill ok">Coach automatico attivo</span><span class="hint" style="margin:0">Legge nome, tipo e focus di ogni corso, lo storico e i feedback, e scrive la seduta. Gira dentro l\'app, senza costi.</span></div>'+
    tabsHTML(tabs,S.ctab,"S.ctab")+[corsiProg,corsiParam,corsiRegole,corsiStorico,corsiInfo][S.ctab]();
 }
 function corsiProg(){
@@ -2196,7 +2377,7 @@ function corsiProg(){
 }
 function progCard(s){
   const pk=s.d+"_"+s.corso,c=corso(s.corso),p=DB.programmi[pk],busy=S.busy[s.id];
-  const meta='<div class="inline" style="margin:-4px 0 12px"><span class="pill">'+LIVELLI[c.livello]+'</span><span class="pill">'+c.durata+'′</span><span class="pill">'+s.pren.length+'/'+s.cap+' iscritti</span><span class="pill">'+esc(c.obiettivo)+'</span>'+
+  const meta='<div class="inline" style="margin:-4px 0 12px"><span class="pill">'+LIVELLI[c.livello]+'</span><span class="pill">'+c.durata+'′</span><span class="pill">'+s.pren.length+'/'+s.cap+' iscritti</span><span class="pill">'+TEMI[temaCorso(c)].n+'</span>'+
    (p?'<span class="pill gold">Intensità '+p.intensita+'/10</span><span class="pill '+(p.fonte.startsWith("IA")?"vio":"info")+'">'+esc(p.fonte)+'</span>'+regoleBadge(p):'')+'</div>';
   return '<div class="card '+(busy?"busy":"")+'" style="margin-bottom:14px"><div class="card-h"><span class="num" style="font-family:var(--disp);font-size:19px;color:var(--gold-mid)">'+s.h+'</span><h3>'+esc(c.n)+'</h3>'+
    '</div>'+meta+'<div class="pacts"><button class="btn sm primary" onclick="rigenera(\''+s.id+'\','+(p?"0":"1")+')">'+(busy?"Genero…":p?"Rigenera":"Genera ora")+'</button>'+(p?'<button class="btn sm" onclick="rigenera(\''+s.id+'\')">'+ic("refresh",13)+' Nuova versione</button>':'')+'<button class="btn sm" onclick="editCorso(\''+c.id+'\')">Parametri</button></div>'+
@@ -2211,7 +2392,6 @@ async function rigenera(sid,stessa){
   const s=DB.agenda[sid],c=corso(s.corso),old=DB.programmi[s.d+"_"+s.corso];
   const ver=stessa?(old?old.ver:0):((old?old.ver:0)+1);
   S.busy[sid]=1;render();let p=null;
-  if(DB.settings.motore==="ia"){try{p=await generaConIA(c,s.d,s.pren.length,ver)}catch(e){S.iaStato="off";toast("IA non raggiungibile: uso il motore a regole")}}
   if(!p)p=verifica(genera(c,s.d,s.pren.length,ver),c);
   DB.programmi[p.id]=p;delete S.busy[sid];save();render();toast("Programma pronto · "+c.n);
 }
@@ -2221,7 +2401,8 @@ function corsiParam(){
   return '<div class="grid g2">'+DB.corsi.map(c=>'<div class="card">'+cardH("users",esc(c.n),'<button class="btn sm" onclick="editCorso(\''+c.id+'\')">'+ic("edit",13)+' Modifica</button>')+
    '<div class="kv"><span>Livello</span><b>'+LIVELLI[c.livello]+'</b></div><div class="kv"><span>Obiettivo</span><span>'+esc(c.obiettivo)+'</span></div>'+
    '<div class="kv"><span>Durata</span><span>'+c.durata+'′</span></div><div class="kv"><span>Intensità obiettivo</span><span>'+c.intensita+'/10</span></div>'+
-   '<div class="kv"><span>Formato</span><span>'+FORMATI[c.formato]+'</span></div>'+
+   '<div class="kv"><span>Tipo di corso</span><span>'+TEMI[temaCorso(c)].n+(c.tema?'':' <small class="dim">(dal nome)</small>')+'</span></div>'+
+   (c.focus?'<div class="kv"><span>Focus</span><span>'+esc(c.focus)+'</span></div>':'<div class="kv"><span>Focus</span><span class="dim">non scritto · tocca Modifica</span></div>')+
    '<div class="kv"><span>Partecipanti</span><span>da prenotazioni · max '+DB.settings.maxCorso+'</span></div>'+
    '<div style="margin-top:8px"><div class="flabel" style="margin-bottom:5px">Attrezzatura</div><div class="chips">'+["corpo libero"].concat(c.attrezzi).map(a=>'<span class="chk on">'+a+'</span>').join("")+'</div></div>'+
    (c.vietati.length?'<div style="margin-top:10px"><div class="flabel" style="margin-bottom:5px">Vietati</div><div class="chips">'+c.vietati.map(a=>'<span class="chk no">'+esc(a)+'</span>').join("")+'</div></div>':'')+
@@ -2230,22 +2411,24 @@ function corsiParam(){
 }
 let CED=null;
 function editCorso(id){const c=corso(id);CED={attrezzi:c.attrezzi.slice(),vietati:c.vietati.slice(),consentiti:c.consentiti.slice()};
-  openModal('<h3>'+esc(c.n)+'</h3><p class="muted" style="margin-bottom:14px">Questi sono i paletti dentro cui il motore costruisce ogni seduta.</p>'+
+  openModal('<h3>'+esc(c.n)+'</h3><p class="muted" style="margin-bottom:14px">Il coach costruisce ogni seduta su nome, tipo e focus del corso, dentro questi paletti.</p>'+
    '<div class="field"><label>Nome del corso</label><input class="fi" id="cN" value="'+esc(c.n)+'"></div>'+
    '<div class="frow"><div class="field"><label>Livello</label><select class="fi" id="cL">'+[1,2,3].map(l=>'<option value="'+l+'"'+(l===c.livello?" selected":"")+'>'+LIVELLI[l]+'</option>').join("")+'</select></div>'+
    '<div class="field"><label>Obiettivo</label><select class="fi" id="cO">'+OBIETTIVI.map(o=>'<option'+(o===c.obiettivo?" selected":"")+'>'+o+'</option>').join("")+'</select></div>'+
    '<div class="field"><label>Durata (min)</label><input class="fi" type="number" min="30" max="90" step="5" id="cD" value="'+c.durata+'"></div></div>'+
-   '<div class="frow"><div class="field"><label>Formato</label><select class="fi" id="cF">'+Object.keys(FORMATI).map(f=>'<option value="'+f+'"'+(f===c.formato?" selected":"")+'>'+FORMATI[f]+'</option>').join("")+'</select></div>'+
+   '<div class="field"><label>Focus del corso · scrivi a parole tue cosa deve fare</label><textarea class="fi" id="cFo" rows="3" placeholder="Es. postura e schiena, core profondo, niente salti, proteggere le ginocchia">'+esc(c.focus||"")+'</textarea>'+
+   '<span class="hint">Il coach lo legge a ogni seduta: parole come equilibrio, glutei, schiena, core, fiato, mobilità, forza, niente salti, senza attrezzi, proteggere le ginocchia cambiano gli esercizi scelti.</span></div>'+
+   '<div class="frow"><div class="field"><label>Tipo di corso</label><select class="fi" id="cT"><option value="auto">Automatico dal nome · ora: '+TEMI[temaCorso(Object.assign({},c,{tema:null}))].n+'</option>'+Object.keys(TEMI).map(k=>'<option value="'+k+'"'+(c.tema===k?" selected":"")+'>'+TEMI[k].n+'</option>').join("")+'</select></div>'+
    '<div class="field"><label>Intensità obiettivo · <span id="cIv">'+c.intensita+'</span>/10</label><input type="range" min="2" max="9" id="cI" value="'+c.intensita+'" oninput="el(\'cIv\').textContent=this.value"></div></div>'+
    '<div class="field"><label>Attrezzatura disponibile in sala</label><div class="chips" id="cA">'+ATTREZZI.map(a=>'<button type="button" class="chk '+(CED.attrezzi.includes(a)?"on":"")+'" onclick="CED.attrezzi=CED.attrezzi.includes(\''+a+'\')?CED.attrezzi.filter(x=>x!==\''+a+'\'):CED.attrezzi.concat(\''+a+'\');this.classList.toggle(\'on\')">'+a+'</button>').join("")+'</div></div>'+
-   '<div class="field"><label>Esercizi · tocca una volta per vietarlo, due volte per usare solo quelli scelti</label><div class="chips">'+POOL.filter(e=>e.f==="main").map(e=>{const st=CED.vietati.includes(e.n)?"no":CED.consentiti.includes(e.n)?"on":"";
+   '<div class="field"><label>Esercizi · tocca una volta per vietarlo, due volte per usare solo quelli scelti</label><div class="chips">'+POOL.filter(e=>e.f==="main"&&!e.v&&(!e.t||e.t.includes(temaCorso(c)))).map(e=>{const st=CED.vietati.includes(e.n)?"no":CED.consentiti.includes(e.n)?"on":"";
      return '<button type="button" class="chk '+st+'" onclick="cicloEx(this,\''+e.n.replace(/'/g,"\\'")+'\')">'+esc(e.n)+'</button>'}).join("")+'</div>'+
    '<span class="hint">Rosso barrato = vietato · oro = lista ristretta (se ne scegli almeno uno, il motore usa solo quelli) · neutro = libero.</span></div>'+
    '<div class="inline" style="justify-content:flex-end"><button class="btn primary" onclick="salvaCorso(\''+id+'\')">Salva parametri</button></div>')}
 function cicloEx(b,n){if(CED.vietati.includes(n)){CED.vietati=CED.vietati.filter(x=>x!==n);CED.consentiti.push(n);b.className="chk on"}
   else if(CED.consentiti.includes(n)){CED.consentiti=CED.consentiti.filter(x=>x!==n);b.className="chk"}else{CED.vietati.push(n);b.className="chk no"}}
 function salvaCorso(id){const c=corso(id);c.n=el("cN").value.trim()||c.n;c.livello=+el("cL").value;c.obiettivo=el("cO").value;c.durata=clamp(parseInt(el("cD").value)||c.durata,30,90);
-  c.formato=el("cF").value;c.intensita=+el("cI").value;c.attrezzi=CED.attrezzi;c.vietati=CED.vietati;c.consentiti=CED.consentiti;
+  c.focus=el("cFo").value.trim();c.tema=el("cT").value==="auto"?null:el("cT").value;c.formato=TEMI[temaCorso(c)].formato;c.intensita=+el("cI").value;c.attrezzi=CED.attrezzi;c.vietati=CED.vietati;c.consentiti=CED.consentiti;
   Object.values(DB.agenda).forEach(s=>{if(s.corso===id)s.dur=c.durata});save();closeModal();render();toast("Parametri salvati · valgono dalla prossima generazione")}
 function corsiRegole(){
   const off=DB.settings.regoleOff||[];
@@ -2292,18 +2475,18 @@ function archSVG(){
 }
 function corsiInfo(){
   return '<div class="card" style="margin-bottom:14px">'+cardH("spark","Lo schema")+archSVG()+'</div>'+
-  '<div class="grid g2"><div class="card">'+cardH("info","Cosa fa l\'IA, cosa fanno le regole")+
+  '<div class="grid g2"><div class="card">'+cardH("info","Cosa fa il coach, cosa fanno le regole")+
    '<div class="stack" style="font-size:14px;color:var(--txt-2)">'+
    '<p><b style="color:var(--txt)">Parte dai tuoi parametri.</b> Per ogni corso: tipologia, livello, obiettivo, durata, partecipanti (letti dalle prenotazioni), attrezzatura in sala, esercizi consentiti o vietati, intensità.</p>'+
    '<p><b style="color:var(--txt)">Legge lo storico.</b> Le ultime sedute del corso e i feedback a fine lezione: fatica percepita da 1 a 10, gradimento da 1 a 5, eventuali fastidi a ginocchia, schiena o spalle.</p>'+
    '<p><b style="color:var(--txt)">Adatta la seduta successiva.</b> Troppa fatica → scende di un punto. Troppo facile → sale di uno. Gradimento basso → cambia esercizi. Fastidi segnalati → toglie quelli che caricano quella zona.</p>'+
-   '<p><b style="color:var(--txt)">Le regole hanno l\'ultima parola.</b> L\'IA propone, il controllo regole verifica: se l\'IA inventa un esercizio, sfora la durata o alza troppo l\'intensità, il programma viene corretto o bloccato. Ogni scelta resta scritta nel “Perché così”.</p></div></div>'+
-  '<div class="card">'+cardH("shield","Collegare l\'IA vera (Claude)")+
+   '<p><b style="color:var(--txt)">Le regole hanno l\'ultima parola.</b> Il coach propone, il controllo regole verifica: se un esercizio usa un attrezzo che non c\'è, se la durata sfora o l\'intensità sale troppo, il programma viene corretto o bloccato. Ogni scelta resta scritta nel “Perché così”.</p></div></div>'+
+  '<div class="card">'+cardH("shield","Come capisce i tuoi corsi")+
    '<div class="stack" style="font-size:14px;color:var(--txt-2)">'+
-   '<p>In questa demo la generazione la fa il <b style="color:var(--txt)">motore a regole</b>, che gira nel browser e funziona senza internet: è già lui ad applicare storico e feedback.</p>'+
-   '<p>Nella cartella del sito c\'è già la funzione <code>netlify/functions/genera-programma.mjs</code>: riceve parametri, storico e regole, chiede a Claude il programma in formato strutturato e lo rimanda indietro. L\'app poi lo passa comunque dal controllo regole.</p>'+
-   '<p>Per accenderla: pubblicare il sito da Git (non col trascina-e-rilascia), aggiungere su Netlify la variabile <code>ANTHROPIC_API_KEY</code> e scegliere qui sopra “IA Claude + regole”.</p>'+
-   '<p>Per la versione definitiva serve anche un database condiviso (prenotazioni, storico, feedback): oggi i dati vivono nel singolo browser.</p></div></div></div>';
+   '<p><b style="color:var(--txt)">Dal nome e dal tipo.</b> Senior Fit, Ginnastica Dolce, Mobilità & Postura, Circuit, Functional, Tabata, Total Body e Bootcamp hanno ognuno la sua struttura: blocchi, tempi, dosaggi ed esercizi dedicati. Se un nome non viene riconosciuto, scegli il tipo a mano in Modifica.</p>'+
+   '<p><b style="color:var(--txt)">Dal focus che scrivi.</b> In Modifica scrivi a parole tue cosa deve fare il corso: equilibrio, glutei, schiena, core, fiato, mobilità, niente salti, senza attrezzi, proteggere le ginocchia… Dalla seduta dopo gli esercizi cambiano di conseguenza.</p>'+
+   '<p><b style="color:var(--txt)">Inventa varianti.</b> Ogni giorno trasforma uno o due esercizi in versioni nuove (tempo lento, fermo, un braccio solo…) con la spiegazione su come farle, così le sedute non si ripetono.</p>'+
+   '<p><b style="color:var(--txt)">Gratis e sempre acceso.</b> Gira dentro l\'app, senza servizi esterni a pagamento.</p></div></div></div>';
 }
 
 /* =================== VISTE CLIENTE =================== */
