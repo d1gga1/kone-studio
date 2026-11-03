@@ -813,6 +813,28 @@ button.pp.warn:hover{background:rgba(224,151,58,.28)}
   .stepper li>span,.stepper li>button{font-size:9px;letter-spacing:.08em}
   .act .tx b{font-size:13px}
 }
+/* =================== v8 · nuovi corsi, libreria scheda, bonifico, rinnovo, avviso =================== */
+.avviso{display:flex;gap:11px;align-items:flex-start;padding:12px 14px;margin:0 0 14px;border-radius:12px;border:1.5px solid #E0645C;background:rgba(224,100,92,.12);color:#F6D7D3;font-size:14px;line-height:1.5;animation:avvBlink 1.4s ease-in-out infinite}
+.avviso p{margin:0}.avviso b{color:#fff;font-weight:600}
+.avviso .av-i{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:#E0645C;color:#140806;font-weight:700;font-size:15px;line-height:1}
+@keyframes avvBlink{0%,100%{border-color:#E0645C;background:rgba(224,100,92,.10);box-shadow:0 0 0 0 rgba(224,100,92,0)}50%{border-color:#FFB0A8;background:rgba(224,100,92,.28);box-shadow:0 0 0 4px rgba(224,100,92,.16)}}
+@media (prefers-reduced-motion:reduce){.avviso{animation:none;background:rgba(224,100,92,.2)}}
+.lgrp{margin-bottom:16px}.lgrp-h{font-family:var(--disp);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-mid);margin:2px 0 9px}
+.lcard{gap:7px}.lcard .lthumb{display:block;padding:0;border:0;background:none;cursor:zoom-in;border-radius:11px}
+.lcard .btn{align-self:flex-start;margin-top:auto}.lcard.added{border-color:rgba(79,168,106,.55);background:linear-gradient(160deg,rgba(79,168,106,.10),var(--ink-2))}
+#libGrid{max-height:min(1100px,75vh);overflow:auto;padding-right:4px;overscroll-behavior:contain}
+.cdot{width:12px;height:12px;border-radius:50%;flex:none;display:inline-block}
+.colsw{width:30px;height:30px;border-radius:50%;border:2px solid transparent;box-shadow:inset 0 0 0 2px rgba(0,0,0,.25)}
+.colsw.on{border-color:#fff;box-shadow:0 0 0 2px var(--gold)}
+.occ-list{max-height:260px;overflow:auto}
+.bonbox .bonrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:7px 0;border-bottom:1px solid var(--line-soft)}
+.bonbox .bonrow span{width:92px;flex:none;color:var(--txt-3);font-size:13px}.bonbox .bonrow b{flex:1;min-width:0;word-break:break-all;font-weight:600}
+.bonbox .bonrow .btn{flex:none}
+.chkline{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;border:1px solid var(--line-soft);background:var(--ink-2);cursor:pointer;margin-bottom:14px}
+.chkline input{width:18px;height:18px;margin-top:2px;accent-color:var(--gold);flex:none}.chkline span{display:flex;flex-direction:column;gap:2px}.chkline small{font-size:12.5px;color:var(--txt-3)}
+.rinbox{margin-bottom:14px;align-items:center}.rinbox>div{flex:1}.rinbtn{margin-top:6px}
+@media (max-width:700px){.bonbox .bonrow span{width:100%}#libGrid{max-height:none;overflow:visible}}
+
 </style>
 </head>
 <body>
@@ -986,7 +1008,7 @@ const LISTINO_SEED={
     {n:"Coppia · 1 seduta",d:"Due persone, stessa seduta",sed:1,p:65},
     {n:"Coppia · 4 sedute",d:"Due persone, stessa seduta",sed:4,p:260}],
   corsi:[
-    {n:"Ingresso singolo",d:"Un corso di gruppo a scelta",sed:1,p:12},
+    {n:"Ingresso singolo",d:"Un corso di gruppo a scelta",sed:1,p:29},
     {n:"Carnet 10 ingressi",d:"Valido su tutti i corsi",sed:10,p:100},
     {n:"Mensile 2 corsi a settimana",d:"8 ingressi nel mese",sed:8,p:59},
     {n:"Mensile illimitato",d:"Tutti i corsi del mese",sed:0,p:79}],
@@ -1337,7 +1359,7 @@ function pubTok(){try{return localStorage.getItem("km2_pubtok")||""}catch(e){ret
 function pubCfg(){return Object.assign({},PUB_DEF,(DB&&DB.settings.pub)||{})}
 function prezziSnap(){return {listino:DB.listino,
   trattamenti:DB.trattamenti.map(t=>{const o={};Object.keys(t).forEach(k=>{const v=t[k];if(!(typeof v==="string"&&v.slice(0,5)==="data:"))o[k]=v});return o}),
-  paypal:DB.settings.paypal||""}}
+  paypal:DB.settings.paypal||"",bonifico:DB.settings.bonifico||null,portale:DB.settings.portale||""}}
 const prezziSig=()=>JSON.stringify(prezziSnap());
 function prezziCheck(){
   if(!DB||_pSig===null)return;
@@ -1380,7 +1402,7 @@ async function caricaPrezzi(){
     DB.listino=j.listino;
     if(Array.isArray(j.trattamenti)&&j.trattamenti.length){const old=DB.trattamenti;
       DB.trattamenti=j.trattamenti.map(t=>{const o=old.find(x=>x.id===t.id);if(o)Object.keys(o).forEach(k=>{if(t[k]===undefined&&typeof o[k]==="string"&&o[k].slice(0,5)==="data:")t[k]=o[k]});return t})}
-    if(j.paypal)DB.settings.paypal=j.paypal;
+    if(j.paypal)DB.settings.paypal=j.paypal;if(j.bonifico&&typeof j.bonifico==="object")DB.settings.bonifico=j.bonifico;if(typeof j.portale==="string")DB.settings.portale=j.portale;
     DB.settings.prezziAgg=j.agg;_pSig=prezziSig();LS.set("db",DB);
     if(el("app").classList.contains("show")&&!el("modal").classList.contains("on")&&!(document.activeElement&&/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)))render();
   }catch(e){}
@@ -1413,7 +1435,7 @@ async function pubSalva(){
   closeModal();toast("Collegato: pubblico i prezzi");pubblicaPrezzi();
 }
 function pubScollega(){try{localStorage.removeItem("km2_pubtok")}catch(e){}PUB.st="";closeModal();refreshPubBar();toast("Pubblicazione scollegata su questo dispositivo")}
-const corso=id=>DB.corsi.find(c=>c.id===id);
+const corso=id=>DB.corsi.find(c=>c.id===id)||(DB.corsiArch||[]).find(c=>c.id===id);
 const cli=id=>DB.clienti.find(c=>c.id===id);
 const exLib=n=>DB.esercizi.find(e=>e.n===n)||varLib(n);
 function varLib(n){const v=DB.exVar&&DB.exVar[n];if(!v)return null;const b=DB.esercizi.find(e=>e.n===v.base);return Object.assign({},b||{m:"Variante"},{n,istr:(b&&b.istr?b.istr+" ":"")+"Variante di oggi: "+(v.mod||v.istr||"")})}
@@ -1422,7 +1444,7 @@ const clone=o=>JSON.parse(JSON.stringify(o));
 
 function initDB(){
   const d=LS.get("db",null);
-  if(d&&d.v===DBV){DB=d;migraSchede();migraPrezzi();migraEsercizi();migraEnciclopedia();migraEserciziCorsi();migraEserciziTemi();caricaVarianti();ensureAgenda(false);autoProgrammi();return}
+  if(d&&d.v===DBV){DB=d;migraSchede();migraPrezzi();migraEsercizi();migraEnciclopedia();migraEserciziCorsi();migraEserciziTemi();caricaVarianti();migraV8();ensureAgenda(false);autoProgrammi();return}
   DB={v:DBV,
     settings:{maxCorso:10,maxPT:3,maxTratt:2,motore:"regole",regoleOff:[],pwCoach:hashPw("kone2026"),pwConti:hashPw("conti2026")},
     clienti:clone(CLIENTI_SEED).map(c=>{if(c.pw){c.pw=hashPw(c.pw)}return c}),
@@ -1431,7 +1453,7 @@ function initDB(){
     scheda:clone(SCHEDA_SEED),chat:clone(CHAT_SEED),
     pesi:{},carichi:{},agenda:{},programmi:{},feedback:[],movimenti:[]};
   migraSchede();
-  seedPesi();seedCarichi();ensureAgenda(true);seedMarco();seedStorico();seedMovimenti();autoProgrammi();migraPrezzi();migraEsercizi();migraEnciclopedia();migraEserciziCorsi();migraEserciziTemi();caricaVarianti();save();
+  seedPesi();seedCarichi();ensureAgenda(true);seedMarco();seedStorico();seedMovimenti();autoProgrammi();migraPrezzi();migraEsercizi();migraEnciclopedia();migraEserciziCorsi();migraEserciziTemi();caricaVarianti();migraV8();save();
 }
 function seedPesi(){
   const marco=[88.5,88.0,87.4,87.1,86.5,86.2,85.9,85.4,85.5,85.0,84.6,84.2];
@@ -1452,7 +1474,7 @@ function ensureAgenda(seedBookings){
   for(let i=-21;i<=13;i++){
     const dt=addD(TODAY,i),d=iso(dt);
     (TPL[dt.getDay()]||[]).forEach(t=>{
-      const id=d+"_"+t[0];if(DB.agenda[id])return;
+      const id=d+"_"+t[0];if(DB.agenda[id]||(DB.agendaDel&&DB.agendaDel[id]))return;if(t[2]&&!DB.corsi.some(x=>x.id===t[2]))return;
       const c=t[2]?corso(t[2]):null;
       const s={id,d,h:t[0],tipo:t[1],corso:t[2]||null,cap:t[1]==="corso"?DB.settings.maxCorso:1,dur:c?c.durata:t[1]==="tratt"?50:60,pren:[],chiuso:false};
       const r=rng("ag"+id);
@@ -2046,7 +2068,7 @@ function vClienti(){
   return head("Clienti",DB.clienti.length+" clienti · tocca Apri per scheda, peso, carichi, prenotazioni e accesso all'app",'<button class="btn primary" onclick="nuovoCliente()">+ Nuovo cliente</button>')+
   '<div class="card"><div class="scroll-x"><table><thead><tr><th>Cliente</th><th>Piano</th><th>Avanzamento</th><th>Scadenza</th><th>Ultimo allenamento</th><th>Stato</th><th></th></tr></thead><tbody>'+
   DB.clienti.map(c=>{const p=(DB.pesi[c.id]||[]).slice(-1)[0];return '<tr><td><div class="inline"><span class="av">'+c.i+'</span><span><span style="font-weight:600">'+esc(c.n)+'</span><br><span class="dim" style="font-size:12.5px">'+(p?fmtN(p.kg)+" kg · ":"")+'aderenza '+c.ader+'%</span></span></div></td>'+
-   '<td>'+esc(c.piano)+'<br><span class="dim" style="font-size:12.5px">'+esc(c.extra)+'</span><br>'+(DB.schede[c.id]?'<span class="pill ok" style="margin-top:4px">scheda attiva</span>':'<span class="pill warn" style="margin-top:4px">senza scheda</span>')+'</td>'+
+   '<td>'+esc(c.piano)+rinPill(c)+'<br><span class="dim" style="font-size:12.5px">'+esc(c.extra)+'</span><br>'+(DB.schede[c.id]?'<span class="pill ok" style="margin-top:4px">scheda attiva</span>':'<span class="pill warn" style="margin-top:4px">senza scheda</span>')+'</td>'+
    '<td style="min-width:130px"><div class="num" style="font-size:13px;margin-bottom:5px">'+usoTxt(c)+' sedute</div><div class="meter '+(!c.illim&&c.tot&&c.usate>=c.tot?"crit":"")+'"><i style="width:'+pctUso(c)+'%"></i></div></td>'+
    '<td class="num">'+c.scad+'</td><td>'+(c.gg===0?"oggi":c.gg+" giorni fa")+'</td><td>'+statoCli(c)+'</td>'+
    '<td><button class="btn sm" onclick="openClient('+c.id+')">Apri</button></td></tr>'}).join("")+'</tbody></table></div></div>';
@@ -2056,7 +2078,7 @@ function vCliente(){
   if(S.tab===0){const pp=DB.pesi[c.id]||[];
     body='<div class="grid g2"><div class="card">'+cardH("card","Abbonamento")+'<div class="stack">'+
      '<div class="kv"><span>Piano</span><b>'+esc(c.piano)+'</b></div><div class="kv"><span>Contenuto</span><span>'+esc(c.extra)+'</span></div>'+
-     '<div class="kv"><span>Scadenza</span><span class="num">'+c.scad+'</span></div>'+
+     '<div class="kv"><span>Scadenza</span><span class="num">'+c.scad+'</span></div>'+(c.rinnovo?'<div class="kv"><span>Rinnovo</span><span>'+(c.disdetta?'<span class="pill warn">disdetto il '+fmtD(c.disdetta,{day:"numeric",month:"short"})+'</span> finisce il '+c.scad:'automatico ogni mese'+(c.pMese?' · '+eur(c.pMese):''))+'</span></div>':'')+
      '<div><div class="kv"><span>Sedute usate</span><span class="num">'+usoTxt(c)+'</span></div><div class="meter"><i style="width:'+pctUso(c)+'%"></i></div></div>'+
      '<div class="inline">'+statoCli(c)+'<span class="pill gold">Aderenza '+c.ader+'%</span></div>'+
      '<button class="btn primary sm" style="align-self:flex-start" onclick="pianoModal('+c.id+')">'+ic("edit",13)+' Modifica abbonamento e sedute</button></div></div>'+
@@ -2087,13 +2109,10 @@ function schedaEditor(){
     '<td><input class="inp" style="width:200px;text-align:left" value="'+esc(e.note)+'" onchange="setEx('+i+',\'note\',this.value)" aria-label="note"></td>'+
     '<td><button class="icon-btn" onclick="togliEx('+i+')" aria-label="Togli esercizio">'+ic("trash",15)+'</button></td></tr>'}).join("")+
    '</tbody></table></div>':'<p class="muted">Giorno di riposo o seduta di massaggio. Aggiungi esercizi qui sotto per trasformarlo in un giorno di allenamento.</p>')+'</div>'+
-  '<div class="card" style="margin-top:14px">'+cardH("dumb","Aggiungi dalla libreria")+
-   '<div class="lib">'+DB.esercizi.filter(x=>!d.ex.some(e=>e.n===x.n)).map(x=>'<button class="libx" onclick="aggiungiEx(\''+x.id+'\')">+ '+esc(x.n)+(x.video?" ▶":"")+'</button>').join("")+'</div>'+
-   '<p class="hint">Ogni esercizio porta con sé la sua foto e il suo video: il cliente li vede aprendo l\'esercizio nella sua app. ▶ = video presente.</p></div>';
+  libPicker(d);
 }
 function setEx(i,k,v,isNum){const e=DB.scheda.giorni[S.day].ex[i];e[k]=isNum?(num(v)||0):v;save();toast("Scheda aggiornata")}
 function togliEx(i){DB.scheda.giorni[S.day].ex.splice(i,1);save();render()}
-function aggiungiEx(id){const x=DB.esercizi.find(e=>e.id===id);DB.scheda.giorni[S.day].ex.push({n:x.n,s:3,r:"10",kg:0,last:0,rec:60,note:""});save();render();toast(x.n+" aggiunto")}
 function vLibreria(){
   const grp={};DB.esercizi.forEach(e=>{(grp[e.m]=grp[e.m]||[]).push(e)});
   const nf=DB.esercizi.filter(e=>e.foto).length,nv=DB.esercizi.filter(e=>e.video).length;
@@ -2125,7 +2144,7 @@ function aggiungiPren(id){const s=DB.agenda[id],v=el("add_"+id.replace(/[^\w]/g,
   if(s.pren.length>=s.cap)return toast("Posti esauriti: aumenta la capienza con +");
   const c=cli(+v);const b={cid:c.id,nome:c.n};if(s.tipo==="tratt"){b.tratt="decon";b.dur=50}s.pren.push(b);save();render()}
 function toggleChiuso(id){DB.agenda[id].chiuso=!DB.agenda[id].chiuso;save();render()}
-function eliminaSlot(id){delete DB.agenda[id];S.aopen=null;save();render();toast("Orario eliminato")}
+function eliminaSlot(id){delete DB.agenda[id];(DB.agendaDel=DB.agendaDel||{})[id]=1;S.aopen=null;save();render();toast("Orario eliminato")}
 function impostazioniCapienza(){const st=DB.settings;
   openModal('<h3>Capienza massima</h3><p class="muted" style="margin-bottom:14px">Il tetto oltre cui non si può andare con il tasto +. La regola dello studio per i corsi è 10.</p>'+
    '<div class="frow"><div class="field"><label>Corsi di gruppo</label><input class="fi" type="number" min="1" max="40" id="mxC" value="'+st.maxCorso+'"></div>'+
@@ -2176,13 +2195,13 @@ function tabL(key,extraHead){const c=SEZ[key],rows=DB.listino[key]=DB.listino[ke
   return '<div class="card" style="margin-top:14px">'+cardH(c.ic,c.t,extraHead||"")+
    (rows.length?'<table class="rt"><thead><tr><th>'+c.col+'</th>'+(c.det?'<th>'+(c.sed?"Dettaglio":"Contenuto")+'</th>':'')+(c.sed?'<th>'+c.sed+'</th>':'')+'<th style="text-align:right">Prezzo</th>'+(c.aSed?'<th style="text-align:right">A seduta</th>':'')+(coach?'<th></th>':(c.risp?'<th></th>':''))+'</tr></thead><tbody>'+
    rows.map((r,i)=>{const b="listino."+key+"."+i,pe=pEff(r);
-    return '<tr><td data-l="'+c.col+'">'+(coach?tin(b+".n",r.n,"tl",c.col):'<b>'+(key==="percorsi"?"Percorso ":"")+esc(r.n)+'</b>')+'</td>'+
+    return '<tr><td data-l="'+c.col+'">'+(coach?tin(b+".n",r.n,"tl",c.col):'<b>'+(key==="percorsi"?"Percorso ":"")+esc(r.n)+'</b>'+(isMeseVoce(key,r)?'<br><button class="btn sm rinbtn" onclick="attivaModal(\''+key+'\','+i+')">'+ic("refresh",12)+' Attiva · rinnovo automatico</button>':''))+'</td>'+
      (c.det?'<td data-l="'+(c.sed?"Dettaglio":"Contenuto")+'" class="muted">'+(coach?tin(b+".d",r.d||"","dt","Dettaglio"):esc(r.d||""))+'</td>':'')+
      (c.sed?'<td data-l="'+c.sed+'" class="num">'+(coach?tin(b+".sed",r.sed||0,"sd",c.sed):(r.sed||"illimitati"))+'</td>':'')+
      '<td data-l="Prezzo" style="text-align:right">'+priceCell(b+".p",r.p,r.n)+'</td>'+
      (c.aSed?'<td data-l="A seduta" class="num dim" style="text-align:right">'+(r.sed?eur(Math.round(pe/r.sed*100)/100):"—")+'</td>':'')+
      (coach?'<td class="tools"><div class="tl-b">'+(c.risp?'<button class="btn sm ghost" onclick="rispModal(\''+key+'\','+i+')" title="Risparmio mostrato al cliente">risparmi '+eur(r.r||0)+'</button> ':'')+
-       '<button class="btn sm ghost'+(scAtt(r)?" sc-on":"")+'" onclick="scontoModal(\''+b+'\')">'+(r.sc>0?"−"+r.sc+"%"+(scAtt(r)?"":" scaduto"):"% sconto")+'</button> '+
+       (isMeseVoce(key,r)?'<button class="btn sm ghost'+(r.link?" sc-on":"")+'" onclick="linkModal(\''+key+'\','+i+')" title="Link di pagamento ricorrente">'+ic("refresh",12)+(r.link?' addebito ✓':' addebito auto')+'</button> ':'')+'<button class="btn sm ghost'+(scAtt(r)?" sc-on":"")+'" onclick="scontoModal(\''+b+'\')">'+(r.sc>0?"−"+r.sc+"%"+(scAtt(r)?"":" scaduto"):"% sconto")+'</button> '+
        '<button class="icon-btn" onclick="eliminaVoce(\''+key+'\','+i+')" aria-label="Elimina voce">'+ic("trash",15)+'</button></div></td>'
       :(c.risp?'<td>'+(r.r?'<span class="pill ok">risparmi '+eur(r.r)+'</span>':'')+'</td>':''))+'</tr>'}).join("")+'</tbody></table>':'<p class="muted">Nessuna voce.</p>')+
    (coach?'<button class="btn sm addrow" onclick="aggiungiVoce(\''+key+'\')">'+ic("plus",13)+' Aggiungi voce</button>':'')+
@@ -2224,9 +2243,9 @@ function vListino(){
   const nSc=righeAmbito("tutto").filter(scAtt).length;
   const intro=coach?'<div class="alert info" style="margin-bottom:14px"><div><b>Il listino è tuo</b><p>Cambia nomi, descrizioni, sedute e prezzi direttamente nelle tabelle (si salva da solo quando esci dalla casella). Con “+ Aggiungi voce” crei un pacchetto nuovo, col cestino lo togli, con “% sconto” fai una promozione. I clienti vedono tutto subito.'+(nSc?' <b>'+nSc+' sconti attivi.</b>':'')+'</p></div></div>':(nSc?'<div class="alert info" style="margin-bottom:14px"><div><b>Promozioni in corso</b><p>I prezzi scontati sono già indicati qui sotto.</p></div></div>':'');
   const pb=coach?'<div id="pubBar">'+pubBarHTML()+'</div>':"";
-  if(S.area==="allen")return head(coach?"Listino · Allenamenti":"Prezzi · Allenamenti",coach?"Modifichi e i clienti lo vedono subito nella loro app":"One to one con Kone e corsi di gruppo",tools)+pb+intro+
+  if(S.area==="allen")return head(coach?"Listino · Allenamenti":"Prezzi · Allenamenti",coach?"Modifichi e i clienti lo vedono subito nella loro app":"One to one con Kone e corsi di gruppo",tools)+pb+intro+(coach?"":rinnovoCard())+avvisoSedute()+
    tabL("pt").replace('style="margin-top:14px"','')+tabL("corsi",'<span class="chip">max '+DB.settings.maxCorso+' persone</span>')+tabL("abbPt")+tabL("combo")+tabL("percorsi")+pagamentiCard();
-  return head(coach?"Listino · Trattamenti":"Prezzi · Trattamenti","Ogni trattamento con i suoi benefici, la durata e il prezzo",tools)+pb+intro+
+  return head(coach?"Listino · Trattamenti":"Prezzi · Trattamenti","Ogni trattamento con i suoi benefici, la durata e il prezzo",tools)+pb+intro+(coach?"":rinnovoCard())+avvisoSedute()+
    '<div class="card">'+cardH("lotus","I trattamenti")+
    '<table class="rt"><thead><tr><th>Trattamento</th><th>Benefici</th><th>Indicato per</th><th style="text-align:right">30′</th><th style="text-align:right">50′</th>'+(coach?'<th></th>':'')+'</tr></thead><tbody>'+
    DB.trattamenti.map((t,i)=>'<tr><td data-l="Trattamento"><div class="tname"><span class="ti">'+ic(t.ic||"lotus",18)+'</span><span><b>'+esc(t.n)+'</b><span>'+esc(t.desc)+'</span></span></div></td>'+
@@ -2365,7 +2384,7 @@ function regoleList(p){return p.regole.map(r=>{const R=REGOLE.find(x=>x.id===r.i
 function vCorsi(){
   const tabs=["Programmi","Corsi e parametri","Regole","Storico e feedback","Come funziona"];
   return head("Corsi di gruppo · IA","Ogni mattina il motore prepara la seduta di ogni corso da parametri, storico e feedback. Le regole dello studio la controllano prima che arrivi in sala.",
-   '<button class="btn" onclick="rigeneraGiorno()">'+ic("refresh",14)+' Rigenera il giorno</button>')+
+   nuovoCorsoBtn()+'<button class="btn" onclick="rigeneraGiorno()">'+ic("refresh",14)+' Rigenera il giorno</button>')+
    '<div class="card flat" style="margin-bottom:14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span class="pill ok">Coach automatico attivo</span><span class="hint" style="margin:0">Legge nome, tipo e focus di ogni corso, lo storico e i feedback, e scrive la seduta. Gira dentro l\'app, senza costi.</span></div>'+
    tabsHTML(tabs,S.ctab,"S.ctab")+[corsiProg,corsiParam,corsiRegole,corsiStorico,corsiInfo][S.ctab]();
 }
@@ -2397,39 +2416,9 @@ async function rigenera(sid,stessa){
 }
 async function rigeneraGiorno(){const days=[];for(let i=0;i<7;i++)days.push(iso(addD(TODAY,i)));const ss=slotsDay(days[S.cday]||T0,["corso"]);S.ctab=0;for(const s of ss)await rigenera(s.id,0)}
 function probeIA(){S.iaStato="…";fetch("/.netlify/functions/genera-programma",{method:"GET"}).then(r=>{S.iaStato=r.status===405||r.status===200?"on":"off"}).catch(()=>{S.iaStato="off"}).then(()=>{if(S.view==="corsi")render()})}
-function corsiParam(){
-  return '<div class="grid g2">'+DB.corsi.map(c=>'<div class="card">'+cardH("users",esc(c.n),'<button class="btn sm" onclick="editCorso(\''+c.id+'\')">'+ic("edit",13)+' Modifica</button>')+
-   '<div class="kv"><span>Livello</span><b>'+LIVELLI[c.livello]+'</b></div><div class="kv"><span>Obiettivo</span><span>'+esc(c.obiettivo)+'</span></div>'+
-   '<div class="kv"><span>Durata</span><span>'+c.durata+'′</span></div><div class="kv"><span>Intensità obiettivo</span><span>'+c.intensita+'/10</span></div>'+
-   '<div class="kv"><span>Tipo di corso</span><span>'+TEMI[temaCorso(c)].n+(c.tema?'':' <small class="dim">(dal nome)</small>')+'</span></div>'+
-   (c.focus?'<div class="kv"><span>Focus</span><span>'+esc(c.focus)+'</span></div>':'<div class="kv"><span>Focus</span><span class="dim">non scritto · tocca Modifica</span></div>')+
-   '<div class="kv"><span>Partecipanti</span><span>da prenotazioni · max '+DB.settings.maxCorso+'</span></div>'+
-   '<div style="margin-top:8px"><div class="flabel" style="margin-bottom:5px">Attrezzatura</div><div class="chips">'+["corpo libero"].concat(c.attrezzi).map(a=>'<span class="chk on">'+a+'</span>').join("")+'</div></div>'+
-   (c.vietati.length?'<div style="margin-top:10px"><div class="flabel" style="margin-bottom:5px">Vietati</div><div class="chips">'+c.vietati.map(a=>'<span class="chk no">'+esc(a)+'</span>').join("")+'</div></div>':'')+
-   (c.consentiti.length?'<div style="margin-top:10px"><div class="flabel" style="margin-bottom:5px">Solo questi esercizi</div><div class="chips">'+c.consentiti.map(a=>'<span class="chk on">'+esc(a)+'</span>').join("")+'</div></div>':'')+
-   '<div style="margin-top:10px"><div class="flabel" style="margin-bottom:5px">Storico</div><p class="muted" style="font-size:13.5px">'+storicoCorso(c.id,"9999").length+' sedute registrate · '+DB.feedback.filter(f=>f.pid.endsWith("_"+c.id)).length+' feedback</p></div></div>').join("")+'</div>';
-}
 let CED=null;
-function editCorso(id){const c=corso(id);CED={attrezzi:c.attrezzi.slice(),vietati:c.vietati.slice(),consentiti:c.consentiti.slice()};
-  openModal('<h3>'+esc(c.n)+'</h3><p class="muted" style="margin-bottom:14px">Il coach costruisce ogni seduta su nome, tipo e focus del corso, dentro questi paletti.</p>'+
-   '<div class="field"><label>Nome del corso</label><input class="fi" id="cN" value="'+esc(c.n)+'"></div>'+
-   '<div class="frow"><div class="field"><label>Livello</label><select class="fi" id="cL">'+[1,2,3].map(l=>'<option value="'+l+'"'+(l===c.livello?" selected":"")+'>'+LIVELLI[l]+'</option>').join("")+'</select></div>'+
-   '<div class="field"><label>Obiettivo</label><select class="fi" id="cO">'+OBIETTIVI.map(o=>'<option'+(o===c.obiettivo?" selected":"")+'>'+o+'</option>').join("")+'</select></div>'+
-   '<div class="field"><label>Durata (min)</label><input class="fi" type="number" min="30" max="90" step="5" id="cD" value="'+c.durata+'"></div></div>'+
-   '<div class="field"><label>Focus del corso · scrivi a parole tue cosa deve fare</label><textarea class="fi" id="cFo" rows="3" placeholder="Es. postura e schiena, core profondo, niente salti, proteggere le ginocchia">'+esc(c.focus||"")+'</textarea>'+
-   '<span class="hint">Il coach lo legge a ogni seduta: parole come equilibrio, glutei, schiena, core, fiato, mobilità, forza, niente salti, senza attrezzi, proteggere le ginocchia cambiano gli esercizi scelti.</span></div>'+
-   '<div class="frow"><div class="field"><label>Tipo di corso</label><select class="fi" id="cT"><option value="auto">Automatico dal nome · ora: '+TEMI[temaCorso(Object.assign({},c,{tema:null}))].n+'</option>'+Object.keys(TEMI).map(k=>'<option value="'+k+'"'+(c.tema===k?" selected":"")+'>'+TEMI[k].n+'</option>').join("")+'</select></div>'+
-   '<div class="field"><label>Intensità obiettivo · <span id="cIv">'+c.intensita+'</span>/10</label><input type="range" min="2" max="9" id="cI" value="'+c.intensita+'" oninput="el(\'cIv\').textContent=this.value"></div></div>'+
-   '<div class="field"><label>Attrezzatura disponibile in sala</label><div class="chips" id="cA">'+ATTREZZI.map(a=>'<button type="button" class="chk '+(CED.attrezzi.includes(a)?"on":"")+'" onclick="CED.attrezzi=CED.attrezzi.includes(\''+a+'\')?CED.attrezzi.filter(x=>x!==\''+a+'\'):CED.attrezzi.concat(\''+a+'\');this.classList.toggle(\'on\')">'+a+'</button>').join("")+'</div></div>'+
-   '<div class="field"><label>Esercizi · tocca una volta per vietarlo, due volte per usare solo quelli scelti</label><div class="chips">'+POOL.filter(e=>e.f==="main"&&!e.v&&(!e.t||e.t.includes(temaCorso(c)))).map(e=>{const st=CED.vietati.includes(e.n)?"no":CED.consentiti.includes(e.n)?"on":"";
-     return '<button type="button" class="chk '+st+'" onclick="cicloEx(this,\''+e.n.replace(/'/g,"\\'")+'\')">'+esc(e.n)+'</button>'}).join("")+'</div>'+
-   '<span class="hint">Rosso barrato = vietato · oro = lista ristretta (se ne scegli almeno uno, il motore usa solo quelli) · neutro = libero.</span></div>'+
-   '<div class="inline" style="justify-content:flex-end"><button class="btn primary" onclick="salvaCorso(\''+id+'\')">Salva parametri</button></div>')}
 function cicloEx(b,n){if(CED.vietati.includes(n)){CED.vietati=CED.vietati.filter(x=>x!==n);CED.consentiti.push(n);b.className="chk on"}
   else if(CED.consentiti.includes(n)){CED.consentiti=CED.consentiti.filter(x=>x!==n);b.className="chk"}else{CED.vietati.push(n);b.className="chk no"}}
-function salvaCorso(id){const c=corso(id);c.n=el("cN").value.trim()||c.n;c.livello=+el("cL").value;c.obiettivo=el("cO").value;c.durata=clamp(parseInt(el("cD").value)||c.durata,30,90);
-  c.focus=el("cFo").value.trim();c.tema=el("cT").value==="auto"?null:el("cT").value;c.formato=TEMI[temaCorso(c)].formato;c.intensita=+el("cI").value;c.attrezzi=CED.attrezzi;c.vietati=CED.vietati;c.consentiti=CED.consentiti;
-  Object.values(DB.agenda).forEach(s=>{if(s.corso===id)s.dur=c.durata});save();closeModal();render();toast("Parametri salvati · valgono dalla prossima generazione")}
 function corsiRegole(){
   const off=DB.settings.regoleOff||[];
   return '<div class="card">'+cardH("shield","Regole dello studio",'<span class="chip">'+REGOLE.length+'</span>')+
@@ -2439,7 +2428,7 @@ function corsiRegole(){
 }
 function toggleRegola(id){const o=DB.settings.regoleOff||(DB.settings.regoleOff=[]);DB.settings.regoleOff=o.includes(id)?o.filter(x=>x!==id):o.concat(id);save();render()}
 function corsiStorico(){
-  const c=corso(S.storCorso)||DB.corsi[0];const st=storicoCorso(c.id,"9999").filter(p=>p.data<=T0);const asc=st.slice().reverse();
+  const c=corso(S.storCorso)||DB.corsi[0];if(!c)return '<div class="card"><p class="muted">Nessun corso: creane uno in “Corsi e parametri”.</p></div>';const st=storicoCorso(c.id,"9999").filter(p=>p.data<=T0);const asc=st.slice().reverse();
   const withFb=asc.filter(p=>fbDi(p.id).length);
   return '<div class="seg sm" style="margin-bottom:14px">'+DB.corsi.map(x=>'<button class="'+(x.id===c.id?"on":"")+'" onclick="S.storCorso=\''+x.id+'\';render()">'+esc(x.n)+'</button>').join("")+'</div>'+
    '<div class="card" style="margin-bottom:14px">'+cardH("chart","Fatica percepita media e intensità programmata")+
@@ -2497,7 +2486,7 @@ function vOggi(){
   const c=me(),g=DB.scheda.giorni[dayIdx()];
   const corsiOggi=mySlots().filter(s=>s.d===T0&&s.tipo==="corso");
   const prossimo=mySlots().find(s=>!isPast(s));
-  let h=head("Ciao "+esc(c.n.split(" ")[0]),fmtD(T0,{weekday:"long",day:"numeric",month:"long"})+" · "+esc(g.t))+abbCTA("home");
+  let h=head("Ciao "+esc(c.n.split(" ")[0]),fmtD(T0,{weekday:"long",day:"numeric",month:"long"})+" · "+esc(g.t))+abbCTA("home")+rinnovoCard();
   if(prossimo)h+='<div class="alert info" style="margin-bottom:14px"><div><b>Prossimo appuntamento: '+esc(slotTitle(prossimo,prossimo.pren.find(b=>b.cid===S.cid)))+'</b><p>'+fmtD(prossimo.d,{weekday:"long",day:"numeric",month:"long"})+' alle '+prossimo.h+'</p></div><button class="btn sm" onclick="go(\'prenota\')">Prenotazioni</button></div>';
   corsiOggi.forEach(s=>{const p=DB.programmi[s.d+"_"+s.corso];h+='<div class="card" style="margin-bottom:14px">'+cardH("users","Il tuo corso di oggi · "+esc(corso(s.corso).n),'<span class="chip">'+s.h+'</span>')+(p?progHTML(p):'<p class="muted">Kone sta preparando il programma.</p>')+'</div>'});
   if(!g.ex.length)return h+'<div class="card"><p class="muted">Oggi nella tua scheda non c\'è allenamento: '+esc(g.t.toLowerCase())+'.</p><p class="hint">Se ti va di muoverti puoi prenotare un corso di gruppo.</p><button class="btn primary" style="margin-top:10px" onclick="S.pfil=\'corso\';go(\'prenota\')">Vedi i corsi</button></div>';
@@ -2628,7 +2617,6 @@ function inviaFeedback(pid){const c=me();DB.feedback=DB.feedback.filter(f=>!(f.p
 const CORSO_COL={func:"#D9A93C",hiit:"#E0645C",tono:"#4FA86A",mob:"#3FA7A0",boot:"#E0973A"};
 const PAYPAL_DEF="https://www.paypal.com/qrcodes/p2pqrc/BAHYS4B2HYL2G";
 const paypalUrl=()=>safeUrl(DB.settings.paypal)||PAYPAL_DEF;
-function colSlot(s){return s.tipo==="pt"?"#5C8BC4":s.tipo==="tratt"?"#A478C8":(CORSO_COL[s.corso]||"#D9A93C")}
 const toMin=h=>{const p=h.split(":");return (+p[0])*60+(+p[1])};
 const toHM=m=>pad(Math.floor(m/60))+":"+pad(m%60);
 const capFirst=t=>t.charAt(0).toUpperCase()+t.slice(1);
@@ -2680,15 +2668,6 @@ function gestisciHTML(s){
    '<div class="inline" style="margin-top:12px"><select class="fi" style="max-width:240px" id="add_'+k+'"><option value="">Aggiungi un cliente…</option>'+others.map(c=>'<option value="'+c.id+'">'+esc(c.n)+'</option>').join("")+'</select>'+
    '<button class="btn sm" onclick="aggiungiPren(\''+s.id+'\')">Aggiungi</button></div></div>';
 }
-function payPill(b,sid,i){if(!b.pay)return "";
-  if(b.pay.stato==="pagato")return '<em class="pp ok">'+ic("check",11)+' pagato '+esc(b.pay.m==="paypal"?"PayPal":"")+'</em>';
-  if(b.pay.m==="paypal")return S.role==="coach"?'<button class="pp warn" onclick="segnaPagato(\''+sid+'\','+i+')" title="Segna come pagato">PayPal '+eur(b.pay.imp)+' · conferma</button>':'<em class="pp warn">PayPal da verificare</em>';
-  if(b.pay.m==="piano")return '<em class="pp">dal piano</em>';
-  return '<em class="pp">'+(S.role==="coach"?'<button onclick="segnaPagato(\''+sid+'\','+i+')" style="color:inherit">in studio '+eur(b.pay.imp)+' · incassa</button>':"paga in studio")+'</em>';
-}
-function segnaPagato(sid,i){const s=DB.agenda[sid],b=s&&s.pren[i];if(!b||!b.pay)return;b.pay.stato="pagato";
-  DB.movimenti.unshift({id:uid(),d:T0,tipo:"entrata",desc:slotTitle(s,b)+" · "+fmtD(s.d)+" "+s.h,cli:b.nome,area:s.tipo==="tratt"?"Trattamenti":"Allenamenti",imp:b.pay.imp,met:b.pay.m==="paypal"?"PayPal":"Contanti",pag:true});
-  save();render();toast("Pagamento registrato in Contabilità")}
 
 /* ---------- vista settimana con trascinamento ---------- */
 const WPX=54;
@@ -2735,7 +2714,7 @@ function moveSlot(id,d,h,avvisa){const s=DB.agenda[id];if(!s||!d||!h)return;cons
   if(DB.agenda[nid])return toast("C'è già un orario "+fmtD(d)+" alle "+h);
   const m=toMin(h),sov=slotsDay(d).find(x=>x.id!==id&&m<toMin(x.h)+x.dur&&toMin(x.h)<m+s.dur);
   const da=fmtD(s.d)+" "+s.h;
-  delete DB.agenda[id];s.id=nid;s.d=d;s.h=h;DB.agenda[nid]=s;if(S.aopen===id)S.aopen=nid;
+  delete DB.agenda[id];(DB.agendaDel=DB.agendaDel||{})[id]=1;delete DB.agendaDel[nid];s.id=nid;s.d=d;s.h=h;DB.agenda[nid]=s;if(S.aopen===id)S.aopen=nid;
   if(avvisa!==false&&s.pren.length)s.pren.forEach(b=>{if(!b.cid)return;const t=chatDi(b.cid),msg="Ciao! "+slotTitle(s,b)+" di "+da+" è stato spostato a "+fmtD(d,{weekday:"long",day:"numeric",month:"long"})+" alle "+h+". Se non ti va bene scrivimi qui. — Kone";t.msgs.push({t:msg,me:1,h:"ora"});t.last=msg});
   save();closeModal();render();
   toast("Spostato a "+fmtD(d)+" "+h+(sov?" · si sovrappone a "+slotTitle(sov)+" ("+sov.h+")":s.pren.length&&avvisa!==false?" · prenotati avvisati":""))}
@@ -2769,7 +2748,7 @@ const TRATT_IMG=["decon","relax","sport","cervi","rifle","linfo","coppe","altri"
 function wAtts(){let l;
   if(S.area==="tratt")l=DB.trattamenti.map(t=>({id:"tratt:"+t.id,tipo:"tratt",tr:t.id,n:t.n,sub:t.desc,img:TRATT_IMG.includes(t.id)?"/assets/img/"+t.id+"-480.webp":null,tag:"30′ o 50′",prezzo:pEff(t,"p30"),da:1,col:"#A478C8"}));
   else l=[{id:"pt",tipo:"pt",n:"One to one con Kone",sub:"Allenamento su misura, solo tu e Kone",img:"/assets/img/personal-trainer-milano.webp",tag:"60′ · su misura",prezzo:pEff(DB.listino.pt[0]),col:"#5C8BC4"}]
-   .concat(DB.corsi.map(c=>({id:"corso:"+c.id,tipo:"corso",corso:c.id,n:c.n,sub:LIVELLI[c.livello]+" · "+c.obiettivo,tag:c.durata+"′ · max "+DB.settings.maxCorso,prezzo:pEff((DB.listino.corsi||[])[0]),col:CORSO_COL[c.id]||"#D9A93C"})));
+   .concat(DB.corsi.map(c=>({id:"corso:"+c.id,tipo:"corso",corso:c.id,n:c.n,sub:LIVELLI[c.livello]+" · "+c.obiettivo,tag:c.durata+"′ · max "+DB.settings.maxCorso,prezzo:pEff(corsoSingolo()),col:corsoCol(c.id)})));
   if(S.w&&S.w.viaPiano)l=l.filter(x=>copre(me(),x.tipo));
   return l;
 }
@@ -2791,7 +2770,7 @@ function wizard(){
       '<button class="act'+(w.att===x.id?" on":"")+'" style="--c:'+x.col+'" onclick="wSet(\'att\',\''+x.id+'\')">'+
        (x.img?'<span class="ph"><img src="'+x.img+'" alt="" loading="lazy"></span>':'<span class="ph ph-c">'+ic(x.tipo==="corso"?"users":"dumb",30)+'</span>')+
        (w.att===x.id?'<i class="tick">'+ic("check",13)+'</i>':'')+
-       '<span class="tx"><b>'+esc(x.n)+'</b><small>'+esc(x.tag)+'</small><em>'+(w.viaPiano?"incluso":(x.da?"da ":"")+eur(x.prezzo))+'</em></span></button>').join("")+'</div>'+
+       '<span class="tx"><b>'+esc(x.n)+'</b><small>'+esc(x.tag)+'</small><em>'+(w.viaPiano?"incluso":x.prezzo?(x.da?"da ":"")+eur(x.prezzo):"con abbonamento")+'</em></span></button>').join("")+'</div>'+
      (a&&a.tipo==="tratt"?'<div class="flabel" style="margin:16px 0 8px">Durata</div><div class="seg">'+[30,50].map(m=>'<button class="'+(w.dur===m?"on":"")+'" onclick="wSet(\'dur\','+m+')">'+m+' minuti'+(w.viaPiano?'':' · '+eur(pEff(tratt(a.tr),m===30?"p30":"p60")))+'</button>').join("")+'</div>':'')+
      (a?'<p class="hint">'+esc(a.sub)+'</p>':'');
   }else if(w.step===2){
@@ -2806,11 +2785,12 @@ function wizard(){
     const s=DB.agenda[w.slot],c=me(),imp=wPrezzo();
     if(!s){w.step=3;return wizard()}
     const conPiano=pianoAttivo(c)&&copre(c,a.tipo)?[["piano","Con il mio abbonamento",esc(c.piano)+" · "+rimTxt(c)+" · non paghi nulla"]]:[];
-    const opts=w.viaPiano&&conPiano.length?conPiano:[["paypal","Paga ora con PayPal","Inquadra il QR o apri PayPal · "+eur(imp)]].concat(conPiano).concat([["studio","Pago in studio","Contanti o carta il giorno della seduta"]]);
+    const bonOpt=bon().iban?[["bonifico","Bonifico bancario","Sul conto di Kone · "+eur(imp)]]:[];
+    const opts=w.viaPiano&&conPiano.length?conPiano:(imp>0?[["paypal","Paga ora con PayPal","Inquadra il QR o apri PayPal · "+eur(imp)]].concat(bonOpt):[]).concat(conPiano).concat([["studio","Pago in studio","Contanti o carta il giorno della seduta"]]);
     if(!opts.some(o=>o[0]===w.pay))w.pay=opts[0][0];
     body=(w.viaPiano&&w.pay==="piano"?'<h2 class="wiz-t">Conferma</h2><p class="muted">Controlla il riepilogo: la seduta viene scalata dal tuo abbonamento.</p>':'<h2 class="wiz-t">Conferma e paga</h2><p class="muted">Controlla il riepilogo e scegli come pagare.</p>')+
      '<div class="pays">'+opts.map(o=>'<button class="pay'+(w.pay===o[0]?" on":"")+'" onclick="wSet(\'pay\',\''+o[0]+'\')"><i></i><span><b>'+o[1]+'</b><small>'+o[2]+'</small></span>'+(o[0]==="paypal"?'<span class="pp-logo">PayPal</span>':'')+'</button>').join("")+'</div>'+
-     (w.pay==="paypal"?paypalBox(imp,a.n+" "+fmtD(s.d)+" "+s.h):'');
+     (w.pay==="paypal"?paypalBox(imp,a.n+" "+fmtD(s.d)+" "+s.h):w.pay==="bonifico"?bonificoBox(imp,a.n+" "+fmtD(s.d)+" "+s.h):'')+(a.tipo==="corso"||(w.pay==="piano"&&c.rinnovo)?'<div style="margin-top:14px">'+avvisoSedute()+'</div>':'');
   }
   const can=w.step===1?!!w.att:w.step===2?!!w.d:w.step===3?!!w.slot:true;
   return '<div class="wiz"><div class="wiz-main card"><ol class="stepper">'+steps.map((t,i)=>{const n=i+1,done=n<w.step;return '<li class="'+(n===w.step?"on":done?"done":"")+'">'+(done?'<button onclick="wGo('+n+')">':'<span>')+'<i>'+(done?ic("check",12):n)+'</i>'+t+(done?'</button>':'</span>')+'</li>'}).join("")+'</ol>'+
@@ -2824,7 +2804,7 @@ function wRiep(){const w=W(),a=wAtt(),s=w.slot?DB.agenda[w.slot]:null;
    (a&&a.img?'<img class="rimg" src="'+a.img+'" alt="">':'')+
    r("Attività",a?esc(a.n):"")+r("Durata",a?wDur(a)+" minuti":"")+r("Giorno",w.d?capFirst(fmtD(w.d,{weekday:"long",day:"numeric",month:"long"})):"")+r("Orario",s?s.h:"")+
    '<div class="sep"></div>'+r("Totale",a?(w.pay==="piano"&&w.step>=4||w.viaPiano?'<span class="tot">Incluso</span>':'<span class="tot">'+eur(wPrezzo())+'</span>'):"")+
-   '<p class="hint" style="margin-top:10px">'+ic("check",11)+' Annulli gratis fino all\'inizio · '+ic("check",11)+' Paghi con PayPal, dal tuo piano o in studio</p></aside>'}
+   '<p class="hint" style="margin-top:10px">'+ic("check",11)+' Annulli gratis fino all\'inizio · '+ic("check",11)+' Paghi con PayPal'+(bon().iban?', bonifico':'')+', dal tuo piano o in studio</p></aside>'}
 function paypalBox(imp,causale){return '<div class="ppbox"><img src="/assets/img/paypal-qr.webp" width="200" height="200" alt="QR code PayPal di Kone Moctar Studio">'+
   '<div><div class="flabel">Importo da inviare</div><div class="ppamt">'+eur(imp)+'</div>'+
   '<ol class="pplist"><li>Inquadra il QR con la fotocamera <span class="dim">oppure</span> tocca il pulsante qui sotto</li><li>Invia <b>'+eur(imp)+'</b> come pagamento a Kone Moctar</li><li>Nel messaggio scrivi: <b>'+esc(causale)+'</b></li></ol>'+
@@ -2838,13 +2818,6 @@ function wConferma(){const w=W(),a=wAtt(),s=DB.agenda[w.slot],c=me();
   if(a.tipo==="tratt"){b.tratt=a.tr;b.dur=w.dur}
   if(w.pay==="piano")c.usate=(c.usate||0)+1;
   s.pren.push(b);save();w.step=5;render();el("main").scrollTop=0}
-function wFatto(){const w=W(),s=DB.agenda[w.slot],b=s&&s.pren.find(x=>x.cid===S.cid);if(!s||!b){S.w=null;return wizard()}
-  return '<div class="card wdone"><span class="ok-ic">'+ic("check",30)+'</span><h2 class="wiz-t">Prenotato!</h2>'+
-   '<p class="muted">'+esc(slotTitle(s,b))+' · '+capFirst(fmtD(s.d,{weekday:"long",day:"numeric",month:"long"}))+' alle '+s.h+'</p>'+
-   (b.pay.m==="paypal"?paypalBox(b.pay.imp,(wAtt()||{n:""}).n+" "+fmtD(s.d)+" "+s.h):'<p style="margin-top:10px">'+(b.pay.m==="piano"?"Scalato dal tuo abbonamento: non devi pagare nulla. "+capFirst(rimTxt(me()))+".":"Paghi "+eur(b.pay.imp)+" in studio il giorno della seduta.")+'</p>')+
-   '<div class="inline" style="justify-content:center;margin-top:18px"><button class="btn primary" onclick="const v=S.w&&S.w.viaPiano;S.w=null;if(v&&pianoAttivo(me()))usaAbbonamento();else render()">Prenota un\'altra</button></div></div>'}
-function pagaModal(sid){const s=DB.agenda[sid],b=s&&s.pren.find(x=>x.cid===S.cid);if(!b)return;
-  openModal('<h3>Paga con PayPal</h3><p class="muted" style="margin-bottom:12px">'+esc(slotTitle(s,b))+' · '+fmtD(s.d)+' '+s.h+'</p>'+paypalBox(b.pay.imp,slotTitle(s,b)+" "+fmtD(s.d)+" "+s.h))}
 function vPrenota(){return head("Prenota","One to one con Kone o corsi di gruppo · in 4 passaggi")+wizard()+mieHTML(["pt","corso"])}
 function vTpren(){return head("Prenota un trattamento","Scegli il trattamento, il giorno e l'orario")+wizard()+mieHTML(["tratt"])}
 
@@ -2869,18 +2842,25 @@ function pianoModal(cid){const c=cli(cid),voci=vociListino();
    '<div class="frow"><div class="field"><label>Sedute totali (0 = illimitate)</label><input class="fi" id="abTot" inputmode="numeric" value="'+(c.illim?0:(c.tot||0))+'"></div>'+
    '<div class="field"><label>Sedute già usate</label><div class="inline" style="flex-wrap:nowrap"><button class="icon-btn" onclick="abUse(-1)" aria-label="Una in meno">'+ic("minus",15)+'</button><input class="fi" id="abU" inputmode="numeric" value="'+(c.usate||0)+'" style="text-align:center"><button class="icon-btn" onclick="abUse(1)" aria-label="Una in più">'+ic("plus",15)+'</button></div></div>'+
    '<div class="field"><label>Scadenza</label><input class="fi" type="date" id="abS" value="'+(c.scadIso||"")+'"></div></div>'+
+   '<div class="frow" style="align-items:flex-end"><label class="chkline" style="flex:2"><input type="checkbox" id="abR"'+(c.rinnovo?' checked':'')+'><span><b>Rinnovo automatico ogni mese</b><small>Alla scadenza si rinnova da solo (+1 mese, sedute di nuovo disponibili, incasso in Contabilità) finché il cliente non disdice dall\'app.</small></span></label>'+
+   '<div class="field"><label>Importo mensile €</label><input class="fi" id="abP" inputmode="decimal" value="'+(c.pMese||"")+'"></div></div>'+
+   (c.rinnovo&&c.disdetta?'<p class="hint" style="color:#F0B866;margin-bottom:10px">'+esc(c.n.split(" ")[0])+' ha disdetto il '+fmtD(c.disdetta,{day:"numeric",month:"long"})+': alla scadenza non si rinnova. <button class="btn sm ghost" onclick="cli('+cid+').disdetta=null;save();pianoModal('+cid+')">Annulla la disdetta</button></p>':'')+
    '<p class="hint" style="margin-bottom:14px">Ogni prenotazione fatta “con l\'abbonamento” scala una seduta da sola; se il cliente annulla, la seduta torna disponibile.</p>'+
    '<div class="inline" style="justify-content:flex-end;flex-wrap:wrap"><button class="btn ghost" style="margin-right:auto" onclick="el(\'abU\').value=0;toast(\'Sedute azzerate: premi Salva\')">'+ic("refresh",14)+' Rinnova (azzera usate)</button><button class="btn primary" onclick="salvaPiano('+cid+')">Salva abbonamento</button></div>')}
 function abUse(d){const i=el("abU");i.value=Math.max(0,(parseInt(i.value)||0)+d)}
 function abDaListino(j){if(j==="")return;const v=vociListino()[+j],r=v.r,c=SEZ[v.k];
   let tot=r.sed;if(tot==null){const m=String(r.d||"").match(/\d+/g);tot=m?m.reduce((a,b)=>a+ +b,0):0}
   el("abN").value=(v.k==="percorsi"?"Percorso ":"")+r.n;el("abT").value=c.tipo;el("abTot").value=tot||0;el("abU").value=0;
-  el("abS").value=iso(addD(TODAY,c.mese?30:90))}
+  el("abS").value=isMeseVoce(v.k,r)?addMese(T0):iso(addD(TODAY,90));
+  const R=el("abR");if(R)R.checked=isMeseVoce(v.k,r);const P=el("abP");if(P)P.value=pEff(r)||""}
 function salvaPiano(cid){const c=cli(cid),tipo=el("abT").value,tot=parseInt(el("abTot").value),us=parseInt(el("abU").value)||0,sc=el("abS").value;
   if(tipo!=="none"&&(isNaN(tot)||tot<0))return toast("Sedute non valide");
   c.tipo=tipo;c.piano=tipo==="none"?"Nessun abbonamento":(el("abN").value.trim()||"Abbonamento");c.illim=tipo!=="none"&&tot===0;c.tot=tipo==="none"?0:tot;c.usate=Math.max(0,us);
   c.scadIso=sc||null;c.scad=sc?fmtD(sc,{day:"numeric",month:"short"}).replace(".",""):"—";
   c.extra=tipo==="none"?"—":c.illim?"ingressi illimitati":tot+(tipo==="mass"?" trattamenti":tipo==="corsi"?" ingressi":" sedute");
+  const R=el("abR");c.rinnovo=tipo!=="none"&&!!(R&&R.checked);c.pMese=num(el("abP").value)||0;
+  if(c.rinnovo&&!c.scadIso){c.scadIso=addMese(T0);c.scad=fmtD(c.scadIso,{day:"numeric",month:"short"}).replace(".","")}
+  if(!c.rinnovo)c.disdetta=null;
   save();closeModal();render();toast("Abbonamento salvato · "+c.n.split(" ")[0]+" lo vede nella sua app")}
 /* lato cliente: "Hai già un abbonamento? Clicca qui" */
 function abbCTA(dove){const c=me();if(!c||!c.tipo||c.tipo==="none")return "";const w=S.w;
@@ -2895,14 +2875,6 @@ function usaAbbonamento(){const c=me();if(!pianoAttivo(c))return toast("Abboname
   go(area==="tratt"?"tpren":"prenota");toast("Scegli cosa prenotare: lo scaliamo dal tuo abbonamento")}
 
 /* ---------- come pagare (listino) ---------- */
-function pagamentiCard(){const coach=S.role==="coach";
-  return '<div class="card" style="margin-top:14px">'+cardH("card","Come pagare")+
-   '<div class="ppbox"><img src="/assets/img/paypal-qr.webp" width="180" height="180" alt="QR code PayPal di Kone Moctar Studio"><div>'+
-   '<p style="margin-bottom:8px"><b>PayPal</b> · inquadra il QR con la fotocamera del telefono o apri il link, poi invia l\'importo indicando nome e servizio.</p>'+
-   '<p class="muted" style="margin-bottom:12px">In studio puoi pagare anche in contanti o con carta.</p>'+
-   '<a class="btn primary" href="'+esc(paypalUrl())+'" target="_blank" rel="noopener">Apri PayPal '+ic("chevR",14)+'</a>'+
-   (coach?'<div class="field" style="margin-top:14px"><label>Il tuo link PayPal (quello del QR)</label><input class="fi" value="'+esc(paypalUrl())+'" onchange="if(/^https:\\/\\//.test(this.value)){DB.settings.paypal=this.value.trim();save();toast(\'Link PayPal salvato\')}else toast(\'Il link deve iniziare con https://\')"></div>':'')+
-   '</div></div></div>'}
 
 /* ---------- aggiornamento dati salvati (prezzi volantino ottobre 2026, trattamenti 50′) ---------- */
 function migraPrezzi(){
@@ -3040,7 +3012,6 @@ function vChatC(){
 }
 
 /* ---------- saldo del titolare (cruscotto) ---------- */
-function paypalDaConfermare(){const out=[];Object.values(DB.agenda).forEach(s=>s.pren.forEach((b,i)=>{if(b.pay&&b.pay.m==="paypal"&&b.pay.stato!=="pagato")out.push({s,b,i})}));return out.sort((a,b)=>(a.s.d+a.s.h)<(b.s.d+b.s.h)?-1:1)}
 function saldoCard(){
   const m=T0.slice(0,7),mv=DB.movimenti.filter(x=>x.d.slice(0,7)===m),sum=a=>a.reduce((t,x)=>t+x.imp,0);
   const inc=sum(mv.filter(x=>x.tipo==="entrata"&&x.pag)),usc=sum(mv.filter(x=>x.tipo==="uscita")),da=sum(DB.movimenti.filter(x=>x.tipo==="entrata"&&!x.pag));
@@ -3117,6 +3088,235 @@ function tourPos(){
   c.style.left=left+"px";c.style.top=top+"px";
   const ax=Math.max(18,Math.min(cw-18,r.left+r.width/2-left));c.style.setProperty("--ax",ax+"px");c.classList.toggle("up",r.top>H/2);
 }
+
+/* =================== v8 · 03/11/2026 · nuovi corsi, libreria nella scheda, bonifico, rinnovo automatico, avviso sedute =================== */
+const FX_FOTO={"Panca declinata manubri":"fx-decline-dumbbell-bench-press","Chest press orizzontale":"fx-leverage-chest-press","Chest press inclinata":"fx-leverage-incline-chest-press","Chest press convergente":"fx-machine-bench-press","Smith machine incline press":"fx-smith-machine-incline-bench-press","Croci ai cavi alti":"fx-cable-crossover","Croci ai cavi medi":"fx-flat-bench-cable-flyes","Croci ai cavi bassi":"fx-low-cable-crossover","Cable press unilaterale":"fx-standing-cable-chest-press","Butterfly machine":"fx-butterfly","Push-up sulle ginocchia":"fx-incline-push-up-medium","Push-up declinati":"fx-decline-push-up","Push-up presa larga":"fx-push-up-wide","Push-up stretti":"fx-push-ups-close-triceps-position","Push-up con elastico":"fx-pushups","Push-up zavorrati":"fx-pushups","Push-up pliometrici":"fx-plyo-push-up","Svend press":"fx-svend-press","Landmine chest press":"fx-landmine-linear-jammer","Trazioni presa neutra":"fx-v-bar-pullup","Trazioni assistite":"fx-band-assisted-pull-up","Lat machine presa inversa":"fx-underhand-cable-pulldowns","Lat machine unilaterale":"fx-one-arm-lat-pulldown","Pullover ai cavi":"fx-rope-straight-arm-pulldown","Pullover con manubrio":"fx-bent-arm-dumbbell-pullover","Pullover machine":"fx-straight-arm-pulldown","Rematore bilanciere presa inversa":"fx-reverse-grip-bent-over-rows","Rematore due manubri":"fx-bent-over-two-dumbbell-row","Rematore su panca inclinata":"fx-dumbbell-incline-row","Landmine row":"fx-bent-over-two-arm-long-bar-row","Pendlay row":"fx-bent-over-barbell-row","Seal row":"fx-lying-cambered-barbell-row","Meadows row":"fx-one-arm-long-bar-row","Pulley basso presa larga":"fx-seated-cable-rows","Pulley unilaterale":"fx-seated-one-arm-cable-pulley-rows","Seated cable row":"fx-seated-cable-rows","High row machine":"fx-leverage-high-row","Low row machine":"fx-leverage-iso-row","Rematore macchina convergente":"fx-leverage-iso-row","Inverted row":"fx-inverted-row","Rematore TRX":"fx-suspended-row","Rematore con elastico":"fx-bodyweight-mid-row","Reverse pec deck":"fx-reverse-machine-flyes","Scrollate manubri":"fx-dumbbell-shrug","Scrollate alla Smith machine":"fx-smith-machine-behind-the-back-shrug","Rack pull":"fx-rack-pulls","Shoulder press machine":"fx-machine-shoulder-military-press","Shoulder press Smith machine":"fx-smith-machine-overhead-shoulder-press","Push press":"fx-push-press","Landmine press":"fx-landmine-linear-jammer","Landmine press unilaterale":"fx-single-arm-linear-jammer","Z press":"fx-seated-barbell-military-press","Alzate laterali ai cavi":"fx-cable-seated-lateral-raise","Alzate laterali unilaterali":"fx-one-arm-side-laterals","Alzate laterali da seduto":"fx-seated-side-lateral-raise","Alzate laterali alla macchina":"fx-side-lateral-raise","Alzate laterali con elastico":"fx-lateral-raise-with-bands","Alzate frontali bilanciere":"fx-standing-front-barbell-raise-over-head","Alzate frontali al cavo":"fx-front-cable-raise","Alzate frontali con disco":"fx-front-plate-raise","Reverse fly panca inclinata":"fx-dumbbell-lying-rear-lateral-raise","Reverse fly ai cavi":"fx-cable-rear-delt-fly","Rear delt row":"fx-barbell-rear-delt-row","Alzate a Y su panca":"fx-dumbbell-incline-shoulder-raise","Alzate a T su panca":"fx-dumbbell-lying-rear-lateral-raise","Scaption raise":"fx-dumbbell-scaption","Cuban press":"fx-cuban-press","Handstand push-up":"fx-handstand-push-ups","Pike push-up":"fx-push-ups-with-feet-elevated","Curl manubri simultanei":"fx-dumbbell-bicep-curl","Curl manubri panca inclinata":"fx-incline-dumbbell-curl","Curl martello incrociato":"fx-cross-body-hammer-curl","Curl inverso bilanciere":"fx-reverse-barbell-curl","Curl inverso manubri":"fx-standing-dumbbell-reverse-curl","Curl Scott unilaterale":"fx-one-arm-dumbbell-preacher-curl","Curl Scott macchina":"fx-machine-preacher-curls","Spider curl":"fx-spider-curl","Drag curl":"fx-drag-curl","Curl ai cavi bassi":"fx-standing-biceps-cable-curl","Curl ai cavi alti":"fx-high-cable-curls","Curl unilaterale al cavo":"fx-standing-one-arm-cable-curl","Bayesian cable curl":"fx-standing-one-arm-cable-curl","Curl con elastico":"fx-close-grip-ez-bar-curl-with-band","Zottman curl":"fx-zottman-curl","Curl 21":"fx-barbell-curl","Pushdown barra V":"fx-triceps-pushdown-v-bar-attachment","Pushdown presa inversa":"fx-reverse-grip-triceps-pushdown","Pushdown unilaterale":"fx-cable-one-arm-tricep-extension","French press bilanciere EZ":"fx-ez-bar-skullcrusher","Estensioni sopra testa manubrio":"fx-standing-dumbbell-triceps-extension","Estensioni sopra testa al cavo":"fx-cable-rope-overhead-triceps-extension","Estensioni sopra testa con corda":"fx-triceps-overhead-extension-with-rope","Estensioni tricipiti unilaterali":"fx-standing-one-arm-dumbbell-triceps-extension","Kickback al cavo":"fx-standing-low-pulley-one-arm-triceps-extension","Panca stretta Smith machine":"fx-smith-machine-close-grip-bench-press","Dip alle parallele":"fx-dips-triceps-version","Diamond push-up":"fx-push-ups-close-triceps-position","JM press":"fx-jm-press","Tate press":"fx-tate-press","TRX triceps extension":"fx-body-tricep-press","Estensioni con elastico":"fx-speed-band-overhead-triceps","Wrist curl bilanciere":"fx-palms-up-barbell-wrist-curl-over-a-bench","Wrist curl manubri":"fx-palms-up-dumbbell-wrist-curl-over-a-bench","Reverse wrist curl":"fx-palms-down-wrist-curl-over-a-bench","Reverse curl":"fx-reverse-barbell-curl","Pronazione avambraccio con manubrio":"fx-dumbbell-lying-pronation","Supinazione avambraccio con manubrio":"fx-dumbbell-lying-supination","Suitcase carry":"fx-farmers-walk","Dead hang":"fx-one-handed-hang","Towel hang":"fx-one-handed-hang","Plate pinch hold":"fx-plate-pinch","Gripper per la presa":"fx-standing-olympic-plate-hand-squeeze","Wrist roller":"fx-wrist-roller","Zercher squat":"fx-zercher-squats","Box squat":"fx-box-squat","Pause squat":"fx-barbell-full-squat","Heel elevated squat":"fx-goblet-squat","Cyclist squat":"fx-narrow-stance-squats","Hack squat macchina":"fx-hack-squat","Sissy squat":"fx-weighted-sissy-squat","Wall sit":"fx-sit-squats","Leg press orizzontale":"fx-leg-press","Leg press verticale":"fx-smith-machine-leg-press","Leg press unilaterale":"fx-leg-press","Leg extension unilaterale":"fx-single-leg-leg-extension","Affondi laterali":"fx-barbell-side-split-squat","Bulgarian split squat":"fx-split-squat-with-dumbbells","Step-down":"fx-dumbbell-step-ups","Pistol squat":"fx-kettlebell-pistol-squat","Squat con elastico":"fx-squats-with-bands","Stacco rumeno manubri":"fx-stiff-legged-dumbbell-deadlift","Stacco rumeno unilaterale":"fx-kettlebell-one-legged-deadlift","Leg curl in piedi":"fx-standing-leg-curl","Leg curl unilaterale":"fx-standing-leg-curl","Leg curl fitball":"fx-ball-leg-curl","Leg curl slider":"fx-platform-hamstring-slides","Leg curl con elastico":"fx-seated-band-hamstring-curl","Nordic hamstring curl":"fx-natural-glute-ham-raise","Glute ham raise":"fx-glute-ham-raise","Cable pull-through":"fx-pull-through","Hip hinge con bastone":"fx-good-morning","Single leg hip hinge":"fx-kettlebell-one-legged-deadlift","Razor curl":"fx-floor-glute-ham-raise","Hip thrust manubrio":"fx-barbell-hip-thrust","Hip thrust Smith machine":"fx-smith-machine-hip-raise","Hip thrust macchina":"fx-barbell-hip-thrust","Hip thrust monopodalico":"fx-single-leg-glute-bridge","Glute bridge monopodalico":"fx-single-leg-glute-bridge","Frog pump":"fx-butt-lift-bridge","Squat profondo":"fx-bodyweight-squat","Step-up alto":"fx-barbell-step-ups","Kickback glutei al cavo":"fx-one-legged-cable-kickback","Kickback macchina":"fx-glute-kickback","Fire hydrant":"fx-hip-circles-prone","Abduzioni al cavo":"fx-thigh-abductor","Abduzioni con elastico":"fx-monster-walk","Clamshell":"fx-side-leg-raises","Monster walk":"fx-monster-walk","Lateral band walk":"fx-monster-walk","Side lying hip abduction":"fx-side-leg-raises","Curtsy lunge":"fx-crossover-reverse-lunge","Reverse hyperextension":"fx-reverse-hyperextension","Back extension enfasi glutei":"fx-hyperextensions-back-extensions","Single leg Romanian deadlift":"fx-kettlebell-one-legged-deadlift","Adduzione anca al cavo":"fx-cable-hip-adduction","Adduzione anca con elastico":"fx-band-hip-adductions","Adduzione laterale da sdraiato":"fx-lying-bent-leg-groin","Affondo laterale":"fx-barbell-side-split-squat","Cossack squat":"fx-barbell-side-split-squat","Side lunge manubri":"fx-barbell-side-split-squat","Adductor squeeze con palla":"fx-thigh-adductor","Isometria palla tra ginocchia":"fx-thigh-adductor","Abduzione anca al cavo":"fx-thigh-abductor","Abduzione con miniband":"fx-monster-walk","Camminata laterale con elastico":"fx-monster-walk","Clamshell con elastico":"fx-side-leg-raises","Side lying leg raise":"fx-side-leg-raises","Standing hip abduction":"fx-thigh-abductor","Side plank con abduzione":"fx-side-bridge","Single leg balance":"fx-kettlebell-one-legged-deadlift","Step-down controllato":"fx-dumbbell-step-ups","Lateral step-up":"fx-barbell-step-ups","Single leg squat assistito":"fx-single-leg-high-box-squat","Calf raise macchina":"fx-standing-calf-raises","Calf raise Smith machine":"fx-smith-machine-calf-raise","Calf raise leg press":"fx-calf-press-on-the-leg-press-machine","Calf raise unilaterale":"fx-dumbbell-seated-one-leg-calf-raise","Donkey calf raise":"fx-donkey-calf-raises","Calf raise su step":"fx-calf-raise-on-a-dumbbell","Calf raise con manubri":"fx-standing-dumbbell-calf-raise","Calf raise ginocchia flesse":"fx-seated-calf-raise","Calf raise isometrico":"fx-standing-calf-raises","Calf raise eccentrico":"fx-rocking-standing-calf-raise","Saltelli su avampiedi":"fx-rope-jumping","Pogo jumps":"fx-rope-jumping","Tibialis raise macchina":"fx-smith-machine-reverse-calf-raises","Tibialis raise al muro":"fx-smith-machine-reverse-calf-raises","Crunch fitball":"fx-exercise-ball-crunch","Crunch macchina":"fx-ab-crunch-machine","Reverse crunch":"fx-reverse-crunch","Sit-up":"fx-sit-up","Sit-up con disco":"fx-weighted-crunches","V-up":"fx-jackknife-sit-up","Jackknife":"fx-jackknife-sit-up","Toe touches":"fx-toe-touchers","Hollow body hold":"fx-flutter-kicks","Hollow rock":"fx-flutter-kicks","Plank tocco spalle":"fx-plank","Plank sollevamento gamba":"fx-plank","Rollout fitball":"fx-suspended-fallout","Hanging knee raise":"fx-hanging-leg-raise","Captain's chair knee raise":"fx-knee-hip-raise-on-parallel-bars","Leg raise a terra":"fx-flat-bench-lying-leg-raise","Side plank dinamico":"fx-side-bridge","Pallof press":"fx-pallof-press","Pallof press in ginocchio":"fx-pallof-press","Pallof hold":"fx-pallof-press","Cable woodchopper alto-basso":"fx-standing-cable-wood-chop","Cable woodchopper basso-alto":"fx-standing-cable-lift","Heel touches":"fx-alternate-heel-touchers","Offset farmer's carry":"fx-farmers-walk","Plank laterale con abduzione":"fx-side-bridge","Landmine rotation":"fx-landmine-180s","Cable rotation":"fx-cable-russian-twists","Anti-rotation walkout":"fx-pallof-press","Stir the pot":"fx-plank","Bear plank":"fx-plank","Back extension orizzontale":"fx-hyperextensions-back-extensions","Roman chair extension":"fx-hyperextensions-back-extensions","Sorensen hold":"fx-hyperextensions-with-no-hyperextension-bench","Quadruped opposite arm-leg raise":"fx-superman","Deadlift isometrico":"fx-barbell-deadlift","Rotazione esterna al cavo":"fx-external-rotation-with-cable","Rotazione esterna con elastico":"fx-external-rotation-with-band","Rotazione esterna sul fianco":"fx-external-rotation","Rotazione esterna a 90 gradi":"fx-external-rotation-with-cable","Rotazione interna al cavo":"fx-cable-internal-rotation","Rotazione interna con elastico":"fx-internal-rotation-with-band","Face pull con rotazione esterna":"fx-face-pull","Push-up plus":"fx-pushups","Serratus punch":"fx-standing-cable-chest-press","Prone Y raise":"fx-dumbbell-incline-shoulder-raise","Prone T raise":"fx-dumbbell-lying-rear-lateral-raise","Prone W raise":"fx-reverse-flyes-with-external-rotation","Scapular pull-up":"fx-scapular-pull-up","Scapular push-up":"fx-shoulder-raise","Band pull-apart":"fx-band-pull-apart","Cuban rotation":"fx-cuban-press","Bottoms-up kettlebell carry":"fx-bottoms-up-clean-from-the-hang-position","Trap-3 raise":"fx-dumbbell-incline-shoulder-raise","Depressione scapolare al cavo":"fx-straight-arm-pulldown","Chin tuck":"fx-chin-to-chest-stretch","Chin tuck contro parete":"fx-chin-to-chest-stretch","Flessione cervicale isometrica":"fx-isometric-neck-exercise-front-and-back","Estensione cervicale isometrica":"fx-isometric-neck-exercise-front-and-back","Flessione laterale cervicale isometrica":"fx-isometric-neck-exercise-sides","Rotazione cervicale controllata":"fx-side-neck-stretch","Squat thrust":"fx-mountain-climbers","Thruster con manubri":"fx-dumbbell-squat","Thruster bilanciere":"fx-front-barbell-squat","Clean and press":"fx-clean-and-press","Hang clean":"fx-hang-clean","Power clean":"fx-power-clean","Kettlebell clean":"fx-one-arm-kettlebell-clean","Kettlebell snatch":"fx-one-arm-kettlebell-snatch","Turkish get-up":"fx-kettlebell-turkish-get-up-squat-style","Man maker":"fx-alternating-renegade-row","Devil press":"fx-dumbbell-clean","Bear crawl":"fx-spider-crawl","Sled pull":"fx-backward-drag","Battle rope slams":"fx-battling-ropes","Broad jump":"fx-standing-long-jump","Skater jump":"fx-lateral-bound","Jump lunge":"fx-split-jump","Step-up con carico":"fx-dumbbell-step-ups","Medicine ball slam":"fx-overhead-slam","Medicine ball chest pass":"fx-medicine-ball-chest-pass","Medicine ball rotational throw":"fx-medicine-ball-full-twist","Treadmill incline walk":"fx-walking-treadmill","Treadmill intervals":"fx-running-treadmill","Circuito con manubri":"fx-dumbbell-squat","Circuito corpo libero":"fx-bodyweight-squat","Marcia veloce con ginocchia alte":"fx-step-up-with-knee-raise","Andature leggere":"fx-fast-skipping","90/90 delle anche":"fx-90-90-hamstring","Squat profondo assistito al TRX":"fx-bodyweight-squat","Thoracic bridge":"fx-pelvic-tilt-into-bridge","Equilibrio superficie instabile":"fx-balance-board","Equilibrio monopodalico":"fx-kettlebell-one-legged-deadlift","Wall angel":"fx-elbows-back","Wall slide":"fx-elbows-back","Serratus wall slide":"fx-elbows-back","Respirazione diaframmatica":"fx-stomach-vacuum","Toe raises":"fx-standing-calf-raises","Camminata sui talloni":"fx-trail-running-walking","High knees":"fx-fast-skipping","Copenhagen plank":"fx-side-bridge","Copenhagen plank dinamico":"fx-side-bridge","Deviazione radiale polso":"fx-wrist-rotations-with-straight-bar","Deviazione ulnare polso":"fx-wrist-rotations-with-straight-bar","Crab walk":"fx-spider-crawl","Alzate dalla sedia":"fx-chair-squat","Mini squat con appoggio alla sedia":"fx-chair-squat","Estensioni del ginocchio da seduti":"fx-single-leg-leg-extension","Elevazioni sulle punte con appoggio":"fx-standing-calf-raises","Marcia da seduti":"fx-seated-leg-tucks","Spinte al muro":"fx-incline-push-up","Remata con elastico da seduti":"fx-seated-cable-rows","Aperture delle braccia con elastico":"fx-band-pull-apart","Alzate laterali leggere":"fx-side-lateral-raise","Presa e apertura delle mani":"fx-standing-olympic-plate-hand-squeeze","Equilibrio su un piede con appoggio":"fx-kettlebell-one-legged-deadlift","Camminata tallone-punta":"fx-trail-running-walking","Passi laterali":"fx-monster-walk","Passo avanti e indietro con stop":"fx-dumbbell-rear-lunge","Rotazioni delle spalle da seduti":"fx-shoulder-circles","Circonduzioni di polsi e caviglie":"fx-ankle-circles","Inclinazioni laterali del collo":"fx-side-neck-stretch","Rotazioni del busto da seduti":"fx-torso-rotation","Open book sul fianco":"fx-side-lying-floor-stretch","Rock back in quadrupedia":"fx-childs-pose","Respirazione 90/90 con piedi al muro":"fx-pelvic-tilt-into-bridge","Pallof press con elastico":"fx-pallof-press","Side plank sulle ginocchia":"fx-side-bridge","Y-T-W a terra":"fx-reverse-flyes-with-external-rotation","Superman alternato":"fx-superman","Ponte glutei con marcia":"fx-single-leg-glute-bridge","Allungamento da seduti della catena posteriore":"fx-seated-floor-hamstring-stretch","Respirazione con apertura delle braccia":"fx-arm-circles","Allungamento del flessore dell'anca":"fx-kneeling-hip-flexor","Step sul gradino basso":"fx-dumbbell-step-ups","Raccogli la spesa da terra":"fx-kettlebell-one-legged-deadlift","Trasporto della spesa":"fx-farmers-walk","Alzarsi e scendere da terra":"fx-kettlebell-turkish-get-up-lunge-style","Sumo squat con manubrio":"fx-plie-dumbbell-squat","Clean con kettlebell":"fx-one-arm-kettlebell-clean","Turkish get-up parziale":"fx-kettlebell-turkish-get-up-squat-style","Affondi con rotazione":"fx-bodyweight-walking-lunge","Pistol assistito al TRX":"fx-kettlebell-pistol-squat","Squat in tenuta isometrica":"fx-sit-squats","Plank con tocco delle spalle":"fx-plank","Curl e press con manubri":"fx-dumbbell-bicep-curl","Kickback tricipiti con manubri":"fx-tricep-dumbbell-kickback","Crunch inverso":"fx-reverse-crunch","Sprint sul posto":"fx-fast-skipping","Squat jack":"fx-freehand-jump-squat","Wall ball con slam ball":"fx-overhead-slam","Shuttle run":"fx-wind-sprints","Reverse Nordic curl":"fx-kneeling-squat","Spanish squat":"fx-sit-squats","Scivolamenti laterali slider":"fx-barbell-side-split-squat","Hip airplane":"fx-kettlebell-one-legged-deadlift","Dorsiflessione con elastico":"fx-ankle-circles","Dorsiflessione con cavigliera":"fx-smith-machine-reverse-calf-raises","Short foot exercise":"fx-foot-smr","Bird dog":"fx-superman","Burpee":"fx-mountain-climbers","Burpees":"fx-mountain-climbers"};
+const PREZZO_CORSO=29;
+const jsq=s=>esc(String(s==null?"":s).replace(/\\/g,"\\\\").replace(/'/g,"\\'"));
+function migraV8(){
+  const st=DB.settings;
+  if(!st.corsi29){(DB.listino.corsi||[]).forEach(r=>{if(r.sed===1&&r.p===12)r.p=PREZZO_CORSO});st.corsi29=true}
+  if(!st.exFx1){DB.esercizi.forEach(x=>{const k=FX_FOTO[x.n];if(k&&!x.foto){x.foto="/assets/img/esercizi/"+k+"-a.webp";x.foto2="/assets/img/esercizi/"+k+"-b.webp"}});st.exFx1=true}
+  if(!st.exGrp1){const G={"Mani e avambracci":"Avambracci e presa","Mobilità":"Mobilità e stretching","Schiena":"Lombari","Funzionale":"Condizionamento","Total body":"Condizionamento","Braccia e spalle":"Spalle","Braccia":"Tricipiti"};DB.esercizi.forEach(x=>{if(G[x.m])x.m=G[x.m]});st.exGrp1=true}
+  st.bonifico=st.bonifico||{iban:"",intest:"Kone Moctar",banca:""};
+  if(st.portale==null)st.portale="";
+  DB.corsiArch=DB.corsiArch||[];DB.agendaDel=DB.agendaDel||{};
+  DB.corsi.forEach(c=>{if(!c.col)c.col=CORSO_COL[c.id]||null});
+  rinnoviAuto(true);
+}
+
+/* ---------- avviso: sedute non recuperabili ---------- */
+const AVVISO_TXT='<b>Attenzione:</b> le sedute degli <b>abbonamenti mensili</b> e dei <b>corsi di gruppo</b> non sono recuperabili: se salti una lezione, la perdi. Le sedute dei <b>pacchetti</b> invece si possono recuperare.';
+const avvisoSedute=()=>'<div class="avviso" role="note"><span class="av-i" aria-hidden="true">!</span><p>'+AVVISO_TXT+'</p></div>';
+
+/* ---------- corsi: crea, colori, orari in calendario, elimina ---------- */
+const CORSO_COLORI=["#D9A93C","#E0645C","#4FA86A","#3FA7A0","#E0973A","#5C8BC4","#A478C8","#3B82F6","#22C55E","#EAB308","#DC2626","#8B5E3C"];
+const corsoCol=id=>{const c=corso(id);return (c&&c.col)||CORSO_COL[id]||"#D9A93C"};
+function colSlot(s){return s.tipo==="pt"?"#5C8BC4":s.tipo==="tratt"?"#A478C8":corsoCol(s.corso)}
+function corsoNuovo(){return {id:"c"+uid(),n:"",livello:1,obiettivo:OBIETTIVI[0],durata:50,intensita:5,formato:"circuito",attrezzi:["tappetino"],vietati:[],consentiti:[],focus:"",tema:null,col:CORSO_COLORI[DB.corsi.length%CORSO_COLORI.length]}}
+function nuovoCorsoBtn(){return '<button class="btn primary" onclick="editCorso()">'+ic("plus",14)+' Nuovo corso</button>'}
+function corsiParam(){
+  return '<div class="card flat" style="margin-bottom:14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span style="flex:1;min-width:220px"><b>I tuoi corsi · '+DB.corsi.length+'</b><br><span class="dim" style="font-size:13.5px">Crea un corso nuovo, poi mettilo in calendario: da quel momento i clienti lo prenotano e il coach prepara le sedute.</span></span>'+nuovoCorsoBtn()+'</div>'+
+  '<div class="grid g2">'+DB.corsi.map(c=>{const fut=Object.values(DB.agenda).filter(s=>s.tipo==="corso"&&s.corso===c.id&&s.d>=T0).length;
+   return '<div class="card"><div class="card-h"><i class="cdot" style="background:'+corsoCol(c.id)+'"></i><h3>'+esc(c.n)+'</h3><span class="more"><button class="btn sm" onclick="editCorso(\''+c.id+'\')">'+ic("edit",13)+' Modifica</button></span></div>'+
+   '<div class="kv"><span>Livello</span><b>'+LIVELLI[c.livello]+'</b></div><div class="kv"><span>Obiettivo</span><span>'+esc(c.obiettivo)+'</span></div>'+
+   '<div class="kv"><span>Durata</span><span>'+c.durata+'′</span></div><div class="kv"><span>Intensità obiettivo</span><span>'+c.intensita+'/10</span></div>'+
+   '<div class="kv"><span>Tipo di corso</span><span>'+TEMI[temaCorso(c)].n+(c.tema?'':' <small class="dim">(dal nome)</small>')+'</span></div>'+
+   (c.focus?'<div class="kv"><span>Focus</span><span>'+esc(c.focus)+'</span></div>':'<div class="kv"><span>Focus</span><span class="dim">non scritto · tocca Modifica</span></div>')+
+   '<div class="kv"><span>In calendario</span><span>'+(fut?fut+' lezioni in arrivo':'<span class="pill warn">nessun orario</span>')+'</span></div>'+
+   '<div style="margin-top:8px"><div class="flabel" style="margin-bottom:5px">Attrezzatura</div><div class="chips">'+["corpo libero"].concat(c.attrezzi).map(a=>'<span class="chk on">'+a+'</span>').join("")+'</div></div>'+
+   (c.vietati.length?'<div style="margin-top:10px"><div class="flabel" style="margin-bottom:5px">Vietati</div><div class="chips">'+c.vietati.map(a=>'<span class="chk no">'+esc(a)+'</span>').join("")+'</div></div>':'')+
+   (c.consentiti.length?'<div style="margin-top:10px"><div class="flabel" style="margin-bottom:5px">Solo questi esercizi</div><div class="chips">'+c.consentiti.map(a=>'<span class="chk on">'+esc(a)+'</span>').join("")+'</div></div>':'')+
+   '<div style="margin-top:10px"><div class="flabel" style="margin-bottom:5px">Storico</div><p class="muted" style="font-size:13.5px">'+storicoCorso(c.id,"9999").length+' sedute registrate · '+DB.feedback.filter(f=>f.pid.endsWith("_"+c.id)).length+' feedback</p></div>'+
+   '<div class="inline" style="margin-top:12px"><button class="btn sm primary" onclick="orariCorso(\''+c.id+'\')">'+ic("cal",13)+' Metti in calendario</button></div></div>'}).join("")+'</div>';
+}
+function editCorso(id){const nuovo=!id,c=nuovo?(S.cNew=corsoNuovo()):corso(id);
+  CED={attrezzi:c.attrezzi.slice(),vietati:c.vietati.slice(),consentiti:c.consentiti.slice(),col:c.col||corsoCol(c.id)};
+  openModal('<h3>'+(nuovo?"Nuovo corso":esc(c.n))+'</h3><p class="muted" style="margin-bottom:14px">'+(nuovo?"Dai un nome al corso e scegli i parametri: dopo il salvataggio lo metti in calendario.":"Il coach costruisce ogni seduta su nome, tipo e focus del corso, dentro questi paletti.")+'</p>'+
+   '<div class="field"><label>Nome del corso</label><input class="fi" id="cN" value="'+esc(c.n)+'" placeholder="Es. Pilates, Senior Fit, Total Body, Glutei e addome"></div>'+
+   '<div class="field"><label>Colore nel calendario</label><div class="chips" id="cCol">'+CORSO_COLORI.map(k=>'<button type="button" class="colsw'+(CED.col===k?" on":"")+'" style="background:'+k+'" onclick="CED.col=\''+k+'\';document.querySelectorAll(\'#cCol .colsw\').forEach(b=>b.classList.remove(\'on\'));this.classList.add(\'on\')" aria-label="Colore '+k+'"></button>').join("")+'</div></div>'+
+   '<div class="frow"><div class="field"><label>Livello</label><select class="fi" id="cL">'+[1,2,3].map(l=>'<option value="'+l+'"'+(l===c.livello?" selected":"")+'>'+LIVELLI[l]+'</option>').join("")+'</select></div>'+
+   '<div class="field"><label>Obiettivo</label><select class="fi" id="cO">'+OBIETTIVI.map(o=>'<option'+(o===c.obiettivo?" selected":"")+'>'+o+'</option>').join("")+'</select></div>'+
+   '<div class="field"><label>Durata (min)</label><input class="fi" type="number" min="30" max="90" step="5" id="cD" value="'+c.durata+'"></div></div>'+
+   '<div class="field"><label>Focus del corso · scrivi a parole tue cosa deve fare</label><textarea class="fi" id="cFo" rows="3" placeholder="Es. postura e schiena, core profondo, niente salti, proteggere le ginocchia">'+esc(c.focus||"")+'</textarea>'+
+   '<span class="hint">Il coach lo legge a ogni seduta: parole come equilibrio, glutei, schiena, core, fiato, mobilità, forza, niente salti, senza attrezzi, proteggere le ginocchia cambiano gli esercizi scelti.</span></div>'+
+   '<div class="frow"><div class="field"><label>Tipo di corso</label><select class="fi" id="cT"><option value="auto">Automatico dal nome'+(nuovo?'':' · ora: '+TEMI[temaCorso(Object.assign({},c,{tema:null}))].n)+'</option>'+Object.keys(TEMI).map(k=>'<option value="'+k+'"'+(c.tema===k?" selected":"")+'>'+TEMI[k].n+'</option>').join("")+'</select></div>'+
+   '<div class="field"><label>Intensità obiettivo · <span id="cIv">'+c.intensita+'</span>/10</label><input type="range" min="2" max="9" id="cI" value="'+c.intensita+'" oninput="el(\'cIv\').textContent=this.value"></div></div>'+
+   '<div class="field"><label>Attrezzatura disponibile in sala</label><div class="chips" id="cA">'+ATTREZZI.map(a=>'<button type="button" class="chk '+(CED.attrezzi.includes(a)?"on":"")+'" onclick="CED.attrezzi=CED.attrezzi.includes(\''+a+'\')?CED.attrezzi.filter(x=>x!==\''+a+'\'):CED.attrezzi.concat(\''+a+'\');this.classList.toggle(\'on\')">'+a+'</button>').join("")+'</div></div>'+
+   (nuovo?'':'<div class="field"><label>Esercizi · tocca una volta per vietarlo, due volte per usare solo quelli scelti</label><div class="chips">'+POOL.filter(e=>e.f==="main"&&!e.v&&(!e.t||e.t.includes(temaCorso(c)))).map(e=>{const st=CED.vietati.includes(e.n)?"no":CED.consentiti.includes(e.n)?"on":"";
+     return '<button type="button" class="chk '+st+'" onclick="cicloEx(this,\''+jsq(e.n)+'\')">'+esc(e.n)+'</button>'}).join("")+'</div>'+
+   '<span class="hint">Rosso barrato = vietato · oro = lista ristretta (se ne scegli almeno uno, il motore usa solo quelli) · neutro = libero.</span></div>')+
+   '<div class="inline" style="justify-content:flex-end;flex-wrap:wrap">'+(nuovo?'':'<button class="btn ghost" style="color:#E8807A;margin-right:auto" onclick="eliminaCorsoModal(\''+id+'\')">'+ic("trash",14)+' Elimina corso</button><button class="btn" onclick="orariCorso(\''+id+'\')">'+ic("cal",14)+' Orari</button>')+
+   '<button class="btn primary" onclick="salvaCorso(\''+(id||"")+'\')">'+(nuovo?"Crea il corso":"Salva parametri")+'</button></div>');
+  if(nuovo)setTimeout(()=>{try{el("cN").focus()}catch(e){}},60)}
+function salvaCorso(id){const nuovo=!id,c=nuovo?S.cNew:corso(id);if(!c)return;
+  const nome=el("cN").value.trim();if(nuovo&&!nome)return toast("Scrivi il nome del corso");
+  if(DB.corsi.some(x=>x.id!==c.id&&x.n.toLowerCase()===nome.toLowerCase()))return toast("Esiste già un corso con questo nome");
+  c.n=nome||c.n;c.livello=+el("cL").value;c.obiettivo=el("cO").value;c.durata=clamp(parseInt(el("cD").value)||c.durata,30,90);
+  c.focus=el("cFo").value.trim();c.tema=el("cT").value==="auto"?null:el("cT").value;c.formato=TEMI[temaCorso(c)].formato;c.intensita=+el("cI").value;c.attrezzi=CED.attrezzi;c.vietati=CED.vietati;c.consentiti=CED.consentiti;c.col=CED.col;
+  if(nuovo){DB.corsi.push(c);S.cNew=null;save();S.ctab=1;render();toast("Corso “"+c.n+"” creato · ora scegli giorni e orari");orariCorso(c.id);return}
+  Object.values(DB.agenda).forEach(s=>{if(s.corso===id)s.dur=c.durata});save();closeModal();render();toast("Parametri salvati · valgono dalla prossima generazione")}
+const GG7=["Lunedì","Martedì","Mercoledì","Giovedì","Venerdì","Sabato","Domenica"];
+function orariCorso(id){const c=corso(id);if(!c)return;S.ocg=S.ocg&&S.ocg.id===id?S.ocg:{id,g:[]};
+  const fut=Object.values(DB.agenda).filter(s=>s.tipo==="corso"&&s.corso===id&&s.d>=T0).sort((a,b)=>(a.d+a.h)<(b.d+b.h)?-1:1);
+  openModal('<h3>Orari · '+esc(c.n)+'</h3><p class="muted" style="margin-bottom:14px">Scegli i giorni della settimana e l\'ora: il corso compare nel calendario per le settimane che indichi e i clienti lo possono prenotare subito.</p>'+
+   '<div class="field"><label>Giorni</label><div class="chips" id="ocG">'+GG7.map((g,i)=>'<button type="button" class="chk'+(S.ocg.g.includes(i)?" on":"")+'" onclick="const a=S.ocg.g,k=a.indexOf('+i+');if(k<0)a.push('+i+');else a.splice(k,1);this.classList.toggle(\'on\')">'+g+'</button>').join("")+'</div></div>'+
+   '<div class="frow"><div class="field"><label>Ora di inizio</label><input class="fi" type="time" id="ocH" value="18:00" step="900"></div>'+
+   '<div class="field"><label>Per quante settimane</label><select class="fi" id="ocW"><option value="4">4 settimane</option><option value="8" selected>8 settimane</option><option value="12">12 settimane</option><option value="26">6 mesi</option></select></div>'+
+   '<div class="field"><label>Posti</label><input class="fi" type="number" min="1" max="'+capMax("corso")+'" id="ocP" value="'+DB.settings.maxCorso+'"></div></div>'+
+   '<div class="inline" style="justify-content:flex-end;margin-bottom:6px"><button class="btn primary" onclick="creaOrariCorso(\''+id+'\')">'+ic("plus",14)+' Aggiungi al calendario</button></div>'+
+   (fut.length?'<div class="sep"></div><div class="flabel" style="margin:8px 0 6px">Già in calendario · '+fut.length+' lezioni</div><div class="occ-list">'+fut.slice(0,12).map(s=>'<div class="row"><span class="num" style="width:120px;flex:none;color:var(--gold-mid);font-size:13.5px">'+fmtD(s.d)+' '+s.h+'</span><span style="flex:1">'+s.pren.length+'/'+s.cap+' iscritti</span>'+(s.pren.length?'':'<button class="icon-btn" onclick="togliOrarioCorso(\''+s.id+'\',\''+id+'\')" aria-label="Togli questa lezione">'+ic("trash",14)+'</button>')+'</div>').join("")+(fut.length>12?'<p class="hint">… e altre '+(fut.length-12)+'. Le vedi tutte in Agenda.</p>':'')+'</div>':''))}
+function creaOrariCorso(id){const c=corso(id),g=S.ocg.g,h=el("ocH").value,w=parseInt(el("ocW").value)||8,cap=clamp(parseInt(el("ocP").value)||DB.settings.maxCorso,1,capMax("corso"));
+  if(!g.length)return toast("Scegli almeno un giorno");if(!h)return toast("Scegli l'ora");
+  let ok=0,busy=0;
+  for(let i=0;i<w*7;i++){const dt=addD(TODAY,i),gi=(dt.getDay()+6)%7;if(!g.includes(gi))continue;
+    const d=iso(dt),sid=d+"_"+h;if(d===T0&&h<=nowHM())continue;
+    if(DB.agenda[sid]){busy++;continue}
+    DB.agenda[sid]={id:sid,d,h,tipo:"corso",corso:c.id,cap,dur:c.durata,pren:[],chiuso:false};delete DB.agendaDel[sid];ok++}
+  save();render();orariCorso(id);toast(ok?ok+" lezioni di "+c.n+" in calendario"+(busy?" · "+busy+" ore già occupate saltate":""):"Nessuna lezione aggiunta: quelle ore sono già occupate")}
+function togliOrarioCorso(sid,id){delete DB.agenda[sid];DB.agendaDel[sid]=1;save();render();orariCorso(id);toast("Lezione tolta dal calendario")}
+function eliminaCorsoModal(id){const c=corso(id),fut=Object.values(DB.agenda).filter(s=>s.tipo==="corso"&&s.corso===id&&s.d>=T0),pren=fut.reduce((n,s)=>n+s.pren.length,0);
+  openModal('<h3>Eliminare “'+esc(c.n)+'”?</h3><p class="muted" style="margin-bottom:14px">Il corso sparisce dall\'elenco e dalla prenotazione. '+(fut.length?'Vengono tolte anche le '+fut.length+' lezioni in calendario'+(pren?' (ci sono <b>'+pren+' prenotati</b>: avvisali in chat)':'')+'. ':'')+'Lo storico delle lezioni passate resta.</p>'+
+   '<div class="inline" style="justify-content:flex-end"><button class="btn ghost" onclick="editCorso(\''+id+'\')">Annulla</button><button class="btn primary" onclick="eliminaCorso(\''+id+'\')">Elimina</button></div>')}
+function eliminaCorso(id){const c=corso(id);if(!c)return;
+  Object.values(DB.agenda).forEach(s=>{if(s.tipo==="corso"&&s.corso===id&&s.d>=T0){delete DB.agenda[s.id];DB.agendaDel[s.id]=1}});
+  DB.corsi=DB.corsi.filter(x=>x.id!==id);DB.corsiArch.push(c);save();closeModal();render();toast("Corso eliminato")}
+
+/* ---------- scheda del cliente: libreria con ricerca e gruppi muscolari ---------- */
+const GRUPPI_ORD=["Petto","Dorso","Spalle","Bicipiti","Tricipiti","Gambe","Quadricipiti","Femorali","Glutei","Polpacci","Adduttori","Abduttori e anca","Core","Lombari","Avambracci e presa","Cuffia rotatori e scapole","Collo e trapezi","Tibiali e caviglie","Condizionamento","Mobilità e stretching"];
+const GRUPPO_LAB={Dorso:"Schiena",Gambe:"Gambe · quadricipiti",Femorali:"Femorali",Core:"Addome · core"};
+const gLab=m=>GRUPPO_LAB[m]||m;
+function gruppiEx(){const g={};DB.esercizi.forEach(e=>{(g[e.m||"Altro"]=g[e.m||"Altro"]||[]).push(e)});
+  const k=Object.keys(g).sort((a,b)=>{const ia=GRUPPI_ORD.indexOf(a),ib=GRUPPI_ORD.indexOf(b);return((ia<0?99:ia)-(ib<0?99:ib))||a.localeCompare(b,"it")});
+  k.forEach(m=>g[m].sort((a,b)=>(!!b.foto-!!a.foto)||a.n.localeCompare(b.n,"it")));return {g,k}}
+const libMatch=(e,m,q)=>!q||(e.n+" "+m+" "+gLab(m)).toLowerCase().includes(q);
+function libPicker(d){
+  const {g,k}=gruppiEx(),sel=S.slg||"",q=(S.slq||"").trim().toLowerCase(),inS=new Set(d.ex.map(e=>e.n));
+  if(sel&&!g[sel])S.slg="";
+  let n=0;
+  const grp=k.map(m=>{const vis=q?true:(!sel||sel===m);let gn=0;
+    const cards=g[m].map(e=>{const on=inS.has(e.n),ok=vis&&libMatch(e,m,q);if(ok){gn++;n++}
+      return '<div class="excard lcard'+(on?" added":"")+'" data-n="'+esc((e.n+" "+m+" "+gLab(m)).toLowerCase())+'"'+(ok?'':' hidden')+'>'+
+       '<button class="lthumb" onclick="vediEsercizio(\''+jsq(e.n)+'\')" aria-label="Come si fa: '+esc(e.n)+'"><span class="exthumb">'+(e.foto?'<img src="'+esc(e.foto)+'" alt="" loading="lazy" decoding="async">':ic("dumb",30)+'<span class="ph-l">senza foto</span>')+(e.video?'<span class="vb">'+ic("play",13)+'</span>':'')+'</span></button>'+
+       '<b>'+esc(e.n)+'</b>'+(on?'<span class="pill ok">'+ic("check",11)+' nella scheda</span>':'<button class="btn sm primary" onclick="aggiungiEx(\''+e.id+'\')">'+ic("plus",13)+' Aggiungi</button>')+'</div>'}).join("");
+    return '<div class="lgrp" data-g="'+esc(m)+'"'+(gn?'':' hidden')+'><div class="lgrp-h">'+esc(gLab(m))+' <span class="dim">'+g[m].length+'</span></div><div class="exgrid">'+cards+'</div></div>'}).join("");
+  return '<div class="card" style="margin-top:14px" id="libPick">'+cardH("dumb","Aggiungi dalla libreria",'<span class="chip" id="slRes">'+n+' esercizi</span>')+
+   '<div class="exfilter"><input class="fi" id="slQ" type="search" placeholder="Cerca un esercizio… (es. panca, squat, curl)" value="'+esc(S.slq||"")+'" oninput="S.slq=this.value;filtraLib()" aria-label="Cerca un esercizio nella libreria"></div>'+
+   '<div class="chips exchips" style="margin-bottom:14px" role="group" aria-label="Gruppo muscolare"><button class="chk'+(!sel?" on":"")+'" onclick="S.slg=\'\';libRender()">Tutti</button>'+k.map(m=>'<button class="chk'+(sel===m?" on":"")+'" onclick="S.slg=\''+jsq(m)+'\';libRender()">'+esc(gLab(m))+' <span class="dim">'+g[m].length+'</span></button>').join("")+'</div>'+
+   '<p class="hint" style="margin:-4px 0 12px">Tocca la foto per vedere come si fa · “Aggiungi” lo mette nel giorno <b>'+esc(d.g)+'</b>. Il cliente vede foto e video aprendo l\'esercizio nella sua app.</p>'+
+   '<div id="libGrid">'+grp+'</div><p class="muted" id="slNone"'+(n?' hidden':'')+'>Nessun esercizio trovato. Prova un\'altra parola o crealo in Esercizi → “+ Nuovo esercizio”.</p></div>';
+}
+function filtraLib(){const q=(S.slq||"").trim().toLowerCase(),sel=S.slg||"";let n=0;
+  document.querySelectorAll("#libGrid .lgrp").forEach(G=>{const m=G.dataset.g,vis=q?true:(!sel||sel===m);let gn=0;
+    G.querySelectorAll(".lcard").forEach(c=>{const ok=vis&&(!q||c.dataset.n.includes(q));c.hidden=!ok;if(ok)gn++});G.hidden=!gn;n+=gn});
+  const r=el("slRes");if(r)r.textContent=n+" esercizi";const z=el("slNone");if(z)z.hidden=!!n}
+function libRender(){const m=el("main"),y=m?m.scrollTop:0;render();if(m)m.scrollTop=y}
+function aggiungiEx(id){const x=DB.esercizi.find(e=>e.id===id);if(!x)return;DB.scheda.giorni[S.day].ex.push({n:x.n,s:3,r:"10",kg:0,last:0,rec:60,note:""});
+  if(DB.scheda.giorni[S.day].t==="Riposo")DB.scheda.giorni[S.day].t="Allenamento";
+  save();libRender();toast(x.n+" aggiunto a "+DB.scheda.giorni[S.day].g)}
+
+/* ---------- bonifico bancario (IBAN modificabile dal titolare) ---------- */
+const bon=()=>DB.settings.bonifico||{};
+const ibanPulito=s=>String(s||"").replace(/\s+/g,"").toUpperCase();
+const ibanFmt=s=>ibanPulito(s).replace(/(.{4})/g,"$1 ").trim();
+function ibanOk(s){s=ibanPulito(s);if(!/^[A-Z]{2}\d{2}[A-Z0-9]{11,30}$/.test(s))return false;if(s.slice(0,2)==="IT"&&s.length!==27)return false;
+  const r=(s.slice(4)+s.slice(0,4)).replace(/[A-Z]/g,c=>String(c.charCodeAt(0)-55));let m=0;for(const ch of r)m=(m*10+(+ch))%97;return m===1}
+function copia(t,msg){const ok=()=>toast(msg||"Copiato");
+  try{if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(t).then(ok,()=>toast("Tieni premuto sul testo per copiarlo"));return}}catch(e){}
+  try{const a=document.createElement("textarea");a.value=t;a.setAttribute("readonly","");a.style.position="fixed";a.style.opacity="0";document.body.appendChild(a);a.select();document.execCommand("copy");a.remove();ok()}catch(e){toast("Tieni premuto sul testo per copiarlo")}}
+function bonificoBox(imp,causale){const b=bon();if(!b.iban)return "";
+  const row=(k,v,cp,lab)=>'<div class="bonrow"><span>'+k+'</span><b'+(cp?' class="num"':'')+'>'+esc(v)+'</b>'+(cp?'<button class="btn sm ghost" onclick="copia(\''+jsq(cp)+'\',\''+lab+' copiato\')">'+ic("copy",13)+' Copia</button>':'')+'</div>';
+  return '<div class="ppbox bonbox"><div style="flex:1;min-width:0"><div class="flabel">Bonifico bancario</div>'+(imp?'<div class="ppamt">'+eur(imp)+'</div>':'')+
+   row("Intestato a",b.intest||"Kone Moctar")+row("IBAN",ibanFmt(b.iban),ibanPulito(b.iban),"IBAN")+(b.banca?row("Banca",b.banca):"")+(causale?row("Causale",causale,causale,"Causale"):"")+
+   '<p class="hint">Fai il bonifico dalla tua banca con questi dati. Kone lo conferma appena arriva (in genere 1 giorno lavorativo, subito se è istantaneo).</p></div></div>'}
+function salvaBonifico(){const iban=ibanPulito(el("bnI").value),it=el("bnN").value.trim(),bk=el("bnB").value.trim();
+  if(iban&&!ibanOk(iban))return toast("IBAN non valido: controlla le cifre"),el("bnI").focus();
+  DB.settings.bonifico={iban,intest:it||"Kone Moctar",banca:bk};save();render();toast(iban?"IBAN salvato · i clienti possono pagare con bonifico":"IBAN tolto · il bonifico non compare più")}
+function salvaPortale(v){v=String(v||"").trim();if(v&&!safeUrl(v))return toast("Il link deve iniziare con https://");DB.settings.portale=v;save();toast(v?"Link per la disdetta salvato":"Link per la disdetta tolto")}
+function pagamentiCard(){const coach=S.role==="coach",b=bon();
+  return '<div class="card" style="margin-top:14px">'+cardH("card","Come pagare")+
+   '<div class="ppbox"><img src="/assets/img/paypal-qr.webp" width="180" height="180" alt="QR code PayPal di Kone Moctar Studio"><div>'+
+   '<p style="margin-bottom:8px"><b>PayPal</b> · inquadra il QR con la fotocamera del telefono o apri il link, poi invia l\'importo indicando nome e servizio.</p>'+
+   '<p class="muted" style="margin-bottom:12px">In studio puoi pagare anche in contanti o con carta.</p>'+
+   '<a class="btn primary" href="'+esc(paypalUrl())+'" target="_blank" rel="noopener">Apri PayPal '+ic("chevR",14)+'</a>'+
+   (coach?'<div class="field" style="margin-top:14px"><label>Il tuo link PayPal (quello del QR)</label><input class="fi" value="'+esc(paypalUrl())+'" onchange="if(/^https:\\/\\//.test(this.value)){DB.settings.paypal=this.value.trim();save();toast(\'Link PayPal salvato\')}else toast(\'Il link deve iniziare con https://\')"></div>':'')+
+   '</div></div>'+
+   (b.iban&&!coach?bonificoBox(0,""):'')+
+   (coach?'<div class="ppbox" style="display:block"><div class="flabel" style="margin-bottom:6px">Bonifico bancario · i tuoi dati</div>'+
+     '<p class="muted" style="margin-bottom:12px;font-size:14px">'+(b.iban?'Attivo: i clienti vedono il bonifico tra i modi di pagamento. Puoi cambiare l\'IBAN quando vuoi.':'Quando la banca ti dà l\'IBAN scrivilo qui: da quel momento i clienti possono pagare anche con bonifico. Lo puoi cambiare quando vuoi.')+'</p>'+
+     '<div class="frow"><div class="field"><label>Intestatario del conto</label><input class="fi" id="bnN" value="'+esc(b.intest||"Kone Moctar")+'"></div>'+
+     '<div class="field" style="flex:2"><label>IBAN</label><input class="fi num" id="bnI" value="'+esc(ibanFmt(b.iban))+'" placeholder="IT00 X000 0000 0000 0000 0000 000" autocapitalize="characters" spellcheck="false"></div></div>'+
+     '<div class="field"><label>Banca (facoltativo)</label><input class="fi" id="bnB" value="'+esc(b.banca||"")+'"></div>'+
+     '<div class="inline" style="justify-content:flex-end"><button class="btn primary" onclick="salvaBonifico()">Salva IBAN</button></div></div>'+
+    '<div class="ppbox" style="display:block"><div class="flabel" style="margin-bottom:6px">Abbonamenti mensili · addebito automatico</div>'+
+     '<p class="muted" style="margin-bottom:10px;font-size:14px">Per far rinnovare da solo un abbonamento mensile serve un link di pagamento ricorrente (Stripe: addebito SEPA sull\'IBAN del cliente o carta). Lo incolli su ogni voce mensile con il tasto “addebito auto”. Qui sotto il link che il cliente usa per disdire l\'addebito (portale clienti di Stripe).</p>'+
+     '<div class="field"><label>Link per gestire o disdire l\'addebito</label><input class="fi" value="'+esc(DB.settings.portale||"")+'" placeholder="https://billing.stripe.com/p/login/…" onchange="salvaPortale(this.value)"></div></div>':'')+
+   '</div>'}
+
+/* ---------- pagamenti da confermare: PayPal + bonifico ---------- */
+const PAY_LAB={paypal:"PayPal",bonifico:"Bonifico",studio:"Contanti",piano:"Abbonamento"};
+function payPill(b,sid,i){if(!b.pay)return "";
+  if(b.pay.stato==="pagato")return '<em class="pp ok">'+ic("check",11)+' pagato '+esc(b.pay.m==="paypal"||b.pay.m==="bonifico"?PAY_LAB[b.pay.m]:"")+'</em>';
+  if(b.pay.m==="paypal"||b.pay.m==="bonifico")return S.role==="coach"?'<button class="pp warn" onclick="segnaPagato(\''+sid+'\','+i+')" title="Segna come pagato">'+PAY_LAB[b.pay.m]+' '+eur(b.pay.imp)+' · conferma</button>':'<em class="pp warn">'+PAY_LAB[b.pay.m]+' da verificare</em>';
+  if(b.pay.m==="piano")return '<em class="pp">dal piano</em>';
+  return '<em class="pp">'+(S.role==="coach"?'<button onclick="segnaPagato(\''+sid+'\','+i+')" style="color:inherit">in studio '+eur(b.pay.imp)+' · incassa</button>':"paga in studio")+'</em>';
+}
+function segnaPagato(sid,i){const s=DB.agenda[sid],b=s&&s.pren[i];if(!b||!b.pay)return;b.pay.stato="pagato";
+  DB.movimenti.unshift({id:uid(),d:T0,tipo:"entrata",desc:slotTitle(s,b)+" · "+fmtD(s.d)+" "+s.h,cli:b.nome,area:s.tipo==="tratt"?"Trattamenti":"Allenamenti",imp:b.pay.imp,met:b.pay.m==="paypal"?"PayPal":b.pay.m==="bonifico"?"Bonifico":"Contanti",pag:true});
+  save();render();toast("Pagamento registrato in Contabilità")}
+function paypalDaConfermare(){const out=[];Object.values(DB.agenda).forEach(s=>s.pren.forEach((b,i)=>{if(b.pay&&(b.pay.m==="paypal"||b.pay.m==="bonifico")&&b.pay.stato!=="pagato")out.push({s,b,i})}));return out.sort((a,b)=>(a.s.d+a.s.h)<(b.s.d+b.s.h)?-1:1)}
+function pagaModal(sid){const s=DB.agenda[sid],b=s&&s.pren.find(x=>x.cid===S.cid);if(!b)return;const caus=slotTitle(s,b)+" "+fmtD(s.d)+" "+s.h;
+  openModal('<h3>'+(b.pay&&b.pay.m==="bonifico"?"Paga con bonifico":"Paga con PayPal")+'</h3><p class="muted" style="margin-bottom:12px">'+esc(slotTitle(s,b))+' · '+fmtD(s.d)+' '+s.h+'</p>'+(b.pay&&b.pay.m==="bonifico"?bonificoBox(b.pay.imp,caus):paypalBox(b.pay.imp,caus)))}
+function wFatto(){const w=W(),s=DB.agenda[w.slot],b=s&&s.pren.find(x=>x.cid===S.cid);if(!s||!b){S.w=null;return wizard()}
+  const caus=(wAtt()||{n:""}).n+" "+fmtD(s.d)+" "+s.h;
+  return '<div class="card wdone"><span class="ok-ic">'+ic("check",30)+'</span><h2 class="wiz-t">Prenotato!</h2>'+
+   '<p class="muted">'+esc(slotTitle(s,b))+' · '+capFirst(fmtD(s.d,{weekday:"long",day:"numeric",month:"long"}))+' alle '+s.h+'</p>'+
+   (b.pay.m==="paypal"?paypalBox(b.pay.imp,caus):b.pay.m==="bonifico"?bonificoBox(b.pay.imp,caus):'<p style="margin-top:10px">'+(b.pay.m==="piano"?"Scalato dal tuo abbonamento: non devi pagare nulla. "+capFirst(rimTxt(me()))+".":"Paghi "+eur(b.pay.imp)+" in studio il giorno della seduta.")+'</p>')+
+   (s.tipo==="corso"||(b.pay.m==="piano"&&me().rinnovo)?'<div style="max-width:560px;margin:16px auto 0;text-align:left">'+avvisoSedute()+'</div>':'')+
+   '<div class="inline" style="justify-content:center;margin-top:18px"><button class="btn primary" onclick="const v=S.w&&S.w.viaPiano;S.w=null;if(v&&pianoAttivo(me()))usaAbbonamento();else render()">Prenota un\'altra</button></div></div>'}
+const corsoSingolo=()=>(DB.listino.corsi||[]).find(r=>r.sed===1&&!/mensil/i.test(r.n))||null;
+
+/* ---------- abbonamento mensile con rinnovo automatico ---------- */
+const isMeseVoce=(k,r)=>!!(SEZ[k]&&SEZ[k].mese)||/mensil/i.test((r&&r.n)||"")||/mensil|al mese/i.test((r&&r.d)||"");
+function addMese(iso_){const d=fromIso(iso_),g=d.getDate();d.setDate(1);d.setMonth(d.getMonth()+1);const ult=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();d.setDate(Math.min(g,ult));return iso(d)}
+function rinnoviAuto(silenzio){let n=0;
+  DB.clienti.forEach(c=>{if(!c.rinnovo||!c.scadIso||!c.tipo||c.tipo==="none")return;let giri=0;
+    while(c.scadIso<T0&&giri<24){giri++;
+      if(c.disdetta){c.rinnovo=false;c.fineDisdetta=c.scadIso;break}
+      const da=c.scadIso,nuova=addMese(da);
+      c.scadIso=nuova;c.scad=fmtD(nuova,{day:"numeric",month:"short"}).replace(".","");c.usate=0;n++;
+      DB.movimenti.unshift({id:uid(),d:da,tipo:"entrata",desc:"Rinnovo automatico · "+c.piano+" (fino al "+fmtD(nuova,{day:"numeric",month:"short"})+")",cli:c.n,area:c.tipo==="mass"?"Trattamenti":c.tipo==="combo"?"Misti":"Allenamenti",imp:c.pMese||0,met:"Addebito automatico",pag:false});
+      const t=chatDi(c.id),msg="Il tuo abbonamento “"+c.piano+"” si è rinnovato da solo: è valido fino al "+fmtD(nuova,{day:"numeric",month:"long"})+" e le sedute del mese sono di nuovo disponibili. Puoi disdire quando vuoi dall'app. — Kone";
+      t.msgs.push({t:msg,me:1,h:oraLabel()});t.last=msg;t.unreadC=(t.unreadC||0)+1}});
+  if(n&&!silenzio)save();return n}
+function rinPill(c){if(!c.rinnovo)return "";return c.disdetta?' <span class="pill warn" title="Disdetto: non si rinnova">disdetto</span>':' <span class="pill info" title="Si rinnova da solo ogni mese">'+ic("refresh",10)+' rinnovo auto</span>'}
+function rinnovoCard(){const c=me();if(!c||!c.rinnovo||!c.tipo||c.tipo==="none")return "";
+  const fino=c.scadIso?fmtD(c.scadIso,{day:"numeric",month:"long"}):"fine mese";
+  if(c.disdetta)return '<div class="alert warn rinbox"><div><b>Abbonamento disdetto</b><p>'+esc(c.piano)+' resta valido fino al '+fino+', poi non si rinnova e non ti viene addebitato più nulla.</p></div><button class="btn sm" onclick="riattivaAbb()">Riattiva</button></div>';
+  return '<div class="alert info rinbox"><div><b>'+ic("refresh",14)+' Rinnovo automatico attivo</b><p>'+esc(c.piano)+(c.pMese?' · '+eur(c.pMese)+' al mese':'')+' · si rinnova da solo il '+fino+'. Puoi disdire quando vuoi.</p></div><button class="btn sm ghost" onclick="disdiciModal()">Disdici</button></div>'}
+function disdiciModal(){const c=me(),fino=c.scadIso?fmtD(c.scadIso,{day:"numeric",month:"long"}):"fine mese";
+  openModal('<h3>Disdire l\'abbonamento?</h3><p class="muted" style="margin-bottom:12px"><b>'+esc(c.piano)+'</b> resta attivo fino al <b>'+fino+'</b>: fino ad allora prenoti come sempre. Dopo non si rinnova più e non ti viene addebitato nulla.</p>'+
+   (DB.settings.portale?'<p class="hint" style="margin-bottom:12px">Ti apriamo anche la pagina sicura dei pagamenti per fermare l\'addebito sul conto.</p>':'<p class="hint" style="margin-bottom:12px">Kone riceve subito la tua disdetta in chat e ferma l\'addebito.</p>')+
+   '<div class="inline" style="justify-content:flex-end"><button class="btn ghost" onclick="closeModal()">Tengo l\'abbonamento</button><button class="btn primary" onclick="disdiciAbb()">Disdici</button></div>')}
+function msgAKone(cid,msg){const t=chatDi(cid);t.msgs.push({t:msg,me:0,h:oraLabel()});t.last=msg;t.unread=(t.unread||0)+1}
+function disdiciAbb(){const c=me();c.disdetta=T0;msgAKone(c.id,"Ciao Kone, ho disdetto il mio abbonamento “"+c.piano+"” dall'app: vale fino al "+(c.scadIso?fmtD(c.scadIso,{day:"numeric",month:"long"}):"fine mese")+", poi non rinnovarlo. Grazie!");
+  save();closeModal();render();toast("Disdetta registrata · Kone è stato avvisato");
+  const p=safeUrl(DB.settings.portale);if(p){const w=window.open(p,"_blank");if(!w)location.href=p}}
+function riattivaAbb(){const c=me();c.disdetta=null;msgAKone(c.id,"Ciao Kone, ho riattivato il rinnovo automatico del mio abbonamento “"+c.piano+"”.");save();render();toast("Rinnovo automatico riattivato")}
+function linkModal(key,i){const r=DB.listino[key][i];
+  openModal('<h3>Addebito automatico · '+esc(r.n)+'</h3><p class="muted" style="margin-bottom:12px">Incolla il link di pagamento <b>ricorrente mensile</b> di questa voce (Stripe → Link di pagamento → prezzo “Ricorrente, mensile”, metodi: addebito SEPA e carta). Il cliente lo apre dal listino, inserisce il suo IBAN o la carta e da lì paga ogni mese da solo finché non disdice.</p>'+
+   '<div class="field"><label>Link di pagamento ricorrente</label><input class="fi" id="lkU" value="'+esc(r.link||"")+'" placeholder="https://buy.stripe.com/…"></div>'+
+   '<div class="inline" style="justify-content:flex-end;flex-wrap:wrap">'+(r.link?'<button class="btn ghost" style="margin-right:auto" onclick="delete DB.listino.'+key+'['+i+'].link;save();closeModal();render();toast(\'Link tolto\')">Togli link</button>':'')+'<button class="btn primary" onclick="salvaLink(\''+key+'\','+i+')">Salva</button></div>')}
+function salvaLink(key,i){const v=el("lkU").value.trim();if(v&&!safeUrl(v))return toast("Il link deve iniziare con https://");const r=DB.listino[key][i];if(v)r.link=v;else delete r.link;save();closeModal();render();toast(v?"Link salvato · i clienti attivano l'abbonamento da soli":"Link tolto")}
+function attivaModal(key,i){const r=DB.listino[key][i],c=me(),pr=pEff(r);
+  openModal('<h3>'+esc(r.n)+' · rinnovo automatico</h3><p class="muted" style="margin-bottom:12px">'+eur(pr)+' al mese'+(r.sed?' · '+r.sed+' sedute':r.sed===0?' · ingressi illimitati':'')+(r.d?' · '+esc(r.d):'')+'</p>'+
+   '<ol class="pplist" style="margin-bottom:12px"><li>Paghi il primo mese e autorizzi l\'addebito mensile (IBAN del tuo conto o carta).</li><li>Ogni mese l\'abbonamento si rinnova da solo e le sedute ripartono.</li><li>Disdici quando vuoi dall\'app: resta valido fino a fine mese, poi non paghi più.</li></ol>'+avvisoSedute()+
+   (r.link?'<div class="inline" style="justify-content:flex-end"><a class="btn primary" href="'+esc(safeUrl(r.link))+'" target="_blank" rel="noopener" onclick="richiestaAbb(\''+key+'\','+i+',1)">Attiva l\'addebito automatico '+ic("chevR",14)+'</a></div>'
+    :'<p class="hint" style="margin-bottom:12px">L\'addebito online si sta attivando: intanto mandi la richiesta a Kone, che ti attiva l\'abbonamento'+(bon().iban?' e ti conferma i dati per il bonifico':'')+'.</p>'+(bon().iban?bonificoBox(pr,"Abbonamento "+r.n+" · "+(c?c.n:"")):'')+
+     '<div class="inline" style="justify-content:flex-end;margin-top:12px"><button class="btn primary" onclick="richiestaAbb(\''+key+'\','+i+')">Manda la richiesta a Kone</button></div>'))}
+function richiestaAbb(key,i,link){const r=DB.listino[key][i],c=me();if(!c)return;
+  msgAKone(c.id,"Ciao Kone, vorrei attivare l'abbonamento mensile “"+r.n+"” ("+eur(pEff(r))+" al mese) con rinnovo automatico."+(link?" Ho aperto il pagamento online.":""));save();
+  if(!link){closeModal();render();toast("Richiesta inviata a Kone in chat")}}
 
 /* =================== RENDER =================== */
 function render(){

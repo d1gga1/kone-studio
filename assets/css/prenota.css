@@ -90,3 +90,13 @@
 .ok-box{text-align:center;padding:20px 0}
 .ok-box .tick{width:64px;height:64px;border-radius:50%;background:var(--grad);color:#0a0906;font-size:34px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
 body.noscroll{overflow:hidden}
+
+/* rinnovo automatico, bonifico (03/11/2026) */
+.mnote{font-size:14.5px;color:var(--gold-mid,#E8C463);margin:0 0 12px}
+.sh-box .avviso{font-size:14.5px;margin:14px 0}
+.bon{margin-top:18px;padding:14px 16px;border-radius:14px;border:1px solid #2a2a31;background:#111114}
+.bon-t{margin:0 0 8px!important;font-size:15px}
+.bon dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 14px;margin:0;font-size:14.5px}
+.bon dt{color:var(--txt-3,#8d877c)}.bon dd{margin:0;font-weight:600;word-break:break-all}
+.bon .iban{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.bon .cp{font:inherit;font-size:12.5px;font-weight:600;padding:4px 10px;border-radius:99px;border:1px solid #8A6415;background:transparent;color:#F7E3A1;cursor:pointer}

@@ -3,7 +3,8 @@
 var C=window.KM_PRENOTA||{};
 var SL=C.slug||{}, PL=C.planning||[], GG=C.giorni||[1,2,3,4,5,6];
 var H0=(C.orari||{}).inizio||7, H1=(C.orari||{}).fine||21;
-var POSTI_ORA=C.postiOra||2, POSTI_CORSO=C.postiCorso||10, P_CORSO=C.prezzoCorso||12;
+var POSTI_ORA=C.postiOra||2, POSTI_CORSO=C.postiCorso||10, P_CORSO=C.prezzoCorso||29, BON=null;
+var AVVISO='<div class="avviso" role="note"><span class="av-i" aria-hidden="true">!</span><p><b>Attenzione:</b> le sedute degli <b>abbonamenti mensili</b> e dei <b>corsi di gruppo</b> non sono recuperabili: se salti una lezione, la perdi. Le sedute dei <b>pacchetti</b> invece si possono recuperare.</p></div>';
 var WA=C.whatsapp||"393922696468";
 var ATTIVO=!!(C.calUser&&C.calUser.trim());
 var GN=["Domenica","Lunedì","Martedì","Mercoledì","Giovedì","Venerdì","Sabato"];
@@ -36,6 +37,7 @@ var PACK={
   {id:"complete",nome:"Complete · mensile",det:"8 PT + 4 massaggi",prezzo:490},{id:"premium",nome:"Premium · mensile",det:"12 PT + 4 massaggi",prezzo:650},
   {id:"total-body",nome:"Total Body · mensile",det:"12 PT + 8 massaggi",prezzo:820}]};
 
+Object.keys(PACK).forEach(function(k){PACK[k].forEach(function(x){if(/mensile/i.test(x.nome))x.mese=1})});
 var $=function(s){return document.querySelector(s)};
 var eur=function(n){return n.toLocaleString("it-IT")+" €"};
 var p2=function(n){return(n<10?"0":"")+n};
@@ -137,7 +139,7 @@ function apriCorso(dIso,h,slug){
   var s1={id:"__corso",nome:"Ingresso singolo",det:"Corso di gruppo · max "+POSTI_CORSO+" persone",prezzo:P_CORSO};
   var s2={id:"__corso-inc",nome:"Ho già un carnet / abbonamento corsi",det:"Già pagato",prezzo:0};
   ctx.lista=[s1,s2];
-  body.innerHTML='<div class="opts">'+optBtn(s1)+optBtn(s2)+'</div>';
+  body.innerHTML='<div class="opts">'+optBtn(s1)+optBtn(s2)+'</div>'+AVVISO;
 }
 function apriPack(id){
   var s=null;Object.keys(PACK).forEach(function(k){PACK[k].forEach(function(x){if(x.id===id)s=x})});
@@ -157,6 +159,8 @@ function vai(s){
   var nome=s.id.indexOf("__corso")===0?ctx.corso.corso+" · "+s.nome:s.nome;
   var h='<button class="back">‹ Indietro</button><div class="sum"><div><b>'+esc(nome)+'</b>'+(ctx.data?'<br><span style="color:var(--txt-2);font-size:14px">'+quando(ctx.data,ctx.ora)+'</span>':'')+'</div><em>'+(s.prezzo?eur(s.prezzo):"Incluso")+'</em></div>';
   if(s.tratt) h+='<label style="font-size:14px;color:var(--txt-2)">Trattamento<select class="sel" id="tratt">'+TRATT.map(function(t){return'<option>'+t+'</option>'}).join("")+'</select></label><div style="height:14px"></div>';
+  if(s.mese)h+='<p class="mnote">Si rinnova da solo ogni mese con addebito automatico · lo disdici quando vuoi.</p>';
+  if(s.mese||ctx.tipo==="corso")h+=AVVISO;
   body.innerHTML=h+'<div id="step2"></div>';
   $("#sh-t").textContent=!ATTIVO?"Conferma e paga":ctx.tipo==="pacchetto"?"Scegli la prima seduta e paga":"Scegli l'orario e paga";
   var go=function(){ATTIVO?cal(s,nome):fallback(s,nome)};
@@ -194,10 +198,19 @@ function fallback(s,nome){
   var t=$("#tratt");
   var msg="Ciao Kone! Vorrei prenotare: "+nome+(t?" ("+t.value+")":"")+(ctx.data?" — "+quando(ctx.data,ctx.ora):"")+(s.prezzo?" — "+eur(s.prezzo)+". Ho pagato con PayPal / pago in studio.":".");
   var wa="https://wa.me/"+WA+"?text="+encodeURIComponent(msg);
-  $("#step2").innerHTML='<div class="fb"><p>Il pagamento automatico con carta si sta attivando. Intanto puoi bloccare il posto così:</p><div class="cta-row">'+
-   (s.prezzo&&C.paypal?'<a class="btn gold" href="'+C.paypal+'" target="_blank" rel="noopener">Paga '+eur(s.prezzo)+' con PayPal</a>':'')+
-   '<a class="btn line" href="'+wa+'" target="_blank" rel="noopener">Invia la prenotazione</a></div><p style="font-size:14px;margin-top:14px">Il messaggio con giorno, ora e servizio è già scritto: devi solo premere invio.</p></div>';
+  var lk=s.link&&/^https:\/\//.test(s.link)?s.link:"";
+  $("#step2").innerHTML='<div class="fb">'+(lk?'<p><b>Abbonamento con rinnovo automatico:</b> paghi il primo mese e autorizzi l\'addebito mensile (IBAN del tuo conto o carta). Lo disdici quando vuoi.</p><div class="cta-row" style="margin-bottom:16px"><a class="btn gold" href="'+esc(lk)+'" target="_blank" rel="noopener">Attiva l\'addebito automatico</a></div><p>Oppure blocca il posto così:</p>':'<p>Il pagamento automatico con carta si sta attivando. Intanto puoi bloccare il posto così:</p>')+'<div class="cta-row">'+
+   (s.prezzo&&C.paypal?'<a class="btn '+(lk?'line':'gold')+'" href="'+C.paypal+'" target="_blank" rel="noopener">Paga '+eur(s.prezzo)+' con PayPal</a>':'')+
+   '<a class="btn line" href="'+wa+'" target="_blank" rel="noopener">Invia la prenotazione</a></div>'+bonHTML(s,nome)+'<p style="font-size:14px;margin-top:14px">Il messaggio con giorno, ora e servizio è già scritto: devi solo premere invio.</p></div>';
 }
+
+function ibanFmt(x){return String(x||"").replace(/\s+/g,"").toUpperCase().replace(/(.{4})/g,"$1 ").trim()}
+function bonHTML(s,nome){if(!BON||!BON.iban||!s.prezzo)return "";
+  return '<div class="bon"><p class="bon-t">Oppure con <b>bonifico bancario</b></p><dl><dt>Importo</dt><dd>'+eur(s.prezzo)+'</dd><dt>Intestato a</dt><dd>'+esc(BON.intest||"Kone Moctar")+'</dd><dt>IBAN</dt><dd class="iban"><span>'+esc(ibanFmt(BON.iban))+'</span><button type="button" class="cp" data-cp="'+esc(String(BON.iban).replace(/\s+/g,""))+'">Copia</button></dd>'+(BON.banca?'<dt>Banca</dt><dd>'+esc(BON.banca)+'</dd>':'')+'<dt>Causale</dt><dd>'+esc(nome)+'</dd></dl></div>'}
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest(".cp");if(!b)return;var t=b.getAttribute("data-cp");
+  var ok=function(){b.textContent="Copiato ✓";setTimeout(function(){b.textContent="Copia"},1800)};
+  try{if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(t).then(ok);return}}catch(x){}
+  try{var a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();document.execCommand("copy");a.remove();ok()}catch(x){}});
 
 /* ---------- eventi ---------- */
 $("#pgrid").addEventListener("click",function(e){
@@ -234,7 +247,9 @@ function daListino(L){
   var U=window.KM_PREZZI_UTIL;if(!U||!L||!L.listino)return;
   var li=L.listino,e=U.eff,e2=U.eur;
   var sc=function(r){return r.sc>0&&(!r.scFino||r.scFino>=iso(new Date()))?" · sconto "+r.sc+"%":""};
-  var voce=function(sez,r,i,nome,det){var id=idVoce(sez,r,i);L_USATI[id]=1;return {id:id,nome:nome,det:det+sc(r),prezzo:e(r)}};
+  var MESE={abbPt:1,abbMass:1,percorsi:1};
+  var voce=function(sez,r,i,nome,det){var id=idVoce(sez,r,i);L_USATI[id]=1;var m=!!(MESE[sez]||/mensil/i.test(r.n));return {id:id,nome:nome,det:(m?"Rinnovo automatico · ":"")+det+sc(r),prezzo:e(r),mese:m?1:0,link:r.link||""}};
+  BON=L.bonifico&&L.bonifico.iban?L.bonifico:null;
   L_USATI={};
   var pt=li.pt||[],single=pt.filter(function(r){return r.sed===1}),pack=[];
   var s1=single.filter(function(r){return!/coppia/i.test(r.n)})[0],s2=single.filter(function(r){return/coppia/i.test(r.n)})[0];
@@ -253,7 +268,8 @@ function daListino(L){
     if(m30!=null)LIBERI[2].prezzo=m30;if(m50!=null)LIBERI[3].prezzo=m50;
     TRATT=tr.map(function(t){return t.n.replace(/^Massaggio /,"").replace(/^./,function(c){return c.toUpperCase()})})}
   var cs=(li.corsi||[]).filter(function(r){return r.sed===1})[0];if(cs)P_CORSO=e(cs);
-  PACK={};if(pack.length)PACK["Personal training"]=pack;if(mass.length)PACK["Massaggi"]=mass;if(mix.length)PACK["Allenamento + massaggi"]=mix;
+  var crs=[];(li.corsi||[]).forEach(function(r,i){if(r.sed===1&&!/mensil/i.test(r.n))return;crs.push(voce("corsi",r,i,r.n,r.d||(r.sed?r.sed+" ingressi":"Ingressi illimitati")))});
+  PACK={};if(pack.length)PACK["Personal training"]=pack;if(crs.length)PACK["Corsi di gruppo"]=crs;if(mass.length)PACK["Massaggi"]=mass;if(mix.length)PACK["Allenamento + massaggi"]=mix;
   cats=Object.keys(PACK);if(!PACK[cat])cat=cats[0];
   if(cats.length)rPack();
 }

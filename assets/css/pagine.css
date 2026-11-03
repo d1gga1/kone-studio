@@ -102,3 +102,10 @@ td small{display:block;color:var(--txt-3);font-size:13px}
 .ticks li a b{color:var(--gold-hi)}
 
 .nav a.nav-pren{color:var(--gold-hi)}
+
+/* avviso sedute non recuperabili (lampeggia) */
+.avviso{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;margin:0 0 18px;border-radius:14px;border:1.5px solid #E0645C;background:rgba(224,100,92,.12);color:#F6D7D3;font-size:15.5px;line-height:1.5;text-align:left;animation:avvBlink 1.4s ease-in-out infinite}
+.avviso p{margin:0!important;color:inherit!important}.avviso b{color:#fff;font-weight:600}
+.avviso .av-i{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:#E0645C;color:#140806;font-weight:700;font-size:16px;line-height:1;font-style:normal}
+@keyframes avvBlink{0%,100%{border-color:#E0645C;background:rgba(224,100,92,.10);box-shadow:0 0 0 0 rgba(224,100,92,0)}50%{border-color:#FFB0A8;background:rgba(224,100,92,.28);box-shadow:0 0 0 4px rgba(224,100,92,.16)}}
+@media (prefers-reduced-motion:reduce){.avviso{animation:none;background:rgba(224,100,92,.2)}}

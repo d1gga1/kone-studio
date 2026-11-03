@@ -218,3 +218,31 @@ Richieste di Kone (video del 22/10): essere completamente indipendente su prezzi
   Andature leggere, Marcia veloce con ginocchia alte, Respirazione diaframmatica (Kone le carica con "Carica la foto" dal riquadro).
 - **Guida a passaggi per il cliente.** Al primo accesso di ogni cliente parte una guida in 9 passi (benvenuto, Allenamenti/Trattamenti, Oggi, Scheda,
   Prenota, Progressi, Dieta, Prezzi, Chat) che evidenzia ogni sezione; alla fine propone di installare l'app. Si rivede col **?** in alto a destra.
+
+### Nuovi corsi, libreria nella scheda, foto esercizi, corsi 29 €, bonifico, rinnovo automatico, avviso sedute (03/11/2026)
+
+Richieste di Kone (messaggio del 03/11):
+
+- **Corsi · IA → "+ Nuovo corso"** (in alto e nella scheda "Corsi e parametri"): nome, colore, livello, obiettivo, durata, focus, tipo, intensità, attrezzi.
+  Dopo il salvataggio si apre **"Metti in calendario"**: giorni della settimana, ora, per quante settimane (4/8/12/26) e posti → le lezioni compaiono in Agenda e i clienti le prenotano.
+  Da "Modifica" si può anche **eliminare** un corso (toglie le lezioni future; lo storico resta, in `DB.corsiArch`).
+  Le lezioni/orari eliminati o spostati non vengono più ricreati dal calendario di base (`DB.agendaDel`).
+- **Scheda del cliente → "Aggiungi dalla libreria"**: barra di ricerca + gruppi muscolari (Petto, Schiena, Spalle, Bicipiti, Tricipiti, Gambe · quadricipiti,
+  Femorali, Glutei, Polpacci, Addome · core…) con la **foto** di ogni esercizio; tocchi la foto per vedere come si fa, "Aggiungi" lo mette nel giorno scelto.
+- **Foto esercizi**: aggiunte le foto (partenza/arrivo) a **~355 esercizi** che non le avevano, file `assets/img/esercizi/fx-*.webp`
+  (Free Exercise DB, pubblico dominio; per alcune varianti è la foto del movimento più simile). Senza foto restano 4 esercizi (Finger extension,
+  Eversione/Inversione caviglia, Toe yoga): Kone le carica da Esercizi. Si applicano da sole una volta (`exFx1`); quelle già caricate da Kone non vengono toccate.
+  Uniti i gruppi minori (Mobilità → Mobilità e stretching, Schiena → Lombari, ecc.) per avere chip più pulite.
+- **Corsi di gruppo 29 € a seduta**: tolto il "12 €" da app, /prenota/, listino.json, home, /prezzi/, pagine SEO e guide. Su /prenota/ c'è la nuova scheda "Corsi di gruppo" tra i pacchetti.
+- **Bonifico**: Listino → "Come pagare" → **IBAN, intestatario, banca** (controllo IBAN; si cambia quando si vuole, vuoto = bonifico nascosto).
+  Il cliente lo trova tra i pagamenti della prenotazione (con "Copia IBAN/causale"), Kone lo conferma come PayPal ("Bonifico · conferma" → Contabilità).
+  L'IBAN viaggia nel `listino.json` pubblicato, quindi arriva anche a /prenota/.
+- **Abbonamenti mensili con rinnovo automatico**: Clienti → Modifica abbonamento → "Rinnovo automatico ogni mese" + importo. Alla scadenza l'app
+  rinnova da sola (+1 mese, sedute azzerate, incasso "Addebito automatico" da verificare in Contabilità, messaggio al cliente). Il cliente vede
+  "Rinnovo automatico attivo · Disdici": la disdetta vale fino a fine mese, poi non si rinnova (Kone riceve un messaggio in chat).
+  **Addebito reale sul conto**: serve Stripe (gratis, commissione a transazione). Per ogni voce mensile del Listino il tasto "addebito auto" accetta un
+  **Payment Link ricorrente mensile** (metodi: addebito SEPA + carta): il cliente inserisce il suo IBAN e paga ogni mese da solo. In "Come pagare" si
+  incolla il link del **portale clienti Stripe**, che si apre quando il cliente disdice. Senza link il cliente manda la richiesta a Kone (e vede l'IBAN).
+- **Avviso lampeggiante** "le sedute degli abbonamenti mensili e dei corsi di gruppo non sono recuperabili; quelle dei pacchetti sì":
+  app (Prezzi, conferma prenotazione corsi/abbonamento, attivazione abbonamento), /prenota/ (planning, pacchetti, scheda corso), /prezzi/, /corsi-di-gruppo-milano/, home.
+- `sw.js` → v19, `pagine.css?v=4`, `prenota.css?v=2`, `prenota.js?v=3`.

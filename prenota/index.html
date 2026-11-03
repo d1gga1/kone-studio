@@ -16,8 +16,8 @@
 <meta property="og:image" content="https://kone-studio.com/assets/og-sito.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Prenota e paga online | Kone Moctar Studio Milano">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Prenota e paga online | Kone Moctar Studio Milano"><meta name="twitter:description" content="Prenota online personal training, corsi di gruppo e massaggi a Milano: guarda il planning settimanale con gli orari liberi e paga subito con carta o PayPal."><meta name="twitter:image" content="https://kone-studio.com/assets/og-sito.jpg">
 <style>@font-face{font-family:'Oswald Fallback';src:local('Arial'),local('ArialMT'),local('Helvetica Neue'),local('Helvetica'),local('Roboto'),local('Liberation Sans'),local('FreeSans');size-adjust:81.43%;ascent-override:146.51%;descent-override:35.49%;line-gap-override:0%}@font-face{font-family:'Barlow Fallback';src:local('Arial'),local('ArialMT'),local('Helvetica Neue'),local('Helvetica'),local('Roboto'),local('Liberation Sans'),local('FreeSans');size-adjust:96.68%;ascent-override:103.43%;descent-override:20.69%;line-gap-override:0%}@font-face{font-family:'Oswald';font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/oswald-400.woff2) format('woff2')}@font-face{font-family:'Oswald';font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/oswald-500.woff2) format('woff2')}@font-face{font-family:'Oswald';font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/oswald-600.woff2) format('woff2')}@font-face{font-family:'Barlow';font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/barlow-400.woff2) format('woff2')}@font-face{font-family:'Barlow';font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/barlow-500.woff2) format('woff2')}@font-face{font-family:'Barlow';font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/barlow-600.woff2) format('woff2')}</style><link rel="preload" href="/assets/fonts/oswald-600.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/assets/fonts/barlow-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/css/pagine.css?v=3">
-<link rel="stylesheet" href="/assets/css/prenota.css?v=1">
+<link rel="stylesheet" href="/assets/css/pagine.css?v=4">
+<link rel="stylesheet" href="/assets/css/prenota.css?v=2">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://kone-studio.com/prenota/#webpage","url":"https://kone-studio.com/prenota/","name":"Prenota e paga online | Kone Moctar Studio Milano","description":"Prenota online personal training, corsi di gruppo e massaggi a Milano: guarda il planning settimanale con gli orari liberi e paga subito con carta o PayPal.","inLanguage":"it-IT","isPartOf":{"@id":"https://kone-studio.com/#web"},"about":{"@id":"https://kone-studio.com/#studio"},"potentialAction":{"@type":"ReserveAction","target":"https://kone-studio.com/prenota/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://kone-studio.com/"},{"@type":"ListItem","position":2,"name":"Prenota online","item":"https://kone-studio.com/prenota/"}]}]}</script>
 </head>
 <body>
@@ -46,6 +46,7 @@
     <ul class="legend" aria-label="Legenda">
       <li><i class="lg-free"></i>Libero · 2 posti</li><li><i class="lg-one"></i>1 posto rimasto</li><li><i class="lg-full"></i>Occupato / completo</li><li><i class="lg-corso"></i>Corso di gruppo · max 10</li>
     </ul>
+    <div class="avviso" role="note"><span class="av-i" aria-hidden="true">!</span><p><b>Attenzione:</b> le sedute degli <b>abbonamenti mensili</b> e dei <b>corsi di gruppo</b> non sono recuperabili: se salti una lezione, la perdi. Le sedute dei <b>pacchetti</b> invece si possono recuperare.</p></div>
     <p class="live" id="live" hidden></p>
     <div class="days-m" id="days-m" role="tablist" aria-label="Giorno"></div>
     <div class="grid-wrap"><div class="pgrid" id="pgrid" aria-live="polite"></div></div>
@@ -54,7 +55,8 @@
 
   <section class="wrap packs" aria-labelledby="pk-h">
     <h2 id="pk-h">Pacchetti e abbonamenti</h2>
-    <p class="plan-sub">Paghi online il pacchetto e prenoti subito la prima seduta. Le successive le prenoti dal planning con <b>"Ho già un pacchetto"</b>, senza pagare di nuovo.</p>
+    <p class="plan-sub">Paghi online il pacchetto e prenoti subito la prima seduta. Le successive le prenoti dal planning con <b>"Ho già un pacchetto"</b>, senza pagare di nuovo. Gli <b>abbonamenti mensili</b> si rinnovano da soli ogni mese (addebito automatico) e li disdici quando vuoi.</p>
+    <div class="avviso" role="note"><span class="av-i" aria-hidden="true">!</span><p><b>Attenzione:</b> le sedute degli <b>abbonamenti mensili</b> e dei <b>corsi di gruppo</b> non sono recuperabili: se salti una lezione, la perdi. Le sedute dei <b>pacchetti</b> invece si possono recuperare.</p></div>
     <div class="ptabs" role="tablist" id="ptabs"></div>
     <div class="pcards" id="pcards"></div>
   </section>
@@ -91,8 +93,8 @@
 b.addEventListener('click',function(){var o=h.classList.toggle('open');b.setAttribute('aria-expanded',o)});
 if('serviceWorker'in navigator&&location.protocol==='https:')navigator.serviceWorker.register('/sw.js').catch(function(){});})();
 </script>
-<script src="/assets/js/prenota-config.js?v=1"></script>
+<script src="/assets/js/prenota-config.js?v=2"></script>
 <script src="/assets/js/prezzi-live.js?v=1"></script>
-<script src="/assets/js/prenota.js?v=2"></script>
+<script src="/assets/js/prenota.js?v=3"></script>
 </body>
 </html>

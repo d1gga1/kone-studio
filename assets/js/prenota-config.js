@@ -84,7 +84,7 @@ window.KM_PRENOTA = {
     { giorno: 4, ora: 19, corso: "Functional Training",        colore: "#DC2626", slug: "functional-training" },
     { giorno: 5, ora: 20, corso: "Tabata Training",            colore: "#EAB308", slug: "tabata-training" }
   ],
-  prezzoCorso: 12,
+  prezzoCorso: 29,     // ingresso singolo a un corso (se il titolare lo cambia nel Listino vale quello)
 
   /* Fallback finché Cal.com non è collegato: pagamento PayPal */
   paypal: "https://www.paypal.com/qrcodes/p2pqrc/BAHYS4B2HYL2G",

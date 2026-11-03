@@ -1,5 +1,5 @@
 {
- "agg": "2026-11-02T12:43:41.307Z",
+ "agg": "2026-11-03T11:31:17.000Z",
  "nota": "File scritto dal pannello titolare: non modificarlo a mano.",
  "listino": {
   "pt": [
@@ -45,7 +45,7 @@
     "n": "Ingresso singolo",
     "d": "Un corso di gruppo a scelta",
     "sed": 1,
-    "p": 12
+    "p": 29
    },
    {
     "n": "Carnet 10 ingressi",
@@ -279,5 +279,11 @@
    "p60": 55
   }
  ],
- "paypal": "https://www.paypal.com/qrcodes/p2pqrc/BAHYS4B2HYL2G"
+ "paypal": "https://www.paypal.com/qrcodes/p2pqrc/BAHYS4B2HYL2G",
+ "bonifico": {
+  "iban": "",
+  "intest": "Kone Moctar",
+  "banca": ""
+ },
+ "portale": ""
 }
