@@ -246,3 +246,17 @@ Richieste di Kone (messaggio del 03/11):
 - **Avviso lampeggiante** "le sedute degli abbonamenti mensili e dei corsi di gruppo non sono recuperabili; quelle dei pacchetti sì":
   app (Prezzi, conferma prenotazione corsi/abbonamento, attivazione abbonamento), /prenota/ (planning, pacchetti, scheda corso), /prezzi/, /corsi-di-gruppo-milano/, home.
 - `sw.js` → v19, `pagine.css?v=4`, `prenota.css?v=2`, `prenota.js?v=3`.
+
+### Registrazione clienti, P.IVA, ingresso titolare, codice su Cruscotto e Contabilità (04/11/2026)
+
+- **Registrazione dei clienti**: nella schermata d'accesso dell'app ci sono le schede **Accedi / Registrati**. Il cliente compila nome, cognome,
+  email, telefono, password (min. 6) e il consenso privacy; entra subito nell'app (senza abbonamento) e Kone riceve un messaggio in chat con email e telefono.
+  Link diretto alla registrazione: `kone-studio.com/app#registrati` (anche nel footer della home).
+- **P.IVA**: si scrive **una volta sola** in `assets/data/studio.js` (campo `piva`). Compare nell'accesso all'app, nel passaggio di pagamento
+  della prenotazione (app e `/prenota/`) e nel piè di pagina di tutte le pagine del sito. Vuota = non compare. Il file non passa dalla cache.
+- **Ingresso titolare facile**: tasto **"Sei Kone? Area titolare"** nella schermata d'accesso dell'app (funziona anche dall'app installata) e link
+  "Area titolare" nel footer della home. Una volta entrato, l'app riapre direttamente il pannello finché Kone non fa "Esci".
+- **Codice su Cruscotto + Contabilità**: entrambe le pagine si aprono solo col **codice** (è la vecchia password della contabilità, demo `conti2026`).
+  Sbloccato una volta vale per tutte e due; si richiude appena si va in un'altra sezione. Si cambia in Contabilità → "Codice cruscotto e contabilità".
+- ⚠️ Limite demo invariato: un cliente registrato esiste solo nel browser del suo telefono finché non si collega il database condiviso (Supabase o simile).
+- `sw.js` → v20, `prenota.js?v=4`.

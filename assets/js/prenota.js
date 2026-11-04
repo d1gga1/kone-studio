@@ -201,9 +201,10 @@ function fallback(s,nome){
   var lk=s.link&&/^https:\/\//.test(s.link)?s.link:"";
   $("#step2").innerHTML='<div class="fb">'+(lk?'<p><b>Abbonamento con rinnovo automatico:</b> paghi il primo mese e autorizzi l\'addebito mensile (IBAN del tuo conto o carta). Lo disdici quando vuoi.</p><div class="cta-row" style="margin-bottom:16px"><a class="btn gold" href="'+esc(lk)+'" target="_blank" rel="noopener">Attiva l\'addebito automatico</a></div><p>Oppure blocca il posto così:</p>':'<p>Il pagamento automatico con carta si sta attivando. Intanto puoi bloccare il posto così:</p>')+'<div class="cta-row">'+
    (s.prezzo&&C.paypal?'<a class="btn '+(lk?'line':'gold')+'" href="'+C.paypal+'" target="_blank" rel="noopener">Paga '+eur(s.prezzo)+' con PayPal</a>':'')+
-   '<a class="btn line" href="'+wa+'" target="_blank" rel="noopener">Invia la prenotazione</a></div>'+bonHTML(s,nome)+'<p style="font-size:14px;margin-top:14px">Il messaggio con giorno, ora e servizio è già scritto: devi solo premere invio.</p></div>';
+   '<a class="btn line" href="'+wa+'" target="_blank" rel="noopener">Invia la prenotazione</a></div>'+bonHTML(s,nome)+pivaHTML()+'<p style="font-size:14px;margin-top:14px">Il messaggio con giorno, ora e servizio è già scritto: devi solo premere invio.</p></div>';
 }
 
+function pivaHTML(){var k=window.KM_STUDIO||{};return k.piva?'<p style="font-size:13px;margin-top:12px;opacity:.75">Pagamento a '+esc(k.ragione||"Kone Moctar Studio")+' · P.IVA '+esc(k.piva)+'</p>':""}
 function ibanFmt(x){return String(x||"").replace(/\s+/g,"").toUpperCase().replace(/(.{4})/g,"$1 ").trim()}
 function bonHTML(s,nome){if(!BON||!BON.iban||!s.prezzo)return "";
   return '<div class="bon"><p class="bon-t">Oppure con <b>bonifico bancario</b></p><dl><dt>Importo</dt><dd>'+eur(s.prezzo)+'</dd><dt>Intestato a</dt><dd>'+esc(BON.intest||"Kone Moctar")+'</dd><dt>IBAN</dt><dd class="iban"><span>'+esc(ibanFmt(BON.iban))+'</span><button type="button" class="cp" data-cp="'+esc(String(BON.iban).replace(/\s+/g,""))+'">Copia</button></dd>'+(BON.banca?'<dt>Banca</dt><dd>'+esc(BON.banca)+'</dd>':'')+'<dt>Causale</dt><dd>'+esc(nome)+'</dd></dl></div>'}

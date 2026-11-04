@@ -131,6 +131,17 @@ img.tb-mark{border-radius:50%}
 .role b{display:block;font-family:var(--disp);font-weight:600;font-size:17px;letter-spacing:.03em;text-transform:uppercase}
 .role small{color:var(--txt-2);font-size:13px}
 .auth-foot{margin-top:26px;font-size:12px;color:var(--txt-3);letter-spacing:.04em}
+.auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:26px;padding:4px;border:1px solid var(--line);border-radius:12px;background:var(--surf)}
+.auth-tabs button{padding:10px;border-radius:9px;font-family:var(--disp);font-weight:600;font-size:15px;letter-spacing:.05em;text-transform:uppercase;color:var(--txt-2);transition:.2s}
+.auth-tabs button.on{background:linear-gradient(150deg,var(--gold-mid),var(--gold-deep));color:#141006}
+.auth-tabs+.auth-form{margin-top:16px}
+.auth-form .frow2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.auth-chk{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--txt-2);line-height:1.45;margin:2px 0}
+.auth-chk input{margin-top:3px;accent-color:#D9A93C;width:16px;height:16px;flex:none}
+.auth-coach{display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:9px 16px;border:1px solid var(--line);border-radius:999px;color:var(--txt-2);font-size:13px;letter-spacing:.03em;transition:.2s}
+.auth-coach:hover{border-color:var(--gold-deep);color:var(--gold-mid)}
+.piva{display:block;margin-top:10px;color:var(--txt-3);font-size:12px;letter-spacing:.06em}
+.piva-pay{margin-top:12px;font-size:12.5px;color:var(--txt-3)}
 
 /* ============ APP SHELL ============ */
 #app{display:none;height:100%;flex-direction:column}
@@ -836,6 +847,7 @@ button.pp.warn:hover{background:rgba(224,151,58,.28)}
 @media (max-width:700px){.bonbox .bonrow span{width:100%}#libGrid{max-height:none;overflow:visible}}
 
 </style>
+<script src="/assets/data/studio.js" defer></script>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute;pointer-events:none" aria-hidden="true" focusable="false"><defs>
@@ -864,14 +876,27 @@ button.pp.warn:hover{background:rgba(224,151,58,.28)}
     <img class="auth-mark" src="/assets/img/logo-km-160.webp" width="160" height="160" alt="KM Studio">
     <h1 class="auth-title">Kone <span>Moctar</span></h1>
     <p class="muted" style="margin-top:8px">Personal training &amp; massaggi professionali<br><span class="dim" style="font-size:13px">Movimento · Cura · Risultati</span></p>
+    <div class="auth-tabs" role="tablist" aria-label="Accesso"><button type="button" role="tab" id="tabLogin" class="on" aria-selected="true" onclick="authTab('login')">Accedi</button><button type="button" role="tab" id="tabReg" aria-selected="false" onclick="authTab('reg')">Registrati</button></div>
     <form class="auth-form" id="cliForm" onsubmit="loginCliente(event)">
       <div class="field" style="margin:0"><label for="cliEmail">Email</label><input class="fi" id="cliEmail" type="email" autocomplete="username" placeholder="la-tua@email.it" required></div>
       <div class="field" style="margin:0"><label for="cliPw">Password</label><input class="fi" id="cliPw" type="password" autocomplete="current-password" placeholder="••••••" required></div>
       <div class="auth-err" id="cliErr"></div>
       <button class="btn primary" type="submit" style="padding:13px">Entra nella tua app</button>
       <button class="btn ghost" type="button" onclick="demoCliente()">Prova la demo come Marco</button>
+      <p class="muted" style="text-align:center;font-size:13px;margin-top:4px">Prima volta? <button type="button" class="linkbtn" onclick="authTab('reg')">Crea il tuo account</button></p>
     </form>
-    <p class="auth-foot">Non hai ancora un accesso? Te lo attiva Kone in studio.<br><a class="linkbtn" href="index.html">← Torna al sito</a><br>Demo dimostrativa · dati di esempio</p>
+    <form class="auth-form" id="regForm" onsubmit="registraCliente(event)" hidden novalidate>
+      <div class="frow2"><div class="field" style="margin:0"><label for="rgN">Nome</label><input class="fi" id="rgN" autocomplete="given-name" required></div><div class="field" style="margin:0"><label for="rgC">Cognome</label><input class="fi" id="rgC" autocomplete="family-name" required></div></div>
+      <div class="field" style="margin:0"><label for="rgE">Email</label><input class="fi" id="rgE" type="email" autocomplete="email" placeholder="la-tua@email.it" required></div>
+      <div class="field" style="margin:0"><label for="rgT">Telefono</label><input class="fi" id="rgT" type="tel" autocomplete="tel" placeholder="333 123 4567" required></div>
+      <div class="frow2"><div class="field" style="margin:0"><label for="rgP">Password</label><input class="fi" id="rgP" type="password" autocomplete="new-password" placeholder="min. 6 caratteri" required></div><div class="field" style="margin:0"><label for="rgP2">Ripeti password</label><input class="fi" id="rgP2" type="password" autocomplete="new-password" required></div></div>
+      <label class="auth-chk"><input type="checkbox" id="rgOk"><span>Accetto il trattamento dei miei dati personali per la gestione di prenotazioni, pagamenti e allenamenti.</span></label>
+      <div class="auth-err" id="rgErr"></div>
+      <button class="btn primary" type="submit" style="padding:13px">Crea il tuo account</button>
+      <p class="muted" style="text-align:center;font-size:13px;margin-top:4px">Hai già un account? <button type="button" class="linkbtn" onclick="authTab('login')">Accedi</button></p>
+    </form>
+    <button type="button" class="auth-coach" onclick="showCoachAuth()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Sei Kone? Area titolare</button>
+    <p class="auth-foot"><a class="linkbtn" href="index.html">← Torna al sito</a><span class="piva" data-piva hidden></span></p>
     <div class="dnv"><span class="dnv-l">Powered by</span><a class="dnv-b" href="https://danova-tech.com" target="_blank" rel="noopener" title="Danova Tech"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="15.5" height="15.5" rx="3.2" fill="none" stroke="#CDD2DC" stroke-width="2"/><path d="M8.2 8h3.2a3.4 3.4 0 0 1 0 6.8H8.2z" fill="none" stroke="#CDD2DC" stroke-width="1.8"/><path d="M2.5 21.5L21.5 2.5" stroke="#2F6BFF" stroke-width="1.7" stroke-linecap="round"/></svg><span class="dnv-t"><b>DANOVA</b><i>TECH</i></span></a></div>
   </div>
 </div>
@@ -887,7 +912,7 @@ button.pp.warn:hover{background:rgba(224,151,58,.28)}
       <div class="auth-err" id="coachErr"></div>
       <button class="btn primary" type="submit" style="padding:13px">Entra nel pannello</button>
     </form>
-    <p class="auth-foot"><a class="linkbtn" href="app.html">Vai all'app clienti</a></p>
+    <p class="auth-foot"><button type="button" class="linkbtn" onclick="showClientAuth()">← Torna all'accesso clienti</button></p>
     <div class="dnv"><span class="dnv-l">Powered by</span><a class="dnv-b" href="https://danova-tech.com" target="_blank" rel="noopener" title="Danova Tech"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="15.5" height="15.5" rx="3.2" fill="none" stroke="#CDD2DC" stroke-width="2"/><path d="M8.2 8h3.2a3.4 3.4 0 0 1 0 6.8H8.2z" fill="none" stroke="#CDD2DC" stroke-width="1.8"/><path d="M2.5 21.5L21.5 2.5" stroke="#2F6BFF" stroke-width="1.7" stroke-linecap="round"/></svg><span class="dnv-t"><b>DANOVA</b><i>TECH</i></span></a></div>
   </div>
 </div>
@@ -1862,12 +1887,33 @@ let introTimer=setTimeout(afterIntro,(__standalone||LS.get("sess",null))?1500:38
 function afterIntro(){
   clearTimeout(introTimer);el("splash").classList.add("gone");
   const sess=LS.get("sess",null);
-  if(isCoachRoute()){if(sess&&sess.role==="coach")return enterApp("coach");return showCoachAuth()}
+  if(sess&&sess.role==="coach")return enterApp("coach");
+  if(isCoachRoute())return showCoachAuth();
   if(sess&&sess.role==="client"&&cli(sess.cid))return enterApp("client",sess.cid);
   showClientAuth();
 }
 function hideAll(){el("auth").classList.remove("show");el("coachAuth").classList.remove("show");el("app").classList.remove("show");document.body.classList.remove("client");stopRest();closeModal()}
-function showClientAuth(){hideAll();el("auth").classList.add("show")}
+function showClientAuth(){hideAll();el("auth").classList.add("show");pivaFill();if(/registr/i.test(location.hash))authTab("reg")}
+function authTab(t){const r=t==="reg";el("cliForm").hidden=r;el("regForm").hidden=!r;el("tabLogin").classList.toggle("on",!r);el("tabReg").classList.toggle("on",r);
+  el("tabLogin").setAttribute("aria-selected",!r);el("tabReg").setAttribute("aria-selected",r);el("cliErr").textContent="";el("rgErr").textContent="";
+  setTimeout(()=>{try{el(r?"rgN":"cliEmail").focus()}catch(e){}},50)}
+function registraCliente(e){e.preventDefault();
+  const cap=x=>x.toLowerCase().replace(/(^|[\s'-])\S/g,m=>m.toUpperCase());
+  const no=cap(el("rgN").value.trim()),co=cap(el("rgC").value.trim()),em=el("rgE").value.trim().toLowerCase(),tel=el("rgT").value.trim(),pw=el("rgP").value,pw2=el("rgP2").value;
+  const ko=m=>errShake("rgErr","regForm",m);
+  if(!no||!co)return ko("Scrivi nome e cognome");
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em))return ko("Email non valida");
+  if(tel.replace(/\D/g,"").length<8)return ko("Numero di telefono non valido");
+  if(pw.length<6)return ko("La password deve avere almeno 6 caratteri");
+  if(pw!==pw2)return ko("Le due password non coincidono");
+  if(!el("rgOk").checked)return ko("Serve il consenso al trattamento dei dati");
+  if(DB.clienti.some(c=>(c.email||"").toLowerCase()===em))return ko("Esiste già un account con questa email: accedi");
+  const id=Math.max.apply(null,DB.clienti.map(c=>c.id).concat([0]))+1,n=no+" "+co;
+  DB.clienti.push({id,n,i:(no[0]+co[0]).toUpperCase(),email:em,pw:hashPw(pw),tel,piano:"Nessun abbonamento",tipo:"none",usate:0,tot:0,extra:"—",scad:"—",gg:0,peso:null,start:null,ader:100,
+    note:"Registrato dall'app il "+fmtD(T0,{day:"numeric",month:"long",year:"numeric"})+".",reg:T0,privacy:new Date().toISOString()});
+  msgAKone(id,"Ciao Kone, mi sono appena registrato nell'app. Email: "+em+" · Telefono: "+tel+".");
+  save();["rgN","rgC","rgE","rgT","rgP","rgP2"].forEach(x=>el(x).value="");el("rgOk").checked=false;
+  LS.set("sess",{role:"client",cid:id});enterApp("client",id);toast("Benvenuto "+no+"! Il tuo account è pronto")}
 function showCoachAuth(){hideAll();el("coachAuth").classList.add("show");setTimeout(()=>{try{el("coachPw").focus()}catch(e){}},300)}
 function errShake(id,box,msg){el(id).textContent=msg;const b=el(box);b.classList.remove("shake");void b.offsetWidth;b.classList.add("shake")}
 function loginCliente(e){e.preventDefault();
@@ -1905,7 +1951,7 @@ function scegliVistaCliente(){
   openModal('<h3>Vista cliente</h3><p class="muted" style="margin-bottom:14px">Apri l\'app esattamente come la vede un tuo cliente. Le prenotazioni che fai qui finiscono a suo nome.</p>'+
    '<div class="stack">'+DB.clienti.map(c=>'<button class="row" style="width:100%;text-align:left" onclick="apriVistaCliente('+c.id+')"><span class="av">'+c.i+'</span><span><span class="nm">'+esc(c.n)+'</span><span class="mt">'+esc(c.piano)+'</span></span><span class="rt">'+ic("eye",16)+'</span></button>').join("")+'</div>');
 }
-function apriVistaCliente(id){closeModal();S.role="client";S.preview=true;S.cid=id;S.area="allen";S.view="oggi";S.sets={};S.vals={};chrome();buildNav();render();el("main").scrollTop=0}
+function apriVistaCliente(id){closeModal();S.contiOk=false;S.role="client";S.preview=true;S.cid=id;S.area="allen";S.view="oggi";S.sets={};S.vals={};chrome();buildNav();render();el("main").scrollTop=0}
 function tornaCoach(){S.role="coach";S.preview=false;S.area="allen";S.view="dash";chrome();buildNav();render();el("main").scrollTop=0}
 
 /* ---------- navigazione ---------- */
@@ -1932,7 +1978,8 @@ function buildNav(){
 }
 function setArea(a){if(S.area===a)return;S.area=a;S.aday=0;S.afil="tutti";S.cf=null;S.aopen=null;const ids=navItems().map(n=>n[0]);
   if(!ids.includes(S.view)||S.view==="cliente")S.view=ids[0];buildNav();render();el("main").scrollTop=0}
-function go(v){if(S.view==="conti"&&v!=="conti")S.contiOk=false;S.view=v;S.open=0;S.tab=0;S.aopen=null;buildNav();render();el("main").scrollTop=0}
+const RISERVATE=["dash","conti"];
+function go(v){if(RISERVATE.includes(S.view)&&!RISERVATE.includes(v))S.contiOk=false;S.view=v;S.open=0;S.tab=0;S.aopen=null;buildNav();render();el("main").scrollTop=0}
 function openClient(id){S.client=id;S.view="cliente";S.tab=0;buildNav();render();el("main").scrollTop=0}
 
 /* =================== MEDIA ESERCIZI =================== */
@@ -2043,6 +2090,7 @@ function vDash(){
   const wk=weekDays(),corsiWk=Object.values(DB.agenda).filter(s=>s.tipo==="corso"&&wk.includes(s.d));
   const occ=corsiWk.reduce((a,s)=>a+s.pren.length,0),capT=corsiWk.reduce((a,s)=>a+s.cap,0);
   const fbNew=DB.feedback.filter(f=>f.d>=iso(addD(TODAY,-2))).length;
+  if(!S.contiOk)return head("Cruscotto","Area riservata")+lockBox();
   return head("Ciao Kone",fmtD(T0,{weekday:"long",day:"numeric",month:"long",year:"numeric"})+" · uno sguardo e sai chi ha bisogno di te")+saldoCard()+
   '<div class="grid g4" style="margin-bottom:16px">'+
    '<div class="stat"><span class="k">Clienti</span><span class="v num">'+DB.clienti.length+'</span><span class="d">'+DB.clienti.filter(c=>!DB.schede[c.id]).length+' senza scheda</span></div>'+
@@ -2061,7 +2109,7 @@ function vDash(){
      '<span style="flex:1;min-width:0"><span class="nm">'+esc(s.tipo==="tratt"&&s.pren[0]?slotTitle(s,s.pren[0]):slotTitle(s))+'</span><span class="mt">'+(s.pren.length?(s.tipo==="corso"?s.pren.length+"/"+s.cap+" iscritti":esc(s.pren.map(b=>b.nome).join(", "))):"libero")+'</span></span>'+tipoPill(s)+'</div>').join(""):'<p class="muted">Oggi lo studio è chiuso.</p>')+
     '<button class="btn sm" style="margin-top:10px" onclick="go(\'agenda\')">Apri l\'agenda</button></div>'+
    '<div class="card">'+cardH("dash","Prenotazioni per giorno · questa settimana")+chartBars(wk.map(d=>[fmtD(d,{weekday:"short"}).replace(".",""),slotsDay(d).reduce((a,s)=>a+s.pren.length,0)]),{hi:(TODAY.getDay()+6)%7})+
-    '<p class="hint">Conta one to one, corsi e trattamenti. I dati economici sono nella Contabilità, protetta da password.</p></div>'+
+    '<p class="hint">Conta one to one, corsi e trattamenti. I dati economici sono nella Contabilità, protetta dal tuo codice.</p></div>'+
   '</div>';
 }
 function vClienti(){
@@ -2292,10 +2340,7 @@ function salvaTratt(id){const nn=el("tN").value.trim();if(!nn)return toast("Scri
 function chatDi(cid){const c=cli(cid);let t=DB.chat.find(x=>x.n===c.n);if(!t){t={id:100+cid,n:c.n,i:c.i,unread:0,last:"",msgs:[]};DB.chat.push(t)}return t}
 /* ---------- contabilità (password) ---------- */
 function vConti(){
-  if(!S.contiOk)return head("Contabilità","Area riservata")+
-   '<div class="card lockbox"><div class="big">'+ic("lock",28)+'</div><h3 style="font-size:18px;margin-bottom:6px">Solo per il titolare</h3><p class="muted" style="margin-bottom:16px">Incassi, uscite e pagamenti sono protetti da una password separata da quella del pannello.</p>'+
-   '<form id="contiForm" onsubmit="sbloccaConti(event)" class="stack"><input class="fi" type="password" id="pwConti" placeholder="Password contabilità" autocomplete="current-password" required><button class="btn primary" type="submit">Sblocca</button><div class="auth-err" id="contiErr"></div></form>'+
-   '<p class="hint">Si richiude da sola quando esci da questa pagina.</p></div>';
+  if(!S.contiOk)return head("Contabilità","Area riservata")+lockBox();
   const mesi=[...new Set(DB.movimenti.map(m=>m.d.slice(0,7)))].sort().reverse();
   if(!S.mese||!mesi.includes(S.mese))S.mese=mesi[0];
   const mm=DB.movimenti.filter(m=>m.d.slice(0,7)===S.mese).sort((a,b)=>a.d<b.d?1:-1);
@@ -2319,16 +2364,19 @@ function vConti(){
     '<td>'+(m.tipo==="entrata"?'<button class="pill '+(m.pag?"ok":"warn")+'" onclick="togglePag(\''+m.id+'\')">'+(m.pag?"Pagato":"Da incassare")+'</button>':'<span class="pill">Uscita</span>')+'</td></tr>').join("")+'</tbody></table></div></div>'+
   '<div class="card" style="margin-bottom:14px">'+cardH("users","Abbonamenti attivi")+'<div class="scroll-x"><table><thead><tr><th>Cliente</th><th>Piano</th><th>Sedute</th><th>Scadenza</th><th>Stato</th></tr></thead><tbody>'+
    DB.clienti.map(c=>'<tr><td><div class="inline"><span class="av">'+c.i+'</span><b>'+esc(c.n)+'</b></div></td><td>'+esc(c.piano)+'</td><td class="num">'+usoTxt(c)+'</td><td class="num">'+c.scad+'</td><td>'+statoCli(c)+'</td></tr>').join("")+'</tbody></table></div></div>'+
-  '<div class="grid g2"><div class="card">'+cardH("shield","Password contabilità")+
-   '<div class="field"><label>Password attuale</label><input class="fi" type="password" id="pwOld" autocomplete="current-password"></div>'+
+  '<div class="grid g2"><div class="card">'+cardH("shield","Codice cruscotto e contabilità")+'<p class="muted" style="font-size:13.5px;margin-bottom:12px">Il codice che apre Cruscotto e Contabilità. Tienilo diverso dalla password del pannello.</p>'+
+   '<div class="field"><label>Codice attuale</label><input class="fi" type="password" id="pwOld" autocomplete="off"></div>'+
    '<div class="frow"><div class="field"><label>Nuova</label><input class="fi" type="password" id="pwNew" autocomplete="new-password"></div><div class="field"><label>Ripeti</label><input class="fi" type="password" id="pwNew2" autocomplete="new-password"></div></div>'+
-   '<button class="btn" onclick="cambiaPw(\'pwConti\')">Cambia password</button></div>'+
-   '<div class="card">'+cardH("shield","Password del pannello coach")+'<p class="muted" style="font-size:13.5px;margin-bottom:12px">Quella che serve per entrare da /coach. Tienila diversa da quella della contabilità.</p>'+
+   '<button class="btn" onclick="cambiaPw(\'pwConti\')">Cambia codice</button></div>'+
+   '<div class="card">'+cardH("shield","Password del pannello coach")+'<p class="muted" style="font-size:13.5px;margin-bottom:12px">Quella che serve per entrare nell\'area titolare (dal tasto “Sei Kone?” o da /coach).</p>'+
    '<div class="field"><label>Password attuale</label><input class="fi" type="password" id="pcOld" autocomplete="current-password"></div>'+
    '<div class="frow"><div class="field"><label>Nuova</label><input class="fi" type="password" id="pcNew" autocomplete="new-password"></div><div class="field"><label>Ripeti</label><input class="fi" type="password" id="pcNew2" autocomplete="new-password"></div></div>'+
    '<button class="btn" onclick="cambiaPw(\'pwCoach\')">Cambia password</button></div></div>';
 }
-function sbloccaConti(e){e.preventDefault();if(hashPw(el("pwConti").value)===DB.settings.pwConti){S.contiOk=true;render()}else errShake("contiErr","contiForm","Password non corretta")}
+function lockBox(){return '<div class="card lockbox"><div class="big">'+ic("lock",28)+'</div><h3 style="font-size:18px;margin-bottom:6px">Inserisci il codice</h3><p class="muted" style="margin-bottom:16px">Cruscotto e Contabilità mostrano saldo, incassi e pagamenti: si aprono solo con il tuo codice personale.</p>'+
+   '<form id="contiForm" onsubmit="sbloccaConti(event)" class="stack"><input class="fi" type="password" id="pwConti" placeholder="Codice di accesso" autocomplete="off" required style="text-align:center;letter-spacing:.3em;font-size:18px"><button class="btn primary" type="submit">Sblocca</button><div class="auth-err" id="contiErr"></div></form>'+
+   '<p class="hint">Si richiude da solo quando esci da Cruscotto e Contabilità. Lo cambi in Contabilità → Codice.</p></div>'}
+function sbloccaConti(e){e.preventDefault();if(hashPw(el("pwConti").value)===DB.settings.pwConti){S.contiOk=true;render()}else errShake("contiErr","contiForm","Codice non corretto")}
 function cambiaPw(k){const p=k==="pwConti"?["pwOld","pwNew","pwNew2"]:["pcOld","pcNew","pcNew2"];
   if(hashPw(el(p[0]).value)!==DB.settings[k])return toast("La password attuale non è corretta");
   const n=el(p[1]).value;if(n.length<6)return toast("Almeno 6 caratteri");if(n!==el(p[2]).value)return toast("Le due password non coincidono");
@@ -2790,7 +2838,7 @@ function wizard(){
     if(!opts.some(o=>o[0]===w.pay))w.pay=opts[0][0];
     body=(w.viaPiano&&w.pay==="piano"?'<h2 class="wiz-t">Conferma</h2><p class="muted">Controlla il riepilogo: la seduta viene scalata dal tuo abbonamento.</p>':'<h2 class="wiz-t">Conferma e paga</h2><p class="muted">Controlla il riepilogo e scegli come pagare.</p>')+
      '<div class="pays">'+opts.map(o=>'<button class="pay'+(w.pay===o[0]?" on":"")+'" onclick="wSet(\'pay\',\''+o[0]+'\')"><i></i><span><b>'+o[1]+'</b><small>'+o[2]+'</small></span>'+(o[0]==="paypal"?'<span class="pp-logo">PayPal</span>':'')+'</button>').join("")+'</div>'+
-     (w.pay==="paypal"?paypalBox(imp,a.n+" "+fmtD(s.d)+" "+s.h):w.pay==="bonifico"?bonificoBox(imp,a.n+" "+fmtD(s.d)+" "+s.h):'')+(a.tipo==="corso"||(w.pay==="piano"&&c.rinnovo)?'<div style="margin-top:14px">'+avvisoSedute()+'</div>':'');
+     (w.pay==="paypal"?paypalBox(imp,a.n+" "+fmtD(s.d)+" "+s.h):w.pay==="bonifico"?bonificoBox(imp,a.n+" "+fmtD(s.d)+" "+s.h):'')+pivaPay()+(a.tipo==="corso"||(w.pay==="piano"&&c.rinnovo)?'<div style="margin-top:14px">'+avvisoSedute()+'</div>':'');
   }
   const can=w.step===1?!!w.att:w.step===2?!!w.d:w.step===3?!!w.slot:true;
   return '<div class="wiz"><div class="wiz-main card"><ol class="stepper">'+steps.map((t,i)=>{const n=i+1,done=n<w.step;return '<li class="'+(n===w.step?"on":done?"done":"")+'">'+(done?'<button onclick="wGo('+n+')">':'<span>')+'<i>'+(done?ic("check",12):n)+'</i>'+t+(done?'</button>':'</span>')+'</li>'}).join("")+'</ol>'+
@@ -2805,6 +2853,10 @@ function wRiep(){const w=W(),a=wAtt(),s=w.slot?DB.agenda[w.slot]:null;
    r("Attività",a?esc(a.n):"")+r("Durata",a?wDur(a)+" minuti":"")+r("Giorno",w.d?capFirst(fmtD(w.d,{weekday:"long",day:"numeric",month:"long"})):"")+r("Orario",s?s.h:"")+
    '<div class="sep"></div>'+r("Totale",a?(w.pay==="piano"&&w.step>=4||w.viaPiano?'<span class="tot">Incluso</span>':'<span class="tot">'+eur(wPrezzo())+'</span>'):"")+
    '<p class="hint" style="margin-top:10px">'+ic("check",11)+' Annulli gratis fino all\'inizio · '+ic("check",11)+' Paghi con PayPal'+(bon().iban?', bonifico':'')+', dal tuo piano o in studio</p></aside>'}
+function pivaTxt(){const k=window.KM_STUDIO||{};return k.piva?(k.ragione||"Kone Moctar Studio")+" · P.IVA "+k.piva:""}
+function pivaPay(){const t=pivaTxt();return t?'<p class="piva-pay">'+ic("shield",12)+' Pagamento a '+esc(t)+'</p>':''}
+function pivaFill(){const t=pivaTxt();document.querySelectorAll("[data-piva]").forEach(x=>{x.textContent=t;x.hidden=!t})}
+window.addEventListener("load",()=>{pivaFill();if(S.role&&S.view)try{render()}catch(e){}});
 function paypalBox(imp,causale){return '<div class="ppbox"><img src="/assets/img/paypal-qr.webp" width="200" height="200" alt="QR code PayPal di Kone Moctar Studio">'+
   '<div><div class="flabel">Importo da inviare</div><div class="ppamt">'+eur(imp)+'</div>'+
   '<ol class="pplist"><li>Inquadra il QR con la fotocamera <span class="dim">oppure</span> tocca il pulsante qui sotto</li><li>Invia <b>'+eur(imp)+'</b> come pagamento a Kone Moctar</li><li>Nel messaggio scrivi: <b>'+esc(causale)+'</b></li></ol>'+
@@ -3354,7 +3406,7 @@ if("serviceWorker" in navigator){window.addEventListener("load",function(){navig
   };
   function addBtn(){if(standalone())return;
     const DL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>';
-    document.querySelectorAll("#cliForm").forEach(f=>{if(f.parentNode.querySelector(".inst-btn"))return;const b=document.createElement("button");b.type="button";b.className="inst-btn";b.innerHTML=DL+"Installa l'app sul telefono";b.onclick=installApp;f.insertAdjacentElement("afterend",b)});
+    document.querySelectorAll("#cliForm").forEach(f=>{if(f.parentNode.querySelector(".inst-btn"))return;const b=document.createElement("button");b.type="button";b.className="inst-btn";b.innerHTML=DL+"Installa l'app sul telefono";b.onclick=installApp;(el("regForm")||f).insertAdjacentElement("afterend",b)});
   }
   if(document.readyState!=="loading")addBtn();else document.addEventListener("DOMContentLoaded",addBtn);
 })();
