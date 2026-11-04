@@ -614,7 +614,12 @@
         /* email già usata (anche per un altro servizio) o conferma via email richiesta */
         var s2 = await sb.auth.signInWithPassword({ email: em, password: pw });
         if (s2.error) {
-          if (/not confirmed/i.test(err(s2.error)) || (!r.error && user)) {
+          /* email già usata da un account esistente (anche di un altro servizio dello stesso progetto):
+             Supabase risponde senza errore ma con identities vuoto e non manda nessuna email */
+          var esiste = !!r.error || (user && Array.isArray(user.identities) && user.identities.length === 0);
+          if (esiste && !/not confirmed/i.test(err(s2.error)))
+            return ko("Questa email ha già un account: usa la sua password oppure, in “Accedi”, tocca “Password dimenticata?”");
+          if (/not confirmed/i.test(err(s2.error)) || user) {
             ["rgP", "rgP2"].forEach(function (x) { el(x).value = ""; });
             openModal('<h3>Controlla la tua email</h3><p class="muted">Ti abbiamo mandato un link a <b>' + esc(em) + '</b>: aprilo per confermare l\'account, poi torna qui e accedi con email e password.</p>');
             authTab("login"); el("cliEmail").value = em; return;
