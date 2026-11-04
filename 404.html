@@ -908,7 +908,8 @@ button.pp.warn:hover{background:rgba(224,151,58,.28)}
     <h1 class="auth-title">Area <span>Coach</span></h1>
     <p class="muted" style="margin-top:8px">Pannello di gestione dello studio</p>
     <form class="auth-form" id="coachForm" onsubmit="loginCoach(event)">
-      <div class="field" style="margin:0"><label for="coachPw">Password coach</label><input class="fi" id="coachPw" type="password" autocomplete="current-password" required></div>
+      <div class="field" style="margin:0"><label for="coachEmail">Email</label><input class="fi" id="coachEmail" type="email" autocomplete="username" required></div>
+      <div class="field" style="margin:0"><label for="coachPw">Password</label><input class="fi" id="coachPw" type="password" autocomplete="current-password" required></div>
       <div class="auth-err" id="coachErr"></div>
       <button class="btn primary" type="submit" style="padding:13px">Entra nel pannello</button>
     </form>
@@ -951,6 +952,9 @@ button.pp.warn:hover{background:rgba(224,151,58,.28)}
 <div class="toast" id="toast"></div>
 <div id="tour" role="dialog" aria-modal="true" aria-labelledby="tourT"><div class="tv"></div><div class="ts"></div><div class="tc" id="tourC"></div></div>
 
+<!-- database condiviso (Supabase): libreria, configurazione -->
+<script src="/assets/js/supabase.js?v=2.119.0"></script>
+<script src="/assets/js/cloud-config.js?v=1"></script>
 <script>
 /* =====================================================================
    KM STUDIO — v2
@@ -1390,7 +1394,7 @@ function prezziCheck(){
   if(!DB||_pSig===null)return;
   const sig=prezziSig();if(sig===_pSig)return;_pSig=sig;
   if(S.role!=="coach")return;
-  DB.settings.prezziAgg=new Date().toISOString();DB.settings.prezziPend=true;
+  DB.settings.prezziAgg=new Date().toISOString();if(window.KM_CLOUD)return;DB.settings.prezziPend=true;
   clearTimeout(_pT);if(pubTok())_pT=setTimeout(pubblicaPrezzi,1800);
   setTimeout(refreshPubBar,0);
 }
@@ -1503,7 +1507,7 @@ function ensureAgenda(seedBookings){
       const c=t[2]?corso(t[2]):null;
       const s={id,d,h:t[0],tipo:t[1],corso:t[2]||null,cap:t[1]==="corso"?DB.settings.maxCorso:1,dur:c?c.durata:t[1]==="tratt"?50:60,pren:[],chiuso:false};
       const r=rng("ag"+id);
-      if(seedBookings||i>0){
+      if(!window.KM_CLOUD&&(seedBookings||i>0)){
         if(s.tipo==="corso"){const n=i<0?4+Math.floor(r()*6):Math.floor(r()*(i<4?8:5))+(i<3?2:0);
           shuffle(r,names).filter(x=>x.cid!==1).slice(0,Math.min(n,s.cap-1)).forEach(x=>s.pren.push({cid:x.cid,nome:x.nome}))}
         else if(s.tipo==="pt"&&r()<(i<0?.85:.45)){const x=shuffle(r,names.filter(x=>x.cid&&x.cid!==1))[0];s.pren.push({cid:x.cid,nome:x.nome})}
@@ -1885,8 +1889,9 @@ const isCoachRoute=()=>/\/coach\/?$/.test(location.pathname)||location.hash==="#
 const __standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
 let introTimer=setTimeout(afterIntro,(__standalone||LS.get("sess",null))?1500:3800);
 function afterIntro(){
+  if(window.KM_CLOUD&&!window.KMC_READY){window.KMC_WAIT=1;return}
   clearTimeout(introTimer);el("splash").classList.add("gone");
-  const sess=LS.get("sess",null);
+  const sess=window.KM_CLOUD?KMC.sess():LS.get("sess",null);
   if(sess&&sess.role==="coach")return enterApp("coach");
   if(isCoachRoute())return showCoachAuth();
   if(sess&&sess.role==="client"&&cli(sess.cid))return enterApp("client",sess.cid);
@@ -3011,7 +3016,7 @@ function nuovoCliente(){const pw="km"+Math.floor(1000+Math.random()*9000);
 function salvaCliente(){const n=el("ncN").value.trim(),em=el("ncE").value.trim().toLowerCase(),pw=el("ncP").value.trim();
   if(n.split(" ").length<2)return toast("Scrivi nome e cognome");if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em))return toast("Email non valida");
   if(DB.clienti.some(c=>(c.email||"").toLowerCase()===em))return toast("Esiste già un cliente con questa email");if(pw.length<4)return toast("Password troppo corta");
-  const id=Math.max.apply(null,DB.clienti.map(c=>c.id))+1,tot=parseInt(el("ncTot").value)||4;
+  const id=window.KM_CLOUD?KMC.prendiId():Math.max.apply(null,DB.clienti.map(c=>c.id).concat([0]))+1,tot=parseInt(el("ncTot").value)||4;
   DB.clienti.push({id,n,i:n.split(" ").map(x=>x[0]).join("").slice(0,2).toUpperCase(),email:em,pw:hashPw(pw),tel:el("ncT").value.trim(),piano:el("ncPiano").value.trim()||"Da definire",tipo:el("ncTipo").value,
     usate:0,tot,extra:tot+" sedute",scad:"—",gg:0,peso:null,start:null,ader:100,note:el("ncNote").value.trim()||"Nuovo cliente."});
   save();closeModal();openClient(id);
@@ -3380,10 +3385,12 @@ function render(){
   const m=el("msgs");if(m)m.scrollTop=m.scrollHeight;
   hydrate();
 }
-initDB();_pSig=prezziSig();caricaPrezzi();
-setInterval(caricaPrezzi,180000);document.addEventListener("visibilitychange",()=>{if(!document.hidden)caricaPrezzi()});
+if(!window.KM_CLOUD){initDB();_pSig=prezziSig();caricaPrezzi();
+setInterval(caricaPrezzi,180000);document.addEventListener("visibilitychange",()=>{if(!document.hidden)caricaPrezzi()});}
 
 </script>
+<!-- collegamento al database: login vero, dati condivisi tra telefoni -->
+<script src="/assets/js/cloud.js?v=1"></script>
 <script>
 if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("/sw.js").catch(function(){});});}
 </script>

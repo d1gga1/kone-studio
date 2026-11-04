@@ -260,3 +260,34 @@ Richieste di Kone (messaggio del 03/11):
   Sbloccato una volta vale per tutte e due; si richiude appena si va in un'altra sezione. Si cambia in Contabilità → "Codice cruscotto e contabilità".
 - ⚠️ Limite demo invariato: un cliente registrato esiste solo nel browser del suo telefono finché non si collega il database condiviso (Supabase o simile).
 - `sw.js` → v20, `prenota.js?v=4`.
+
+### Database condiviso Supabase (04/11/2026)
+
+L'app non tiene più i dati nel browser: clienti, agenda e prenotazioni, schede, peso e carichi, chat, programmi dei corsi,
+feedback, contabilità, listino ed esercizi stanno nel database **Supabase**, progetto `artantis`, schema separato **`kmstudio`**
+(le tabelle di Artantis non vengono toccate).
+
+- **File nuovi**: `assets/js/supabase.js` (libreria ufficiale v2.119.0, in locale), `assets/js/cloud-config.js` (indirizzo e chiave
+  *publishable* del progetto), `assets/js/cloud.js` (il "ponte": login, caricamento, salvataggio). Script SQL in `../supabase/`.
+- **Login vero** (email + password di Supabase):
+  - **Kone** entra da `/coach` con email e password. L'account si crea dal pannello Supabase (Authentication → Add user) e si
+    rende titolare con la riga SQL in fondo a `kmstudio_schema.sql`.
+  - **Clienti**: si registrano da `/app#registrati`. Se Kone li ha già creati con quella email, il profilo (abbonamento, scheda)
+    si collega da solo. "Password dimenticata?" manda un'email per sceglierne una nuova.
+  - Gli utenti di Artantis non entrano nell'app di Kone finché non si registrano anche qui.
+- **Chi vede cosa** (regole RLS nel database): Kone vede tutto; ogni cliente vede solo i suoi dati; degli altri vede solo quanti
+  posti sono occupati. Contabilità, impostazioni e modelli di scheda solo Kone.
+- **Prenotazioni**: passano dalle funzioni `prenota` / `annulla` del database, che controllano i posti (niente posti doppi) e
+  scalano/restituiscono le sedute dell'abbonamento.
+- **Aggiornamento**: ogni app chiede ogni 15 s alla tabella `stato` se qualcosa è cambiato (pochi byte) e riscarica solo le
+  tabelle cambiate. Ogni 10 minuti riscarica tutto.
+- **Prezzi**: la pubblicazione su GitHub (`listino.json` + chiave GitHub) non serve più. Kone cambia il Listino → il documento
+  `listino_pub` nel database si aggiorna → app dei clienti, `/prenota/` e `/prezzi/` lo leggono da lì (`prezzi-live.js`;
+  se il database non risponde usano ancora `listino.json`).
+- **Primo accesso del titolare**: il database parte vuoto. Al primo accesso l'app carica listino, corsi ed esercizi
+  (quelli salvati in quel browser, se ci sono, + i prezzi di `listino.json`) e crea l'agenda senza prenotazioni finte.
+  Clienti, movimenti e prenotazioni della demo **non** vengono copiati. Il primo accesso conviene farlo dal dispositivo di Kone.
+- ⚠️ Ancora sul dispositivo (da spostare nello Storage di Supabase in un secondo passaggio): **foto allegate in chat**,
+  **video caricati come file** negli esercizi (i link YouTube/Vimeo invece funzionano per tutti) e **schede caricate come PDF/foto**.
+  I testi della chat e le schede create nell'app arrivano a tutti.
+- Se cambi `cloud.js` o `cloud-config.js`, alza il `?v=` in `app.html` e la versione in `sw.js` (`km-studio-v21` → `v22`).
