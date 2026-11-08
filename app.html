@@ -2121,7 +2121,7 @@ function vDash(){
    '<div class="stat accent"><span class="k">Prenotazioni oggi</span><span class="v num">'+prenOggi+'</span><span class="d">'+oggi.filter(s=>s.pren.length).length+' slot occupati su '+oggi.length+'</span></div>'+
    '<div class="stat"><span class="k">Posti corsi · settimana</span><span class="v num">'+occ+'<em>/'+capT+'</em></span><span class="d">'+(capT?Math.round(occ/capT*100):0)+'% di riempimento</span></div>'+
    '<div class="stat"><span class="k">Aderenza media</span><span class="v num">82<em>%</em></span><span class="d">sedute svolte su programmate</span></div></div>'+
-  '<div class="card" style="margin-bottom:16px">'+cardH("bell","Richiede la tua attenzione")+'<div class="stack">'+
+  prenAppCard()+'<div class="card" style="margin-bottom:16px">'+cardH("bell","Richiede la tua attenzione")+'<div class="stack">'+
    '<div class="alert crit"><div><b>'+fermi.length+' clienti non si allenano da 6 giorni o più</b><p>'+fermi.map(c=>esc(c.n)+" ("+c.gg+" gg)").join(" · ")+'</p></div><button class="btn sm" onclick="go(\'chat\')">Scrivi</button></div>'+
    '<div class="alert warn"><div><b>'+scad.length+' abbonamenti da rinnovare</b><p>'+scad.map(c=>esc(c.n)+" — "+(!c.illim&&c.usate>=c.tot?"pacchetto esaurito":abbScaduto(c)?"scaduto":"scade il "+c.scad)).join(" · ")+'</p></div><button class="btn sm" onclick="go(\'clienti\')">Vedi</button></div>'+
    '<div class="alert info"><div><b>'+unread+' messaggi in attesa di risposta</b><p>Il più vecchio aspetta da 3 ore</p></div><button class="btn sm" onclick="go(\'chat\')">Apri chat</button></div>'+
@@ -2736,7 +2736,9 @@ function vProgC(){
 }
 /* ---------- prenotazioni ---------- */
 function annulla(id){const s=DB.agenda[id],b=s.pren.find(x=>x.cid===S.cid),c=me();s.pren=s.pren.filter(x=>x.cid!==S.cid);
-  const rest=b&&b.pay&&b.pay.m==="piano"&&c&&c.usate>0;if(rest)c.usate--;save();render();toast("Prenotazione annullata"+(rest?" · la seduta torna nel tuo abbonamento":""))}
+  const rest=b&&b.pay&&b.pay.m==="piano"&&c&&c.usate>0;if(rest)c.usate--;
+  if(b&&c)try{msgAKone(c.id,"❌ Ho annullato: "+slotTitle(s,b)+" · "+fmtD(s.d,{weekday:"long",day:"numeric",month:"long"})+" alle "+s.h+(b.pay&&b.pay.stato==="pagato"?" (era già pagato)":""))}catch(e){}
+  save();render();toast("Prenotazione annullata"+(rest?" · la seduta torna nel tuo abbonamento":""))}
 function mieHTML(tipi){
   const all=mySlots().filter(s=>tipi.includes(s.tipo)),fut=all.filter(s=>!isPast(s));
   const da=iso(addD(TODAY,-10)),fbs=all.filter(s=>s.tipo==="corso"&&isPast(s)&&s.d>=da);
@@ -3021,8 +3023,9 @@ function wConferma(){const w=W(),a=wAtt(),s=DB.agenda[w.slot],c=me();
   const imp=w.pay==="piano"?0:wPrezzo(),b={cid:c.id,nome:c.n,pay:{m:w.pay,imp,stato:w.pay==="piano"?"incluso":"da pagare"}};
   if(a.tipo==="tratt"){b.tratt=a.tr;b.dur=w.dur}
   if(w.pay==="piano")c.usate=(c.usate||0)+1;
+  b.da="app";b.quando=new Date().toISOString();
   s.pren.push(b);
-  if(w.pay==="bonifico"&&!bon().iban)try{msgAKone(c.id,"Ho prenotato "+slotTitle(s,b)+" "+fmtD(s.d)+" alle "+s.h+" e pago con bonifico ("+eur(imp)+"): mi mandi l'IBAN?")}catch(e){}
+  try{msgAKone(c.id,"📅 Nuova prenotazione: "+slotTitle(s,b)+(b.dur?" "+b.dur+"′":"")+" · "+fmtD(s.d,{weekday:"long",day:"numeric",month:"long"})+" alle "+s.h+" · "+payTesto(b.pay))}catch(e){}
   save();w.step=5;render();el("main").scrollTop=0}
 function vPrenota(){return head("Prenota","One to one con Kone o corsi di gruppo · in 4 passaggi")+wizard()+mieHTML(["pt","corso"])}
 function vTpren(){return head("Prenota un trattamento","Scegli il trattamento, il giorno e l'orario")+wizard()+mieHTML(["tratt"])}
@@ -3510,6 +3513,39 @@ function disdiciModal(){const c=me(),fino=c.scadIso?fmtD(c.scadIso,{day:"numeric
   openModal('<h3>Disdire l\'abbonamento?</h3><p class="muted" style="margin-bottom:12px"><b>'+esc(c.piano)+'</b> resta attivo fino al <b>'+fino+'</b>: fino ad allora prenoti come sempre. Dopo non si rinnova più e non ti viene addebitato nulla.</p>'+
    (DB.settings.portale?'<p class="hint" style="margin-bottom:12px">Ti apriamo anche la pagina sicura dei pagamenti per fermare l\'addebito sul conto.</p>':'<p class="hint" style="margin-bottom:12px">Kone riceve subito la tua disdetta in chat e ferma l\'addebito.</p>')+
    '<div class="inline" style="justify-content:flex-end"><button class="btn ghost" onclick="closeModal()">Tengo l\'abbonamento</button><button class="btn primary" onclick="disdiciAbb()">Disdici</button></div>')}
+function payTesto(p){if(!p)return "";const L={paypal:"PayPal",bonifico:"bonifico",studio:"paga in studio",piano:"dal suo abbonamento"};
+  return (p.m==="piano"?"":"pagamento ")+(L[p.m]||p.m)+(p.imp?" "+eur(p.imp):"")+(p.m==="paypal"||p.m==="bonifico"?" (da verificare)":"")}
+/* ---------- avvisi a Kone: nuove prenotazioni dall'app ---------- */
+function nuovePren(){const out=[];Object.values(DB.agenda).forEach(s=>s.pren.forEach(b=>{if(b.da==="app"&&!b._ph)out.push({s,b})}));
+  return out.sort((a,b)=>(a.b.quando||"")<(b.b.quando||"")?1:-1)}
+function notificaKone(titolo,testo){
+  try{if(!("Notification" in window)||Notification.permission!=="granted")return;
+    const o={body:testo,icon:"/assets/icon-192.png",badge:"/assets/icon-192.png",tag:"km-pren-"+Date.now()};
+    if(navigator.serviceWorker&&navigator.serviceWorker.ready)navigator.serviceWorker.ready.then(r=>r.showNotification(titolo,o)).catch(()=>new Notification(titolo,o));
+    else new Notification(titolo,o)}catch(e){}}
+function attivaNotifiche(){if(!("Notification" in window))return toast("Questo browser non supporta le notifiche");
+  Notification.requestPermission().then(p=>{render();toast(p==="granted"?"Notifiche attive: ti avviso a ogni nuova prenotazione":"Notifiche non attivate: puoi abilitarle dalle impostazioni del browser")})}
+/* le prenotazioni già viste si ricordano su ogni dispositivo di Kone: così l'avviso arriva sia al telefono sia al computer */
+const nvKey=x=>(x.b.quando||"")+"_"+(x.b.cid||x.b.nome);
+function nvCheck(){if(!DB||S.role!=="coach"||!el("app")||!el("app").classList.contains("show"))return;
+  let visti;try{visti=JSON.parse(localStorage.getItem("km2_nvVisti")||"null")}catch(e){visti=null}
+  const tutte=nuovePren(),primo=!visti;visti=visti||{};
+  const nuove=tutte.filter(x=>!visti[nvKey(x)]);
+  if(!nuove.length&&!primo)return;
+  const keep={};tutte.forEach(x=>keep[nvKey(x)]=1);
+  try{localStorage.setItem("km2_nvVisti",JSON.stringify(keep))}catch(e){}
+  if(primo||!nuove.length)return;   // prima volta su questo dispositivo: segna tutto come già visto, senza avvisi
+  const r=x=>x.b.nome+" · "+slotTitle(x.s,x.b)+" "+fmtD(x.s.d)+" "+x.s.h;
+  const tit=nuove.length===1?"Nuova prenotazione":nuove.length+" nuove prenotazioni";
+  notificaKone(tit,nuove.slice(0,4).map(r).join("\n")+(nuove.length>4?"\n…":""));
+  toast(tit+": "+r(nuove[0])+(nuove.length>1?" e altre "+(nuove.length-1):""));
+  if(["dash","agenda","chat"].includes(S.view)&&!el("modal").classList.contains("on")&&!(document.activeElement&&/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)))render()}
+setInterval(nvCheck,4000);
+function prenAppCard(){const L=nuovePren().slice(0,6),nOk="Notification" in window,perm=nOk?Notification.permission:"denied";
+  return '<div class="card" style="margin-bottom:16px">'+cardH("cal","Ultime prenotazioni dall'app")+
+   (nOk&&perm==="default"?'<div class="alert"><div><b>Attiva le notifiche</b><p>Ti arriva un avviso su questo dispositivo ogni volta che un cliente prenota.</p></div><button class="btn sm primary" onclick="attivaNotifiche()">Attiva</button></div>':'')+
+   (L.length?'<div class="occ-list">'+L.map(x=>'<div class="row" style="cursor:pointer" onclick="S.cv=\'giorno\';S.cdate=\''+x.s.d+'\';S.aopen=\''+x.s.id+'\';go(\'agenda\')"><span class="num" style="width:120px;flex:none;color:var(--gold-mid);font-size:13.5px">'+fmtD(x.s.d)+' '+x.s.h+'</span><span style="flex:1"><b>'+esc(x.b.nome)+'</b> · '+esc(slotTitle(x.s,x.b))+'<br><small class="muted">'+esc(payTesto(x.b.pay))+'</small></span></div>').join("")+'</div>'
+     :'<p class="muted">Ancora nessuna prenotazione fatta dai clienti dall\'app. Quando arriva la vedi qui, in chat e come notifica.</p>')+'</div>'}
 function msgAKone(cid,msg){const t=chatDi(cid);t.msgs.push({t:msg,me:0,h:oraLabel()});t.last=msg;t.unread=(t.unread||0)+1}
 function disdiciAbb(){const c=me();c.disdetta=T0;msgAKone(c.id,"Ciao Kone, ho disdetto il mio abbonamento “"+c.piano+"” dall'app: vale fino al "+(c.scadIso?fmtD(c.scadIso,{day:"numeric",month:"long"}):"fine mese")+", poi non rinnovarlo. Grazie!");
   save();closeModal();render();toast("Disdetta registrata · Kone è stato avvisato");
