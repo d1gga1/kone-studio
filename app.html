@@ -2985,7 +2985,7 @@ function wizard(){
     const s=DB.agenda[w.slot],c=me(),imp=wPrezzo();
     if(!s){w.step=3;return wizard()}
     const conPiano=pianoAttivo(c)&&copre(c,a.tipo)?[["piano","Con il mio abbonamento",esc(c.piano)+" · "+rimTxt(c)+" · non paghi nulla"]]:[];
-    const bonOpt=bon().iban?[["bonifico","Bonifico bancario","Sul conto di Kone · "+eur(imp)]]:[];
+    const bonOpt=[["bonifico","Bonifico bancario",bon().iban?"Sul conto di Kone · "+eur(imp):"Intestato a "+(bon().intest||"Kone Moctar")+" · l'IBAN te lo manda Kone in chat"]];
     const opts=w.viaPiano&&conPiano.length?conPiano:(imp>0?[["paypal","Paga ora con PayPal","Inquadra il QR o apri PayPal · "+eur(imp)]].concat(bonOpt):[]).concat(conPiano).concat([["studio","Pago in studio","Contanti o carta il giorno della seduta"]]);
     if(!opts.some(o=>o[0]===w.pay))w.pay=opts[0][0];
     body=(w.viaPiano&&w.pay==="piano"?'<h2 class="wiz-t">Conferma</h2><p class="muted">Controlla il riepilogo: la seduta viene scalata dal tuo abbonamento.</p>':'<h2 class="wiz-t">Conferma e paga</h2><p class="muted">Controlla il riepilogo e scegli come pagare.</p>')+
@@ -3004,7 +3004,7 @@ function wRiep(){const w=W(),a=wAtt(),s=w.slot?DB.agenda[w.slot]:null;
    (a&&a.img?'<img class="rimg" src="'+a.img+'" alt="">':'')+
    r("Attività",a?esc(a.n):"")+r("Durata",a?wDur(a)+" minuti":"")+r("Giorno",w.d?capFirst(fmtD(w.d,{weekday:"long",day:"numeric",month:"long"})):"")+r("Orario",s?s.h:"")+
    '<div class="sep"></div>'+r("Totale",a?(w.pay==="piano"&&w.step>=4||w.viaPiano?'<span class="tot">Incluso</span>':'<span class="tot">'+eur(wPrezzo())+'</span>'):"")+
-   '<p class="hint" style="margin-top:10px">'+ic("check",11)+' Annulli gratis fino all\'inizio · '+ic("check",11)+' Paghi con PayPal'+(bon().iban?', bonifico':'')+', dal tuo piano o in studio</p></aside>'}
+   '<p class="hint" style="margin-top:10px">'+ic("check",11)+' Annulli gratis fino all\'inizio · '+ic("check",11)+' Paghi con PayPal, bonifico, dal tuo piano o in studio</p></aside>'}
 function pivaTxt(){const k=window.KM_STUDIO||{};return k.piva?(k.ragione||"Kone Moctar Studio")+" · P.IVA "+k.piva:""}
 function pivaPay(){const t=pivaTxt();return t?'<p class="piva-pay">'+ic("shield",12)+' Pagamento a '+esc(t)+'</p>':''}
 function pivaFill(){const t=pivaTxt();document.querySelectorAll("[data-piva]").forEach(x=>{x.textContent=t;x.hidden=!t})}
@@ -3021,7 +3021,9 @@ function wConferma(){const w=W(),a=wAtt(),s=DB.agenda[w.slot],c=me();
   const imp=w.pay==="piano"?0:wPrezzo(),b={cid:c.id,nome:c.n,pay:{m:w.pay,imp,stato:w.pay==="piano"?"incluso":"da pagare"}};
   if(a.tipo==="tratt"){b.tratt=a.tr;b.dur=w.dur}
   if(w.pay==="piano")c.usate=(c.usate||0)+1;
-  s.pren.push(b);save();w.step=5;render();el("main").scrollTop=0}
+  s.pren.push(b);
+  if(w.pay==="bonifico"&&!bon().iban)try{msgAKone(c.id,"Ho prenotato "+slotTitle(s,b)+" "+fmtD(s.d)+" alle "+s.h+" e pago con bonifico ("+eur(imp)+"): mi mandi l'IBAN?")}catch(e){}
+  save();w.step=5;render();el("main").scrollTop=0}
 function vPrenota(){return head("Prenota","One to one con Kone o corsi di gruppo · in 4 passaggi")+wizard()+mieHTML(["pt","corso"])}
 function vTpren(){return head("Prenota un trattamento","Scegli il trattamento, il giorno e l'orario")+wizard()+mieHTML(["tratt"])}
 
@@ -3428,7 +3430,10 @@ function ibanOk(s){s=ibanPulito(s);if(!/^[A-Z]{2}\d{2}[A-Z0-9]{11,30}$/.test(s))
 function copia(t,msg){const ok=()=>toast(msg||"Copiato");
   try{if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(t).then(ok,()=>toast("Tieni premuto sul testo per copiarlo"));return}}catch(e){}
   try{const a=document.createElement("textarea");a.value=t;a.setAttribute("readonly","");a.style.position="fixed";a.style.opacity="0";document.body.appendChild(a);a.select();document.execCommand("copy");a.remove();ok()}catch(e){toast("Tieni premuto sul testo per copiarlo")}}
-function bonificoBox(imp,causale){const b=bon();if(!b.iban)return "";
+function bonificoBox(imp,causale){const b=bon();
+  if(!b.iban)return imp||causale?'<div class="ppbox bonbox"><div style="flex:1;min-width:0"><div class="flabel">Bonifico bancario</div>'+(imp?'<div class="ppamt">'+eur(imp)+'</div>':'')+
+   '<div class="bonrow"><span>Intestato a</span><b>'+esc(b.intest||"Kone Moctar")+'</b></div>'+(causale?'<div class="bonrow"><span>Causale</span><b>'+esc(causale)+'</b></div>':'')+
+   '<p class="hint">Conferma la prenotazione: Kone riceve la richiesta e ti manda l\'IBAN qui in chat. Lo conferma appena il bonifico arriva.</p></div></div>':"";
   const row=(k,v,cp,lab)=>'<div class="bonrow"><span>'+k+'</span><b'+(cp?' class="num"':'')+'>'+esc(v)+'</b>'+(cp?'<button class="btn sm ghost" onclick="copia(\''+jsq(cp)+'\',\''+lab+' copiato\')">'+ic("copy",13)+' Copia</button>':'')+'</div>';
   return '<div class="ppbox bonbox"><div style="flex:1;min-width:0"><div class="flabel">Bonifico bancario</div>'+(imp?'<div class="ppamt">'+eur(imp)+'</div>':'')+
    row("Intestato a",b.intest||"Kone Moctar")+row("IBAN",ibanFmt(b.iban),ibanPulito(b.iban),"IBAN")+(b.banca?row("Banca",b.banca):"")+(causale?row("Causale",causale,causale,"Causale"):"")+
