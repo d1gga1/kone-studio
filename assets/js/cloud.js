@@ -24,9 +24,18 @@
     return;
   }
 
+  /* arrivo dal link "scegli una nuova password" ricevuto per email (letto prima che Supabase pulisca l'indirizzo) */
+  var RECUPERO = /type=recovery/.test(location.hash + location.search);
+
   var sb = window.supabase.createClient(CFG.url, CFG.key, {
     db: { schema: "kmstudio" },
     auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, storageKey: "km-studio-auth" }
+  });
+
+  sb.auth.onAuthStateChange(function (ev) {
+    if (ev !== "PASSWORD_RECOVERY") return;
+    RECUPERO = true;
+    if (K.pronto) apriNuovaPassword();
   });
 
   var K = window.KMC = {
@@ -522,7 +531,7 @@
     addEventListener("online", function () { if (K.errori) esegui(); });
     var tm = setInterval(function () { if (K.ridisegna && puoiDisegnare()) { K.ridisegna = false; render(); } }, 1500);
     void tm;
-    sb.auth.onAuthStateChange(function (ev) { if (ev === "PASSWORD_RECOVERY") setTimeout(nuovaPassword, 400); });
+    if (RECUPERO) apriNuovaPassword();
   };
 
   /* numero per un nuovo cliente creato da Kone: lo chiedo prima al database */
@@ -546,34 +555,119 @@
   }
 
   /* --------------------- schermate di accesso (modifiche) --------------------- */
+  var ICONA_CHIAVE = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="4.5"/><path d="M10.7 12.3 21 2M16 7l3 3M19 4l2 2"/></svg>';
+  var EMAIL_OK = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+  function linkDimenticata(campo, id, chi) {
+    var pw = el(campo);
+    if (!pw || document.getElementById(id)) return;
+    var b = document.createElement("button"); b.type = "button"; b.id = id; b.className = "linkbtn";
+    b.style.cssText = "align-self:flex-end;font-size:13px;margin-top:-4px"; b.textContent = "Password dimenticata?";
+    b.onclick = function () { passwordDimenticata(chi); };
+    pw.closest(".field").insertAdjacentElement("afterend", b);
+  }
   function preparaSchermate() {
     var demo = document.querySelector('#cliForm button[onclick="demoCliente()"]'); if (demo) demo.remove();
-    var pw = el("cliPw");
-    if (pw && !document.getElementById("kmcForgot")) {
-      var b = document.createElement("button"); b.type = "button"; b.id = "kmcForgot"; b.className = "linkbtn";
-      b.style.cssText = "align-self:flex-end;font-size:13px;margin-top:-4px"; b.textContent = "Password dimenticata?";
-      b.onclick = passwordDimenticata;
-      pw.closest(".field").insertAdjacentElement("afterend", b);
+    linkDimenticata("cliPw", "kmcForgot", "cliente");
+    linkDimenticata("coachPw", "kmcForgotC", "coach");
+    /* tasto "Cambia password" nella barra in alto, per Kone e per i clienti */
+    var out = document.querySelector('.tb-right button[onclick="esci()"]');
+    if (out && !document.getElementById("kmcPwBtn")) {
+      var k = document.createElement("button"); k.type = "button"; k.className = "icon-btn"; k.id = "kmcPwBtn";
+      k.title = "Cambia password"; k.setAttribute("aria-label", "Cambia password"); k.innerHTML = ICONA_CHIAVE;
+      k.onclick = function () { K.cambiaPassword(); };
+      out.parentNode.insertBefore(k, out);
     }
   }
-  async function passwordDimenticata() {
-    var em = (el("cliEmail").value || "").trim().toLowerCase();
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)) return errShake("cliErr", "cliForm", "Scrivi la tua email qui sopra, poi tocca “Password dimenticata?”");
-    var r = await sb.auth.resetPasswordForEmail(em, { redirectTo: location.origin + "/app" });
-    if (r.error) return errShake("cliErr", "cliForm", traduci(err(r.error)));
-    el("cliErr").textContent = ""; toast("Ti abbiamo mandato un'email per scegliere una nuova password");
+
+  /* 1 · dalla schermata di accesso: "Password dimenticata?" → email con il link */
+  async function passwordDimenticata(chi) {
+    var c = chi === "coach", f = c ? "coachForm" : "cliForm", e = c ? "coachErr" : "cliErr";
+    var em = ((el(c ? "coachEmail" : "cliEmail") || {}).value || "").trim().toLowerCase();
+    if (!EMAIL_OK.test(em)) return errShake(e, f, "Scrivi la tua email qui sopra, poi tocca “Password dimenticata?”");
+    busy(true);
+    try {
+      var r = await mandaLink(em, c);
+      if (r.error) return errShake(e, f, traduci(err(r.error)));
+      el(e).textContent = "";
+      emailInviata(em);
+    } catch (x) { errShake(e, f, traduci(err(x))); } finally { busy(false); }
+  }
+  function mandaLink(em, coach) {
+    return sb.auth.resetPasswordForEmail(em, { redirectTo: location.origin + (coach ? "/coach" : "/app") });
+  }
+  function emailInviata(em) {
+    openModal('<h3>Controlla la tua email</h3><p class="muted" style="margin-bottom:10px">Se <b>' + esc(em) + '</b> ha un account, ti abbiamo appena mandato un link per scegliere una nuova password.</p>' +
+      '<p class="hint">Apri il link (meglio da questo stesso telefono o computer): si apre l\'app e ti chiede la password nuova. Non la trovi? Guarda nello spam. Il link vale un\'ora.</p>');
+  }
+
+  /* 2 · dal link dell'email: scegli la nuova password (aspetto che l'app sia sullo schermo, se no la finestra si chiude) */
+  function apriNuovaPassword() {
+    if (K.pwAperta) return; K.pwAperta = true;
+    var n = 0, t = setInterval(function () {
+      n++;
+      var vis = ["app", "auth", "coachAuth"].some(function (id) { var x = el(id); return x && x.classList.contains("show"); });
+      if (vis || n > 60) { clearInterval(t); setTimeout(nuovaPassword, 300); }
+    }, 250);
+  }
+  function campiNuova(pre) {
+    return '<div class="field"><label>Nuova password</label><input class="fi" id="' + pre + 'Np" type="password" autocomplete="new-password" placeholder="min. 6 caratteri"></div>' +
+      '<div class="field"><label>Ripeti la nuova password</label><input class="fi" id="' + pre + 'Np2" type="password" autocomplete="new-password"></div>';
   }
   function nuovaPassword() {
-    openModal('<h3>Nuova password</h3><p class="muted" style="margin-bottom:12px">Scegli la nuova password per entrare nell\'app.</p>' +
-      '<div class="field"><label>Nuova password</label><input class="fi" id="kmcNp" type="password" autocomplete="new-password" placeholder="min. 6 caratteri"></div>' +
-      '<div class="inline" style="justify-content:flex-end"><button class="btn primary" onclick="KMC.salvaPassword()">Salva</button></div>');
+    openModal('<h3>Scegli la nuova password</h3><p class="muted" style="margin-bottom:12px">La userai da ora in poi per entrare.</p>' + campiNuova("kmc") +
+      '<div class="inline" style="justify-content:flex-end"><button class="btn primary" onclick="KMC.salvaPassword()">Salva la password</button></div>');
+    setTimeout(function () { try { el("kmcNp").focus(); } catch (e) {} }, 200);
+  }
+  function controllaNuova(p, p2) {
+    if (p.length < 6) return "La password deve avere almeno 6 caratteri";
+    if (p !== p2) return "Le due password non coincidono";
+    return "";
   }
   K.salvaPassword = async function () {
-    var p = el("kmcNp").value; if (p.length < 6) return toast("Almeno 6 caratteri");
-    var r = await sb.auth.updateUser({ password: p });
+    var p = el("kmcNp").value, ko = controllaNuova(p, el("kmcNp2").value); if (ko) return toast(ko);
+    busy(true);
+    try {
+      var r = await sb.auth.updateUser({ password: p });
+      if (r.error) return toast(traduci(err(r.error)));
+      RECUPERO = false; K.pwAperta = false;
+      try { history.replaceState(null, "", location.pathname); } catch (e) {}
+      closeModal(); toast("Password aggiornata ✓");
+      if (!K.ruolo) {
+        var s = await sb.auth.getSession();
+        if (s.data.session) { var ro = await entra(s.data.session.user); if (ro) enterApp(ro, K.cid); }
+      }
+    } catch (x) { toast(traduci(err(x))); } finally { busy(false); }
+  };
+
+  /* 3 · da dentro l'app: tasto chiave in alto → cambia password (serve quella attuale) */
+  async function emailUtente() { var u = await sb.auth.getUser(); return u.data && u.data.user ? u.data.user.email : ""; }
+  K.cambiaPassword = function () {
+    openModal('<h3>Cambia password</h3><p class="muted" style="margin-bottom:12px">Per sicurezza scrivi prima quella che usi adesso.</p>' +
+      '<div class="field"><label>Password attuale</label><input class="fi" id="kmcOld" type="password" autocomplete="current-password"></div>' + campiNuova("kmcC") +
+      '<div class="inline" style="justify-content:space-between;flex-wrap:wrap;gap:10px"><button class="linkbtn" type="button" onclick="KMC.linkDaDentro()">Non ricordo quella attuale</button>' +
+      '<button class="btn primary" onclick="KMC.salvaCambio()">Cambia password</button></div>');
+  };
+  K.cambia = async function (old, p, p2) {
+    if (!old) { toast("Scrivi la password attuale"); return false; }
+    var ko = controllaNuova(p, p2); if (ko) { toast(ko); return false; }
+    busy(true);
+    try {
+      var em = await emailUtente(); if (!em) { toast("Sessione scaduta: esci e rientra"); return false; }
+      var v = await sb.auth.signInWithPassword({ email: em, password: old });
+      if (v.error) { toast(/invalid/i.test(err(v.error)) ? "La password attuale non è corretta" : traduci(err(v.error))); return false; }
+      var r = await sb.auth.updateUser({ password: p });
+      if (r.error) { toast(/different|same/i.test(err(r.error)) ? "La nuova password deve essere diversa da quella attuale" : traduci(err(r.error))); return false; }
+      toast("Password cambiata ✓"); return true;
+    } catch (x) { toast(traduci(err(x))); return false; } finally { busy(false); }
+  };
+  K.salvaCambio = async function () {
+    if (await K.cambia(el("kmcOld").value, el("kmcCNp").value, el("kmcCNp2").value)) closeModal();
+  };
+  K.linkDaDentro = async function () {
+    var em = await emailUtente(); if (!em) return toast("Sessione scaduta: esci e rientra");
+    var r = await mandaLink(em, K.ruolo === "coach");
     if (r.error) return toast(traduci(err(r.error)));
-    closeModal(); toast("Password aggiornata");
-    if (!K.ruolo) { var s = await sb.auth.getSession(); if (s.data.session) { var ro = await entra(s.data.session.user); if (ro) enterApp(ro, K.cid); } }
+    emailInviata(em);
   };
 
   async function loginCliente(e) {
@@ -669,6 +763,13 @@
   window.loginCoach = loginCoach;
   window.esci = esci;
   window.demoCliente = function () {};
+  var cambiaPwLocale = window.cambiaPw;
+  window.cambiaPw = function (k) {
+    if (k !== "pwCoach") return cambiaPwLocale(k);
+    K.cambia(el("pcOld").value, el("pcNew").value, el("pcNew2").value).then(function (ok) {
+      if (ok) ["pcOld", "pcNew", "pcNew2"].forEach(function (x) { el(x).value = ""; });
+    });
+  };
   window.save = function () { prezziCheck(); K.salva(); };
   window.caricaPrezzi = function () {};
   window.pubBarHTML = function () {

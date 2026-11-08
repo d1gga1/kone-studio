@@ -2373,7 +2373,7 @@ function vConti(){
    '<div class="field"><label>Codice attuale</label><input class="fi" type="password" id="pwOld" autocomplete="off"></div>'+
    '<div class="frow"><div class="field"><label>Nuova</label><input class="fi" type="password" id="pwNew" autocomplete="new-password"></div><div class="field"><label>Ripeti</label><input class="fi" type="password" id="pwNew2" autocomplete="new-password"></div></div>'+
    '<button class="btn" onclick="cambiaPw(\'pwConti\')">Cambia codice</button></div>'+
-   '<div class="card">'+cardH("shield","Password del pannello coach")+'<p class="muted" style="font-size:13.5px;margin-bottom:12px">Quella che serve per entrare nell\'area titolare (dal tasto “Sei Kone?” o da /coach).</p>'+
+   '<div class="card">'+cardH("shield","Password del pannello coach")+'<p class="muted" style="font-size:13.5px;margin-bottom:12px">La password del tuo account (email + password) per entrare nell\'area titolare. Se la dimentichi: “Password dimenticata?” nella schermata di accesso.</p>'+
    '<div class="field"><label>Password attuale</label><input class="fi" type="password" id="pcOld" autocomplete="current-password"></div>'+
    '<div class="frow"><div class="field"><label>Nuova</label><input class="fi" type="password" id="pcNew" autocomplete="new-password"></div><div class="field"><label>Ripeti</label><input class="fi" type="password" id="pcNew2" autocomplete="new-password"></div></div>'+
    '<button class="btn" onclick="cambiaPw(\'pwCoach\')">Cambia password</button></div></div>';
@@ -3390,7 +3390,7 @@ setInterval(caricaPrezzi,180000);document.addEventListener("visibilitychange",()
 
 </script>
 <!-- collegamento al database: login vero, dati condivisi tra telefoni -->
-<script src="/assets/js/cloud.js?v=2"></script>
+<script src="/assets/js/cloud.js?v=3"></script>
 <script>
 if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("/sw.js").catch(function(){});});}
 </script>
