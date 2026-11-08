@@ -1407,7 +1407,7 @@ function pubTok(){try{return localStorage.getItem("km2_pubtok")||""}catch(e){ret
 function pubCfg(){return Object.assign({},PUB_DEF,(DB&&DB.settings.pub)||{})}
 function prezziSnap(){return {listino:DB.listino,
   trattamenti:DB.trattamenti.map(t=>{const o={};Object.keys(t).forEach(k=>{const v=t[k];if(!(typeof v==="string"&&v.slice(0,5)==="data:"))o[k]=v});return o}),
-  paypal:DB.settings.paypal||"",bonifico:DB.settings.bonifico||null,portale:DB.settings.portale||""}}
+  paypal:DB.settings.paypal||"",bonifico:bon(),portale:DB.settings.portale||""}}
 const prezziSig=()=>JSON.stringify(prezziSnap());
 function prezziCheck(){
   if(!DB||_pSig===null)return;
@@ -3422,7 +3422,9 @@ function aggiungiEx(id){const x=DB.esercizi.find(e=>e.id===id);if(!x)return;DB.s
   save();libRender();toast(x.n+" aggiunto a "+DB.scheda.giorni[S.day].g)}
 
 /* ---------- bonifico bancario (IBAN modificabile dal titolare) ---------- */
-const bon=()=>DB.settings.bonifico||{};
+/* IBAN di partenza: vale finché Kone non salva i suoi dati da "IBAN e pagamenti" (da lì cambia IBAN, intestatario e banca) */
+const BON_DEF={iban:"IT70R0306920310100000062819",intest:"Kone Moctar",banca:"Intesa Sanpaolo"};
+const bon=()=>{const b=DB.settings.bonifico;return b&&(b.iban||b.mod)?b:BON_DEF};
 const ibanPulito=s=>String(s||"").replace(/\s+/g,"").toUpperCase();
 const ibanFmt=s=>ibanPulito(s).replace(/(.{4})/g,"$1 ").trim();
 function ibanOk(s){s=ibanPulito(s);if(!/^[A-Z]{2}\d{2}[A-Z0-9]{11,30}$/.test(s))return false;if(s.slice(0,2)==="IT"&&s.length!==27)return false;
@@ -3440,7 +3442,7 @@ function bonificoBox(imp,causale){const b=bon();
    '<p class="hint">Fai il bonifico dalla tua banca con questi dati. Kone lo conferma appena arriva (in genere 1 giorno lavorativo, subito se è istantaneo).</p></div></div>'}
 function salvaBonifico(){const iban=ibanPulito(el("bnI").value),it=el("bnN").value.trim(),bk=el("bnB").value.trim();
   if(iban&&!ibanOk(iban))return toast("IBAN non valido: controlla le cifre"),el("bnI").focus();
-  DB.settings.bonifico={iban,intest:it||"Kone Moctar",banca:bk};save();render();toast(iban?"IBAN salvato · i clienti possono pagare con bonifico":"IBAN tolto · il bonifico non compare più")}
+  DB.settings.bonifico={iban,intest:it||"Kone Moctar",banca:bk,mod:true};save();render();toast(iban?"IBAN salvato · i clienti possono pagare con bonifico":"IBAN tolto · il bonifico non compare più")}
 function salvaPortale(v){v=String(v||"").trim();if(v&&!safeUrl(v))return toast("Il link deve iniziare con https://");DB.settings.portale=v;save();toast(v?"Link per la disdetta salvato":"Link per la disdetta tolto")}
 function vPagamenti(){return head("IBAN e pagamenti","Il conto su cui i clienti fanno il bonifico, il link PayPal e il link per le disdette. Li cambi quando vuoi: i clienti li vedono subito.")+pagamentiCard().replace('style="margin-top:14px"','')}
 function pagamentiCard(){const coach=S.role==="coach",b=bon();

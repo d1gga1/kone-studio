@@ -281,9 +281,9 @@
  ],
  "paypal": "https://www.paypal.com/qrcodes/p2pqrc/BAHYS4B2HYL2G",
  "bonifico": {
-  "iban": "",
+  "iban": "IT70R0306920310100000062819",
   "intest": "Kone Moctar",
-  "banca": ""
+  "banca": "Intesa Sanpaolo"
  },
  "portale": ""
 }

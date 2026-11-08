@@ -250,7 +250,7 @@ function daListino(L){
   var sc=function(r){return r.sc>0&&(!r.scFino||r.scFino>=iso(new Date()))?" · sconto "+r.sc+"%":""};
   var MESE={abbPt:1,abbMass:1,percorsi:1};
   var voce=function(sez,r,i,nome,det){var id=idVoce(sez,r,i);L_USATI[id]=1;var m=!!(MESE[sez]||/mensil/i.test(r.n));return {id:id,nome:nome,det:(m?"Rinnovo automatico · ":"")+det+sc(r),prezzo:e(r),mese:m?1:0,link:r.link||""}};
-  BON=L.bonifico&&L.bonifico.iban?L.bonifico:null;
+  BON=L.bonifico&&L.bonifico.iban?L.bonifico:(L.bonifico&&L.bonifico.mod?null:{iban:"IT70R0306920310100000062819",intest:"Kone Moctar",banca:"Intesa Sanpaolo"});
   L_USATI={};
   var pt=li.pt||[],single=pt.filter(function(r){return r.sed===1}),pack=[];
   var s1=single.filter(function(r){return!/coppia/i.test(r.n)})[0],s2=single.filter(function(r){return/coppia/i.test(r.n)})[0];
