@@ -100,3 +100,5 @@ body.noscroll{overflow:hidden}
 .bon dt{color:var(--txt-3,#8d877c)}.bon dd{margin:0;font-weight:600;word-break:break-all}
 .bon .iban{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .bon .cp{font:inherit;font-size:12.5px;font-weight:600;padding:4px 10px;border-radius:99px;border:1px solid #8A6415;background:transparent;color:#F7E3A1;cursor:pointer}
+.bon-ist{margin:0 0 10px!important;padding:10px 12px;border-radius:10px;background:rgba(217,169,60,.13);border:1px solid #9c7a2c;font-size:13.5px;line-height:1.45}
+.bon-ist b{color:#f1c869}

@@ -758,6 +758,9 @@ body.dragging,body.dragging *{cursor:grabbing!important}
 body.resizing,body.resizing *{cursor:ns-resize!important}
 .wd.drop{outline:1px dashed var(--gold-deep);background:rgba(217,169,60,.14)}
 .wk.one{min-width:0}
+.bon-ist{display:flex;gap:10px;align-items:flex-start;margin:12px 0 4px;padding:11px 13px;border-radius:10px;background:rgba(217,169,60,.13);border:1px solid var(--gold-deep);color:var(--txt);font-size:13.5px;line-height:1.45}
+.bon-ist svg{flex:none;margin-top:2px;color:var(--gold-hi)}
+.bon-ist b{display:block;color:var(--gold-hi);font-size:14px;letter-spacing:.02em;margin-bottom:2px}
 .wk.one .wk-b{grid-template-columns:52px minmax(0,1fr)}
 .wk-wrap.one{margin-bottom:14px}
 .flabel.cal-lt{margin:6px 0 8px}
@@ -1822,6 +1825,7 @@ const S={role:null,cid:1,preview:false,area:"allen",view:"oggi",tab:0,day:-1,set
   contiOk:false,mese:null,ctab:0,cday:0,storCorso:"func",busy:{},iaStato:"?",fbVoto:4};
 function toast(m){const t=el("toast");t.textContent=m;t.classList.add("on");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("on"),2600)}
 const ICONS={
+  bolt:'<path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/>',
  dash:'<path d="M3 13h8V3H3v10Zm0 8h8v-6H3v6Zm10 0h8V11h-8v10Zm0-18v6h8V3h-8Z"/>',
  users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm13 10v-2a4 4 0 0 0-3-3.87M16 3.13A4 4 0 0 1 16 11"/>',
  plan:'<path d="M9 2h6v4H9zM5 6h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Zm3 7h8M8 17h5"/>',
@@ -2987,7 +2991,7 @@ function wizard(){
     const s=DB.agenda[w.slot],c=me(),imp=wPrezzo();
     if(!s){w.step=3;return wizard()}
     const conPiano=pianoAttivo(c)&&copre(c,a.tipo)?[["piano","Con il mio abbonamento",esc(c.piano)+" · "+rimTxt(c)+" · non paghi nulla"]]:[];
-    const bonOpt=[["bonifico","Bonifico bancario",bon().iban?"Sul conto di Kone · "+eur(imp):"Intestato a "+(bon().intest||"Kone Moctar")+" · l'IBAN te lo manda Kone in chat"]];
+    const bonOpt=[["bonifico","Bonifico istantaneo",bon().iban?"Solo istantaneo · sul conto di Kone · "+eur(imp):"Intestato a "+(bon().intest||"Kone Moctar")+" · l'IBAN te lo manda Kone in chat"]];
     const opts=w.viaPiano&&conPiano.length?conPiano:(imp>0?[["paypal","Paga ora con PayPal","Inquadra il QR o apri PayPal · "+eur(imp)]].concat(bonOpt):[]).concat(conPiano).concat([["studio","Pago in studio","Contanti o carta il giorno della seduta"]]);
     if(!opts.some(o=>o[0]===w.pay))w.pay=opts[0][0];
     body=(w.viaPiano&&w.pay==="piano"?'<h2 class="wiz-t">Conferma</h2><p class="muted">Controlla il riepilogo: la seduta viene scalata dal tuo abbonamento.</p>':'<h2 class="wiz-t">Conferma e paga</h2><p class="muted">Controlla il riepilogo e scegli come pagare.</p>')+
@@ -3435,14 +3439,15 @@ function ibanOk(s){s=ibanPulito(s);if(!/^[A-Z]{2}\d{2}[A-Z0-9]{11,30}$/.test(s))
 function copia(t,msg){const ok=()=>toast(msg||"Copiato");
   try{if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(t).then(ok,()=>toast("Tieni premuto sul testo per copiarlo"));return}}catch(e){}
   try{const a=document.createElement("textarea");a.value=t;a.setAttribute("readonly","");a.style.position="fixed";a.style.opacity="0";document.body.appendChild(a);a.select();document.execCommand("copy");a.remove();ok()}catch(e){toast("Tieni premuto sul testo per copiarlo")}}
+const BON_IST='<div class="bon-ist">'+ic("bolt",16)+'<span><b>Solo bonifico istantaneo</b>Scegli “bonifico istantaneo” nella tua app della banca: arriva in pochi secondi e la prenotazione viene confermata subito. Un bonifico ordinario impiega 1–2 giorni e il posto non è garantito.</span></div>';
 function bonificoBox(imp,causale){const b=bon();
-  if(!b.iban)return imp||causale?'<div class="ppbox bonbox"><div style="flex:1;min-width:0"><div class="flabel">Bonifico bancario</div>'+(imp?'<div class="ppamt">'+eur(imp)+'</div>':'')+
+  if(!b.iban)return imp||causale?'<div class="ppbox bonbox"><div style="flex:1;min-width:0"><div class="flabel">Bonifico istantaneo</div>'+(imp?'<div class="ppamt">'+eur(imp)+'</div>':'')+
    '<div class="bonrow"><span>Intestato a</span><b>'+esc(b.intest||"Kone Moctar")+'</b></div>'+(causale?'<div class="bonrow"><span>Causale</span><b>'+esc(causale)+'</b></div>':'')+
    '<p class="hint">Conferma la prenotazione: Kone riceve la richiesta e ti manda l\'IBAN qui in chat. Lo conferma appena il bonifico arriva.</p></div></div>':"";
   const row=(k,v,cp,lab)=>'<div class="bonrow"><span>'+k+'</span><b'+(cp?' class="num"':'')+'>'+esc(v)+'</b>'+(cp?'<button class="btn sm ghost" onclick="copia(\''+jsq(cp)+'\',\''+lab+' copiato\')">'+ic("copy",13)+' Copia</button>':'')+'</div>';
-  return '<div class="ppbox bonbox"><div style="flex:1;min-width:0"><div class="flabel">Bonifico bancario</div>'+(imp?'<div class="ppamt">'+eur(imp)+'</div>':'')+
+  return '<div class="ppbox bonbox"><div style="flex:1;min-width:0"><div class="flabel">Bonifico istantaneo</div>'+(imp?'<div class="ppamt">'+eur(imp)+'</div>':'')+
    row("Intestato a",b.intest||"Kone Moctar")+row("IBAN",ibanFmt(b.iban),ibanPulito(b.iban),"IBAN")+(b.banca?row("Banca",b.banca):"")+(causale?row("Causale",causale,causale,"Causale"):"")+
-   '<p class="hint">Fai il bonifico dalla tua banca con questi dati. Kone lo conferma appena arriva (in genere 1 giorno lavorativo, subito se è istantaneo).</p></div></div>'}
+   BON_IST+'<p class="hint">Fai il bonifico istantaneo dalla tua banca con questi dati: Kone lo conferma appena arriva.</p></div></div>'}
 function salvaBonifico(){const iban=ibanPulito(el("bnI").value),it=el("bnN").value.trim(),bk=el("bnB").value.trim();
   if(iban&&!ibanOk(iban))return toast("IBAN non valido: controlla le cifre"),el("bnI").focus();
   DB.settings.bonifico={iban,intest:it||"Kone Moctar",banca:bk,mod:true};save();render();toast(iban?"IBAN salvato · i clienti possono pagare con bonifico":"IBAN tolto · il bonifico non compare più")}
