@@ -747,7 +747,7 @@ button.pp.warn:hover{background:rgba(224,151,58,.28)}
 .wev.closed{opacity:.55;border-style:dashed}
 .wev.full small{color:var(--gold-hi)}
 .wev.drag{opacity:.4}
-.wev{display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;touch-action:pan-x pan-y;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.wev{cursor:grab;-webkit-user-drag:none;display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;touch-action:pan-x pan-y;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .wev.moving{opacity:.92;z-index:20;cursor:grabbing;box-shadow:0 10px 28px rgba(0,0,0,.45),0 0 0 2px var(--c);transition:none;filter:none}
 .wev.lift{transform:scale(1.03);box-shadow:0 0 0 2px var(--c)}
 .wev .rsz{position:absolute;left:0;right:0;bottom:0;height:9px;cursor:ns-resize;touch-action:none}
@@ -2836,8 +2836,8 @@ function calWeek(wk,one){
    '<div class="wk-b"><div class="wk-hrs" style="height:'+H+'px">'+hrs+'</div>'+
    wk.map((x,j)=>'<div class="wk-col'+(x<T0?" past":"")+(x===T0?" today":"")+'" style="height:'+H+'px" data-d="'+x+'" data-h0="'+mn+'" ondblclick="calDbl(event)">'+
      all[j].map(s=>{const top=(toMin(s.h)-mn*60)/60*WPX,ht=Math.max(24,s.dur/60*WPX-3),past=isPast(s),full=s.pren.length>=s.cap;
-      return '<button class="wev'+(past?" past":"")+(full?" full":"")+(s.chiuso?" closed":"")+'" data-id="'+s.id+'" style="--c:'+colSlot(s)+';top:'+top+'px;height:'+ht+'px" '+(past?'':'onpointerdown="wevDown(event,\''+s.id+'\',\'move\')" oncontextmenu="return false" ')+'onclick="wevClick(\''+s.id+'\')" title="'+esc(slotTitle(s))+' · '+s.h+'"><b>'+esc(slotTitle(s))+'</b><small>'+s.h+'–'+toHM(toMin(s.h)+s.dur)+' · '+s.pren.length+'/'+s.cap+'</small>'+
-       (past?'':'<span class="rsz" onpointerdown="wevDown(event,\''+s.id+'\',\'size\')" onclick="event.stopPropagation()" aria-hidden="true"></span>')+'</button>'}).join("")+
+      return '<div role="button" tabindex="0" class="wev'+(past?" past":"")+(full?" full":"")+(s.chiuso?" closed":"")+'" data-id="'+s.id+'" style="--c:'+colSlot(s)+';top:'+top+'px;height:'+ht+'px" '+(past?'':'onpointerdown="wevDown(event,\''+s.id+'\',\'move\')" oncontextmenu="return false" ')+'onclick="wevClick(\''+s.id+'\')" onkeydown="if(event.key===\'Enter\')wevClick(\''+s.id+'\')" ondragstart="return false" title="'+esc(slotTitle(s))+' · '+s.h+'"><b>'+esc(slotTitle(s))+'</b><small>'+s.h+'–'+toHM(toMin(s.h)+s.dur)+' · '+s.pren.length+'/'+s.cap+'</small>'+
+       (past?'':'<span class="rsz" onpointerdown="wevDown(event,\''+s.id+'\',\'size\')" onclick="event.stopPropagation()" aria-hidden="true"></span>')+'</div>'}).join("")+
    '</div>').join("")+'</div></div></div>';
 }
 /* trascinamento con mouse e dito: sposta (giorno/ora) e ridimensiona (durata), a scatti di 15 minuti */
@@ -2881,7 +2881,7 @@ function wevMove(e){if(!PD)return;const dx=e.clientX-PD.x0,dy=e.clientY-PD.y0,di
   PD.nm=clamp(snap15(h0+(e.clientY-r.top-PD.offY)/WPX*60),0,24*60-PD.dur);PD.nd=col.dataset.d;
   PD.el.style.top=(PD.nm-h0)/60*WPX+"px";wevTip();
 }
-function wevStop(){removeEventListener("pointermove",wevMove);removeEventListener("pointerup",wevUp);removeEventListener("pointercancel",wevCancel);removeEventListener("keydown",wevKey);
+function wevStop(){setTimeout(()=>{if(window._renderPend&&!PD){window._renderPend=0;render()}},0);removeEventListener("pointermove",wevMove);removeEventListener("pointerup",wevUp);removeEventListener("pointercancel",wevCancel);removeEventListener("keydown",wevKey);
   document.body.classList.remove("dragging","resizing");document.querySelectorAll(".wd.drop").forEach(b=>b.classList.remove("drop"));if(PD)clearTimeout(PD.timer);PD=null}
 function wevCancel(){const was=PD&&PD.on;wevStop();if(was)render()}
 function wevKey(e){if(e.key==="Escape")wevCancel()}
@@ -3573,6 +3573,7 @@ function richiestaAbb(key,i,link){const r=DB.listino[key][i],c=me();if(!c)return
 
 /* =================== RENDER =================== */
 function render(){
+  if(typeof PD!=="undefined"&&PD&&PD.on){window._renderPend=1;return}   // sto trascinando un blocco: ridisegno dopo
   const coach=S.role==="coach";
   const V=coach?{dash:vDash,agenda:vAgenda,clienti:vClienti,cliente:vCliente,chat:vChat,listino:vListino,pagamenti:vPagamenti,conti:vConti,schede:vSchede,libreria:vLibreria,corsi:vCorsi,nutrizione:vNutrizione,tratt:vTratt}
     :{oggi:vOggi,scheda:vScheda,prenota:vPrenota,prog:vProgC,dieta:vDieta,listino:vListino,chat:vChatC,tcat:vTcat,tpren:vTpren};
