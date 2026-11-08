@@ -747,6 +747,20 @@ button.pp.warn:hover{background:rgba(224,151,58,.28)}
 .wev.closed{opacity:.55;border-style:dashed}
 .wev.full small{color:var(--gold-hi)}
 .wev.drag{opacity:.4}
+.wev{display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;touch-action:pan-x pan-y;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.wev.moving{opacity:.92;z-index:20;cursor:grabbing;box-shadow:0 10px 28px rgba(0,0,0,.45),0 0 0 2px var(--c);transition:none;filter:none}
+.wev.lift{transform:scale(1.03);box-shadow:0 0 0 2px var(--c)}
+.wev .rsz{position:absolute;left:0;right:0;bottom:0;height:9px;cursor:ns-resize;touch-action:none}
+.wev .rsz::after{content:"";position:absolute;left:50%;bottom:3px;width:22px;height:3px;margin-left:-11px;border-radius:2px;background:var(--c);opacity:0;transition:opacity .15s}
+.wev:hover .rsz::after,.wev.moving .rsz::after{opacity:.8}
+.wev .tip{position:absolute;right:5px;top:3px;font-size:10.5px;font-weight:700;color:var(--gold-hi);font-variant-numeric:tabular-nums}
+body.dragging,body.dragging *{cursor:grabbing!important}
+body.resizing,body.resizing *{cursor:ns-resize!important}
+.wd.drop{outline:1px dashed var(--gold-deep);background:rgba(217,169,60,.14)}
+.wk.one{min-width:0}
+.wk.one .wk-b{grid-template-columns:52px minmax(0,1fr)}
+.wk-wrap.one{margin-bottom:14px}
+.flabel.cal-lt{margin:6px 0 8px}
 /* foglio azioni */
 .act-h{border-left:4px solid var(--c);padding-left:12px;margin-bottom:14px}
 .act-list{display:flex;flex-direction:column;gap:6px}
@@ -2780,11 +2794,11 @@ function vAgenda(){
    '<button class="btn sm cal-fbtn" onclick="calFiltri()">'+ic("filter",14)+' Filtri'+(nf?'<span class="cnt">'+nf+'</span>':'')+'</button></div>'+
   (chips?'<div class="chips" style="margin:-4px 0 12px">'+chips+'</div>':'')+
   (S.cv==="sett"?'':'<div class="wstrip">'+wk.map(x=>{const n=calSlots(x).reduce((a,s)=>a+s.pren.length,0),dt=fromIso(x);
-    return '<button class="wd'+(x===d&&S.cv!=="sett"?" on":"")+(x===T0?" today":"")+(x<T0?" past":"")+'" onclick="'+(S.cv==="sett"?"S.cv=\'giorno\';":"")+'calDay(\''+x+'\')"><span>'+dt.toLocaleDateString("it-IT",{weekday:"short"}).replace(".","")+'</span><b>'+dt.getDate()+'</b><small>'+(n?n+" pren.":"·")+'</small></button>'}).join("")+'</div>')+
+    return '<button data-dd="'+x+'" class="wd'+(x===d&&S.cv!=="sett"?" on":"")+(x===T0?" today":"")+(x<T0?" past":"")+'" onclick="'+(S.cv==="sett"?"S.cv=\'giorno\';":"")+'calDay(\''+x+'\')"><span>'+dt.toLocaleDateString("it-IT",{weekday:"short"}).replace(".","")+'</span><b>'+dt.getDate()+'</b><small>'+(n?n+" pren.":"·")+'</small></button>'}).join("")+'</div>')+
   (S.cv==="sett"?calWeek(wk):
    '<div class="cal-sum"><span><b class="num">'+pren+'</b>/'+cap+' posti prenotati</span><span>'+list.length+' orari</span><span>'+list.filter(s=>s.pren.length>=s.cap).length+' al completo</span></div>'+
-   (list.length?'<div class="cal-day">'+list.map(calEv).join("")+'</div>':'<div class="card"><p class="muted">'+(nf?"Nessun orario con questi filtri.":"Nessun orario in questo giorno.")+' Aggiungine uno con “Nuovo orario”.</p></div>'))+
-  '<p class="hint">'+(S.cv==="sett"?"Trascina un blocco per spostarlo in un altro giorno o a un'altra ora (da computer). Doppio clic su uno spazio vuoto per creare un orario. Dal telefono tocca il blocco e scegli “Sposta”.":"Con ⋮ sposti o duplichi un orario. Con − e + cambi quante persone possono prenotarsi; non puoi scendere sotto chi è già prenotato.")+'</p>';
+   (list.length?calWeek([d],true)+'<div class="flabel cal-lt">Elenco e prenotati</div><div class="cal-day">'+list.map(calEv).join("")+'</div>':'<div class="card"><p class="muted">'+(nf?"Nessun orario con questi filtri.":"Nessun orario in questo giorno.")+' Aggiungine uno con “Nuovo orario”.</p></div>'))+
+  '<p class="hint">'+(S.cv==="sett"?"Trascina un blocco per spostarlo in un altro giorno o a un'altra ora; tira il bordo in basso per cambiare la durata. Dal telefono tieni premuto il blocco un attimo, poi trascina. Doppio clic su uno spazio vuoto per creare un orario.":"Trascina un blocco per cambiare ora, o lascialo su un giorno della striscia in alto per cambiare giorno; tira il bordo in basso per cambiare la durata. Dal telefono tieni premuto un attimo, poi trascina. Con − e + cambi i posti.")+'</p>';
 }
 function calEv(s){
   const full=s.pren.length>=s.cap,open=S.aopen===s.id,past=isPast(s);
@@ -2806,27 +2820,78 @@ function gestisciHTML(s){
 
 /* ---------- vista settimana con trascinamento ---------- */
 const WPX=54;
-function calWeek(wk){
+function calWeek(wk,one){
   const all=wk.map(x=>calSlots(x));let mn=8,mx=20;
   all.forEach(l=>l.forEach(s=>{const m=toMin(s.h);mn=Math.min(mn,Math.floor(m/60));mx=Math.max(mx,Math.ceil((m+s.dur)/60))}));
+  if(one&&all[0].length){mn=Math.max(0,Math.min(...all[0].map(s=>Math.floor(toMin(s.h)/60)))-1);mx=Math.min(24,Math.max(...all[0].map(s=>Math.ceil((toMin(s.h)+s.dur)/60)))+1)}
   const H=(mx-mn)*WPX;let hrs="";for(let h=mn;h<mx;h++)hrs+='<span style="top:'+(h-mn)*WPX+'px">'+pad(h)+':00</span>';
-  return '<div class="wk-wrap"><div class="wk" style="--hpx:'+WPX+'px">'+
-   '<div class="wk-h"><span></span>'+wk.map(x=>{const dt=fromIso(x);return '<button class="'+(x===T0?"today":"")+'" onclick="S.cv=\'giorno\';calDay(\''+x+'\')">'+dt.toLocaleDateString("it-IT",{weekday:"short"}).replace(".","")+' <b>'+dt.getDate()+'</b></button>'}).join("")+'</div>'+
+  return '<div class="wk-wrap'+(one?" one":"")+'"><div class="wk'+(one?" one":"")+'" style="--hpx:'+WPX+'px">'+
+   (one?'':'<div class="wk-h"><span></span>'+wk.map(x=>{const dt=fromIso(x);return '<button class="'+(x===T0?"today":"")+'" onclick="S.cv=\'giorno\';calDay(\''+x+'\')">'+dt.toLocaleDateString("it-IT",{weekday:"short"}).replace(".","")+' <b>'+dt.getDate()+'</b></button>'}).join("")+'</div>')+
    '<div class="wk-b"><div class="wk-hrs" style="height:'+H+'px">'+hrs+'</div>'+
-   wk.map((x,j)=>'<div class="wk-col'+(x<T0?" past":"")+(x===T0?" today":"")+'" style="height:'+H+'px" data-d="'+x+'" data-h0="'+mn+'" ondragover="calOver(event)" ondragleave="this.classList.remove(\'drop\')" ondrop="calDrop(event)" ondblclick="calDbl(event)">'+
+   wk.map((x,j)=>'<div class="wk-col'+(x<T0?" past":"")+(x===T0?" today":"")+'" style="height:'+H+'px" data-d="'+x+'" data-h0="'+mn+'" ondblclick="calDbl(event)">'+
      all[j].map(s=>{const top=(toMin(s.h)-mn*60)/60*WPX,ht=Math.max(24,s.dur/60*WPX-3),past=isPast(s),full=s.pren.length>=s.cap;
-      return '<button class="wev'+(past?" past":"")+(full?" full":"")+(s.chiuso?" closed":"")+'" style="--c:'+colSlot(s)+';top:'+top+'px;height:'+ht+'px" '+(past?'':'draggable="true" ondragstart="calDrag(event,\''+s.id+'\')" ondragend="calEnd()"')+' onclick="calAzioni(\''+s.id+'\')" title="'+esc(slotTitle(s))+' · '+s.h+'"><b>'+esc(slotTitle(s))+'</b><small>'+s.h+' · '+s.pren.length+'/'+s.cap+'</small></button>'}).join("")+
+      return '<button class="wev'+(past?" past":"")+(full?" full":"")+(s.chiuso?" closed":"")+'" data-id="'+s.id+'" style="--c:'+colSlot(s)+';top:'+top+'px;height:'+ht+'px" '+(past?'':'onpointerdown="wevDown(event,\''+s.id+'\',\'move\')" oncontextmenu="return false" ')+'onclick="wevClick(\''+s.id+'\')" title="'+esc(slotTitle(s))+' · '+s.h+'"><b>'+esc(slotTitle(s))+'</b><small>'+s.h+'–'+toHM(toMin(s.h)+s.dur)+' · '+s.pren.length+'/'+s.cap+'</small>'+
+       (past?'':'<span class="rsz" onpointerdown="wevDown(event,\''+s.id+'\',\'size\')" onclick="event.stopPropagation()" aria-hidden="true"></span>')+'</button>'}).join("")+
    '</div>').join("")+'</div></div></div>';
 }
-let DRAG=null;
-function calDrag(e,id){DRAG={id,off:e.offsetY||0};try{e.dataTransfer.setData("text/plain",id);e.dataTransfer.effectAllowed="move"}catch(x){}e.currentTarget.classList.add("drag")}
-function calEnd(){document.querySelectorAll(".wk-col.drop").forEach(c=>c.classList.remove("drop"));document.querySelectorAll(".wev.drag").forEach(c=>c.classList.remove("drag"))}
-function calOver(e){if(!DRAG)return;e.preventDefault();e.currentTarget.classList.add("drop")}
-function calY(e,off){const c=e.currentTarget,r=c.getBoundingClientRect(),y=e.clientY-r.top-(off||0);
-  return clamp(Math.round((+c.dataset.h0*60+y/WPX*60)/15)*15,0,23*60+45)}
-function calDrop(e){e.preventDefault();const c=e.currentTarget;c.classList.remove("drop");if(!DRAG)return;
-  const m=calY(e,DRAG.off),id=DRAG.id;DRAG=null;moveSlot(id,c.dataset.d,toHM(m))}
-function calDbl(e){if(e.target!==e.currentTarget)return;const d=e.currentTarget.dataset.d;if(d<T0)return;nuovoSlot(d,toHM(calY(e,0)))}
+/* trascinamento con mouse e dito: sposta (giorno/ora) e ridimensiona (durata), a scatti di 15 minuti */
+let PD=null,PD_T=0;
+const snap15=m=>Math.round(m/15)*15;
+function wevClick(id){if(Date.now()-PD_T<450)return;calAzioni(id)}
+function wevDown(e,id,mode){
+  if(e.button>0||PD)return;const s=DB.agenda[id];if(!s||isPast(s))return;
+  if(mode==="size")e.stopPropagation();
+  const ev=e.target.closest(".wev"),r=ev.getBoundingClientRect();
+  PD={id,mode,el:ev,col:ev.parentElement,x0:e.clientX,y0:e.clientY,offY:e.clientY-r.top,on:false,
+      touch:e.pointerType!=="mouse",timer:null,d:s.d,m:toMin(s.h),dur:s.dur,nd:s.d,nm:toMin(s.h),ndur:s.dur,strip:null};
+  if(PD.touch&&mode==="move")PD.timer=setTimeout(()=>{if(PD&&!PD.on){wevStart();try{navigator.vibrate&&navigator.vibrate(12)}catch(x){}}},280);
+  else if(PD.touch&&mode==="size"){e.preventDefault();wevStart()}
+  addEventListener("pointermove",wevMove,{passive:false});addEventListener("pointerup",wevUp);addEventListener("pointercancel",wevCancel);addEventListener("keydown",wevKey);
+}
+function wevStart(){if(!PD)return;PD.on=true;PD.el.classList.add("moving");document.body.classList.add(PD.mode==="size"?"resizing":"dragging");
+  if(!PD.el.querySelector(".tip"))PD.el.insertAdjacentHTML("beforeend",'<span class="tip"></span>');wevTip()}
+function wevTip(){const t=PD.el.querySelector(".tip");if(!t)return;
+  t.textContent=PD.mode==="size"?PD.ndur+"′":(PD.strip?fmtD(PD.strip)+" ":(PD.nd!==PD.d?fmtD(PD.nd)+" ":""))+toHM(PD.nm)}
+function wevCols(){return [...document.querySelectorAll(".wk-col")]}
+function wevMove(e){if(!PD)return;const dx=e.clientX-PD.x0,dy=e.clientY-PD.y0,dist=Math.hypot(dx,dy);
+  if(!PD.on){
+    if(PD.touch){if(dist>8){clearTimeout(PD.timer);wevStop()}return}   // sta scorrendo la pagina
+    if(dist<4)return;wevStart()}
+  e.preventDefault();
+  if(e.clientY<70)scrollBy(0,-14);else if(e.clientY>innerHeight-70)scrollBy(0,14);
+  if(PD.mode==="size"){const top=PD.el.getBoundingClientRect().top;
+    PD.ndur=clamp(snap15((e.clientY-top)/WPX*60),15,240);
+    PD.el.style.height=Math.max(24,PD.ndur/60*WPX-3)+"px";wevTip();return}
+  // sopra un giorno della striscia (vista Giorno)?
+  document.querySelectorAll(".wd.drop").forEach(b=>b.classList.remove("drop"));PD.strip=null;
+  const hit=document.elementFromPoint(e.clientX,e.clientY),wd=hit&&hit.closest&&hit.closest(".wd[data-dd]");
+  if(wd&&wd.dataset.dd>=T0){wd.classList.add("drop");PD.strip=wd.dataset.dd;PD.el.style.opacity=".55";wevTip();return}
+  PD.el.style.opacity="";
+  const cols=wevCols();let col=cols.find(c=>{const r=c.getBoundingClientRect();return e.clientX>=r.left&&e.clientX<r.right})||PD.col;
+  if(cols.length===1)col=cols[0];
+  if(col.dataset.d<T0)col=PD.el.parentElement;
+  if(col!==PD.el.parentElement)col.appendChild(PD.el);
+  const r=col.getBoundingClientRect(),h0=+col.dataset.h0*60;
+  PD.nm=clamp(snap15(h0+(e.clientY-r.top-PD.offY)/WPX*60),0,24*60-PD.dur);PD.nd=col.dataset.d;
+  PD.el.style.top=(PD.nm-h0)/60*WPX+"px";wevTip();
+}
+function wevStop(){removeEventListener("pointermove",wevMove);removeEventListener("pointerup",wevUp);removeEventListener("pointercancel",wevCancel);removeEventListener("keydown",wevKey);
+  document.body.classList.remove("dragging","resizing");document.querySelectorAll(".wd.drop").forEach(b=>b.classList.remove("drop"));if(PD)clearTimeout(PD.timer);PD=null}
+function wevCancel(){const was=PD&&PD.on;wevStop();if(was)render()}
+function wevKey(e){if(e.key==="Escape")wevCancel()}
+function wevUp(){if(!PD)return;const p=PD;clearTimeout(p.timer);
+  if(!p.on){wevStop();return}            // semplice clic: lo gestisce onclick
+  PD_T=Date.now();wevStop();
+  if(p.mode==="size"){const s=DB.agenda[p.id];if(!s||p.ndur===p.dur)return render();
+    const m=toMin(s.h),sov=slotsDay(s.d).find(x=>x.id!==s.id&&m<toMin(x.h)+x.dur&&toMin(x.h)<m+p.ndur);
+    s.dur=p.ndur;save();render();toast("Durata "+p.ndur+"′ · "+s.h+"–"+toHM(m+p.ndur)+(sov?" · si sovrappone a "+slotTitle(sov)+" ("+sov.h+")":""));return}
+  const d=p.strip||p.nd,h=p.strip?toHM(p.m):toHM(p.nm);
+  if(d===p.d&&h===toHM(p.m))return render();
+  moveSlot(p.id,d,h);if(DB.agenda[p.id])render();   // se non è stato spostato rimette il blocco al suo posto
+}
+document.addEventListener("touchmove",e=>{if(PD&&PD.on&&e.cancelable)e.preventDefault()},{passive:false});
+function calDbl(e){if(e.target!==e.currentTarget)return;const d=e.currentTarget.dataset.d;if(d<T0)return;
+  const c=e.currentTarget,r=c.getBoundingClientRect();nuovoSlot(d,toHM(clamp(snap15(+c.dataset.h0*60+(e.clientY-r.top)/WPX*60),0,23*60+45)))}
 
 /* ---------- azioni su un orario ---------- */
 function calAzioni(id){const s=DB.agenda[id];if(!s)return;const past=isPast(s);
