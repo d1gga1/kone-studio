@@ -2105,7 +2105,8 @@ const slotsDay=(d,tipi)=>Object.values(DB.agenda).filter(s=>s.d===d&&(!tipi||tip
 const isPast=s=>s.d<T0||(s.d===T0&&s.h<=nowHM());
 const capMax=t=>({corso:DB.settings.maxCorso,pt:DB.settings.maxPT,tratt:DB.settings.maxTratt}[t]);
 const tipoLabel=t=>({corso:"corso di gruppo",pt:"one to one",tratt:"trattamento"}[t]);
-function slotTitle(s,b){if(s.tipo==="corso")return (corso(s.corso)||{n:"Corso"}).n;if(s.tipo==="pt")return "One to one con Kone";
+const nomePT=()=>(DB.settings.nomePT||"").trim()||"One to one con Kone";
+function slotTitle(s,b){if(s.nome)return s.nome;if(s.tipo==="corso")return (corso(s.corso)||{n:"Corso"}).n;if(s.tipo==="pt")return nomePT();
   const t=b&&b.tratt?tratt(b.tratt):null;return t?t.n+(b.dur?" · "+b.dur+"′":""):"Trattamento"}
 function tipoPill(s){return s.tipo==="corso"?'<span class="pill gold">Corso</span>':s.tipo==="pt"?'<span class="pill info">One to one</span>':'<span class="pill vio">Trattamento</span>'}
 function seats(s){let h='<span class="seats" aria-hidden="true">';for(let i=0;i<s.cap;i++)h+='<i class="'+(i<s.pren.length?"on":"")+'"></i>';return h+'</span>'}
@@ -2905,10 +2906,26 @@ function calAzioni(id){const s=DB.agenda[id];if(!s)return;const past=isPast(s);
    '<div class="act-list">'+
    '<button onclick="closeModal();S.cv=\'giorno\';S.cdate=\''+s.d+'\';S.aopen=\''+s.id+'\';render()">'+ic("users",18)+'<span><b>Gestisci prenotati e posti</b><small>'+calPren(s)+'</small></span></button>'+
    (past?'':'<button onclick="spostaModal(\''+s.id+'\')">'+ic("move",18)+'<span><b>Sposta</b><small>Cambia giorno o ora'+(s.pren.length?" · i prenotati ricevono un messaggio":"")+'</small></span></button>')+
+   '<button onclick="rinominaModal(\''+s.id+'\')">'+ic("edit",18)+'<span><b>Rinomina</b><small>Ora si chiama “'+esc(slotTitle(s))+'” · i clienti vedono subito il nuovo nome</small></span></button>'+
    '<button onclick="duplicaModal(\''+s.id+'\')">'+ic("copy",18)+'<span><b>Duplica</b><small>Domani, la settimana prossima o per più settimane</small></span></button>'+
    (past?'':'<button onclick="toggleChiuso(\''+s.id+'\');closeModal()">'+ic(s.chiuso?"unlock":"lock",18)+'<span><b>'+(s.chiuso?"Riapri le prenotazioni":"Chiudi le prenotazioni")+'</b><small>'+(s.chiuso?"I clienti tornano a vederlo":"Resta in calendario ma nessuno può prenotare")+'</small></span></button>')+
    (s.pren.length?'':'<button class="danger" onclick="eliminaSlot(\''+s.id+'\');closeModal()">'+ic("trash",18)+'<span><b>Elimina orario</b><small>Nessun prenotato</small></span></button>')+
    '</div>')}
+function rinominaModal(id){const s=DB.agenda[id];if(!s)return;const c=s.tipo==="corso"?corso(s.corso):null;
+  openModal('<h3>Rinomina</h3><p class="muted" style="margin-bottom:14px">'+capFirst(fmtD(s.d,{weekday:"long",day:"numeric",month:"long"}))+' alle '+s.h+'</p>'+
+   '<div class="field"><label>Nome</label><input class="fi" id="rnN" maxlength="60" value="'+esc(slotTitle(s))+'" onkeydown="if(event.key===\'Enter\')salvaNome(\''+id+'\')"></div>'+
+   (s.tipo==="pt"?'<label class="chkline"><input type="checkbox" id="rnTutti"'+(s.nome?'':' checked')+'> Usa questo nome per tutti gli one to one (anche quelli futuri)</label>':'')+
+   (c?'<label class="chkline"><input type="checkbox" id="rnTutti" checked> Rinomina il corso “'+esc(c.n)+'” in tutte le lezioni</label>':'')+
+   '<p class="hint" style="margin-bottom:12px">Lascia vuoto per tornare al nome standard. I clienti vedono il nuovo nome in pochi secondi.</p>'+
+   '<div class="inline" style="justify-content:flex-end"><button class="btn ghost" onclick="calAzioni(\''+id+'\')">Indietro</button><button class="btn primary" onclick="salvaNome(\''+id+'\')">Salva</button></div>');
+  setTimeout(()=>{try{const i=el("rnN");i.focus();i.select()}catch(e){}},60)}
+function salvaNome(id){const s=DB.agenda[id];if(!s)return;const n=el("rnN").value.trim().slice(0,60),tutti=el("rnTutti")&&el("rnTutti").checked;
+  if(tutti&&s.tipo==="corso"){const c=corso(s.corso);if(!n)return toast("Scrivi il nome del corso");
+    if(DB.corsi.some(x=>x.id!==c.id&&x.n.toLowerCase()===n.toLowerCase()))return toast("Esiste già un corso con questo nome");
+    c.n=n;Object.values(DB.agenda).forEach(x=>{if(x.corso===c.id)delete x.nome})}
+  else if(tutti&&s.tipo==="pt"){DB.settings.nomePT=n;Object.values(DB.agenda).forEach(x=>{if(x.tipo==="pt")delete x.nome})}
+  else if(n)s.nome=n;else delete s.nome;
+  save();closeModal();render();toast("Nome aggiornato: “"+slotTitle(s)+"”"+(tutti?" · su tutti gli orari":"")+" · i clienti lo vedono subito")}
 function spostaModal(id){const s=DB.agenda[id];
   openModal('<h3>Sposta</h3><p class="muted" style="margin-bottom:14px">'+esc(slotTitle(s))+' · ora '+capFirst(fmtD(s.d,{weekday:"long",day:"numeric",month:"long"}))+' alle '+s.h+'</p>'+
    '<div class="frow"><div class="field"><label>Nuovo giorno</label><input class="fi" type="date" id="mvDd" min="'+T0+'" value="'+s.d+'"></div><div class="field"><label>Nuova ora</label><input class="fi" type="time" id="mvHh" step="900" value="'+s.h+'"></div></div>'+
@@ -2936,7 +2953,7 @@ function duplicaModal(id){const s=DB.agenda[id],dt=fromIso(s.d);
    '<div class="inline" style="justify-content:flex-end"><button class="btn ghost" onclick="calAzioni(\''+id+'\')">Indietro</button><button class="btn primary" onclick="duplica(\''+id+'\',[[el(\'dpD\').value,el(\'dpH\').value]])">Duplica</button></div>')}
 function duplica(id,targets){const s=DB.agenda[id];let ok=0,busy=0;
   targets.forEach(t=>{const d=t[0],h=t[1];if(!d||!h)return;const nid=d+"_"+h;if(DB.agenda[nid]||d<T0||(d===T0&&h<=nowHM())){busy++;return}
-    DB.agenda[nid]={id:nid,d,h,tipo:s.tipo,corso:s.corso,cap:s.cap,dur:s.dur,pren:[],chiuso:false};ok++});
+    DB.agenda[nid]={id:nid,d,h,tipo:s.tipo,corso:s.corso,cap:s.cap,dur:s.dur,pren:[],chiuso:false};if(s.nome)DB.agenda[nid].nome=s.nome;ok++});
   save();closeModal();render();
   toast(ok?(ok===1?"Duplicato · "+fmtD(targets[0][0])+" "+targets[0][1]:"Duplicato "+ok+" volte")+(busy?" · "+busy+" già occupati":""):"Nessuna copia: orario già occupato o passato")}
 
