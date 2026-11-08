@@ -3360,15 +3360,16 @@ function editCorso(id){const nuovo=!id,c=nuovo?(S.cNew=corsoNuovo()):corso(id);
      return '<button type="button" class="chk '+st+'" onclick="cicloEx(this,\''+jsq(e.n)+'\')">'+esc(e.n)+'</button>'}).join("")+'</div>'+
    '<span class="hint">Rosso barrato = vietato · oro = lista ristretta (se ne scegli almeno uno, il motore usa solo quelli) · neutro = libero.</span></div>')+
    '<div class="inline" style="justify-content:flex-end;flex-wrap:wrap">'+(nuovo?'':'<button class="btn ghost" style="color:#E8807A;margin-right:auto" onclick="eliminaCorsoModal(\''+id+'\')">'+ic("trash",14)+' Elimina corso</button><button class="btn" onclick="orariCorso(\''+id+'\')">'+ic("cal",14)+' Orari</button>')+
-   '<button class="btn primary" onclick="salvaCorso(\''+(id||"")+'\')">'+(nuovo?"Crea il corso":"Salva parametri")+'</button></div>');
+   '<button class="btn primary" onclick="salvaCorso(\''+(id||"")+'\')">'+(nuovo?"Crea il corso":"Salva")+'</button></div>');
   if(nuovo)setTimeout(()=>{try{el("cN").focus()}catch(e){}},60)}
 function salvaCorso(id){const nuovo=!id,c=nuovo?S.cNew:corso(id);if(!c)return;
   const nome=el("cN").value.trim();if(nuovo&&!nome)return toast("Scrivi il nome del corso");
   if(DB.corsi.some(x=>x.id!==c.id&&x.n.toLowerCase()===nome.toLowerCase()))return toast("Esiste già un corso con questo nome");
-  c.n=nome||c.n;c.livello=+el("cL").value;c.obiettivo=el("cO").value;c.durata=clamp(parseInt(el("cD").value)||c.durata,30,90);
+  S.cOld=c.n;c.n=nome||c.n;c.livello=+el("cL").value;c.obiettivo=el("cO").value;c.durata=clamp(parseInt(el("cD").value)||c.durata,30,90);
   c.focus=el("cFo").value.trim();c.tema=el("cT").value==="auto"?null:el("cT").value;c.formato=TEMI[temaCorso(c)].formato;c.intensita=+el("cI").value;c.attrezzi=CED.attrezzi;c.vietati=CED.vietati;c.consentiti=CED.consentiti;c.col=CED.col;
   if(nuovo){DB.corsi.push(c);S.cNew=null;save();S.ctab=1;render();toast("Corso “"+c.n+"” creato · ora scegli giorni e orari");orariCorso(c.id);return}
-  Object.values(DB.agenda).forEach(s=>{if(s.corso===id)s.dur=c.durata});save();closeModal();render();toast("Parametri salvati · valgono dalla prossima generazione")}
+  const vecchio=S.cOld;Object.values(DB.agenda).forEach(s=>{if(s.corso===id)s.dur=c.durata});save();closeModal();render();
+  toast(vecchio&&vecchio!==c.n?"Nome cambiato in “"+c.n+"” · i clienti lo vedono già aggiornato":"Corso salvato · i clienti vedono subito le modifiche")}
 const GG7=["Lunedì","Martedì","Mercoledì","Giovedì","Venerdì","Sabato","Domenica"];
 function orariCorso(id){const c=corso(id);if(!c)return;S.ocg=S.ocg&&S.ocg.id===id?S.ocg:{id,g:[]};
   const fut=Object.values(DB.agenda).filter(s=>s.tipo==="corso"&&s.corso===id&&s.d>=T0).sort((a,b)=>(a.d+a.h)<(b.d+b.h)?-1:1);
