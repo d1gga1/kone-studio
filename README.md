@@ -305,3 +305,20 @@ feedback, contabilità, listino ed esercizi stanno nel database **Supabase**, pr
   (Nutrizione, oppure Clienti → Apri → Dieta): pasti, ore, alimenti, quantità/unità, kcal, proteine, carboidrati, grassi, obiettivo kcal, note.
   Totali calcolati da soli. **Serve una volta `supabase/kmstudio_patch_03.sql`** (permette il tipo `dieta`).
 - `sw.js` → v24, `cloud.js?v=4`.
+
+### Modifiche di Kone → calendario dei clienti in tempo reale + avvisi (08/11/2026, sera)
+
+- **Aggiornamento istantaneo**: `cloud.js` si iscrive al canale Realtime di Supabase sulla tabella `stato`. Quando Kone cambia
+  qualcosa in Calendario/Agenda (sposta, trascina, cambia durata, rinomina, chiude, elimina, aggiunge o toglie persone) tutte le app
+  aperte dei clienti si aggiornano in 1-2 secondi. Il controllo ogni 15 s resta come riserva.
+  **Serve una volta `supabase/kmstudio_patch_04.sql`** (aggiunge `kmstudio.stato` alla pubblicazione `supabase_realtime`); senza, si aggiorna ogni 15 s come prima.
+  Vale anche per chat e prenotazioni (Kone vede prima le nuove prenotazioni).
+- **Avvisi al cliente**: l'app del cliente confronta le sue prenotazioni con com'erano (per numero di prenotazione) e avvisa se Kone
+  le ha **spostate**, ha cambiato **durata** o **nome**, ha **chiuso/riaperto** l'orario, le ha **tolte/annullate**, oppure **l'ha prenotato lui**.
+  L'avviso arriva come **notifica del telefono** (dopo "Attiva le notifiche", in Oggi e Prenota), come messaggio in basso e come riquadro
+  "Kone ha modificato i tuoi appuntamenti" in **Oggi** e **Prenota** (resta finché il cliente tocca "Ok, visto").
+  Le prenotazioni annullate dal cliente stesso non generano avvisi. Se il cliente aveva l'app chiusa, l'avviso compare appena la riapre.
+  Lo spostamento con "Sposta" continua a mandare anche il messaggio in chat.
+- Limite: con l'app **completamente chiusa** la notifica non parte subito (arriva alla riapertura). Per la notifica immediata ad app chiusa
+  servono le notifiche push (Web Push con chiavi VAPID + una Edge Function di Supabase che le invia): passo successivo.
+- `404.html` riallineato ad `app.html` (era rimasto indietro: /app e /coach su GitHub Pages usano `404.html`). `sw.js` → v26, `cloud.js?v=5`.

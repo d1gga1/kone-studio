@@ -477,6 +477,7 @@
       K.noto = st;
       ricostruisci();
       if (puoiDisegnare()) render(); else K.ridisegna = true;
+      try { dispatchEvent(new Event("km:dati")); } catch (e) {}
     } catch (e) { console.warn("[KM cloud] aggiornamento", e); }
   }
   K.aggiorna = aggiorna;
@@ -527,6 +528,7 @@
     K.pronto = true; window.KMC_READY = true;
     if (window.KMC_WAIT) afterIntro();
     if (K.ruolo === "client" && K.nuovo) benvenuto();
+    tempoReale();
     setInterval(function () { aggiorna(false); }, 15000);
     setInterval(function () { aggiorna(true); }, 600000);
     document.addEventListener("visibilitychange", function () { if (document.hidden) { if (K.timer) K.flush(); } else aggiorna(false); });
@@ -535,6 +537,25 @@
     void tm;
     if (RECUPERO) apriNuovaPassword();
   };
+
+  /* tempo reale: appena Kone (o un cliente) cambia qualcosa, il database lo segnala sulla tabella "stato"
+     e tutte le app aperte si aggiornano subito, senza aspettare il controllo dei 15 secondi (che resta come riserva).
+     Serve una volta supabase/kmstudio_patch_04.sql; senza, funziona come prima. */
+  function tempoReale() {
+    var t = null, ch = null;
+    function arriva() { clearTimeout(t); t = setTimeout(function () { aggiorna(false); }, 350); }
+    function apri() {
+      try {
+        if (ch) sb.removeChannel(ch);
+        ch = sb.channel("km-stato").on("postgres_changes", { event: "*", schema: "kmstudio", table: "stato" }, arriva)
+          .subscribe(function (st) { if (st === "CHANNEL_ERROR" || st === "TIMED_OUT") setTimeout(apri, 30000); });
+      } catch (e) { console.warn("[KM cloud] tempo reale", e); }
+    }
+    apri();
+    sb.auth.onAuthStateChange(function (ev, ses) {
+      if (ses && ses.access_token) { try { sb.realtime.setAuth(ses.access_token); } catch (e) {} }
+    });
+  }
 
   /* numero per un nuovo cliente creato da Kone: lo chiedo prima al database */
   K.idRiservato = null;

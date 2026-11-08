@@ -2644,7 +2644,7 @@ function vOggi(){
   const c=me(),g=DB.scheda.giorni[dayIdx()];
   const corsiOggi=mySlots().filter(s=>s.d===T0&&s.tipo==="corso");
   const prossimo=mySlots().find(s=>!isPast(s));
-  let h=head("Ciao "+esc(c.n.split(" ")[0]),fmtD(T0,{weekday:"long",day:"numeric",month:"long"})+" · "+esc(g.t))+abbCTA("home")+rinnovoCard();
+  let h=head("Ciao "+esc(c.n.split(" ")[0]),fmtD(T0,{weekday:"long",day:"numeric",month:"long"})+" · "+esc(g.t))+abbCTA("home")+rinnovoCard()+avvCard();
   if(prossimo)h+='<div class="alert info" style="margin-bottom:14px"><div><b>Prossimo appuntamento: '+esc(slotTitle(prossimo,prossimo.pren.find(b=>b.cid===S.cid)))+'</b><p>'+fmtD(prossimo.d,{weekday:"long",day:"numeric",month:"long"})+' alle '+prossimo.h+'</p></div><button class="btn sm" onclick="go(\'prenota\')">Prenotazioni</button></div>';
   corsiOggi.forEach(s=>{const p=DB.programmi[s.d+"_"+s.corso];h+='<div class="card" style="margin-bottom:14px">'+cardH("users","Il tuo corso di oggi · "+esc(corso(s.corso).n),'<span class="chip">'+s.h+'</span>')+(p?progHTML(p):'<p class="muted">Kone sta preparando il programma.</p>')+'</div>'});
   if(!g.ex.length)return h+'<div class="card"><p class="muted">Oggi nella tua scheda non c\'è allenamento: '+esc(g.t.toLowerCase())+'.</p><p class="hint">Se ti va di muoverti puoi prenotare un corso di gruppo.</p><button class="btn primary" style="margin-top:10px" onclick="S.pfil=\'corso\';go(\'prenota\')">Vedi i corsi</button></div>';
@@ -2740,14 +2740,14 @@ function vProgC(){
   return head("I tuoi progressi","Peso corporeo e carichi li aggiorni tu, Kone li vede in tempo reale")+tabsHTML(tabs,S.tab,"S.tab")+b;
 }
 /* ---------- prenotazioni ---------- */
-function annulla(id){const s=DB.agenda[id],b=s.pren.find(x=>x.cid===S.cid),c=me();s.pren=s.pren.filter(x=>x.cid!==S.cid);
+function annulla(id){const s=DB.agenda[id],b=s.pren.find(x=>x.cid===S.cid),c=me();try{avvTogli(b&&b.pid)}catch(e){}s.pren=s.pren.filter(x=>x.cid!==S.cid);
   const rest=b&&b.pay&&b.pay.m==="piano"&&c&&c.usate>0;if(rest)c.usate--;
   if(b&&c)try{msgAKone(c.id,"❌ Ho annullato: "+slotTitle(s,b)+" · "+fmtD(s.d,{weekday:"long",day:"numeric",month:"long"})+" alle "+s.h+(b.pay&&b.pay.stato==="pagato"?" (era già pagato)":""))}catch(e){}
   save();render();toast("Prenotazione annullata"+(rest?" · la seduta torna nel tuo abbonamento":""))}
 function mieHTML(tipi){
   const all=mySlots().filter(s=>tipi.includes(s.tipo)),fut=all.filter(s=>!isPast(s));
   const da=iso(addD(TODAY,-10)),fbs=all.filter(s=>s.tipo==="corso"&&isPast(s)&&s.d>=da);
-  let h='<div class="card" style="margin-bottom:14px">'+cardH("cal","Le tue prenotazioni",'<span class="chip">'+fut.length+'</span>');
+  let h=avvCard()+'<div class="card" style="margin-bottom:14px">'+cardH("cal","Le tue prenotazioni",'<span class="chip">'+fut.length+'</span>');
   h+=fut.length?fut.map(s=>{const b=s.pren.find(x=>x.cid===S.cid);return '<div class="row"><span class="num" style="width:104px;flex:none;color:var(--gold-mid);font-size:14px">'+fmtD(s.d)+'<br>'+s.h+'</span><span style="flex:1;min-width:0"><span class="nm">'+esc(slotTitle(s,b))+'</span><span class="mt">'+tipoPill(s)+payPill(b)+'</span></span>'+(b.pay&&b.pay.m==="paypal"&&b.pay.stato!=="pagato"?'<button class="btn sm primary" onclick="pagaModal(\''+s.id+'\')">Paga</button>':'')+
     (s.tipo==="corso"&&DB.programmi[s.d+"_"+s.corso]?'<button class="btn sm ghost" onclick="vediProgramma(\''+s.d+"_"+s.corso+'\')">Programma</button>':'')+'<button class="btn sm" onclick="annulla(\''+s.id+'\')">Annulla</button></div>'}).join(""):'<p class="muted">Nessuna prenotazione in arrivo.</p>';
   if(fbs.length)h+='<div class="sep"></div><div class="flabel" style="margin-bottom:6px">Corsi a cui hai partecipato</div>'+fbs.reverse().map(s=>{const pid=s.d+"_"+s.corso,f=DB.feedback.find(x=>x.pid===pid&&x.cid===S.cid);
@@ -3547,7 +3547,7 @@ function notificaKone(titolo,testo){
     if(navigator.serviceWorker&&navigator.serviceWorker.ready)navigator.serviceWorker.ready.then(r=>r.showNotification(titolo,o)).catch(()=>new Notification(titolo,o));
     else new Notification(titolo,o)}catch(e){}}
 function attivaNotifiche(){if(!("Notification" in window))return toast("Questo browser non supporta le notifiche");
-  Notification.requestPermission().then(p=>{render();toast(p==="granted"?"Notifiche attive: ti avviso a ogni nuova prenotazione":"Notifiche non attivate: puoi abilitarle dalle impostazioni del browser")})}
+  Notification.requestPermission().then(p=>{render();toast(p==="granted"?(S.role==="coach"?"Notifiche attive: ti avviso a ogni nuova prenotazione":"Notifiche attive: ti avviso se Kone cambia un tuo appuntamento"):"Notifiche non attivate: puoi abilitarle dalle impostazioni del browser")})}
 /* le prenotazioni già viste si ricordano su ogni dispositivo di Kone: così l'avviso arriva sia al telefono sia al computer */
 const nvKey=x=>(x.b.quando||"")+"_"+(x.b.cid||x.b.nome);
 function nvCheck(){if(!DB||S.role!=="coach"||!el("app")||!el("app").classList.contains("show"))return;
@@ -3564,6 +3564,50 @@ function nvCheck(){if(!DB||S.role!=="coach"||!el("app")||!el("app").classList.co
   toast(tit+": "+r(nuove[0])+(nuove.length>1?" e altre "+(nuove.length-1):""));
   if(["dash","agenda","chat"].includes(S.view)&&!el("modal").classList.contains("on")&&!(document.activeElement&&/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)))render()}
 setInterval(nvCheck,4000);
+/* ---------- avvisi al cliente: Kone modifica una sua prenotazione ----------
+   Ogni dispositivo del cliente ricorda com'erano le sue prenotazioni (per numero di prenotazione, che resta
+   uguale anche quando Kone sposta l'orario). Quando i dati arrivano dal database confronta e avvisa:
+   spostata, durata cambiata, rinominata, orario chiuso/riaperto, annullata, oppure Kone l'ha prenotato lui. */
+const avvK=()=>"km2_avvC_"+S.cid,avvLK=()=>"km2_avvL_"+S.cid;
+function avvLeggi(k){try{return JSON.parse(localStorage.getItem(k)||"null")}catch(e){return null}}
+function avvScrivi(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function avvFoto(){const out={};Object.values(DB.agenda).forEach(s=>{const b=(s.pren||[]).find(x=>x.cid===S.cid&&!x._ph);if(!b||!b.pid)return;
+  out[b.pid]={sid:s.id,d:s.d,h:s.h,dur:+(b.dur||s.dur||60),t:slotTitle(s,b),ch:!!s.chiuso,da:b.da||""}});return out}
+/* il cliente annulla da solo: non è una modifica di Kone */
+function avvTogli(pid){if(!pid||S.role!=="client")return;const f=avvLeggi(avvK());if(f&&f[pid]){delete f[pid];avvScrivi(avvK(),f)}}
+function avvPronto(){const K=window.KMC;return !!(window.KM_CLOUD&&K&&K.ruolo==="client"&&K.cid===S.cid&&!K.timer&&!K.inCorso&&!K.daRicostruire&&!K.carico)}
+function avvCheck(){if(!DB||S.role!=="client"||!avvPronto())return;
+  const ora=avvFoto(),prima=avvLeggi(avvK());avvScrivi(avvK(),ora);
+  if(!prima)return;   // primo avvio su questo dispositivo: da qui in poi avviso
+  const quando=x=>fmtD(x.d,{weekday:"long",day:"numeric",month:"long"})+" alle "+x.h,nuovi=[];
+  Object.keys(prima).forEach(pid=>{const a=prima[pid],b=ora[pid];
+    if(a.d<T0)return;   // appuntamento già passato
+    if(!b){const s=DB.agenda[a.sid];
+      nuovi.push(s&&!s.chiuso?{k:"via",t:"Kone ha tolto una tua prenotazione",p:a.t+" di "+quando(a)+". Se è un errore scrivigli in chat."}
+        :{k:"via",t:"Appuntamento annullato",p:a.t+" di "+quando(a)+" non è più in programma. Se vuoi, prenota un altro orario."});return}
+    if(a.d!==b.d||a.h!==b.h)nuovi.push({k:"sposta",t:"Kone ha spostato un tuo appuntamento",p:b.t+": da "+fmtD(a.d)+" "+a.h+" a "+quando(b)+"."});
+    if(b.ch&&!a.ch)nuovi.push({k:"chiuso",t:"Orario chiuso da Kone",p:b.t+" di "+quando(b)+" è stato chiuso. Scrivi a Kone se hai dubbi."});
+    else if(!b.ch&&a.ch)nuovi.push({k:"riaperto",t:"Orario riaperto",p:b.t+" di "+quando(b)+" è di nuovo confermato."});
+    if(a.dur!==b.dur)nuovi.push({k:"durata",t:"Durata cambiata",p:b.t+" di "+quando(b)+" ora dura "+b.dur+"′ (prima "+a.dur+"′)."});
+    if(a.t!==b.t&&a.d===b.d&&a.h===b.h)nuovi.push({k:"nome",t:"Appuntamento aggiornato",p:"“"+a.t+"” di "+quando(b)+" ora si chiama “"+b.t+"”."})});
+  Object.keys(ora).forEach(pid=>{const b=ora[pid];if(!prima[pid]&&b.da!=="app"&&b.d>=T0)nuovi.push({k:"nuovo",t:"Kone ti ha prenotato",p:b.t+" · "+quando(b)+"."})});
+  if(!nuovi.length)return;
+  const q=new Date().toISOString(),L=(avvLeggi(avvLK())||[]);
+  nuovi.forEach(x=>{x.q=q;x.nl=1;L.unshift(x)});avvScrivi(avvLK(),L.slice(0,20));
+  notificaKone(nuovi.length===1?nuovi[0].t:nuovi.length+" modifiche ai tuoi appuntamenti",nuovi.slice(0,4).map(x=>nuovi.length===1?x.p:x.t+" · "+x.p).join("\n"));
+  toast(nuovi[0].t+(nuovi.length>1?" e altre "+(nuovi.length-1)+" modifiche":""));
+  if(!el("modal").classList.contains("on")&&!(document.activeElement&&/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)))render()}
+setInterval(avvCheck,4000);addEventListener("km:dati",()=>setTimeout(avvCheck,50));
+function avvVisti(){const L=avvLeggi(avvLK())||[];L.forEach(x=>x.nl=0);avvScrivi(avvLK(),L);render()}
+function avvCard(){if(S.role!=="client")return "";
+  const L=(avvLeggi(avvLK())||[]).filter(x=>x.nl),nOk="Notification" in window,perm=nOk?Notification.permission:"denied";
+  const fut=mySlots().some(s=>!isPast(s));
+  let h="";
+  if(L.length)h+='<div class="card" style="margin-bottom:14px;border-color:var(--gold-mid)">'+cardH("bell","Kone ha modificato i tuoi appuntamenti",'<span class="chip">'+L.length+'</span>')+
+    '<div class="stack">'+L.slice(0,6).map(x=>'<div class="alert'+(x.k==="via"||x.k==="chiuso"?" warn":" info")+'" style="margin:0"><div><b>'+esc(x.t)+'</b><p>'+esc(x.p)+'</p></div></div>').join("")+'</div>'+
+    '<div class="inline" style="justify-content:flex-end;margin-top:10px;flex-wrap:wrap"><button class="btn sm ghost" onclick="go(\'chat\')">Scrivi a Kone</button><button class="btn sm primary" onclick="avvVisti()">Ok, visto</button></div></div>';
+  if(fut&&nOk&&perm==="default")h+='<div class="alert" style="margin-bottom:14px"><div><b>Attiva le notifiche</b><p>Ti avvisiamo su questo telefono se Kone sposta, cambia o annulla un tuo appuntamento.</p></div><button class="btn sm primary" onclick="attivaNotifiche()">Attiva</button></div>';
+  return h}
 function prenAppCard(){const L=nuovePren().slice(0,6),nOk="Notification" in window,perm=nOk?Notification.permission:"denied";
   return '<div class="card" style="margin-bottom:16px">'+cardH("cal","Ultime prenotazioni dall'app")+
    (nOk&&perm==="default"?'<div class="alert"><div><b>Attiva le notifiche</b><p>Ti arriva un avviso su questo dispositivo ogni volta che un cliente prenota.</p></div><button class="btn sm primary" onclick="attivaNotifiche()">Attiva</button></div>':'')+
@@ -3605,7 +3649,7 @@ setInterval(caricaPrezzi,180000);document.addEventListener("visibilitychange",()
 
 </script>
 <!-- collegamento al database: login vero, dati condivisi tra telefoni -->
-<script src="/assets/js/cloud.js?v=4"></script>
+<script src="/assets/js/cloud.js?v=5"></script>
 <script>
 if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("/sw.js").catch(function(){});});}
 </script>
