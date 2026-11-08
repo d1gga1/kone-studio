@@ -167,7 +167,7 @@
       exVar: base("exVar", function () { return {}; }),
       modelli: coach ? base("modelli", function () { return []; }) : [],
       agendaDel: coach ? base("agendaDel", function () { return {}; }) : {},
-      clienti: [], schede: {}, schedeArch: {}, pesi: {}, carichi: {}, agenda: {}, programmi: {}, feedback: [], movimenti: [], chat: []
+      clienti: [], schede: {}, schedeArch: {}, pesi: {}, carichi: {}, diete: {}, agenda: {}, programmi: {}, feedback: [], movimenti: [], chat: []
     };
     /* primo avvio del titolare: prezzi pubblicati sul sito (listino.json) se più recenti */
     var L = K.listinoSito;
@@ -203,6 +203,7 @@
     valori("progressi").forEach(function (r) {
       if (r.tipo === "peso") D.pesi[r.cliente_id] = (r.dati && r.dati.v) || [];
       if (r.tipo === "carico") D.carichi[r.cliente_id] = (r.dati && r.dati.v) || {};
+      if (r.tipo === "dieta" && r.dati && Array.isArray(r.dati.pasti)) D.diete[r.cliente_id] = r.dati;
     });
     var fili = {};
     valori("messaggi").sort(function (a, b) { return a.creato < b.creato ? -1 : a.creato > b.creato ? 1 : 0; }).forEach(function (r) {
@@ -267,6 +268,7 @@
     var miei = coach ? ids : new Set([K.cid]);
     Object.keys(DB.pesi || {}).forEach(function (k) { var cid = +k; if (miei.has(cid) && ids.has(cid)) put("progressi", "peso_" + cid, { rif: "peso_" + cid, cliente_id: cid, tipo: "peso", dati: { v: DB.pesi[k] || [] } }); });
     Object.keys(DB.carichi || {}).forEach(function (k) { var cid = +k; if (miei.has(cid) && ids.has(cid)) put("progressi", "carico_" + cid, { rif: "carico_" + cid, cliente_id: cid, tipo: "carico", dati: { v: DB.carichi[k] || {} } }); });
+    Object.keys(DB.diete || {}).forEach(function (k) { var cid = +k; if (miei.has(cid) && ids.has(cid) && DB.diete[k]) put("progressi", "dieta_" + cid, { rif: "dieta_" + cid, cliente_id: cid, tipo: "dieta", dati: DB.diete[k] }); });
     (DB.feedback || []).forEach(function (f) {
       if (!f || !miei.has(f.cid) || !ids.has(f.cid)) return;
       put("feedback", f.pid + "_" + f.cid, { rif: f.pid + "_" + f.cid, programma_id: f.pid, cliente_id: f.cid, dati: f });

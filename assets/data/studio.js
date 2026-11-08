@@ -3,7 +3,8 @@
    Vuota = non viene mostrata. (Questo file non passa dalla cache: la modifica si vede subito.) */
 window.KM_STUDIO = {
   ragione: "Kone Moctar Studio",
-  piva: ""
+  piva: "14938790962",
+  indirizzo: "Piazza Puccini 16/A, 20070 Vizzolo Predabissi (MI)"
 };
 (function () {
   function fill() {

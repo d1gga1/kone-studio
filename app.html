@@ -313,6 +313,11 @@ tbody tr:hover{background:rgba(255,255,255,.017)}
 .meal-h{display:flex;align-items:center;gap:10px;padding:12px 15px;background:var(--ink-2)}
 .meal-h h4{font-family:var(--disp);font-size:13px;letter-spacing:.14em;text-transform:uppercase}
 .meal-h .kc{margin-left:auto;font-size:12.5px;color:var(--gold-mid);font-variant-numeric:tabular-nums}
+.dfood{display:grid;grid-template-columns:minmax(150px,2.2fr) repeat(2,minmax(70px,.9fr)) repeat(4,minmax(62px,.8fr)) auto;gap:8px;align-items:end;padding:10px 15px;border-top:1px solid var(--line-soft)}
+.dl{display:flex;flex-direction:column;gap:3px;min-width:0}.dl>span{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--txt-3)}
+.dfood .fi,.dmeal .meal-h .fi{padding:8px 9px;font-size:14px}.dfood .ddel{margin-bottom:2px}
+.dmeal .dmn{flex:1;min-width:140px;font-family:var(--disp);letter-spacing:.06em}.dmeal .dmh{width:84px;flex:none}
+@media (max-width:760px){.dfood{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 8px;padding:12px}.dfood .dn{grid-column:1/3;grid-row:1}.dfood .ddel{grid-column:3;grid-row:1;justify-self:end;align-self:end}.dmeal .meal-h{padding:10px 12px}.dmeal .dmn{min-width:0;flex:1 1 100%}.dmeal .dmh{width:90px}}
 .food{display:flex;align-items:center;gap:10px;padding:10px 15px;border-top:1px solid var(--line-soft);font-size:14px}
 .food .g{margin-left:auto;color:var(--txt-2);font-size:13px;font-variant-numeric:tabular-nums;flex:none}
 
@@ -1961,7 +1966,7 @@ function tornaCoach(){S.role="coach";S.preview=false;S.area="allen";S.view="dash
 
 /* ---------- navigazione ---------- */
 const NAV={
-  coach:{studio:[["dash","Cruscotto","dash"],["agenda","Agenda","cal"],["clienti","Clienti","users"],["chat","Chat","chat"],["listino","Listino prezzi","tag"],["conti","Contabilità","lock"]],
+  coach:{studio:[["dash","Cruscotto","dash"],["agenda","Agenda","cal"],["clienti","Clienti","users"],["chat","Chat","chat"],["listino","Listino prezzi","tag"],["pagamenti","IBAN e pagamenti","card"],["conti","Contabilità","lock"]],
     allen:[["schede","Schede clienti","plan"],["libreria","Esercizi","dumb"],["corsi","Corsi · IA","spark"],["nutrizione","Nutrizione","food"]],
     tratt:[["tratt","Trattamenti","lotus"]]},
   client:{allen:[["oggi","Oggi","today"],["scheda","Scheda","plan"],["prenota","Prenota","cal"],["prog","Progressi","chart"],["dieta","Dieta","food"],["listino","Prezzi","tag"],["chat","Chat","chat"]],
@@ -2127,7 +2132,7 @@ function vClienti(){
    '<td><button class="btn sm" onclick="openClient('+c.id+')">Apri</button></td></tr>'}).join("")+'</tbody></table></div></div>';
 }
 function vCliente(){
-  const c=cli(S.client),tabs=["Panoramica","Scheda","Peso","Carichi","Prenotazioni","Note"];let body="";
+  const c=cli(S.client),tabs=["Panoramica","Scheda","Peso","Carichi","Prenotazioni","Dieta","Note"];let body="";
   if(S.tab===0){const pp=DB.pesi[c.id]||[];
     body='<div class="grid g2"><div class="card">'+cardH("card","Abbonamento")+'<div class="stack">'+
      '<div class="kv"><span>Piano</span><b>'+esc(c.piano)+'</b></div><div class="kv"><span>Contenuto</span><span>'+esc(c.extra)+'</span></div>'+
@@ -2143,6 +2148,7 @@ function vCliente(){
   else if(S.tab===3)body=carichiBlock(c.id);
   else if(S.tab===4){const ss=Object.values(DB.agenda).filter(s=>s.pren.some(b=>b.cid===c.id)).sort((a,b)=>(a.d+a.h)<(b.d+b.h)?1:-1);
     body='<div class="card">'+cardH("cal","Prenotazioni",'<span class="chip">'+ss.length+'</span>')+(ss.length?ss.map(s=>{const b=s.pren.find(x=>x.cid===c.id);return '<div class="row"><span class="num" style="width:110px;flex:none;color:var(--gold-mid)">'+fmtD(s.d)+' '+s.h+'</span><span style="flex:1"><span class="nm">'+esc(slotTitle(s,b))+'</span></span>'+tipoPill(s)+(isPast(s)?'<span class="pill">svolta</span>':'')+'</div>'}).join(""):'<p class="muted">Nessuna prenotazione.</p>')+'</div>'}
+  else if(S.tab===5)body=dietaPanel(c.id);
   else body='<div class="card">'+cardH("plan","Note e storico")+'<div class="stack"><div class="alert info"><div><b>Ultimo check</b><p>'+esc(c.note)+'</p></div></div>'+
     '<div class="alert"><div><b>Scheda aggiornata</b><p>Passaggio al Blocco 2: più volume sulla spinta, squat in progressione da 92,5 kg.</p></div></div>'+
     '<div class="alert"><div><b>Anamnesi</b><p>Compilata dal cliente in autonomia dall\'app. Nessuna patologia in corso, infortunio pregresso segnalato.</p></div></div></div></div>';
@@ -2177,15 +2183,95 @@ function vLibreria(){
    '<div class="exgrid">'+grp[m].map(e=>'<button class="excard" data-n="'+esc(e.n.toLowerCase())+'" data-g="'+esc(m)+'" onclick="editEsercizio(\''+e.id+'\')">'+thumbHTML(e,"aggiungi foto")+'<b>'+esc(e.n)+'</b>'+
     '<span class="inline" style="gap:5px"><span class="pill '+(e.foto?"ok":"")+'">'+ic("img",11)+' foto</span><span class="pill '+(e.video?"ok":"")+'">'+ic("video",11)+' video</span></span></button>').join("")+'</div></div>').join("");
 }
-function nutriBlock(){
-  const tot=PASTI.reduce((a,p)=>a+p.kcal,0);
-  return '<div class="card" style="margin-bottom:14px">'+cardH("food","Ricomposizione · "+tot.toLocaleString("it-IT")+" kcal",'<span class="chip">5 pasti</span>')+
-   '<div class="macro"><div class="m"><div class="k">Calorie</div><div class="v num">'+tot.toLocaleString("it-IT")+'</div></div><div class="m"><div class="k">Proteine</div><div class="v num">165 g</div></div>'+
-   '<div class="m"><div class="k">Carboidrati</div><div class="v num">228 g</div></div><div class="m"><div class="k">Grassi</div><div class="v num">71 g</div></div><div class="m"><div class="k">Fibre</div><div class="v num">34 g</div></div></div>'+
-   '<p class="hint">Calorie e macro si calcolano da soli mentre componi i pasti dall\'archivio alimenti.</p></div>'+
-   PASTI.map(p=>'<div class="meal"><div class="meal-h">'+ic("food",15)+'<h4>'+p.n+'</h4><span class="dim" style="font-size:12.5px">'+p.h+'</span><span class="kc num">'+p.kcal+' kcal</span></div>'+p.f.map(f=>'<div class="food"><span>'+f[0]+'</span><span class="g">'+f[1]+'</span></div>').join("")+'</div>').join("");
+/* =================== DIETA (modificabile da Kone e dal cliente) ===================
+   DB.diete[cid] = {tgt, note, pasti:[{n,h,f:[{n,q,u,k,p,c,g}]}], agg:{da,t}}
+   k = kcal dell'alimento (se vuoto si calcola da proteine/carboidrati/grassi: 4·P + 4·C + 9·G) */
+const DIETA_ES=[
+  {n:"Colazione",h:"07:30",f:[{n:"Avena",q:80,u:"g",k:300,p:10.5,c:47,g:5.5},{n:"Yogurt greco 0%",q:170,u:"g",k:100,p:17,c:6.5,g:0.3},{n:"Mirtilli",q:80,u:"g",k:46,p:0.6,c:11.5,g:0.3},{n:"Mandorle",q:15,u:"g",k:87,p:3.2,c:1.5,g:7.5}]},
+  {n:"Spuntino",h:"10:30",f:[{n:"Ricotta vaccina",q:150,u:"g",k:220,p:13,c:5,g:16},{n:"Mela media",q:1,u:"pz",k:94,p:0.5,c:25,g:0.3},{n:"Noci",q:10,u:"g",k:65,p:1.5,c:1.4,g:6.5}]},
+  {n:"Pranzo",h:"13:00",f:[{n:"Riso basmati (crudo)",q:100,u:"g",k:350,p:8,c:78,g:1},{n:"Petto di pollo",q:180,u:"g",k:200,p:41,c:0,g:2.5},{n:"Zucchine",q:200,u:"g",k:34,p:2.4,c:6,g:0.6},{n:"Olio extravergine",q:15,u:"g",k:135,p:0,c:0,g:15}]},
+  {n:"Post-workout",h:"19:45",f:[{n:"Proteine whey",q:30,u:"g",k:120,p:24,c:3,g:1.5},{n:"Banana grande",q:1,u:"pz",k:120,p:1.5,c:31,g:0.4},{n:"Gallette di riso",q:3,u:"pz",k:92,p:2,c:19,g:0.7}]},
+  {n:"Cena",h:"21:00",f:[{n:"Merluzzo",q:220,u:"g",k:180,p:39,c:0,g:1.5},{n:"Patate",q:250,u:"g",k:193,p:5,c:43,g:0.3},{n:"Insalata mista",q:150,u:"g",k:25,p:2,c:3.5,g:0.3},{n:"Olio extravergine",q:10,u:"g",k:90,p:0,c:0,g:10}]}];
+const DIETA_VUOTA=["Colazione","Spuntino","Pranzo","Merenda","Cena"].map((n,i)=>({n,h:["07:30","10:30","13:00","16:30","20:30"][i],f:[]}));
+const D_UNITA=["g","ml","pz","cucchiai","cucchiaini","tazze","fette","porzioni"];
+const dNum=v=>{const x=parseFloat(String(v==null?"":v).replace(",","."));return isFinite(x)&&x>=0?Math.round(x*10)/10:0};
+const dK=f=>f.k>0?f.k:Math.round(4*(f.p||0)+4*(f.c||0)+9*(f.g||0));
+const dSomma=ff=>ff.reduce((a,f)=>({k:a.k+dK(f),p:a.p+(f.p||0),c:a.c+(f.c||0),g:a.g+(f.g||0)}),{k:0,p:0,c:0,g:0});
+const dTot=d=>dSomma([].concat(...d.pasti.map(p=>p.f)));
+const fN=x=>Math.round(x).toLocaleString("it-IT");
+function dieta(cid){DB.diete=DB.diete||{};const d=DB.diete[cid];return d&&!d.del&&Array.isArray(d.pasti)?d:null}
+function dChi(){return S.role==="coach"||S.preview?"Kone":(me()?me().n:"Cliente")}
+function dSalva(cid){const d=dieta(cid);if(!d)return;d.agg={da:dChi(),t:Date.now()};save()}
+function dCrea(cid,da){DB.diete=DB.diete||{};
+  const src=da==="es"?DIETA_ES:da==="vuota"?DIETA_VUOTA:(DB.diete[da]?DB.diete[da].pasti:DIETA_VUOTA);
+  DB.diete[cid]={tgt:da==="es"?2250:0,note:da!=="es"&&da!=="vuota"&&DB.diete[da]?DB.diete[da].note||"":"",pasti:clone(src)};
+  S.dEd=cid;dSalva(cid);render();toast("Piano creato: ora puoi modificarlo")}
+function dEdit(cid,on){const d=dieta(cid);if(!on&&d){let x=0;d.pasti.forEach(p=>{const n=p.f.length;p.f=p.f.filter(f=>(f.n||"").trim()||f.q||f.k||f.p||f.c||f.g);x+=n-p.f.length});if(x)dSalva(cid)}S.dEd=on?cid:null;render();if(!on)toast("Piano salvato")}
+/* modifica di un campo senza ridisegnare la pagina (così il cursore resta dov'è) */
+function dSet(cid,mi,fi,k,v){const d=dieta(cid);if(!d)return;
+  if(mi<0){d[k]=k==="tgt"?dNum(v):String(v).slice(0,2000)}
+  else if(fi<0){d.pasti[mi][k]=String(v).slice(0,60)}
+  else{const f=d.pasti[mi].f[fi];if(!f)return;f[k]=(k==="n"||k==="u")?String(v).slice(0,80):dNum(v)}
+  dSalva(cid);dAggiornaTot(cid)}
+function dAggiornaTot(cid){const d=dieta(cid);if(!d)return;const t=dTot(d);
+  [["k",t.k],["p",t.p],["c",t.c],["g",t.g]].forEach(([k,v])=>{const e=el("dT_"+k);if(e)e.textContent=fN(v)});
+  d.pasti.forEach((p,i)=>{const e=el("dM_"+i);if(e)e.textContent=fN(dSomma(p.f).k)+" kcal";
+    p.f.forEach((f,j)=>{const x=el("dF_"+i+"_"+j);if(x)x.placeholder=dK(f)?String(dK(f)):"auto"})});
+  const b=el("dBar");if(b){const pc=d.tgt?Math.min(100,Math.round(t.k/d.tgt*100)):0;b.style.width=pc+"%"}}
+function dAddFood(cid,mi){const d=dieta(cid);d.pasti[mi].f.push({n:"",q:0,u:"g",k:0,p:0,c:0,g:0});dSalva(cid);render();
+  setTimeout(()=>{const e=el("dN_"+mi+"_"+(d.pasti[mi].f.length-1));if(e)e.focus()},60)}
+function dDelFood(cid,mi,fi){const d=dieta(cid);d.pasti[mi].f.splice(fi,1);dSalva(cid);render()}
+function dAddMeal(cid){const d=dieta(cid);d.pasti.push({n:"Nuovo pasto",h:"",f:[]});dSalva(cid);render()}
+function dDelMeal(cid,mi){const d=dieta(cid);const p=d.pasti[mi];
+  if(p.f.length&&!S.dDelOk){S.dDelOk=mi;toast("Il pasto ha degli alimenti: tocca di nuovo il cestino per eliminarlo");setTimeout(()=>{S.dDelOk=null},4000);return}
+  S.dDelOk=null;d.pasti.splice(mi,1);dSalva(cid);render()}
+function dMove(cid,mi,dir){const d=dieta(cid),j=mi+dir;if(j<0||j>=d.pasti.length)return;const t=d.pasti[mi];d.pasti[mi]=d.pasti[j];d.pasti[j]=t;dSalva(cid);render()}
+function dElimina(cid){if(S.dDelAll!==cid){S.dDelAll=cid;toast("Tocca di nuovo “Elimina piano” per confermare");setTimeout(()=>{S.dDelAll=null},4000);return}
+  S.dDelAll=null;DB.diete[cid]={del:1,pasti:[],agg:{da:dChi(),t:Date.now()}};S.dEd=null;save();render();toast("Piano eliminato")}
+function dietaPanel(cid){
+  const d=dieta(cid),coach=S.role==="coach",ed=S.dEd===cid&&d;
+  if(!d){const altri=coach?DB.clienti.filter(c=>c.id!==cid&&dieta(c.id)):[];
+    return '<div class="card lockbox"><div class="big">'+ic("food",28)+'</div><h3 style="font-size:18px;margin-bottom:6px">'+(coach?"Nessun piano alimentare":"Non hai ancora un piano alimentare")+'</h3>'+
+     '<p class="muted" style="margin-bottom:16px">'+(coach?"Crealo da zero, parti dall'esempio o copialo da un altro cliente. Il cliente lo vede subito nella sua app e lo può modificare anche lui.":"Puoi crearlo tu e modificarlo quando vuoi: alimenti, grammi e calorie. Kone lo vede e può sistemarlo con te.")+'</p>'+
+     '<div class="inline" style="justify-content:center;gap:8px"><button class="btn primary" onclick="dCrea('+cid+',\'vuota\')">'+ic("plus",14)+' Crea il piano</button><button class="btn" onclick="dCrea('+cid+',\'es\')">Parti da un esempio</button></div>'+
+     (altri.length?'<div class="field" style="max-width:320px;margin:16px auto 0"><label>Copia da un altro cliente</label><select class="fi" onchange="if(this.value)dCrea('+cid+',+this.value)"><option value="">—</option>'+altri.map(c=>'<option value="'+c.id+'">'+esc(c.n)+'</option>').join("")+'</select></div>':'')+'</div>'}
+  const t=dTot(d),pc=d.tgt?Math.min(100,Math.round(t.k/d.tgt*100)):0;
+  const agg=d.agg?'Ultima modifica: <b>'+esc(d.agg.da)+'</b> · '+fmtD(new Date(d.agg.t).toISOString().slice(0,10),{day:"numeric",month:"short"})+' '+new Date(d.agg.t).toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit"}):"";
+  const inp=(id,v,mi,fi,k,ph,cls,mode)=>'<input class="fi '+(cls||"")+'" '+(id?'id="'+id+'" ':'')+'value="'+esc(v==null||v===0?"":String(v).replace(".",","))+'" placeholder="'+esc(ph||"")+'"'+(mode?' inputmode="decimal"':'')+' onchange="dSet('+cid+','+mi+','+fi+',\''+k+'\',this.value)">';
+  let h='<div class="card" style="margin-bottom:14px">'+cardH("food","Totale della giornata",ed?'<button class="btn primary sm" onclick="dEdit('+cid+',0)">'+ic("check",13)+' Fatto</button>':'<button class="btn primary sm" onclick="dEdit('+cid+',1)">'+ic("edit",13)+' Modifica</button>')+
+   '<div class="macro">'+[["Calorie","k"," kcal"],["Proteine","p"," g"],["Carboidrati","c"," g"],["Grassi","g"," g"]].map(m=>'<div class="m"><div class="k">'+m[0]+'</div><div class="v num"><span id="dT_'+m[1]+'">'+fN(t[m[1]])+'</span><em style="font-size:12px;font-style:normal;color:var(--txt-3)">'+m[2]+'</em></div></div>').join("")+'</div>'+
+   (ed?'<div class="frow" style="margin-top:12px"><div class="field" style="margin:0"><label>Obiettivo calorie al giorno (facoltativo)</label>'+inp("",d.tgt,-1,-1,"tgt","es. 2200","num",1)+'</div></div>':'')+
+   (d.tgt?'<div style="margin-top:12px"><div class="kv" style="font-size:13px"><span>Obiettivo</span><span class="num">'+fN(d.tgt)+' kcal</span></div><div class="meter"><i id="dBar" style="width:'+pc+'%"></i></div></div>':'')+
+   (agg?'<p class="hint" style="margin-top:10px">'+agg+'</p>':'')+'</div>';
+  h+=d.pasti.map((p,mi)=>{const s=dSomma(p.f);
+    if(!ed)return '<div class="meal"><div class="meal-h">'+ic("food",15)+'<h4>'+esc(p.n)+'</h4><span class="dim" style="font-size:12.5px">'+esc(p.h||"")+'</span><span class="kc num">'+fN(s.k)+' kcal</span></div>'+
+      (p.f.length?p.f.map(f=>'<div class="food">'+ic("check",14)+'<span>'+esc(f.n||"—")+'</span><span class="g">'+(f.q?String(f.q).replace(".",",")+' '+esc(f.u||""):"")+(dK(f)?' · '+fN(dK(f))+' kcal':'')+'</span></div>').join(""):'<div class="food"><span class="dim">Nessun alimento</span></div>')+'</div>';
+    return '<div class="meal dmeal"><div class="meal-h" style="flex-wrap:wrap">'+inp("",p.n,mi,-1,"n","Nome del pasto","dmn")+inp("",p.h,mi,-1,"h","Ora","dmh")+
+      '<span class="kc num" id="dM_'+mi+'">'+fN(s.k)+' kcal</span><span class="inline" style="gap:4px;flex:none">'+
+      '<button class="icon-btn" title="Sposta su" aria-label="Sposta su" onclick="dMove('+cid+','+mi+',-1)"'+(mi?'':' disabled')+'>↑</button><button class="icon-btn" title="Sposta giù" aria-label="Sposta giù" onclick="dMove('+cid+','+mi+',1)"'+(mi<d.pasti.length-1?'':' disabled')+'>↓</button>'+
+      '<button class="icon-btn" title="Elimina pasto" aria-label="Elimina pasto" onclick="dDelMeal('+cid+','+mi+')">'+ic("trash",15)+'</button></span></div>'+
+      p.f.map((f,fi)=>'<div class="dfood"><label class="dl dn"><span>Alimento</span>'+inp("dN_"+mi+"_"+fi,f.n,mi,fi,"n","es. Petto di pollo")+'</label>'+
+        '<label class="dl"><span>Quantità</span>'+inp("",f.q,mi,fi,"q","0","num",1)+'</label>'+
+        '<label class="dl"><span>Unità</span><select class="fi" onchange="dSet('+cid+','+mi+','+fi+',\'u\',this.value)">'+D_UNITA.concat(D_UNITA.includes(f.u)||!f.u?[]:[f.u]).map(u=>'<option'+(u===(f.u||"g")?' selected':'')+'>'+esc(u)+'</option>').join("")+'</select></label>'+
+        '<label class="dl"><span>Kcal</span>'+inp("dF_"+mi+"_"+fi,f.k,mi,fi,"k",dK(f)?String(dK(f)):"auto","num",1)+'</label>'+
+        '<label class="dl"><span>Prot. g</span>'+inp("",f.p,mi,fi,"p","0","num",1)+'</label>'+
+        '<label class="dl"><span>Carb. g</span>'+inp("",f.c,mi,fi,"c","0","num",1)+'</label>'+
+        '<label class="dl"><span>Grassi g</span>'+inp("",f.g,mi,fi,"g","0","num",1)+'</label>'+
+        '<button class="icon-btn ddel" title="Togli alimento" aria-label="Togli alimento" onclick="dDelFood('+cid+','+mi+','+fi+')">'+ic("trash",15)+'</button></div>').join("")+
+      '<div class="food"><button class="btn sm" onclick="dAddFood('+cid+','+mi+')">'+ic("plus",13)+' Aggiungi alimento</button></div></div>'}).join("");
+  if(ed)h+='<div class="inline" style="justify-content:space-between;margin:4px 0 14px;gap:8px"><button class="btn" onclick="dAddMeal('+cid+')">'+ic("plus",14)+' Aggiungi pasto</button><button class="btn ghost sm" onclick="dElimina('+cid+')">'+ic("trash",13)+' Elimina piano</button></div>'+
+    '<p class="hint" style="margin-bottom:14px">Le modifiche si salvano da sole. Se lasci vuote le kcal di un alimento, si calcolano da proteine, carboidrati e grassi.</p>';
+  h+='<div class="card" style="margin-top:4px">'+cardH("bell","Note")+(ed?'<textarea class="fi" rows="3" placeholder="Indicazioni, sostituzioni, acqua, integratori…" onchange="dSet('+cid+',-1,-1,\'note\',this.value)">'+esc(d.note||"")+'</textarea>':'<p class="muted" style="white-space:pre-line">'+(d.note?esc(d.note):"Nessuna nota.")+'</p>')+'</div>';
+  return h;
 }
-function vNutrizione(){return head("Piani alimentari","Marco Bellini · piano attivo",'<button class="btn primary" onclick="toast(\'Piano inviato all\\\'app del cliente\')">Invia piano</button>')+nutriBlock()}
+function vNutrizione(){
+  const conD=DB.clienti.filter(c=>dieta(c.id));
+  if(S.nutCli==null||!cli(S.nutCli))S.nutCli=(conD[0]||DB.clienti[0]||{}).id;
+  const c=cli(S.nutCli);
+  return head("Piani alimentari",conD.length+" clienti con un piano · lo modificate sia tu sia il cliente")+
+   '<div class="field" style="max-width:360px"><label>Cliente</label><select class="fi" onchange="S.nutCli=+this.value;S.dEd=null;render()">'+DB.clienti.map(x=>'<option value="'+x.id+'"'+(x.id===S.nutCli?' selected':'')+'>'+esc(x.n)+(dieta(x.id)?' · piano attivo':'')+'</option>').join("")+'</select></div>'+
+   (c?dietaPanel(c.id):'<p class="muted">Nessun cliente.</p>');
+}
 
 /* ---------- agenda e capienza (coach) ---------- */
 function capDelta(id,d){const s=DB.agenda[id],n=s.cap+d,mx=capMax(s.tipo);
@@ -2586,12 +2672,8 @@ function vScheda(){
    (g.ex.length?'<div class="stack" style="gap:4px">'+g.ex.map(e=>'<button class="inline" style="justify-content:space-between;font-size:14px;width:100%;text-align:left;flex-wrap:nowrap;padding:4px 0" onclick="vediEsercizio(\''+esc(e.n).replace(/'/g,"\\'")+'\')">'+
      '<span class="inline" style="flex-wrap:nowrap">'+miniHTML(e.n)+'<span>'+esc(e.n)+'</span></span><span class="dim num" style="flex:none">'+e.s+'×'+esc(e.r)+(e.kg?' · '+fmtN(e.kg)+' kg':'')+'</span></button>').join("")+'</div>':'<p class="muted" style="font-size:14px">Nessun allenamento in programma.</p>')+'</div>').join("")+'</div>';
 }
-function vDieta(){
-  const tot=PASTI.reduce((a,p)=>a+p.kcal,0);
-  return head("Il tuo piano di oggi",tot.toLocaleString("it-IT")+" kcal · 165 g proteine · 228 g carboidrati · 71 g grassi")+
-  '<div class="card" style="margin-bottom:14px"><div class="macro">'+[["Calorie",tot.toLocaleString("it-IT")],["Proteine","165 g"],["Carboidrati","228 g"],["Grassi","71 g"]].map(m=>'<div class="m"><div class="k">'+m[0]+'</div><div class="v num">'+m[1]+'</div></div>').join("")+'</div></div>'+
-  PASTI.map(p=>'<div class="meal"><div class="meal-h">'+ic("food",15)+'<h4>'+p.n+'</h4><span class="dim" style="font-size:12.5px">'+p.h+'</span><span class="kc num">'+p.kcal+' kcal</span></div>'+p.f.map(f=>'<div class="food">'+ic("check",14)+'<span>'+f[0]+'</span><span class="g">'+f[1]+'</span></div>').join("")+'</div>').join("");
-}
+function vDieta(){const d=dieta(S.cid),t=d?dTot(d):null;
+  return head("La tua dieta",t?fN(t.k)+" kcal · "+fN(t.p)+" g proteine · "+fN(t.c)+" g carboidrati · "+fN(t.g)+" g grassi":"Il tuo piano alimentare, modificabile da te e da Kone")+dietaPanel(S.cid)}
 /* ---------- peso e carichi ---------- */
 function pesoBlock(cid,coach){
   const pp=(DB.pesi[cid]||[]).slice().sort((a,b)=>a.d<b.d?-1:1);const last=pp[pp.length-1],first=pp[0],prev=pp[pp.length-2];
@@ -3095,7 +3177,7 @@ const TOUR=[
   {t:"La tua scheda",d:()=>"Il programma della settimana che ha preparato Kone per te, giorno per giorno.",go:"scheda"},
   {t:"Prenota",d:()=>"Scegli attività, giorno e orario in 4 passaggi. Se hai già un abbonamento tocca “Hai già un abbonamento?”: la seduta si scala da sola senza pagare di nuovo.",go:"prenota"},
   {t:"Progressi",d:()=>"Registra il tuo peso e guarda il grafico. I carichi che usi in sala finiscono qui da soli quando chiudi la seduta.",go:"prog"},
-  {t:"Dieta",d:()=>"Il tuo piano alimentare, quando Kone te lo prepara.",go:"dieta"},
+  {t:"Dieta",d:()=>"Il tuo piano alimentare: con “Modifica” cambi alimenti, grammi e calorie. Lo vede anche Kone.",go:"dieta"},
   {t:"Prezzi",d:()=>"Pacchetti, abbonamenti e promozioni del momento, sempre aggiornati da Kone.",go:"listino"},
   {t:"Chat con Kone",d:()=>"Per dubbi, spostamenti o domande scrivi qui, anche con una foto. Kone ti risponde in chat.",go:"chat"},
   {t:"Rivedi la guida quando vuoi",d:()=>"Se ti serve di nuovo, tocca il punto interrogativo qui in alto.",sel:()=>el("tbHelp")},
@@ -3157,7 +3239,7 @@ function migraV8(){
   if(!st.exGrp1){const G={"Mani e avambracci":"Avambracci e presa","Mobilità":"Mobilità e stretching","Schiena":"Lombari","Funzionale":"Condizionamento","Total body":"Condizionamento","Braccia e spalle":"Spalle","Braccia":"Tricipiti"};DB.esercizi.forEach(x=>{if(G[x.m])x.m=G[x.m]});st.exGrp1=true}
   st.bonifico=st.bonifico||{iban:"",intest:"Kone Moctar",banca:""};
   if(st.portale==null)st.portale="";
-  DB.corsiArch=DB.corsiArch||[];DB.agendaDel=DB.agendaDel||{};
+  DB.corsiArch=DB.corsiArch||[];DB.agendaDel=DB.agendaDel||{};DB.diete=DB.diete||{};
   DB.corsi.forEach(c=>{if(!c.col)c.col=CORSO_COL[c.id]||null});
   rinnoviAuto(true);
 }
@@ -3290,6 +3372,7 @@ function salvaBonifico(){const iban=ibanPulito(el("bnI").value),it=el("bnN").val
   if(iban&&!ibanOk(iban))return toast("IBAN non valido: controlla le cifre"),el("bnI").focus();
   DB.settings.bonifico={iban,intest:it||"Kone Moctar",banca:bk};save();render();toast(iban?"IBAN salvato · i clienti possono pagare con bonifico":"IBAN tolto · il bonifico non compare più")}
 function salvaPortale(v){v=String(v||"").trim();if(v&&!safeUrl(v))return toast("Il link deve iniziare con https://");DB.settings.portale=v;save();toast(v?"Link per la disdetta salvato":"Link per la disdetta tolto")}
+function vPagamenti(){return head("IBAN e pagamenti","Il conto su cui i clienti fanno il bonifico, il link PayPal e il link per le disdette. Li cambi quando vuoi: i clienti li vedono subito.")+pagamentiCard().replace('style="margin-top:14px"','')}
 function pagamentiCard(){const coach=S.role==="coach",b=bon();
   return '<div class="card" style="margin-top:14px">'+cardH("card","Come pagare")+
    '<div class="ppbox"><img src="/assets/img/paypal-qr.webp" width="180" height="180" alt="QR code PayPal di Kone Moctar Studio"><div>'+
@@ -3378,7 +3461,7 @@ function richiestaAbb(key,i,link){const r=DB.listino[key][i],c=me();if(!c)return
 /* =================== RENDER =================== */
 function render(){
   const coach=S.role==="coach";
-  const V=coach?{dash:vDash,agenda:vAgenda,clienti:vClienti,cliente:vCliente,chat:vChat,listino:vListino,conti:vConti,schede:vSchede,libreria:vLibreria,corsi:vCorsi,nutrizione:vNutrizione,tratt:vTratt}
+  const V=coach?{dash:vDash,agenda:vAgenda,clienti:vClienti,cliente:vCliente,chat:vChat,listino:vListino,pagamenti:vPagamenti,conti:vConti,schede:vSchede,libreria:vLibreria,corsi:vCorsi,nutrizione:vNutrizione,tratt:vTratt}
     :{oggi:vOggi,scheda:vScheda,prenota:vPrenota,prog:vProgC,dieta:vDieta,listino:vListino,chat:vChatC,tcat:vTcat,tpren:vTpren};
   const f=V[S.view]||(coach?vDash:vOggi);
   try{el("view").innerHTML=f()}catch(e){console.error(e);el("view").innerHTML='<div class="card"><p>Qualcosa non ha funzionato in questa pagina.</p><p class="hint">'+esc(e.message)+'</p></div>'}
@@ -3390,7 +3473,7 @@ setInterval(caricaPrezzi,180000);document.addEventListener("visibilitychange",()
 
 </script>
 <!-- collegamento al database: login vero, dati condivisi tra telefoni -->
-<script src="/assets/js/cloud.js?v=3"></script>
+<script src="/assets/js/cloud.js?v=4"></script>
 <script>
 if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("/sw.js").catch(function(){});});}
 </script>

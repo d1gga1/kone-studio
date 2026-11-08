@@ -291,3 +291,17 @@ feedback, contabilità, listino ed esercizi stanno nel database **Supabase**, pr
   **video caricati come file** negli esercizi (i link YouTube/Vimeo invece funzionano per tutti) e **schede caricate come PDF/foto**.
   I testi della chat e le schede create nell'app arrivano a tutti.
 - Se cambi `cloud.js` o `cloud-config.js`, alza il `?v=` in `app.html` e la versione in `sw.js` (`km-studio-v21` → `v22`).
+
+### Password, indirizzo, P.IVA, IBAN, dieta modificabile (08/11/2026)
+
+- **Password**: "Password dimenticata?" anche nell'area titolare; tasto 🔑 in alto (titolare e clienti) per cambiarla da dentro l'app;
+  il link dell'email apre la scelta della nuova password. Le email partono da Resend (SMTP in Supabase, mittente `noreply@kone-studio.com`,
+  dominio verificato con 3 record DNS su Aruba). L'SMTP vale per tutto il progetto `artantis`.
+- **Indirizzo**: Piazza Puccini 16/A, 20070 Vizzolo Predabissi (MI) — dati strutturati di tutte le pagine (con `hasMap` e `vatID`),
+  piè di pagina, Contatti, FAQ, home (`CONTATTI.indirizzo`), `llms.txt`, `assets/data/studio.js`.
+- **P.IVA** 14938790962 in `assets/data/studio.js`.
+- **IBAN e pagamenti**: nuova voce nel menu del titolare (stessa scheda di Listino → Come pagare).
+- **Dieta**: piano per cliente (`DB.diete`, tabella `progressi` con tipo `dieta`) modificabile dal cliente (Dieta → Modifica) e da Kone
+  (Nutrizione, oppure Clienti → Apri → Dieta): pasti, ore, alimenti, quantità/unità, kcal, proteine, carboidrati, grassi, obiettivo kcal, note.
+  Totali calcolati da soli. **Serve una volta `supabase/kmstudio_patch_03.sql`** (permette il tipo `dieta`).
+- `sw.js` → v24, `cloud.js?v=4`.
