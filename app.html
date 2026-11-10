@@ -1167,13 +1167,20 @@ const LIVELLI={1:"Principiante",2:"Intermedio",3:"Avanzato"};
 const LIV_MAX={1:7,2:8,3:9};
 const OBIETTIVI=["Dimagrimento","Forza e condizionamento","Tonificazione","Resistenza","Mobilità"];
 const FORMATI={stazioni:"Circuito a stazioni",tabata:"Tabata / intervalli",circuito:"Circuito a ripetizioni",flusso:"Flusso di mobilità"};
+/* corsi del volantino (palinsesto ufficiale dello studio) */
 const CORSI_SEED=[
-  {id:"func",n:"Functional Training",livello:2,obiettivo:"Forza e condizionamento",durata:50,intensita:7,formato:"stazioni",attrezzi:["tappetino","kettlebell","manubri","trx","box","slam ball"],vietati:[],consentiti:[]},
-  {id:"hiit",n:"HIIT Brucia Grassi",livello:2,obiettivo:"Dimagrimento",durata:45,intensita:8,formato:"tabata",attrezzi:["tappetino","kettlebell","funicella","air bike","vogatore"],vietati:[],consentiti:[]},
-  {id:"tono",n:"Tonificazione Total Body",livello:1,obiettivo:"Tonificazione",durata:50,intensita:6,formato:"circuito",attrezzi:["tappetino","manubri","elastici"],vietati:["Burpees"],consentiti:[]},
-  {id:"mob",n:"Mobilità & Postura",livello:1,obiettivo:"Mobilità",durata:50,intensita:3,formato:"flusso",attrezzi:["tappetino","elastici","trx"],vietati:[],consentiti:[]},
-  {id:"boot",n:"Bootcamp del Sabato",livello:3,obiettivo:"Resistenza",durata:60,intensita:8,formato:"stazioni",attrezzi:ATTREZZI.slice(),vietati:[],consentiti:[]}
+  {id:"senior",n:"Senior Fit",livello:1,obiettivo:"Mobilità",durata:60,intensita:4,formato:"circuito",attrezzi:["tappetino","elastici","manubri"],vietati:[],consentiti:[],col:"#3B82F6"},
+  {id:"mob",n:"Mobilità & Postura",livello:1,obiettivo:"Mobilità",durata:60,intensita:3,formato:"flusso",attrezzi:["tappetino","elastici","trx"],vietati:[],consentiti:[],col:"#22C55E"},
+  {id:"dolce",n:"Ginnastica Dolce Over 70",livello:1,obiettivo:"Mobilità",durata:60,intensita:2,formato:"flusso",attrezzi:["tappetino","elastici"],vietati:[],consentiti:[],col:"#A855F7"},
+  {id:"circuit",n:"Circuit Training",livello:2,obiettivo:"Forza e condizionamento",durata:60,intensita:7,formato:"circuito",attrezzi:["tappetino","kettlebell","manubri","box"],vietati:[],consentiti:[],col:"#F97316"},
+  {id:"func",n:"Functional Training",livello:2,obiettivo:"Forza e condizionamento",durata:60,intensita:7,formato:"stazioni",attrezzi:["tappetino","kettlebell","manubri","trx","box","slam ball"],vietati:[],consentiti:[],col:"#DC2626"},
+  {id:"tabata",n:"Tabata Training",livello:2,obiettivo:"Dimagrimento",durata:60,intensita:8,formato:"tabata",attrezzi:["tappetino","kettlebell","funicella"],vietati:[],consentiti:[],col:"#EAB308"},
+  {id:"totalbody",n:"Total Body",livello:1,obiettivo:"Tonificazione",durata:60,intensita:6,formato:"circuito",attrezzi:["tappetino","manubri","elastici"],vietati:[],consentiti:[],col:"#8B5E3C"}
 ];
+/* corsi del vecchio modello: restano in archivio (storico, programmi, feedback) */
+const CORSI_VECCHI=[{id:"hiit",n:"HIIT Brucia Grassi",livello:2,obiettivo:"Dimagrimento",durata:45,intensita:8,formato:"tabata",attrezzi:["tappetino","kettlebell","funicella","air bike","vogatore"],vietati:[],consentiti:[]},
+  {id:"tono",n:"Tonificazione Total Body",livello:1,obiettivo:"Tonificazione",durata:50,intensita:6,formato:"circuito",attrezzi:["tappetino","manubri","elastici"],vietati:["Burpees"],consentiti:[]},
+  {id:"boot",n:"Bootcamp del Sabato",livello:3,obiettivo:"Resistenza",durata:60,intensita:8,formato:"stazioni",attrezzi:ATTREZZI.slice(),vietati:[],consentiti:[]}];
 /* Catalogo esercizi del motore: nome, schema, attrezzo, alto impatto, livello minimo, intensità, zona a rischio, fase */
 const POOL=[
   ["Squat a corpo libero","squat","corpo libero",0,1,5,"ginocchia","main"],["Goblet squat","squat","kettlebell",0,1,6,"ginocchia","main"],
@@ -1338,16 +1345,13 @@ function migraEserciziTemi(){
 const PM={};POOL.forEach(e=>PM[e.n]=e);
 const ZONE=["ginocchia","schiena","spalle"];
 
-/* modello settimanale degli orari: [ora, tipo, corso] — 1 = lunedì */
-const TPL={
-  1:[["07:00","pt"],["08:00","pt"],["09:30","tratt"],["10:30","tratt"],["12:30","corso","hiit"],["15:00","tratt"],["16:00","pt"],["17:00","pt"],["18:30","corso","func"],["19:30","corso","tono"]],
-  2:[["07:00","pt"],["08:00","pt"],["09:30","tratt"],["10:30","tratt"],["12:30","corso","mob"],["15:00","tratt"],["16:00","pt"],["17:00","pt"],["18:30","corso","hiit"],["19:30","corso","func"]],
-  3:[["07:00","pt"],["08:00","pt"],["09:30","tratt"],["10:30","tratt"],["12:30","corso","tono"],["15:00","tratt"],["16:00","pt"],["17:00","pt"],["18:30","corso","func"],["19:30","corso","mob"]],
-  4:[["07:00","pt"],["08:00","pt"],["09:30","tratt"],["10:30","tratt"],["12:30","corso","hiit"],["15:00","tratt"],["16:00","pt"],["17:00","pt"],["18:30","corso","tono"],["19:30","corso","func"]],
-  5:[["07:00","pt"],["08:00","pt"],["09:30","tratt"],["10:30","tratt"],["12:30","corso","func"],["15:00","tratt"],["16:00","pt"],["17:00","pt"],["18:30","corso","hiit"]],
-  6:[["09:00","corso","boot"],["10:15","corso","mob"],["11:30","pt"],["12:30","tratt"]],
-  0:[]
-};
+/* modello settimanale = VOLANTINO: dalle 7 alle 21, lunedì → sabato.
+   Ogni ora è un corso (max 10) oppure un'ora libera da 2 posti (one to one, coppia o massaggio).
+   [ora, tipo, corso] — 1 = lunedì */
+const VOLANTINO={1:{9:"senior",12:"circuit",19:"func"},2:{9:"mob",12:"func",19:"totalbody"},3:{9:"dolce",12:"tabata",19:"totalbody"},
+  4:{9:"senior",12:"circuit",19:"func"},5:{9:"mob",12:"tabata",18:"func",20:"tabata"},6:{9:"dolce",13:"totalbody"}};
+const ORE_LIBERE_POSTI=2;
+const TPL=(()=>{const t={0:[]};for(let g=1;g<=6;g++){t[g]=[];for(let h=7;h<21;h++){const o=String(h).padStart(2,"0")+":00",c=VOLANTINO[g][h];t[g].push(c?[o,"corso",c]:[o,"pt"])}}return t})();
 
 
 /* Esercizi del motore Corsi · IA: [nome, gruppo, come si fa, foto] — foto = nome file in assets/img/esercizi/ (senza -a/-b), null = da caricare.
@@ -1518,16 +1522,36 @@ function seedCarichi(){
   DB.carichi[1]=h;
 }
 /* agenda: slot da 3 settimane fa a 2 settimane avanti */
+/* passaggio una tantum all'agenda del volantino (10/11/2026): corsi del volantino attivi, vecchi corsi in archivio,
+   orari futuri SENZA prenotazioni sostituiti dal nuovo modello. Le prenotazioni esistenti non si toccano mai. */
+function migraVolantino(){
+  if(DB.settings.palinsesto==="volantino-1")return false;
+  DB.corsiArch=DB.corsiArch||[];
+  CORSI_SEED.forEach(c=>{let x=DB.corsi.find(y=>y.id===c.id);
+    if(!x){const a=DB.corsiArch.find(y=>y.id===c.id);if(a){DB.corsiArch=DB.corsiArch.filter(y=>y!==a);DB.corsi.push(a);x=a}}
+    if(x)Object.assign(x,{n:c.n,durata:c.durata,col:c.col});else DB.corsi.push(clone(c))});
+  DB.corsi=DB.corsi.filter(c=>{if(CORSI_VECCHI.some(v=>v.id===c.id)){if(!DB.corsiArch.some(y=>y.id===c.id))DB.corsiArch.push(c);return false}return true});
+  let tenuti=0;
+  Object.values(DB.agenda).forEach(s=>{if(isPast(s))return;
+    if(s.pren.some(b=>!b._ph)){tenuti++;if(s.tipo==="pt")s.cap=Math.max(s.cap,ORE_LIBERE_POSTI);return}
+    delete DB.agenda[s.id]});
+  if(DB.agendaDel)Object.keys(DB.agendaDel).forEach(k=>{if(k.slice(0,10)>=T0)delete DB.agendaDel[k]});
+  DB.settings.palinsesto="volantino-1";
+  setTimeout(()=>{try{toast("Agenda aggiornata al palinsesto del volantino"+(tenuti?" · "+tenuti+" orari con prenotazioni lasciati com'erano":""))}catch(e){}},1200);
+  return true;
+}
 function ensureAgenda(seedBookings){
+  const migrata=migraVolantino();
   const names=DB.clienti.filter(c=>c.tipo!=="mass").map(c=>({cid:c.id,nome:c.n})).concat(ALTRI_NOMI.map(n=>({cid:null,nome:n})));
   const massNames=DB.clienti.filter(c=>c.tipo==="mass"||c.tipo==="combo").map(c=>({cid:c.id,nome:c.n}));
-  let added=0;
+  let added=0;const giorniPieni=new Set(Object.values(DB.agenda).map(s=>s.d)),ora=nowHM();
   for(let i=-21;i<=13;i++){
     const dt=addD(TODAY,i),d=iso(dt);
     (TPL[dt.getDay()]||[]).forEach(t=>{
+      if(giorniPieni.has(d)&&(d<T0||(d===T0&&t[0]<=ora)))return;   /* lo storico già scritto non si tocca */
       const id=d+"_"+t[0];if(DB.agenda[id]||(DB.agendaDel&&DB.agendaDel[id]))return;if(t[2]&&!DB.corsi.some(x=>x.id===t[2]))return;
       const c=t[2]?corso(t[2]):null;
-      const s={id,d,h:t[0],tipo:t[1],corso:t[2]||null,cap:t[1]==="corso"?DB.settings.maxCorso:1,dur:c?c.durata:t[1]==="tratt"?50:60,pren:[],chiuso:false};
+      const s={id,d,h:t[0],tipo:t[1],corso:t[2]||null,cap:t[1]==="corso"?DB.settings.maxCorso:t[1]==="pt"?ORE_LIBERE_POSTI:1,dur:c?c.durata:t[1]==="tratt"?50:60,pren:[],chiuso:false};
       const r=rng("ag"+id);
       if(!window.KM_CLOUD&&(seedBookings||i>0)){
         if(s.tipo==="corso"){const n=i<0?4+Math.floor(r()*6):Math.floor(r()*(i<4?8:5))+(i<3?2:0);
@@ -1538,7 +1562,7 @@ function ensureAgenda(seedBookings){
       DB.agenda[id]=s;added++;
     });
   }
-  if(added&&!seedBookings)save();
+  if((added||migrata)&&!seedBookings)save();
 }
 function seedMarco(){
   const all=Object.values(DB.agenda).sort((a,b)=>(a.d+a.h)<(b.d+b.h)?-1:1);
@@ -1976,7 +2000,7 @@ function prenDaSito(){
   try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}
   const p=new URLSearchParams(q),s=DB.agenda[p.get("prenota")];
   if(!s){go("prenota");toast("Quell'orario non è più in agenda: scegline un altro");return true}
-  const tr=s.tipo==="tratt";S.area=tr?"tratt":"allen";S.view=tr?"tpren":"prenota";S.w=null;const w=W();
+  const tr=s.tipo==="tratt"||p.get("tipo")==="tratt";S.area=tr?"tratt":"allen";S.view=tr?"tpren":"prenota";S.w=null;const w=W();
   let att=s.tipo==="pt"?"pt":s.tipo==="corso"?attCorso(s):null;
   if(tr){const n=(p.get("tratt")||"").toLowerCase().trim(),t=n?DB.trattamenti.find(t=>{const x=t.n.toLowerCase();return x.includes(n)||n.includes(x.replace(/^massaggio /,""))}):null;
     att=t?"tratt:"+t.id:null;w.dur=p.get("dur")==="30"?30:50}
@@ -2124,7 +2148,7 @@ const isPast=s=>s.d<T0||(s.d===T0&&s.h<=nowHM());
 const capMax=t=>({corso:DB.settings.maxCorso,pt:DB.settings.maxPT,tratt:DB.settings.maxTratt}[t]);
 const tipoLabel=t=>({corso:"corso di gruppo",pt:"one to one",tratt:"trattamento"}[t]);
 const nomePT=()=>(DB.settings.nomePT||"").trim()||"One to one con Kone";
-function slotTitle(s,b){if(s.nome)return s.nome;if(s.tipo==="corso")return (corso(s.corso)||{n:"Corso"}).n;if(s.tipo==="pt")return nomePT();
+function slotTitle(s,b){if(s.tipo==="pt"&&b&&b.tratt){const t=tratt(b.tratt);if(t)return t.n+(b.dur?" · "+b.dur+"′":"")}if(s.nome)return s.nome;if(s.tipo==="corso")return (corso(s.corso)||{n:"Corso"}).n;if(s.tipo==="pt")return nomePT();
   const t=b&&b.tratt?tratt(b.tratt):null;return t?t.n+(b.dur?" · "+b.dur+"′":""):"Trattamento"}
 function tipoPill(s){return s.tipo==="corso"?'<span class="pill gold">Corso</span>':s.tipo==="pt"?'<span class="pill info">One to one</span>':'<span class="pill vio">Trattamento</span>'}
 function seats(s){let h='<span class="seats" aria-hidden="true">';for(let i=0;i<s.cap;i++)h+='<i class="'+(i<s.pren.length?"on":"")+'"></i>';return h+'</span>'}
@@ -2763,7 +2787,7 @@ function annulla(id){const s=DB.agenda[id],b=s.pren.find(x=>x.cid===S.cid),c=me(
   if(b&&c)try{msgAKone(c.id,"❌ Ho annullato: "+slotTitle(s,b)+" · "+fmtD(s.d,{weekday:"long",day:"numeric",month:"long"})+" alle "+s.h+(b.pay&&b.pay.stato==="pagato"?" (era già pagato)":""))}catch(e){}
   save();render();toast("Prenotazione annullata"+(rest?" · la seduta torna nel tuo abbonamento":""))}
 function mieHTML(tipi){
-  const all=mySlots().filter(s=>tipi.includes(s.tipo)),fut=all.filter(s=>!isPast(s));
+  const all=mySlots().filter(s=>{const b=s.pren.find(x=>x.cid===S.cid);return tipi.includes(b&&b.tratt?"tratt":s.tipo)}),fut=all.filter(s=>!isPast(s));
   const da=iso(addD(TODAY,-10)),fbs=all.filter(s=>s.tipo==="corso"&&isPast(s)&&s.d>=da);
   let h=avvCard()+'<div class="card" style="margin-bottom:14px">'+cardH("cal","Le tue prenotazioni",'<span class="chip">'+fut.length+'</span>');
   h+=fut.length?fut.map(s=>{const b=s.pren.find(x=>x.cid===S.cid);return '<div class="row"><span class="num" style="width:104px;flex:none;color:var(--gold-mid);font-size:14px">'+fmtD(s.d)+'<br>'+s.h+'</span><span style="flex:1;min-width:0"><span class="nm">'+esc(slotTitle(s,b))+'</span><span class="mt">'+tipoPill(s)+payPill(b)+'</span></span>'+(b.pay&&b.pay.m==="paypal"&&b.pay.stato!=="pagato"?'<button class="btn sm primary" onclick="pagaModal(\''+s.id+'\')">Paga</button>':'')+
@@ -3005,7 +3029,7 @@ function W(){if(!S.w||S.w.area!==S.area)S.w={area:S.area,step:1,att:null,dur:50,
 function wAtt(){const w=W();return wAtts().find(a=>a.id===w.att)||null}
 function wPrezzo(a,w){a=a||wAtt();w=w||W();if(!a)return 0;if(a.tipo==="tratt"){const t=tratt(a.tr);return pEff(t,w.dur===30?"p30":"p60")}return a.prezzo}
 function wDur(a){a=a||wAtt();if(!a)return 0;if(a.tipo==="tratt")return W().dur;if(a.tipo==="corso")return (corso(a.corso)||{durata:60}).durata;return 60}
-function wSlots(d){const a=wAtt();if(!a)return [];return slotsDay(d,[a.tipo]).filter(s=>(a.tipo!=="corso"||(s.corso===a.corso&&(s.nome||"")===(a.nome||"")))&&!isPast(s)&&!s.chiuso&&!s.pren.some(b=>b.cid===S.cid))}
+function wSlots(d){const a=wAtt();if(!a)return [];return slotsDay(d,a.tipo==="tratt"?["tratt","pt"]:[a.tipo]).filter(s=>(a.tipo!=="corso"||(s.corso===a.corso&&(s.nome||"")===(a.nome||"")))&&!isPast(s)&&!s.chiuso&&!s.pren.some(b=>b.cid===S.cid))}
 function wFree(d){return wSlots(d).reduce((n,s)=>n+Math.max(0,s.cap-s.pren.length),0)}
 function wGo(n){const w=W();if(n>=2&&!w.att)return toast("Scegli prima cosa vuoi fare");if(n>=3&&!w.d)return toast("Scegli il giorno");if(n>=4&&!w.slot)return toast("Scegli l'orario");w.step=n;render();const m=el("main");if(m&&window.innerWidth<900){const t=document.querySelector(".wiz");if(t)m.scrollTop=Math.max(0,t.offsetTop-70)}}
 function wSet(k,v,next){const w=W();w[k]=v;if(k==="att"){w.d=null;w.slot=null}if(k==="d")w.slot=null;if(k==="dur")w.slot=null;if(next)wGo(next);else render()}

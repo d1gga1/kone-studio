@@ -106,13 +106,13 @@ function cella(s){
   var aria=esc(nome)+', '+GN[new Date(s.d+"T12:00:00").getDay()]+' ore '+s.h;
   if(s.tipo==="corso"){
     var c=colSlot(s), lab=fin?"Terminato":s.chiuso?"Chiuso":f<=0?"Completo":f+(f===1?" posto":" posti"), no=fin||s.chiuso||f<=0;
-    return '<button class="cell c-corso'+(chiaro(c)?' dark':'')+(no?' done':'')+'" style="background:'+c+'" '+data+(no?' disabled':'')+' aria-label="'+aria+', '+lab+'"><b>'+esc(nome)+'</b><span>'+s.h+' · '+lab+'</span></button>';
+    return '<button class="cell c-corso'+(chiaro(c)?' dark':'')+(no?' done':'')+'" style="background:'+c+'" '+data+(no?' disabled':'')+' aria-label="'+aria+', '+lab+'"><b>'+esc(nome)+'</b><span>'+(s.h.slice(3)==="00"?"":s.h+' · ')+lab+'</span></button>';
   }
-  var corto=s.tipo==="pt"?"One to one":"Massaggio";
-  if(fin) return '<button class="cell c-past" disabled tabindex="-1" aria-hidden="true"><b>'+corto+'</b><span>'+s.h+'</span></button>';
-  var k=s.chiuso||f<=0?"c-full":f<s.cap&&s.cap>1?"c-one":"c-free";
-  var t=s.chiuso?"Chiuso":f<=0?"Occupato":s.cap>1&&f<s.cap?(f===1?"1 posto":f+" posti"):"Libero";
-  return '<button class="cell '+k+(s.tipo==="tratt"?' c-tratt':'')+'" '+data+(k==="c-full"?' disabled':'')+' aria-label="'+aria+', '+t+'"><b>'+corto+' · '+t+'</b><span>'+s.h+'–'+hm(minuti(s.h)+s.dur)+'</span></button>';
+  if(fin) return '<button class="cell c-past" disabled aria-hidden="true" tabindex="-1"><span>—</span></button>';
+  var k=s.chiuso||f<=0?"c-full":f<s.cap?"c-one":"c-free";
+  var t=s.chiuso?"Chiuso":f<=0?"Occupato":f<s.cap?(f===1?"1 posto":f+" posti"):"Libero";
+  var pre=s.tipo==="tratt"?"Massaggio · ":"";
+  return '<button class="cell '+k+(s.tipo==="tratt"?' c-tratt':'')+'" '+data+(k==="c-full"?' disabled':'')+' aria-label="'+aria+', '+t+'"><b>'+pre+t+'</b>'+(f>0&&!s.chiuso?'<span>'+f+'/'+s.cap+'</span>':'')+'</button>';
 }
 function render(){
   var mon=lunedi(wk), now=new Date(), sun=dayOf(mon,7), L=AG[iso(mon)], html="";
@@ -139,7 +139,8 @@ function render(){
   GG.forEach(function(g){var dd=dayOf(mon,g);var t=iso(dd)===iso(now);html+='<div class="ph'+(t?' today':'')+'">'+GN[dd.getDay()]+'<small>'+dd.getDate()+' '+MN[dd.getMonth()].slice(0,3)+'</small></div>'});
   ore.forEach(function(h){
     var vuotaM=!L.some(function(s){return s.h===h&&s.d===iso(dayOf(mon,dayM))});
-    html+='<div class="pt'+(vuotaM?' e':'')+'">'+h+'</div>';
+    var dr=(L.filter(function(s){return s.h===h})[0]||{}).dur||60;
+    html+='<div class="pt'+(vuotaM?' e':'')+'">'+h+'–'+hm(minuti(h)+dr)+'</div>';
     GG.forEach(function(g){
       var d=iso(dayOf(mon,g)), qui=L.filter(function(s){return s.d===d&&s.h===h});
       qui.sort(function(a,b){return a.tipo===b.tipo?0:a.tipo==="corso"?-1:1});
@@ -207,8 +208,9 @@ function apriSlot(sl){
   if(sl.tipo==="corso")return apriCorso(sl);
   var f=liberi(sl), tr=sl.tipo==="tratt";
   ctx={slot:sl,data:sl.d,ora:sl.h,tipo:"libero"};
-  apri(quando(sl.d,sl.h,sl.dur),tr?"Massaggio · scegli il trattamento":"One to one con Kone");
-  var lib=LIBERI.filter(function(s){return tr?s.tratt:!s.tratt}), inc=INCLUSI.filter(function(s){return tr?s.tratt:!s.tratt});
+  apri(quando(sl.d,sl.h,sl.dur),"Cosa vuoi prenotare?");
+  /* ora libera: one to one, coppia o massaggio nei posti dell'ora · orario solo massaggi: solo massaggi */
+  var lib=LIBERI.filter(function(s){return !tr||s.tratt}), inc=INCLUSI.filter(function(s){return !tr||s.tratt});
   body.innerHTML='<div class="opts">'+lib.map(function(s){return optBtn(s,s.posti>f)}).join("")+'</div><p class="sep">Hai già un pacchetto o un abbonamento?</p><div class="opts">'+inc.map(function(s){return optBtn(s,s.posti>f)}).join("")+'</div>';
   ctx.lista=lib.concat(inc);
 }
@@ -278,8 +280,9 @@ function fatto(){
    Così il posto viene bloccato subito nell'agenda di Kone (funzione kmstudio.prenota,
    niente posti doppi) e tutti — sito, app dei clienti, agenda del titolare — vedono lo stesso. */
 function viaApp(s,nome){
-  var sl=ctx.slot,t=$("#tratt"),q="prenota="+encodeURIComponent(sl.id)+(t?"&tratt="+encodeURIComponent(t.value):"")+(s.id==="mass-30"?"&dur=30":"");
-  fallback(s,nome);   /* PayPal / bonifico / WhatsApp restano come seconda strada */
+  var sl=ctx.slot,t=$("#tratt"),q="prenota="+encodeURIComponent(sl.id)+(s.tratt?"&tipo=tratt":"")+(t?"&tratt="+encodeURIComponent(t.value):"")+(s.id==="mass-30"?"&dur=30":"");
+  fallback(s,nome);
+  if(s.posti>1)return;   /* la coppia (2 posti) la conferma Kone: resta PayPal / WhatsApp */   /* PayPal / bonifico / WhatsApp restano come seconda strada */
   var box=$("#step2"), resto=box.innerHTML.replace(/class="btn gold"/g,'class="btn line"');
   box.innerHTML='<div class="fb"><p><b>Prenota dalla tua area clienti:</b> il posto viene bloccato subito nell\'agenda di Kone e lo vedi tra le tue prenotazioni. Se è la prima volta, crei l\'account in un minuto.</p>'+
    '<div class="cta-row"><a class="btn gold" href="/app#'+q+'">Accedi e prenota</a><a class="btn line" href="/app#registrati&'+q+'">Crea l\'account</a></div></div>'+
