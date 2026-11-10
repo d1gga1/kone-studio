@@ -2,7 +2,7 @@
 "use strict";
 var C=window.KM_PRENOTA||{};
 var SL=C.slug||{}, GG=[1,2,3,4,5,6];
-var P_CORSO=C.prezzoCorso||29, BON=null;
+var P_CORSO=C.prezzoCorso||29, BON=null, STRIPE=/^https:\/\//.test(C.stripe||"")?C.stripe:"";
 /* stesso database dell'app di Kone (vedi cloud-config.js): la chiave "publishable" è pubblica */
 var CLOUD=window.KM_CLOUD||{url:"https://fvukqtgaqcpevtystgeo.supabase.co",key:"sb_publishable_Zr5phbGD1dEw_Lu6CgmAUw_iIPah2KP"};
 var CORSO_COL={func:"#D9A93C",hiit:"#E0645C",tono:"#4FA86A",mob:"#3FA7A0",boot:"#E0973A"};   /* uguali all'app */
@@ -95,7 +95,7 @@ function minuti(h){var p=String(h).split(":");return (+p[0])*60+(+p[1]||0)}
 function hm(m){return p2(Math.floor(m/60)%24)+":"+p2(m%60)}
 function passato(s){var n=new Date(),t=iso(n);return s.d<t||(s.d===t&&s.h<=p2(n.getHours())+":"+p2(n.getMinutes()))}   /* come l'app */
 function liberi(s){return Math.max(0,s.cap-s.occ)}
-function nomeSlot(s){if(s.nome)return s.nome;if(s.tipo==="corso")return (CORSI[s.corso]||{}).n||"Corso di gruppo";return s.tipo==="pt"?"One to one con Kone":"Massaggio / trattamento"}
+function nomeSlot(s){if(s.nome)return s.nome;if(s.tipo==="corso")return (CORSI[s.corso]||{}).n||"Corso di gruppo";return "Ora libera"}   /* ora libera = qualsiasi servizio: one to one, coppia, massaggio o trattamento */
 function colSlot(s){return s.tipo==="corso"?((CORSI[s.corso]||{}).col||CORSO_COL[s.corso]||"#D9A93C"):null}
 function trova(id){var r=null;Object.keys(AG).forEach(function(k){(AG[k]||[]).forEach(function(s){if(s.id===id)r=s})});return r}
 
@@ -111,8 +111,7 @@ function cella(s){
   if(fin) return '<button class="cell c-past" disabled aria-hidden="true" tabindex="-1"><span>—</span></button>';
   var k=s.chiuso||f<=0?"c-full":f<s.cap?"c-one":"c-free";
   var t=s.chiuso?"Chiuso":f<=0?"Occupato":f<s.cap?(f===1?"1 posto":f+" posti"):"Libero";
-  var pre=s.tipo==="tratt"?"Massaggio · ":"";
-  return '<button class="cell '+k+(s.tipo==="tratt"?' c-tratt':'')+'" '+data+(k==="c-full"?' disabled':'')+' aria-label="'+aria+', '+t+'"><b>'+pre+t+'</b>'+(f>0&&!s.chiuso?'<span>'+f+'/'+s.cap+'</span>':'')+'</button>';
+  return '<button class="cell '+k+'" '+data+(k==="c-full"?' disabled':'')+' aria-label="'+aria+', '+t+'"><b>'+t+'</b>'+(f>0&&!s.chiuso?'<span>'+f+'/'+s.cap+'</span>':'')+'</button>';
 }
 function render(){
   var mon=lunedi(wk), now=new Date(), sun=dayOf(mon,7), L=AG[iso(mon)], html="";
@@ -206,11 +205,11 @@ function optBtn(s,dis){return '<button class="opt" data-s="'+s.id+'"'+(dis?' dis
 
 function apriSlot(sl){
   if(sl.tipo==="corso")return apriCorso(sl);
-  var f=liberi(sl), tr=sl.tipo==="tratt";
+  var f=liberi(sl);
   ctx={slot:sl,data:sl.d,ora:sl.h,tipo:"libero"};
   apri(quando(sl.d,sl.h,sl.dur),"Cosa vuoi prenotare?");
-  /* ora libera: one to one, coppia o massaggio nei posti dell'ora · orario solo massaggi: solo massaggi */
-  var lib=LIBERI.filter(function(s){return !tr||s.tratt}), inc=INCLUSI.filter(function(s){return !tr||s.tratt});
+  /* ogni ora libera è aperta a tutto: one to one, coppia, massaggio o trattamento (il primo che prenota la prende) */
+  var lib=LIBERI, inc=INCLUSI;
   body.innerHTML='<div class="opts">'+lib.map(function(s){return optBtn(s,s.posti>f)}).join("")+'</div><p class="sep">Hai già un pacchetto o un abbonamento?</p><div class="opts">'+inc.map(function(s){return optBtn(s,s.posti>f)}).join("")+'</div>';
   ctx.lista=lib.concat(inc);
 }
@@ -295,9 +294,10 @@ function fallback(s,nome){
   var msg="Ciao Kone! Vorrei prenotare: "+nome+(t?" ("+t.value+")":"")+(ctx.slot?" — "+quando(ctx.slot.d,ctx.slot.h,ctx.slot.dur):"")+(s.prezzo?" — "+eur(s.prezzo)+". Ho pagato con PayPal / pago in studio.":".");
   var wa="https://wa.me/"+WA+"?text="+encodeURIComponent(msg);
   var lk=s.link&&/^https:\/\//.test(s.link)?s.link:"";
-  $("#step2").innerHTML='<div class="fb">'+(lk?'<p><b>Abbonamento con rinnovo automatico:</b> paghi il primo mese e autorizzi l\'addebito mensile (IBAN del tuo conto o carta). Lo disdici quando vuoi.</p><div class="cta-row" style="margin-bottom:16px"><a class="btn gold" href="'+esc(lk)+'" target="_blank" rel="noopener">Attiva l\'addebito automatico</a></div><p>Oppure blocca il posto così:</p>':'<p>Il pagamento automatico con carta si sta attivando. Intanto puoi bloccare il posto così:</p>')+'<div class="cta-row">'+
-   (s.prezzo&&C.paypal?'<a class="btn '+(lk?'line':'gold')+'" href="'+C.paypal+'" target="_blank" rel="noopener">Paga '+eur(s.prezzo)+' con PayPal</a>':'')+
-   '<a class="btn line" href="'+wa+'" target="_blank" rel="noopener">Invia la prenotazione</a></div>'+bonHTML(s,nome)+pivaHTML()+'<p style="font-size:14px;margin-top:14px">Il messaggio con giorno, ora e servizio è già scritto: devi solo premere invio.</p></div>';
+  $("#step2").innerHTML='<div class="fb">'+(lk?'<p><b>Abbonamento con rinnovo automatico:</b> paghi il primo mese e autorizzi l\'addebito mensile (IBAN del tuo conto o carta). Lo disdici quando vuoi.</p><div class="cta-row" style="margin-bottom:16px"><a class="btn gold" href="'+esc(lk)+'" target="_blank" rel="noopener">Attiva l\'addebito automatico</a></div><p>Oppure blocca il posto così:</p>':(STRIPE?'<p>Paga subito e manda la prenotazione a Kone:</p>':'<p>Il pagamento automatico con carta si sta attivando. Intanto puoi bloccare il posto così:</p>'))+'<div class="cta-row">'+
+   (s.prezzo&&STRIPE?'<a class="btn '+(lk?'line':'gold')+'" href="'+esc(STRIPE)+'" target="_blank" rel="noopener">Paga '+eur(s.prezzo)+' con carta, Apple Pay, Google Pay o Klarna</a>':'')+
+   (s.prezzo&&C.paypal?'<a class="btn '+(lk||STRIPE?'line':'gold')+'" href="'+C.paypal+'" target="_blank" rel="noopener">Paga '+eur(s.prezzo)+' con PayPal</a>':'')+
+   '<a class="btn line" href="'+wa+'" target="_blank" rel="noopener">Invia la prenotazione</a></div>'+(s.prezzo&&STRIPE?'<p style="font-size:14px;margin-top:12px">Pagamento con carta, Apple Pay, Google Pay o Klarna (anche in 3 rate): nella pagina sicura scrivi l\'importo <b>'+eur(s.prezzo)+'</b>.</p>':'')+bonHTML(s,nome)+pivaHTML()+'<p style="font-size:14px;margin-top:14px">Il messaggio con giorno, ora e servizio è già scritto: devi solo premere invio.</p></div>';
 }
 
 function pivaHTML(){var k=window.KM_STUDIO||{};return k.piva?'<p style="font-size:13px;margin-top:12px;opacity:.75">Pagamento a '+esc(k.ragione||"Kone Moctar Studio")+' · P.IVA '+esc(k.piva)+'</p>':""}
@@ -346,6 +346,7 @@ function daListino(L){
   var sc=function(r){return r.sc>0&&(!r.scFino||r.scFino>=iso(new Date()))?" · sconto "+r.sc+"%":""};
   var MESE={abbPt:1,abbMass:1,percorsi:1};
   var voce=function(sez,r,i,nome,det){var id=idVoce(sez,r,i);L_USATI[id]=1;var m=!!(MESE[sez]||/mensil/i.test(r.n));return {id:id,nome:nome,det:(m?"Rinnovo automatico · ":"")+det+sc(r),prezzo:e(r),mese:m?1:0,link:r.link||""}};
+  if(typeof L.stripe==="string"&&(!L.stripe||/^https:\/\//.test(L.stripe)))STRIPE=L.stripe||(/^https:\/\//.test(C.stripe||"")?C.stripe:"");
   BON=L.bonifico&&L.bonifico.iban?L.bonifico:(L.bonifico&&L.bonifico.mod?null:{iban:"IT70R0306920310100000062819",intest:"Kone Moctar",banca:"Intesa Sanpaolo"});
   L_USATI={};
   var pt=li.pt||[],single=pt.filter(function(r){return r.sed===1}),pack=[];

@@ -1414,7 +1414,7 @@ function pubTok(){try{return localStorage.getItem("km2_pubtok")||""}catch(e){ret
 function pubCfg(){return Object.assign({},PUB_DEF,(DB&&DB.settings.pub)||{})}
 function prezziSnap(){return {listino:DB.listino,
   trattamenti:DB.trattamenti.map(t=>{const o={};Object.keys(t).forEach(k=>{const v=t[k];if(!(typeof v==="string"&&v.slice(0,5)==="data:"))o[k]=v});return o}),
-  paypal:DB.settings.paypal||"",bonifico:bon(),portale:DB.settings.portale||""}}
+  paypal:DB.settings.paypal||"",bonifico:bon(),portale:DB.settings.portale||"",stripe:stripeUrl()}}
 const prezziSig=()=>JSON.stringify(prezziSnap());
 function prezziCheck(){
   if(!DB||_pSig===null)return;
@@ -1524,6 +1524,13 @@ function seedCarichi(){
 /* agenda: slot da 3 settimane fa a 2 settimane avanti */
 /* passaggio una tantum all'agenda del volantino (10/11/2026): corsi del volantino attivi, vecchi corsi in archivio,
    orari futuri SENZA prenotazioni sostituiti dal nuovo modello. Le prenotazioni esistenti non si toccano mai. */
+/* ore "solo massaggio" rimaste dal vecchio modello: se non hanno prenotazioni diventano ore libere
+   (one to one, coppia, massaggio o trattamento). Le prenotazioni esistenti non si toccano. */
+function migraOreLibere(){
+  if(DB.settings.oreLibere==="tutte")return false;
+  Object.values(DB.agenda).forEach(s=>{if(s.tipo!=="tratt"||isPast(s)||s.pren.some(b=>!b._ph))return;
+    s.tipo="pt";s.cap=Math.max(s.cap||1,ORE_LIBERE_POSTI);s.dur=60});
+  DB.settings.oreLibere="tutte";return true}
 function migraVolantino(){
   if(DB.settings.palinsesto==="volantino-1")return false;
   DB.corsiArch=DB.corsiArch||[];
@@ -1541,7 +1548,7 @@ function migraVolantino(){
   return true;
 }
 function ensureAgenda(seedBookings){
-  const migrata=migraVolantino();
+  const migrata=[migraVolantino(),migraOreLibere()].some(Boolean);
   const names=DB.clienti.filter(c=>c.tipo!=="mass").map(c=>({cid:c.id,nome:c.n})).concat(ALTRI_NOMI.map(n=>({cid:null,nome:n})));
   const massNames=DB.clienti.filter(c=>c.tipo==="mass"||c.tipo==="combo").map(c=>({cid:c.id,nome:c.n}));
   let added=0;const giorniPieni=new Set(Object.values(DB.agenda).map(s=>s.d)),ora=nowHM();
@@ -2000,8 +2007,8 @@ function prenDaSito(){
   try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}
   const p=new URLSearchParams(q),s=DB.agenda[p.get("prenota")];
   if(!s){go("prenota");toast("Quell'orario non è più in agenda: scegline un altro");return true}
-  const tr=s.tipo==="tratt"||p.get("tipo")==="tratt";S.area=tr?"tratt":"allen";S.view=tr?"tpren":"prenota";S.w=null;const w=W();
-  let att=s.tipo==="pt"?"pt":s.tipo==="corso"?attCorso(s):null;
+  const tr=s.tipo!=="corso"&&p.get("tipo")==="tratt";S.area=tr?"tratt":"allen";S.view=tr?"tpren":"prenota";S.w=null;const w=W();
+  let att=s.tipo==="corso"?attCorso(s):"pt";
   if(tr){const n=(p.get("tratt")||"").toLowerCase().trim(),t=n?DB.trattamenti.find(t=>{const x=t.n.toLowerCase();return x.includes(n)||n.includes(x.replace(/^massaggio /,""))}):null;
     att=t?"tratt:"+t.id:null;w.dur=p.get("dur")==="30"?30:50}
   const ok=att&&wAtts().some(a=>a.id===att);
@@ -2148,9 +2155,9 @@ const isPast=s=>s.d<T0||(s.d===T0&&s.h<=nowHM());
 const capMax=t=>({corso:DB.settings.maxCorso,pt:DB.settings.maxPT,tratt:DB.settings.maxTratt}[t]);
 const tipoLabel=t=>({corso:"corso di gruppo",pt:"one to one",tratt:"trattamento"}[t]);
 const nomePT=()=>(DB.settings.nomePT||"").trim()||"One to one con Kone";
-function slotTitle(s,b){if(s.tipo==="pt"&&b&&b.tratt){const t=tratt(b.tratt);if(t)return t.n+(b.dur?" · "+b.dur+"′":"")}if(s.nome)return s.nome;if(s.tipo==="corso")return (corso(s.corso)||{n:"Corso"}).n;if(s.tipo==="pt")return nomePT();
+function slotTitle(s,b){if(s.tipo==="pt"&&b&&b.tratt){const t=tratt(b.tratt);if(t)return t.n+(b.dur?" · "+b.dur+"′":"")}if(s.nome)return s.nome;if(s.tipo==="corso")return (corso(s.corso)||{n:"Corso"}).n;if(s.tipo==="pt"||(b&&!b.tratt))return nomePT();
   const t=b&&b.tratt?tratt(b.tratt):null;return t?t.n+(b.dur?" · "+b.dur+"′":""):"Trattamento"}
-function tipoPill(s){return s.tipo==="corso"?'<span class="pill gold">Corso</span>':s.tipo==="pt"?'<span class="pill info">One to one</span>':'<span class="pill vio">Trattamento</span>'}
+function tipoPill(s,b){return s.tipo==="corso"?'<span class="pill gold">Corso</span>':b?(b.tratt?'<span class="pill vio">Trattamento</span>':'<span class="pill info">One to one</span>'):s.tipo==="pt"?'<span class="pill info">One to one</span>':'<span class="pill vio">Trattamento</span>'}
 function seats(s){let h='<span class="seats" aria-hidden="true">';for(let i=0;i<s.cap;i++)h+='<i class="'+(i<s.pren.length?"on":"")+'"></i>';return h+'</span>'}
 function weekDays(){const mon=addD(TODAY,-((TODAY.getDay()+6)%7));return [0,1,2,3,4,5,6].map(i=>iso(addD(mon,i)))}
 
@@ -2787,10 +2794,10 @@ function annulla(id){const s=DB.agenda[id],b=s.pren.find(x=>x.cid===S.cid),c=me(
   if(b&&c)try{msgAKone(c.id,"❌ Ho annullato: "+slotTitle(s,b)+" · "+fmtD(s.d,{weekday:"long",day:"numeric",month:"long"})+" alle "+s.h+(b.pay&&b.pay.stato==="pagato"?" (era già pagato)":""))}catch(e){}
   save();render();toast("Prenotazione annullata"+(rest?" · la seduta torna nel tuo abbonamento":""))}
 function mieHTML(tipi){
-  const all=mySlots().filter(s=>{const b=s.pren.find(x=>x.cid===S.cid);return tipi.includes(b&&b.tratt?"tratt":s.tipo)}),fut=all.filter(s=>!isPast(s));
+  const all=mySlots().filter(s=>{const b=s.pren.find(x=>x.cid===S.cid);return tipi.includes(b&&b.tratt?"tratt":s.tipo==="tratt"?"pt":s.tipo)}),fut=all.filter(s=>!isPast(s));
   const da=iso(addD(TODAY,-10)),fbs=all.filter(s=>s.tipo==="corso"&&isPast(s)&&s.d>=da);
   let h=avvCard()+'<div class="card" style="margin-bottom:14px">'+cardH("cal","Le tue prenotazioni",'<span class="chip">'+fut.length+'</span>');
-  h+=fut.length?fut.map(s=>{const b=s.pren.find(x=>x.cid===S.cid);return '<div class="row"><span class="num" style="width:104px;flex:none;color:var(--gold-mid);font-size:14px">'+fmtD(s.d)+'<br>'+s.h+'</span><span style="flex:1;min-width:0"><span class="nm">'+esc(slotTitle(s,b))+'</span><span class="mt">'+tipoPill(s)+payPill(b)+'</span></span>'+(b.pay&&b.pay.m==="paypal"&&b.pay.stato!=="pagato"?'<button class="btn sm primary" onclick="pagaModal(\''+s.id+'\')">Paga</button>':'')+
+  h+=fut.length?fut.map(s=>{const b=s.pren.find(x=>x.cid===S.cid);return '<div class="row"><span class="num" style="width:104px;flex:none;color:var(--gold-mid);font-size:14px">'+fmtD(s.d)+'<br>'+s.h+'</span><span style="flex:1;min-width:0"><span class="nm">'+esc(slotTitle(s,b))+'</span><span class="mt">'+tipoPill(s,b)+payPill(b)+'</span></span>'+(b.pay&&(b.pay.m==="paypal"||b.pay.m==="carta")&&b.pay.stato!=="pagato"?'<button class="btn sm primary" onclick="pagaModal(\''+s.id+'\')">Paga</button>':'')+
     (s.tipo==="corso"&&DB.programmi[s.d+"_"+s.corso]?'<button class="btn sm ghost" onclick="vediProgramma(\''+s.d+"_"+s.corso+'\')">Programma</button>':'')+'<button class="btn sm" onclick="annulla(\''+s.id+'\')">Annulla</button></div>'}).join(""):'<p class="muted">Nessuna prenotazione in arrivo.</p>';
   if(fbs.length)h+='<div class="sep"></div><div class="flabel" style="margin-bottom:6px">Corsi a cui hai partecipato</div>'+fbs.reverse().map(s=>{const pid=s.d+"_"+s.corso,f=DB.feedback.find(x=>x.pid===pid&&x.cid===S.cid);
     return '<div class="row"><span class="num" style="width:104px;flex:none;font-size:14px">'+fmtD(s.d)+'</span><span style="flex:1"><span class="nm">'+esc(corso(s.corso).n)+'</span><span class="mt">'+(f?"Feedback inviato · fatica "+f.rpe+"/10":"Com'è andata? Aiuta Kone a calibrare il prossimo")+'</span></span>'+
@@ -3025,11 +3032,11 @@ function corsiAgenda(){const fine=iso(addD(TODAY,13)),m=new Map();
     const k=attCorso(s);if(m.has(k))return;const c=corso(s.corso)||{livello:1,obiettivo:"",durata:s.dur||60};
     m.set(k,{id:k,tipo:"corso",corso:s.corso,nome:s.nome||"",n:slotTitle(s),sub:(LIVELLI[c.livello]||"Corso di gruppo")+(c.obiettivo?" · "+c.obiettivo:""),tag:(s.dur||c.durata)+"′ · max "+s.cap,prezzo:pEff(corsoSingolo()),col:corsoCol(s.corso)})});
   return Array.from(m.values())}
-function W(){if(!S.w||S.w.area!==S.area)S.w={area:S.area,step:1,att:null,dur:50,d:null,slot:null,pay:"paypal"};return S.w}
+function W(){if(!S.w||S.w.area!==S.area)S.w={area:S.area,step:1,att:null,dur:50,d:null,slot:null,pay:null};return S.w}
 function wAtt(){const w=W();return wAtts().find(a=>a.id===w.att)||null}
 function wPrezzo(a,w){a=a||wAtt();w=w||W();if(!a)return 0;if(a.tipo==="tratt"){const t=tratt(a.tr);return pEff(t,w.dur===30?"p30":"p60")}return a.prezzo}
 function wDur(a){a=a||wAtt();if(!a)return 0;if(a.tipo==="tratt")return W().dur;if(a.tipo==="corso")return (corso(a.corso)||{durata:60}).durata;return 60}
-function wSlots(d){const a=wAtt();if(!a)return [];return slotsDay(d,a.tipo==="tratt"?["tratt","pt"]:[a.tipo]).filter(s=>(a.tipo!=="corso"||(s.corso===a.corso&&(s.nome||"")===(a.nome||"")))&&!isPast(s)&&!s.chiuso&&!s.pren.some(b=>b.cid===S.cid))}
+function wSlots(d){const a=wAtt();if(!a)return [];return slotsDay(d,a.tipo==="corso"?["corso"]:["tratt","pt"]).filter(s=>(a.tipo!=="corso"||(s.corso===a.corso&&(s.nome||"")===(a.nome||"")))&&!isPast(s)&&!s.chiuso&&!s.pren.some(b=>b.cid===S.cid))}
 function wFree(d){return wSlots(d).reduce((n,s)=>n+Math.max(0,s.cap-s.pren.length),0)}
 function wGo(n){const w=W();if(n>=2&&!w.att)return toast("Scegli prima cosa vuoi fare");if(n>=3&&!w.d)return toast("Scegli il giorno");if(n>=4&&!w.slot)return toast("Scegli l'orario");w.step=n;render();const m=el("main");if(m&&window.innerWidth<900){const t=document.querySelector(".wiz");if(t)m.scrollTop=Math.max(0,t.offsetTop-70)}}
 function wSet(k,v,next){const w=W();w[k]=v;if(k==="att"){w.d=null;w.slot=null}if(k==="d")w.slot=null;if(k==="dur")w.slot=null;if(next)wGo(next);else render()}
@@ -3059,11 +3066,12 @@ function wizard(){
     if(!s){w.step=3;return wizard()}
     const conPiano=pianoAttivo(c)&&copre(c,a.tipo)?[["piano","Con il mio abbonamento",esc(c.piano)+" · "+rimTxt(c)+" · non paghi nulla"]]:[];
     const bonOpt=[["bonifico","Bonifico istantaneo",bon().iban?"Solo istantaneo · sul conto di Kone · "+eur(imp):"Intestato a "+(bon().intest||"Kone Moctar")+" · l'IBAN te lo manda Kone in chat"]];
-    const opts=w.viaPiano&&conPiano.length?conPiano:(imp>0?[["paypal","Paga ora con PayPal","Inquadra il QR o apri PayPal · "+eur(imp)]].concat(bonOpt):[]).concat(conPiano).concat([["studio","Pago in studio","Contanti o carta il giorno della seduta"]]);
+    const cartaOpt=stripeUrl()?[["carta","Carta, Apple Pay, Google Pay o Klarna","Pagamento sicuro · con Klarna anche in 3 rate · "+eur(imp)]]:[];
+    const opts=w.viaPiano&&conPiano.length?conPiano:(imp>0?cartaOpt.concat([["paypal","Paga ora con PayPal","Inquadra il QR o apri PayPal · "+eur(imp)]]).concat(bonOpt):[]).concat(conPiano).concat([["studio","Pago in studio","Contanti o carta il giorno della seduta"]]);
     if(!opts.some(o=>o[0]===w.pay))w.pay=opts[0][0];
     body=(w.viaPiano&&w.pay==="piano"?'<h2 class="wiz-t">Conferma</h2><p class="muted">Controlla il riepilogo: la seduta viene scalata dal tuo abbonamento.</p>':'<h2 class="wiz-t">Conferma e paga</h2><p class="muted">Controlla il riepilogo e scegli come pagare.</p>')+
-     '<div class="pays">'+opts.map(o=>'<button class="pay'+(w.pay===o[0]?" on":"")+'" onclick="wSet(\'pay\',\''+o[0]+'\')"><i></i><span><b>'+o[1]+'</b><small>'+o[2]+'</small></span>'+(o[0]==="paypal"?'<span class="pp-logo">PayPal</span>':'')+'</button>').join("")+'</div>'+
-     (w.pay==="paypal"?paypalBox(imp,a.n+" "+fmtD(s.d)+" "+s.h):w.pay==="bonifico"?bonificoBox(imp,a.n+" "+fmtD(s.d)+" "+s.h):'')+pivaPay()+(a.tipo==="corso"||(w.pay==="piano"&&c.rinnovo)?'<div style="margin-top:14px">'+avvisoSedute()+'</div>':'');
+     '<div class="pays">'+opts.map(o=>'<button class="pay'+(w.pay===o[0]?" on":"")+'" onclick="wSet(\'pay\',\''+o[0]+'\')"><i></i><span><b>'+o[1]+'</b><small>'+o[2]+'</small></span>'+(o[0]==="paypal"?'<span class="pp-logo">PayPal</span>':o[0]==="carta"?'<span class="pp-logo">Pay · Klarna</span>':'')+'</button>').join("")+'</div>'+
+     (w.pay==="carta"?stripeBox(imp,a.n+" "+fmtD(s.d)+" "+s.h):w.pay==="paypal"?paypalBox(imp,a.n+" "+fmtD(s.d)+" "+s.h):w.pay==="bonifico"?bonificoBox(imp,a.n+" "+fmtD(s.d)+" "+s.h):'')+pivaPay()+(a.tipo==="corso"||(w.pay==="piano"&&c.rinnovo)?'<div style="margin-top:14px">'+avvisoSedute()+'</div>':'');
   }
   const can=w.step===1?!!w.att:w.step===2?!!w.d:w.step===3?!!w.slot:true;
   return '<div class="wiz"><div class="wiz-main card"><ol class="stepper">'+steps.map((t,i)=>{const n=i+1,done=n<w.step;return '<li class="'+(n===w.step?"on":done?"done":"")+'">'+(done?'<button onclick="wGo('+n+')">':'<span>')+'<i>'+(done?ic("check",12):n)+'</i>'+t+(done?'</button>':'</span>')+'</li>'}).join("")+'</ol>'+
@@ -3077,11 +3085,38 @@ function wRiep(){const w=W(),a=wAtt(),s=w.slot?DB.agenda[w.slot]:null;
    (a&&a.img?'<img class="rimg" src="'+a.img+'" alt="">':'')+
    r("Attività",a?esc(a.n):"")+r("Durata",a?wDur(a)+" minuti":"")+r("Giorno",w.d?capFirst(fmtD(w.d,{weekday:"long",day:"numeric",month:"long"})):"")+r("Orario",s?s.h:"")+
    '<div class="sep"></div>'+r("Totale",a?(w.pay==="piano"&&w.step>=4||w.viaPiano?'<span class="tot">Incluso</span>':'<span class="tot">'+eur(wPrezzo())+'</span>'):"")+
-   '<p class="hint" style="margin-top:10px">'+ic("check",11)+' Annulli gratis fino all\'inizio · '+ic("check",11)+' Paghi con PayPal, bonifico, dal tuo piano o in studio</p></aside>'}
+   '<p class="hint" style="margin-top:10px">'+ic("check",11)+' Annulli gratis fino all\'inizio · '+ic("check",11)+' Paghi con carta, Apple Pay, Google Pay, Klarna, PayPal, bonifico, dal tuo piano o in studio</p></aside>'}
 function pivaTxt(){const k=window.KM_STUDIO||{};return k.piva?(k.ragione||"Kone Moctar Studio")+" · P.IVA "+k.piva:""}
 function pivaPay(){const t=pivaTxt();return t?'<p class="piva-pay">'+ic("shield",12)+' Pagamento a '+esc(t)+'</p>':''}
 function pivaFill(){const t=pivaTxt();document.querySelectorAll("[data-piva]").forEach(x=>{x.textContent=t;x.hidden=!t})}
 window.addEventListener("load",()=>{pivaFill();if(S.role&&S.view)try{render()}catch(e){}});
+function stripeUrl(){const u=String(DB.settings.stripe||"").trim();return /^https:\/\//i.test(u)?u:""}
+function stripeLink(){const u=stripeUrl(),c=S.role==="client"?me():null;if(!u||!c||!c.email)return u;return u+(u.includes("?")?"&":"?")+"prefilled_email="+encodeURIComponent(c.email)}
+function stripeBox(imp,causale){if(!stripeUrl())return "";return '<div class="ppbox stbox"><div style="flex:1;min-width:0"><div class="flabel">Carta · Apple Pay · Google Pay · Klarna</div><div class="ppamt">'+eur(imp)+'</div>'+
+  '<ol class="pplist"><li>Tocca il pulsante: si apre la pagina di pagamento sicura (Stripe)</li><li>Scrivi l\'importo <b>'+eur(imp)+'</b></li><li>Paga con carta, Apple Pay, Google Pay o Klarna (anche in 3 rate senza interessi)</li></ol>'+
+  (causale?'<p class="hint" style="margin-bottom:10px">Causale: <b>'+esc(causale)+'</b></p>':'')+
+  '<a class="btn primary" href="'+esc(stripeLink())+'" target="_blank" rel="noopener">Paga '+eur(imp)+' '+ic("chevR",14)+'</a>'+
+  '<p class="hint">Kone conferma il pagamento appena lo riceve: lo vedi nelle tue prenotazioni.</p></div></div>'}
+function salvaStripe(v){v=String(v||"").trim().replace(/\s+/g,"");
+  if(v&&!/^https:\/\//i.test(v))return toast("Il link deve iniziare con https://");
+  if(v&&/dashboard\.stripe\.com/i.test(v))return toast("Questo è il link della tua pagina Stripe, non quello per i clienti: copia il link che inizia con https://buy.stripe.com/");
+  if(v&&/\/test_/i.test(v)&&!confirm("Questo è un link di PROVA (test): i clienti non pagherebbero davvero. Salvarlo lo stesso?"))return;
+  DB.settings.stripe=v;save();render();toast(v?"Stripe collegato · i clienti pagano anche con carta, Apple Pay, Google Pay e Klarna":"Stripe scollegato")}
+function stripeCard(){const u=stripeUrl(),ok=!!u,dom=u&&!/^https:\/\/buy\.stripe\.com\//i.test(u);
+  const st=(n,t,lk,lab)=>'<li style="margin-bottom:8px"><b>'+n+'</b> '+t+(lk?' <a href="'+lk+'" target="_blank" rel="noopener" style="white-space:nowrap">'+lab+' ↗</a>':'')+'</li>';
+  return '<div class="ppbox" style="display:block"><div class="flabel" style="margin-bottom:6px">Carta, Apple Pay, Google Pay e Klarna · Stripe</div>'+
+   (ok?'<div class="alert info" style="margin-bottom:12px"><div><b>'+ic("check",14)+' Collegato</b><p>I clienti vedono “Carta, Apple Pay, Google Pay o Klarna” come primo modo di pagamento, nell\'app e sul sito.'+(dom?' Il link non inizia con buy.stripe.com: controlla che sia quello giusto con “Prova il link”.':'')+'</p></div></div>'
+     :'<p class="muted" style="margin-bottom:10px;font-size:14px">Non ancora collegato. Ci vogliono circa 15 minuti, una volta sola:</p>'+
+      '<ol style="margin:0 0 12px;padding:0;list-style:none;font-size:14px;line-height:1.5">'+
+       st("1.","Crea l\'account Stripe e completa la verifica (documento, P.IVA, IBAN su cui ricevere i soldi).","https://dashboard.stripe.com/register","Apri Stripe")+
+       st("2.","In Impostazioni → Metodi di pagamento attiva Apple Pay, Google Pay e Klarna.","https://dashboard.stripe.com/settings/payment_methods","Metodi di pagamento")+
+       st("3.","Crea un link di pagamento scegliendo “I clienti scelgono quanto pagare”, valuta EUR.","https://dashboard.stripe.com/payment-links/create/customer-chooses-pricing","Crea il link")+
+       st("4.","Copia il link (inizia con https://buy.stripe.com/) e incollalo qui sotto, poi tocca Collega.","","")+
+      '</ol>')+
+   '<div class="field"><label>Link di pagamento Stripe</label><input class="fi" id="stU" value="'+esc(DB.settings.stripe||"")+'" placeholder="https://buy.stripe.com/…" autocapitalize="off" spellcheck="false"></div>'+
+   '<div class="inline" style="justify-content:flex-end;flex-wrap:wrap;gap:8px">'+
+    (ok?'<button class="btn ghost" style="margin-right:auto" onclick="if(confirm(\'Scollegare Stripe? I clienti non vedranno più carta, Apple Pay, Google Pay e Klarna.\'))salvaStripe(\'\')">Scollega</button><a class="btn ghost" href="'+esc(u)+'" target="_blank" rel="noopener">Prova il link ↗</a>':'')+
+    '<button class="btn primary" onclick="salvaStripe(el(\'stU\').value)">'+(ok?'Aggiorna':'Collega')+'</button></div></div>'}
 function paypalBox(imp,causale){return '<div class="ppbox"><img src="/assets/img/paypal-qr.webp" width="200" height="200" alt="QR code PayPal di Kone Moctar Studio">'+
   '<div><div class="flabel">Importo da inviare</div><div class="ppamt">'+eur(imp)+'</div>'+
   '<ol class="pplist"><li>Inquadra il QR con la fotocamera <span class="dim">oppure</span> tocca il pulsante qui sotto</li><li>Invia <b>'+eur(imp)+'</b> come pagamento a Kone Moctar</li><li>Nel messaggio scrivi: <b>'+esc(causale)+'</b></li></ol>'+
@@ -3536,30 +3571,32 @@ function pagamentiCard(){const coach=S.role==="coach",b=bon();
      '<div class="field" style="flex:2"><label>IBAN</label><input class="fi num" id="bnI" value="'+esc(ibanFmt(b.iban))+'" placeholder="IT00 X000 0000 0000 0000 0000 000" autocapitalize="characters" spellcheck="false"></div></div>'+
      '<div class="field"><label>Banca (facoltativo)</label><input class="fi" id="bnB" value="'+esc(b.banca||"")+'"></div>'+
      '<div class="inline" style="justify-content:flex-end"><button class="btn primary" onclick="salvaBonifico()">Salva IBAN</button></div></div>'+
+    stripeCard()+
     '<div class="ppbox" style="display:block"><div class="flabel" style="margin-bottom:6px">Abbonamenti mensili · addebito automatico</div>'+
      '<p class="muted" style="margin-bottom:10px;font-size:14px">Per far rinnovare da solo un abbonamento mensile serve un link di pagamento ricorrente (Stripe: addebito SEPA sull\'IBAN del cliente o carta). Lo incolli su ogni voce mensile con il tasto “addebito auto”. Qui sotto il link che il cliente usa per disdire l\'addebito (portale clienti di Stripe).</p>'+
      '<div class="field"><label>Link per gestire o disdire l\'addebito</label><input class="fi" value="'+esc(DB.settings.portale||"")+'" placeholder="https://billing.stripe.com/p/login/…" onchange="salvaPortale(this.value)"></div></div>':'')+
    '</div>'}
 
 /* ---------- pagamenti da confermare: PayPal + bonifico ---------- */
-const PAY_LAB={paypal:"PayPal",bonifico:"Bonifico",studio:"Contanti",piano:"Abbonamento"};
+const PAY_LAB={paypal:"PayPal",bonifico:"Bonifico",carta:"Carta/Klarna",studio:"Contanti",piano:"Abbonamento"},PAY_ONLINE=["paypal","bonifico","carta"];
 function payPill(b,sid,i){if(!b.pay)return "";
-  if(b.pay.stato==="pagato")return '<em class="pp ok">'+ic("check",11)+' pagato '+esc(b.pay.m==="paypal"||b.pay.m==="bonifico"?PAY_LAB[b.pay.m]:"")+'</em>';
-  if(b.pay.m==="paypal"||b.pay.m==="bonifico")return S.role==="coach"?'<button class="pp warn" onclick="segnaPagato(\''+sid+'\','+i+')" title="Segna come pagato">'+PAY_LAB[b.pay.m]+' '+eur(b.pay.imp)+' · conferma</button>':'<em class="pp warn">'+PAY_LAB[b.pay.m]+' da verificare</em>';
+  if(b.pay.stato==="pagato")return '<em class="pp ok">'+ic("check",11)+' pagato '+esc(PAY_ONLINE.includes(b.pay.m)?PAY_LAB[b.pay.m]:"")+'</em>';
+  if(PAY_ONLINE.includes(b.pay.m))return S.role==="coach"?'<button class="pp warn" onclick="segnaPagato(\''+sid+'\','+i+')" title="Segna come pagato">'+PAY_LAB[b.pay.m]+' '+eur(b.pay.imp)+' · conferma</button>':'<em class="pp warn">'+PAY_LAB[b.pay.m]+' da verificare</em>';
   if(b.pay.m==="piano")return '<em class="pp">dal piano</em>';
   return '<em class="pp">'+(S.role==="coach"?'<button onclick="segnaPagato(\''+sid+'\','+i+')" style="color:inherit">in studio '+eur(b.pay.imp)+' · incassa</button>':"paga in studio")+'</em>';
 }
 function segnaPagato(sid,i){const s=DB.agenda[sid],b=s&&s.pren[i];if(!b||!b.pay)return;b.pay.stato="pagato";
-  DB.movimenti.unshift({id:uid(),d:T0,tipo:"entrata",desc:slotTitle(s,b)+" · "+fmtD(s.d)+" "+s.h,cli:b.nome,area:s.tipo==="tratt"?"Trattamenti":"Allenamenti",imp:b.pay.imp,met:b.pay.m==="paypal"?"PayPal":b.pay.m==="bonifico"?"Bonifico":"Contanti",pag:true});
+  DB.movimenti.unshift({id:uid(),d:T0,tipo:"entrata",desc:slotTitle(s,b)+" · "+fmtD(s.d)+" "+s.h,cli:b.nome,area:s.tipo==="tratt"?"Trattamenti":"Allenamenti",imp:b.pay.imp,met:b.pay.m==="paypal"?"PayPal":b.pay.m==="bonifico"?"Bonifico":b.pay.m==="carta"?"Carta / Apple Pay / Klarna":"Contanti",pag:true});
   save();render();toast("Pagamento registrato in Contabilità")}
-function paypalDaConfermare(){const out=[];Object.values(DB.agenda).forEach(s=>s.pren.forEach((b,i)=>{if(b.pay&&(b.pay.m==="paypal"||b.pay.m==="bonifico")&&b.pay.stato!=="pagato")out.push({s,b,i})}));return out.sort((a,b)=>(a.s.d+a.s.h)<(b.s.d+b.s.h)?-1:1)}
+function paypalDaConfermare(){const out=[];Object.values(DB.agenda).forEach(s=>s.pren.forEach((b,i)=>{if(b.pay&&PAY_ONLINE.includes(b.pay.m)&&b.pay.stato!=="pagato")out.push({s,b,i})}));return out.sort((a,b)=>(a.s.d+a.s.h)<(b.s.d+b.s.h)?-1:1)}
 function pagaModal(sid){const s=DB.agenda[sid],b=s&&s.pren.find(x=>x.cid===S.cid);if(!b)return;const caus=slotTitle(s,b)+" "+fmtD(s.d)+" "+s.h;
-  openModal('<h3>'+(b.pay&&b.pay.m==="bonifico"?"Paga con bonifico":"Paga con PayPal")+'</h3><p class="muted" style="margin-bottom:12px">'+esc(slotTitle(s,b))+' · '+fmtD(s.d)+' '+s.h+'</p>'+(b.pay&&b.pay.m==="bonifico"?bonificoBox(b.pay.imp,caus):paypalBox(b.pay.imp,caus)))}
+  const m=b.pay&&b.pay.m;
+  openModal('<h3>'+(m==="bonifico"?"Paga con bonifico":m==="carta"?"Paga con carta, Apple Pay o Klarna":"Paga con PayPal")+'</h3><p class="muted" style="margin-bottom:12px">'+esc(slotTitle(s,b))+' · '+fmtD(s.d)+' '+s.h+'</p>'+(m==="bonifico"?bonificoBox(b.pay.imp,caus):m==="carta"&&stripeUrl()?stripeBox(b.pay.imp,caus):paypalBox(b.pay.imp,caus)))}
 function wFatto(){const w=W(),s=DB.agenda[w.slot],b=s&&s.pren.find(x=>x.cid===S.cid);if(!s||!b){S.w=null;return wizard()}
   const caus=(wAtt()||{n:""}).n+" "+fmtD(s.d)+" "+s.h;
   return '<div class="card wdone"><span class="ok-ic">'+ic("check",30)+'</span><h2 class="wiz-t">Prenotato!</h2>'+
    '<p class="muted">'+esc(slotTitle(s,b))+' · '+capFirst(fmtD(s.d,{weekday:"long",day:"numeric",month:"long"}))+' alle '+s.h+'</p>'+
-   (b.pay.m==="paypal"?paypalBox(b.pay.imp,caus):b.pay.m==="bonifico"?bonificoBox(b.pay.imp,caus):'<p style="margin-top:10px">'+(b.pay.m==="piano"?"Scalato dal tuo abbonamento: non devi pagare nulla. "+capFirst(rimTxt(me()))+".":"Paghi "+eur(b.pay.imp)+" in studio il giorno della seduta.")+'</p>')+
+   (b.pay.m==="carta"?stripeBox(b.pay.imp,caus):b.pay.m==="paypal"?paypalBox(b.pay.imp,caus):b.pay.m==="bonifico"?bonificoBox(b.pay.imp,caus):'<p style="margin-top:10px">'+(b.pay.m==="piano"?"Scalato dal tuo abbonamento: non devi pagare nulla. "+capFirst(rimTxt(me()))+".":"Paghi "+eur(b.pay.imp)+" in studio il giorno della seduta.")+'</p>')+
    (s.tipo==="corso"||(b.pay.m==="piano"&&me().rinnovo)?'<div style="max-width:560px;margin:16px auto 0;text-align:left">'+avvisoSedute()+'</div>':'')+
    '<div class="inline" style="justify-content:center;margin-top:18px"><button class="btn primary" onclick="const v=S.w&&S.w.viaPiano;S.w=null;if(v&&pianoAttivo(me()))usaAbbonamento();else render()">Prenota un\'altra</button></div></div>'}
 const corsoSingolo=()=>(DB.listino.corsi||[]).find(r=>r.sed===1&&!/mensil/i.test(r.n))||null;
@@ -3586,8 +3623,8 @@ function disdiciModal(){const c=me(),fino=c.scadIso?fmtD(c.scadIso,{day:"numeric
   openModal('<h3>Disdire l\'abbonamento?</h3><p class="muted" style="margin-bottom:12px"><b>'+esc(c.piano)+'</b> resta attivo fino al <b>'+fino+'</b>: fino ad allora prenoti come sempre. Dopo non si rinnova più e non ti viene addebitato nulla.</p>'+
    (DB.settings.portale?'<p class="hint" style="margin-bottom:12px">Ti apriamo anche la pagina sicura dei pagamenti per fermare l\'addebito sul conto.</p>':'<p class="hint" style="margin-bottom:12px">Kone riceve subito la tua disdetta in chat e ferma l\'addebito.</p>')+
    '<div class="inline" style="justify-content:flex-end"><button class="btn ghost" onclick="closeModal()">Tengo l\'abbonamento</button><button class="btn primary" onclick="disdiciAbb()">Disdici</button></div>')}
-function payTesto(p){if(!p)return "";const L={paypal:"PayPal",bonifico:"bonifico",studio:"paga in studio",piano:"dal suo abbonamento"};
-  return (p.m==="piano"?"":"pagamento ")+(L[p.m]||p.m)+(p.imp?" "+eur(p.imp):"")+(p.m==="paypal"||p.m==="bonifico"?" (da verificare)":"")}
+function payTesto(p){if(!p)return "";const L={paypal:"PayPal",bonifico:"bonifico",carta:"carta / Apple Pay / Google Pay / Klarna",studio:"paga in studio",piano:"dal suo abbonamento"};
+  return (p.m==="piano"?"":"pagamento ")+(L[p.m]||p.m)+(p.imp?" "+eur(p.imp):"")+(PAY_ONLINE.includes(p.m)?" (da verificare)":"")}
 /* ---------- avvisi a Kone: nuove prenotazioni dall'app ---------- */
 function nuovePren(){const out=[];Object.values(DB.agenda).forEach(s=>s.pren.forEach(b=>{if(b.da==="app"&&!b._ph)out.push({s,b})}));
   return out.sort((a,b)=>(a.b.quando||"")<(b.b.quando||"")?1:-1)}

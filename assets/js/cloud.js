@@ -177,6 +177,7 @@
       if (L.paypal) D.settings.paypal = L.paypal;
       if (L.bonifico && typeof L.bonifico === "object") D.settings.bonifico = L.bonifico;
       if (typeof L.portale === "string") D.settings.portale = L.portale;
+      if (typeof L.stripe === "string") D.settings.stripe = L.stripe;
       D.settings.prezziAgg = L.agg;
     }
     valori("clienti").sort(function (a, b) { return a.id - b.id; }).forEach(function (r) {

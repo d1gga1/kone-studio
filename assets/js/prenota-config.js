@@ -62,6 +62,13 @@ window.KM_PRENOTA = {
      Per cambiare corsi, orari o posti si modifica l'agenda nell'app.          */
   prezzoCorso: 29,     // ingresso singolo a un corso (se il titolare lo cambia nel Listino vale quello)
 
+  /* Pagamento con carta, Apple Pay, Google Pay e Klarna (Stripe).
+     Su Stripe: Payment Links → Nuovo → "I clienti scelgono quanto pagare" (valuta EUR),
+     poi Impostazioni → Metodi di pagamento → attiva Apple Pay, Google Pay e Klarna.
+     Il link (https://buy.stripe.com/…) si incolla nell'app: Area titolare → IBAN e pagamenti.
+     Quello scritto qui sotto vale solo finché nell'app non ce n'è uno.                      */
+  stripe: "",
+
   /* Fallback finché Cal.com non è collegato: pagamento PayPal */
   paypal: "https://www.paypal.com/qrcodes/p2pqrc/BAHYS4B2HYL2G",
   whatsapp: "393922696468"
