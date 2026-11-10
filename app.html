@@ -1910,6 +1910,8 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
 /* =================== ACCESSI E ROUTING =================== */
 const isCoachRoute=()=>/\/coach\/?$/.test(location.pathname)||location.hash==="#coach"||new URLSearchParams(location.search).has("coach");
 const __standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+/* arrivo dal sito (/prenota/) con un orario già scelto: #prenota=<id slot>[&tratt=…&dur=30] — lo tengo fino a dopo l'accesso */
+try{const h=location.hash.match(/prenota=[^#]*/);if(h)sessionStorage.setItem("km_pren",h[0])}catch(e){}
 let introTimer=setTimeout(afterIntro,(__standalone||LS.get("sess",null))?1500:3800);
 function afterIntro(){
   if(window.KM_CLOUD&&!window.KMC_READY){window.KMC_WAIT=1;return}
@@ -1964,7 +1966,23 @@ function enterApp(role,cid){
   hideAll();S.role=role;S.preview=false;S.sets={};S.vals={};S.contiOk=false;
   if(role==="client"){S.cid=cid||1;S.area="allen";S.view="oggi"}else{S.area="allen";S.view="dash"}
   el("app").classList.add("show");chrome();buildNav();render();
+  if(role==="client"&&prenDaSito())return;
   if(role==="client"&&!LS.get("tour_"+S.cid,0))setTimeout(()=>{if(S.role==="client"&&!S.preview)tourStart()},700);
+}
+/* apre il wizard di prenotazione sull'orario scelto nel sito: stesso slot dell'agenda di Kone */
+function prenDaSito(){
+  let q=null;try{q=sessionStorage.getItem("km_pren");sessionStorage.removeItem("km_pren")}catch(e){}
+  if(!q||S.role!=="client"||S.preview)return false;
+  try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}
+  const p=new URLSearchParams(q),s=DB.agenda[p.get("prenota")];
+  if(!s){go("prenota");toast("Quell'orario non è più in agenda: scegline un altro");return true}
+  const tr=s.tipo==="tratt";S.area=tr?"tratt":"allen";S.view=tr?"tpren":"prenota";S.w=null;const w=W();
+  let att=s.tipo==="pt"?"pt":s.tipo==="corso"?"corso:"+s.corso:null;
+  if(tr){const n=(p.get("tratt")||"").toLowerCase().trim(),t=n?DB.trattamenti.find(t=>{const x=t.n.toLowerCase();return x.includes(n)||n.includes(x.replace(/^massaggio /,""))}):null;
+    att=t?"tratt:"+t.id:null;w.dur=p.get("dur")==="30"?30:50}
+  const ok=att&&wAtts().some(a=>a.id===att);
+  if(ok){w.att=att;if(wSlots(s.d).some(x=>x.id===s.id)){w.d=s.d;w.slot=s.id;w.step=4}else{w.step=2;setTimeout(()=>toast("Quell'orario è appena stato preso o non è prenotabile: scegline un altro"),300)}}
+  buildNav();render();el("main").scrollTop=0;return true;
 }
 function chrome(){
   const coach=S.role==="coach";

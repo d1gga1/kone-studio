@@ -1,9 +1,11 @@
 (function(){
 "use strict";
 var C=window.KM_PRENOTA||{};
-var SL=C.slug||{}, PL=C.planning||[], GG=C.giorni||[1,2,3,4,5,6];
-var H0=(C.orari||{}).inizio||7, H1=(C.orari||{}).fine||21;
-var POSTI_ORA=C.postiOra||2, POSTI_CORSO=C.postiCorso||10, P_CORSO=C.prezzoCorso||29, BON=null;
+var SL=C.slug||{}, GG=[1,2,3,4,5,6];
+var P_CORSO=C.prezzoCorso||29, BON=null;
+/* stesso database dell'app di Kone (vedi cloud-config.js): la chiave "publishable" è pubblica */
+var CLOUD=window.KM_CLOUD||{url:"https://fvukqtgaqcpevtystgeo.supabase.co",key:"sb_publishable_Zr5phbGD1dEw_Lu6CgmAUw_iIPah2KP"};
+var CORSO_COL={func:"#D9A93C",hiit:"#E0645C",tono:"#4FA86A",mob:"#3FA7A0",boot:"#E0973A"};   /* uguali all'app */
 var AVVISO='<div class="avviso" role="note"><span class="av-i" aria-hidden="true">!</span><p><b>Attenzione:</b> le sedute degli <b>abbonamenti mensili</b> e dei <b>corsi di gruppo</b> non sono recuperabili: se salti una lezione, la perdi. Le sedute dei <b>pacchetti</b> invece si possono recuperare.</p></div>';
 var WA=C.whatsapp||"393922696468";
 var ATTIVO=!!(C.calUser&&C.calUser.trim());
@@ -46,75 +48,150 @@ function lunedi(off){var d=new Date();d.setHours(0,0,0,0);var g=(d.getDay()+6)%7
 function dayOf(mon,g){var d=new Date(mon);d.setDate(d.getDate()+g-1);return d}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 
-var wk=0, MAXWK=5, dayM=null, live={}; /* live[slug][iso+"T"+ora] = posti rimasti */
+var wk=0, MAXWK=0, dayM=null;
+var AG={};          /* AG[lunedì iso] = slot di quella settimana, presi dal database */
+var CORSI={};       /* id corso → {n, col, durata} (documento "corsi" dell'app) */
+var ERR=false, agg=null;
 
-/* ---------- disponibilità reale da Cal.com (se collegato) ---------- */
+/* =====================================================================
+   ORARI = AGENDA DEL TITOLARE
+   La griglia non ha più un planning scritto a mano: legge gli stessi slot
+   che Kone vede e modifica nella sua agenda (tabella kmstudio.slot) e i posti
+   occupati dalla funzione kmstudio.disponibilita. Quando Kone sposta, aggiunge,
+   chiude un orario o arriva una prenotazione, la pagina si aggiorna da sola
+   (tempo reale sulla tabella kmstudio.stato + controllo ogni 20 secondi).
+   ===================================================================== */
+function rest(path,body){
+  var h={apikey:CLOUD.key,"Accept-Profile":"kmstudio"};
+  if(body){h["Content-Profile"]="kmstudio";h["Content-Type"]="application/json"}
+  return fetch(CLOUD.url+"/rest/v1/"+path,{method:body?"POST":"GET",headers:h,body:body?JSON.stringify(body):undefined,cache:"no-store"})
+    .then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json()});
+}
+function caricaCorsi(){
+  return rest("documenti?chiave=eq.corsi&select=dati").then(function(a){
+    var l=(a&&a[0]&&a[0].dati)||[];CORSI={};
+    (Array.isArray(l)?l:[]).forEach(function(c){if(c&&c.id)CORSI[c.id]={n:c.n||"Corso",col:c.col||CORSO_COL[c.id]||"#D9A93C",durata:c.durata||60}});
+  }).catch(function(){});
+}
+function caricaFine(){   /* ultima settimana con orari pubblicati */
+  return rest("slot?select=giorno&order=giorno.desc&limit=1").then(function(a){
+    MAXWK=0;if(!a||!a[0])return;var last=new Date(String(a[0].giorno).slice(0,10)+"T12:00:00"),m=lunedi(0);
+    MAXWK=Math.max(0,Math.min(8,Math.floor((last-m)/(7*864e5))));
+  }).catch(function(){});
+}
 function carica(mon){
-  if(!ATTIVO) return Promise.resolve(false);
-  var start=iso(mon), endD=new Date(mon); endD.setDate(endD.getDate()+6); var end=iso(endD);
-  var slugs={}; slugs[SL["pt-singola"]||"pt-singola"]=1; PL.forEach(function(c){slugs[c.slug]=1});
-  var jobs=Object.keys(slugs).map(function(s){
-    var u="https://api.cal.com/v2/slots?username="+encodeURIComponent(C.calUser.trim())+"&eventTypeSlug="+encodeURIComponent(s)+"&start="+start+"&end="+end+"&timeZone=Europe/Rome";
-    return fetch(u,{headers:{"cal-api-version":"2024-09-04"}}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){
-      var m={},d=(j&&j.data)||{};
-      Object.keys(d).forEach(function(day){(d[day]||[]).forEach(function(x){
-        var t=new Date(x.start||x.time); var k=iso(t)+"T"+t.getHours();
-        m[k]=(typeof x.seatsRemaining==="number")?x.seatsRemaining:-1;
-      })});
-      live[s+"|"+start]=m;
-    });
-  });
-  return Promise.all(jobs).then(function(){return true},function(){return false});
+  var a=iso(mon),e=new Date(mon);e.setDate(e.getDate()+6);var b=iso(e);
+  return Promise.all([
+    rest("slot?giorno=gte."+a+"&giorno=lte."+b+"&select=id,giorno,ora,tipo,corso,cap,durata,chiuso,dati&order=ora"),
+    rest("rpc/disponibilita",{da:a,a:b})
+  ]).then(function(r){
+    var occ={};(r[1]||[]).forEach(function(x){occ[x.slot_id]=x.occupati|0});
+    AG[a]=(r[0]||[]).map(function(x){var d=x.dati||{};return {id:x.id,d:String(x.giorno).slice(0,10),h:String(x.ora).slice(0,5),tipo:x.tipo,corso:x.corso,
+      cap:x.cap|0,dur:x.durata||60,chiuso:!!x.chiuso,nome:d.nome||"",occ:occ[x.id]||0}});
+    ERR=false;agg=new Date();
+  }).catch(function(e){ERR=true;console.warn("[prenota] orari non caricati",e)});
 }
-function stato(slug,mon,d,h,max){
-  var m=live[slug+"|"+iso(mon)]; if(!m) return max;           /* nessun dato: mostra la capienza teorica */
-  var k=iso(d)+"T"+h; if(!(k in m)) return 0;                  /* lo slot non esiste = occupato o chiuso */
-  return m[k]<0?max:Math.min(max,m[k]);
-}
+function minuti(h){var p=String(h).split(":");return (+p[0])*60+(+p[1]||0)}
+function hm(m){return p2(Math.floor(m/60)%24)+":"+p2(m%60)}
+function passato(s){var n=new Date(),t=iso(n);return s.d<t||(s.d===t&&s.h<=p2(n.getHours())+":"+p2(n.getMinutes()))}   /* come l'app */
+function liberi(s){return Math.max(0,s.cap-s.occ)}
+function nomeSlot(s){if(s.nome)return s.nome;if(s.tipo==="corso")return (CORSI[s.corso]||{}).n||"Corso di gruppo";return s.tipo==="pt"?"One to one con Kone":"Massaggio / trattamento"}
+function colSlot(s){return s.tipo==="corso"?((CORSI[s.corso]||{}).col||CORSO_COL[s.corso]||"#D9A93C"):null}
+function trova(id){var r=null;Object.keys(AG).forEach(function(k){(AG[k]||[]).forEach(function(s){if(s.id===id)r=s})});return r}
 
 /* ---------- griglia ---------- */
-function corsoAt(g,h){for(var i=0;i<PL.length;i++)if(PL[i].giorno===g&&PL[i].ora===h)return PL[i];return null}
-function chiaro(hex){var n=parseInt(hex.slice(1),16),r=n>>16,g=n>>8&255,b=n&255;return(r*299+g*587+b*114)/1000>165}
+function chiaro(hex){if(!/^#[0-9a-f]{6}$/i.test(hex))return false;var n=parseInt(hex.slice(1),16),r=n>>16,g=n>>8&255,b=n&255;return(r*299+g*587+b*114)/1000>165}
+function cella(s){
+  var fin=passato(s), f=liberi(s), nome=nomeSlot(s), data='data-id="'+esc(s.id)+'"';
+  var aria=esc(nome)+', '+GN[new Date(s.d+"T12:00:00").getDay()]+' ore '+s.h;
+  if(s.tipo==="corso"){
+    var c=colSlot(s), lab=fin?"Terminato":s.chiuso?"Chiuso":f<=0?"Completo":f+(f===1?" posto":" posti"), no=fin||s.chiuso||f<=0;
+    return '<button class="cell c-corso'+(chiaro(c)?' dark':'')+(no?' done':'')+'" style="background:'+c+'" '+data+(no?' disabled':'')+' aria-label="'+aria+', '+lab+'"><b>'+esc(nome)+'</b><span>'+s.h+' · '+lab+'</span></button>';
+  }
+  var corto=s.tipo==="pt"?"One to one":"Massaggio";
+  if(fin) return '<button class="cell c-past" disabled tabindex="-1" aria-hidden="true"><b>'+corto+'</b><span>'+s.h+'</span></button>';
+  var k=s.chiuso||f<=0?"c-full":f<s.cap&&s.cap>1?"c-one":"c-free";
+  var t=s.chiuso?"Chiuso":f<=0?"Occupato":s.cap>1&&f<s.cap?(f===1?"1 posto":f+" posti"):"Libero";
+  return '<button class="cell '+k+(s.tipo==="tratt"?' c-tratt':'')+'" '+data+(k==="c-full"?' disabled':'')+' aria-label="'+aria+', '+t+'"><b>'+corto+' · '+t+'</b><span>'+s.h+'–'+hm(minuti(s.h)+s.dur)+'</span></button>';
+}
 function render(){
-  var mon=lunedi(wk), now=new Date(), g, h, d, html="";
-  var sun=dayOf(mon,7);
+  var mon=lunedi(wk), now=new Date(), sun=dayOf(mon,7), L=AG[iso(mon)], html="";
   $("#wk-lab").textContent=wk===0?"Questa settimana":wk===1?"Prossima settimana":(mon.getDate()+" "+MN[mon.getMonth()].slice(0,3)+" – "+sun.getDate()+" "+MN[sun.getMonth()].slice(0,3));
   $("#wk-prev").disabled=wk<=0; $("#wk-next").disabled=wk>=MAXWK;
-  if(dayM===null||GG.indexOf(dayM)<0){var td=(now.getDay()+6)%7+1; dayM=(wk===0&&GG.indexOf(td)>=0)?td:GG[0];}
-  /* tab giorni (telefono) */
-  $("#days-m").innerHTML=GG.map(function(g){var dd=dayOf(mon,g);return '<button role="tab" aria-selected="'+(g===dayM)+'" data-g="'+g+'">'+GN[dd.getDay()].slice(0,3)+'<small>'+dd.getDate()+' '+MN[dd.getMonth()].slice(0,3)+'</small></button>'}).join("");
+  if(!L){
+    $("#days-m").innerHTML="";$("#pgrid").style.setProperty("--nd",1);
+    $("#pgrid").innerHTML='<div class="pmsg">'+(ERR?'Non riesco a caricare gli orari aggiornati. <button class="btn line sm" id="riprova">Riprova</button> oppure <a href="https://wa.me/'+WA+'?text='+encodeURIComponent("Ciao Kone! Vorrei prenotare.")+'" target="_blank" rel="noopener">scrivi a Kone su WhatsApp</a>.':'Carico gli orari dall\'agenda di Kone…')+'</div>';
+    return;
+  }
+  GG=[1,2,3,4,5,6];if(L.some(function(s){return new Date(s.d+"T12:00:00").getDay()===0}))GG.push(7);
+  var td=(now.getDay()+6)%7+1;
+  if(dayM===null||GG.indexOf(dayM)<0) dayM=(wk===0&&GG.indexOf(td)>=0)?td:GG[0];
+  $("#days-m").innerHTML=GG.map(function(g){var dd=dayOf(mon,g);var n=L.filter(function(s){return s.d===iso(dd)}).length;
+    return '<button role="tab" aria-selected="'+(g===dayM)+'" data-g="'+g+'">'+GN[dd.getDay()].slice(0,3)+'<small>'+dd.getDate()+' '+MN[dd.getMonth()].slice(0,3)+(n?'':' · —')+'</small></button>'}).join("");
   $("#pgrid").style.setProperty("--nd",GG.length);
+  if(!L.length){
+    $("#pgrid").style.setProperty("--nd",1);
+    $("#pgrid").innerHTML='<div class="pmsg">Gli orari di questa settimana non sono ancora pubblicati. <a href="https://wa.me/'+WA+'?text='+encodeURIComponent("Ciao Kone! Vorrei prenotare.")+'" target="_blank" rel="noopener">Scrivi a Kone su WhatsApp</a>.</div>';
+    return;
+  }
+  var ore=[];L.forEach(function(s){if(ore.indexOf(s.h)<0)ore.push(s.h)});ore.sort();
   html+='<div class="ph">Orario</div>';
   GG.forEach(function(g){var dd=dayOf(mon,g);var t=iso(dd)===iso(now);html+='<div class="ph'+(t?' today':'')+'">'+GN[dd.getDay()]+'<small>'+dd.getDate()+' '+MN[dd.getMonth()].slice(0,3)+'</small></div>'});
-  for(h=H0;h<H1;h++){
-    html+='<div class="pt">'+p2(h)+':00–'+p2(h+1)+':00</div>';
+  ore.forEach(function(h){
+    var vuotaM=!L.some(function(s){return s.h===h&&s.d===iso(dayOf(mon,dayM))});
+    html+='<div class="pt'+(vuotaM?' e':'')+'">'+h+'</div>';
     GG.forEach(function(g){
-      d=dayOf(mon,g); var inizio=new Date(d); inizio.setHours(h,0,0,0);
-      var passato=inizio.getTime()<now.getTime()+60*60*1000;
-      var c=corsoAt(g,h), cls="pc"+(g!==dayM?" hid":""), inner;
-      var data='data-d="'+iso(d)+'" data-h="'+h+'"';
-      if(c){
-        var r=stato(c.slug,mon,d,h,POSTI_CORSO);
-        var lab=passato?"Terminato":r<=0?"Completo":r+(r===1?" posto":" posti");
-        inner='<button class="cell c-corso'+(chiaro(c.colore)?' dark':'')+(passato||r<=0?' done':'')+'" style="background:'+c.colore+'" '+data+' data-c="'+esc(c.slug)+'"'+(passato||r<=0?' disabled':'')+' aria-label="'+esc(c.corso)+', '+GN[d.getDay()]+' ore '+h+', '+lab+'"><b>'+esc(c.corso)+'</b><span>'+lab+'</span></button>';
-      }else if(passato){
-        inner='<button class="cell c-past" disabled aria-hidden="true" tabindex="-1"><span>—</span></button>';
-      }else{
-        var f=stato(SL["pt-singola"]||"pt-singola",mon,d,h,POSTI_ORA);
-        var k=f<=0?"c-full":f<POSTI_ORA?"c-one":"c-free";
-        var t=f<=0?"Occupato":f===1?"1 posto":"Libero";
-        inner='<button class="cell '+k+'" '+data+' data-f="'+f+'"'+(f<=0?' disabled':'')+' aria-label="'+GN[d.getDay()]+' '+d.getDate()+' ore '+h+', '+t+'"><b>'+t+'</b>'+(f>0?'<span>'+f+'/'+POSTI_ORA+'</span>':'')+'</button>';
-      }
-      html+='<div class="'+cls+'">'+inner+'</div>';
+      var d=iso(dayOf(mon,g)), qui=L.filter(function(s){return s.d===d&&s.h===h});
+      qui.sort(function(a,b){return a.tipo===b.tipo?0:a.tipo==="corso"?-1:1});
+      html+='<div class="pc'+(g!==dayM?' hid':'')+(qui.length>1?' multi':'')+(g===dayM&&vuotaM?' e':'')+'">'+(qui.length?qui.map(cella).join(""):'<span class="c-none" aria-hidden="true"></span>')+'</div>';
     });
-  }
-  /* righe orario solo con la colonna del giorno scelto, su telefono */
+  });
   $("#pgrid").innerHTML=html;
 }
-function aggiorna(){
+var giro=0;
+function aggiorna(forza){
+  var mon=lunedi(wk),k=iso(mon),n=++giro;
+  if(forza)delete AG[k];
   render();
-  if(ATTIVO){var mon=lunedi(wk);var l=$("#live");l.hidden=false;l.textContent="Aggiornamento disponibilità…";
-    carica(mon).then(function(ok){l.textContent=ok?"Disponibilità in tempo reale.":"Disponibilità indicativa: la conferma arriva al pagamento.";render();});}
+  return carica(mon).then(function(){
+    if(n!==giro&&!forza)return;
+    var l=$("#live");l.hidden=false;
+    l.textContent=ERR?"Orari non aggiornati: controlla la connessione.":"Orari in tempo reale dall'agenda di Kone · aggiornati alle "+p2(agg.getHours())+":"+p2(agg.getMinutes());
+    render();
+    if(ctx&&ctx.slot&&!sheet.hidden){var s=trova(ctx.slot.id);if(s)ctx.slot=s}
+  });
+}
+
+/* ---------- tempo reale ---------- */
+var marca={}, tmr=null;
+function cambiato(chiave){
+  clearTimeout(tmr);
+  tmr=setTimeout(function(){
+    var p=[];
+    if(chiave===null||chiave==="documenti:corsi")p.push(caricaCorsi());
+    if(chiave===null||chiave==="slot")p.push(caricaFine());
+    Promise.all(p).then(function(){AG={};aggiorna(true)});
+  },300);
+}
+function controlla(){   /* riserva al tempo reale: pochi byte ogni 20 secondi */
+  if(document.hidden)return;
+  rest("stato?select=chiave,agg&chiave=in.(slot,prenotazioni,documenti:corsi)").then(function(a){
+    var nuovo=false,tutto=null;
+    (a||[]).forEach(function(r){if(marca[r.chiave]&&marca[r.chiave]!==r.agg){nuovo=true;tutto=(tutto===null||tutto===r.chiave)?r.chiave:"*"}marca[r.chiave]=r.agg});
+    if(nuovo)cambiato(tutto==="*"?null:tutto);
+  }).catch(function(){});
+}
+function tempoReale(){
+  setInterval(controlla,20000);controlla();
+  document.addEventListener("visibilitychange",function(){if(!document.hidden){controlla();if(ERR)aggiorna(true)}});
+  var sc=document.createElement("script");sc.src="/assets/js/supabase.js?v=2.119.0";sc.async=true;
+  sc.onload=function(){try{
+    var sb=window.supabase.createClient(CLOUD.url,CLOUD.key,{db:{schema:"kmstudio"},auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false,storageKey:"km-prenota"}});
+    sb.channel("km-prenota").on("postgres_changes",{event:"*",schema:"kmstudio",table:"stato"},function(m){
+      var k=m&&m.new&&m.new.chiave;if(k==="slot"||k==="prenotazioni"||k==="documenti:corsi"){if(m.new.agg)marca[k]=m.new.agg;cambiato(k)}
+    }).subscribe();
+  }catch(e){console.warn("[prenota] tempo reale",e)}};
+  document.head.appendChild(sc);
 }
 
 /* ---------- pannello ---------- */
@@ -123,20 +200,24 @@ function apri(when,title){lastFocus=document.activeElement;$("#sh-when").textCon
 function chiudi(){sheet.hidden=true;document.body.classList.remove("noscroll");body.innerHTML="";if(lastFocus)lastFocus.focus()}
 sheet.addEventListener("click",function(e){if(e.target.hasAttribute("data-close"))chiudi()});
 document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!sheet.hidden)chiudi()});
-function quando(dIso,h){var d=new Date(dIso+"T12:00:00");return GN[d.getDay()]+" "+d.getDate()+" "+MN[d.getMonth()]+" · "+p2(h)+":00–"+p2(h+1)+":00"}
-function optBtn(s,dis){return '<button class="opt" data-s="'+s.id+'"'+(dis?' disabled':'')+'><div><b>'+esc(s.nome)+'</b><span>'+esc(s.det)+(dis?' · serve un\'ora con 2 posti liberi':'')+'</span></div><em>'+(s.prezzo?eur(s.prezzo):"Incluso")+'</em></button>'}
+function quando(dIso,h,dur){var d=new Date(dIso+"T12:00:00");return GN[d.getDay()]+" "+d.getDate()+" "+MN[d.getMonth()]+" · "+h+"–"+hm(minuti(h)+(dur||60))}
+function optBtn(s,dis){return '<button class="opt" data-s="'+s.id+'"'+(dis?' disabled':'')+'><div><b>'+esc(s.nome)+'</b><span>'+esc(s.det)+(dis?' · servono 2 posti liberi':'')+'</span></div><em>'+(s.prezzo?eur(s.prezzo):"Incluso")+'</em></button>'}
 
-function apriOra(dIso,h,f){
-  ctx={data:dIso,ora:h,tipo:"libero"};
-  apri(quando(dIso,h),"Cosa vuoi prenotare?");
-  body.innerHTML='<div class="opts">'+LIBERI.map(function(s){return optBtn(s,s.posti>f)}).join("")+'</div><p class="sep">Hai già un pacchetto o un abbonamento?</p><div class="opts">'+INCLUSI.map(function(s){return optBtn(s,s.posti>f)}).join("")+'</div>';
-  ctx.lista=LIBERI.concat(INCLUSI);
+function apriSlot(sl){
+  if(sl.tipo==="corso")return apriCorso(sl);
+  var f=liberi(sl), tr=sl.tipo==="tratt";
+  ctx={slot:sl,data:sl.d,ora:sl.h,tipo:"libero"};
+  apri(quando(sl.d,sl.h,sl.dur),tr?"Massaggio · scegli il trattamento":"One to one con Kone");
+  var lib=LIBERI.filter(function(s){return tr?s.tratt:!s.tratt}), inc=INCLUSI.filter(function(s){return tr?s.tratt:!s.tratt});
+  body.innerHTML='<div class="opts">'+lib.map(function(s){return optBtn(s,s.posti>f)}).join("")+'</div><p class="sep">Hai già un pacchetto o un abbonamento?</p><div class="opts">'+inc.map(function(s){return optBtn(s,s.posti>f)}).join("")+'</div>';
+  ctx.lista=lib.concat(inc);
 }
-function apriCorso(dIso,h,slug){
-  var c=PL.filter(function(x){return x.slug===slug})[0];
-  ctx={data:dIso,ora:h,tipo:"corso",corso:c};
-  apri(quando(dIso,h),c.corso);
-  var s1={id:"__corso",nome:"Ingresso singolo",det:"Corso di gruppo · max "+POSTI_CORSO+" persone",prezzo:P_CORSO};
+function apriCorso(sl){
+  var nome=nomeSlot(sl);
+  ctx={slot:sl,data:sl.d,ora:sl.h,tipo:"corso",corso:{corso:nome,slug:SL["corso"]||"corso-di-gruppo"}};
+  apri(quando(sl.d,sl.h,sl.dur),nome);
+  var f=liberi(sl);
+  var s1={id:"__corso",nome:"Ingresso singolo",det:"Corso di gruppo · "+(f===1?"1 posto libero":f+" posti liberi"),prezzo:P_CORSO};
   var s2={id:"__corso-inc",nome:"Ho già un carnet / abbonamento corsi",det:"Già pagato",prezzo:0};
   ctx.lista=[s1,s2];
   body.innerHTML='<div class="opts">'+optBtn(s1)+optBtn(s2)+'</div>'+AVVISO;
@@ -147,7 +228,7 @@ function apriPack(id){
 }
 body.addEventListener("click",function(e){
   var b=e.target.closest(".opt"); if(b){var s=ctx.lista.filter(function(x){return x.id===b.dataset.s})[0]; if(s) vai(s); return;}
-  if(e.target.closest(".back")){ if(ctx.tipo==="corso") apriCorso(ctx.data,ctx.ora,ctx.corso.slug); else if(ctx.tipo==="libero") apriOra(ctx.data,ctx.ora,+ctx.f||POSTI_ORA); else chiudi(); }
+  if(e.target.closest(".back")){ if(ctx.slot) apriSlot(trova(ctx.slot.id)||ctx.slot); else chiudi(); }
 });
 
 function slugFor(s){
@@ -157,13 +238,13 @@ function slugFor(s){
 }
 function vai(s){
   var nome=s.id.indexOf("__corso")===0?ctx.corso.corso+" · "+s.nome:s.nome;
-  var h='<button class="back">‹ Indietro</button><div class="sum"><div><b>'+esc(nome)+'</b>'+(ctx.data?'<br><span style="color:var(--txt-2);font-size:14px">'+quando(ctx.data,ctx.ora)+'</span>':'')+'</div><em>'+(s.prezzo?eur(s.prezzo):"Incluso")+'</em></div>';
+  var h='<button class="back">‹ Indietro</button><div class="sum"><div><b>'+esc(nome)+'</b>'+(ctx.slot?'<br><span style="color:var(--txt-2);font-size:14px">'+quando(ctx.slot.d,ctx.slot.h,ctx.slot.dur)+'</span>':'')+'</div><em>'+(s.prezzo?eur(s.prezzo):"Incluso")+'</em></div>';
   if(s.tratt) h+='<label style="font-size:14px;color:var(--txt-2)">Trattamento<select class="sel" id="tratt">'+TRATT.map(function(t){return'<option>'+t+'</option>'}).join("")+'</select></label><div style="height:14px"></div>';
   if(s.mese)h+='<p class="mnote">Si rinnova da solo ogni mese con addebito automatico · lo disdici quando vuoi.</p>';
   if(s.mese||ctx.tipo==="corso")h+=AVVISO;
   body.innerHTML=h+'<div id="step2"></div>';
-  $("#sh-t").textContent=!ATTIVO?"Conferma e paga":ctx.tipo==="pacchetto"?"Scegli la prima seduta e paga":"Scegli l'orario e paga";
-  var go=function(){ATTIVO?cal(s,nome):fallback(s,nome)};
+  $("#sh-t").textContent=ctx.slot?"Conferma la prenotazione":!ATTIVO?"Conferma e paga":"Scegli la prima seduta e paga";
+  var go=function(){ctx.slot?viaApp(s,nome):ATTIVO?cal(s,nome):fallback(s,nome)};
   go(); var t=$("#tratt"); if(t) t.addEventListener("change",go);
 }
 
@@ -193,10 +274,22 @@ function fatto(){
   setTimeout(aggiorna,1500);
 }
 
+/* ---------- prenotazione di un orario dell'agenda: passa dall'app ----------
+   Così il posto viene bloccato subito nell'agenda di Kone (funzione kmstudio.prenota,
+   niente posti doppi) e tutti — sito, app dei clienti, agenda del titolare — vedono lo stesso. */
+function viaApp(s,nome){
+  var sl=ctx.slot,t=$("#tratt"),q="prenota="+encodeURIComponent(sl.id)+(t?"&tratt="+encodeURIComponent(t.value):"")+(s.id==="mass-30"?"&dur=30":"");
+  fallback(s,nome);   /* PayPal / bonifico / WhatsApp restano come seconda strada */
+  var box=$("#step2"), resto=box.innerHTML.replace(/class="btn gold"/g,'class="btn line"');
+  box.innerHTML='<div class="fb"><p><b>Prenota dalla tua area clienti:</b> il posto viene bloccato subito nell\'agenda di Kone e lo vedi tra le tue prenotazioni. Se è la prima volta, crei l\'account in un minuto.</p>'+
+   '<div class="cta-row"><a class="btn gold" href="/app#'+q+'">Accedi e prenota</a><a class="btn line" href="/app#registrati&'+q+'">Crea l\'account</a></div></div>'+
+   '<p class="sep" style="margin-top:18px">Oppure paga e manda la richiesta a Kone</p>'+resto;
+}
+
 /* ---------- finché Cal.com non è collegato ---------- */
 function fallback(s,nome){
   var t=$("#tratt");
-  var msg="Ciao Kone! Vorrei prenotare: "+nome+(t?" ("+t.value+")":"")+(ctx.data?" — "+quando(ctx.data,ctx.ora):"")+(s.prezzo?" — "+eur(s.prezzo)+". Ho pagato con PayPal / pago in studio.":".");
+  var msg="Ciao Kone! Vorrei prenotare: "+nome+(t?" ("+t.value+")":"")+(ctx.slot?" — "+quando(ctx.slot.d,ctx.slot.h,ctx.slot.dur):"")+(s.prezzo?" — "+eur(s.prezzo)+". Ho pagato con PayPal / pago in studio.":".");
   var wa="https://wa.me/"+WA+"?text="+encodeURIComponent(msg);
   var lk=s.link&&/^https:\/\//.test(s.link)?s.link:"";
   $("#step2").innerHTML='<div class="fb">'+(lk?'<p><b>Abbonamento con rinnovo automatico:</b> paghi il primo mese e autorizzi l\'addebito mensile (IBAN del tuo conto o carta). Lo disdici quando vuoi.</p><div class="cta-row" style="margin-bottom:16px"><a class="btn gold" href="'+esc(lk)+'" target="_blank" rel="noopener">Attiva l\'addebito automatico</a></div><p>Oppure blocca il posto così:</p>':'<p>Il pagamento automatico con carta si sta attivando. Intanto puoi bloccare il posto così:</p>')+'<div class="cta-row">'+
@@ -215,9 +308,9 @@ document.addEventListener("click",function(e){var b=e.target.closest&&e.target.c
 
 /* ---------- eventi ---------- */
 $("#pgrid").addEventListener("click",function(e){
+  if(e.target.closest("#riprova")){aggiorna(true);return}
   var b=e.target.closest(".cell"); if(!b||b.disabled) return;
-  if(b.dataset.c) apriCorso(b.dataset.d,+b.dataset.h,b.dataset.c);
-  else {apriOra(b.dataset.d,+b.dataset.h,+b.dataset.f); ctx.f=b.dataset.f;}
+  var sl=trova(b.dataset.id); if(sl) apriSlot(sl);
 });
 $("#days-m").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;dayM=+b.dataset.g;render()});
 $("#wk-prev").addEventListener("click",function(){if(wk>0){wk--;dayM=null;aggiorna()}});
@@ -278,7 +371,9 @@ function daListino(L){
 /* link diretti: /prenota/?s=pt-8 apre il pacchetto · ?cat=Massaggi · #planning */
 var q=new URLSearchParams(location.search);
 if(q.get("cat")&&PACK[q.get("cat")])cat=q.get("cat");
-rPack(); aggiorna();
+rPack();
+Promise.all([caricaCorsi(),caricaFine()]).then(function(){aggiorna()});
+tempoReale();
 var qs=q.get("s"); if(qs){Object.keys(PACK).forEach(function(k){PACK[k].forEach(function(x){if(x.id===qs){cat=k;rPack();apriPack(qs)}})});}
 if(window.KM_LISTINO)window.KM_LISTINO.then(function(L){if(L)daListino(L)});
 })();

@@ -17,7 +17,7 @@
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Prenota e paga online | Kone Moctar Studio Milano"><meta name="twitter:description" content="Prenota online personal training, corsi di gruppo e massaggi a Milano: guarda il planning settimanale con gli orari liberi e paga subito con carta o PayPal."><meta name="twitter:image" content="https://kone-studio.com/assets/og-sito.jpg">
 <style>@font-face{font-family:'Oswald Fallback';src:local('Arial'),local('ArialMT'),local('Helvetica Neue'),local('Helvetica'),local('Roboto'),local('Liberation Sans'),local('FreeSans');size-adjust:81.43%;ascent-override:146.51%;descent-override:35.49%;line-gap-override:0%}@font-face{font-family:'Barlow Fallback';src:local('Arial'),local('ArialMT'),local('Helvetica Neue'),local('Helvetica'),local('Roboto'),local('Liberation Sans'),local('FreeSans');size-adjust:96.68%;ascent-override:103.43%;descent-override:20.69%;line-gap-override:0%}@font-face{font-family:'Oswald';font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/oswald-400.woff2) format('woff2')}@font-face{font-family:'Oswald';font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/oswald-500.woff2) format('woff2')}@font-face{font-family:'Oswald';font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/oswald-600.woff2) format('woff2')}@font-face{font-family:'Barlow';font-style:normal;font-weight:400;font-display:swap;src:url(/assets/fonts/barlow-400.woff2) format('woff2')}@font-face{font-family:'Barlow';font-style:normal;font-weight:500;font-display:swap;src:url(/assets/fonts/barlow-500.woff2) format('woff2')}@font-face{font-family:'Barlow';font-style:normal;font-weight:600;font-display:swap;src:url(/assets/fonts/barlow-600.woff2) format('woff2')}</style><link rel="preload" href="/assets/fonts/oswald-600.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/assets/fonts/barlow-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/css/pagine.css?v=4">
-<link rel="stylesheet" href="/assets/css/prenota.css?v=3">
+<link rel="stylesheet" href="/assets/css/prenota.css?v=4">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://kone-studio.com/prenota/#webpage","url":"https://kone-studio.com/prenota/","name":"Prenota e paga online | Kone Moctar Studio Milano","description":"Prenota online personal training, corsi di gruppo e massaggi a Milano: guarda il planning settimanale con gli orari liberi e paga subito con carta o PayPal.","inLanguage":"it-IT","isPartOf":{"@id":"https://kone-studio.com/#web"},"about":{"@id":"https://kone-studio.com/#studio"},"potentialAction":{"@type":"ReserveAction","target":"https://kone-studio.com/prenota/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://kone-studio.com/"},{"@type":"ListItem","position":2,"name":"Prenota online","item":"https://kone-studio.com/prenota/"}]}]}</script>
 <script src="/assets/data/studio.js" defer></script>
 </head>
@@ -35,23 +35,23 @@
       <nav class="crumbs" aria-label="Percorso"><ol><li><a href="/">Home</a></li><li aria-current="page">Prenota online</li></ol></nav>
       <p class="eyebrow">Prenotazione e pagamento online · Milano</p>
       <h1>Prenota<br><span class="g">e paga online</span></h1>
-      <p class="lead">Guarda il planning della settimana, scegli un'ora libera o un corso e paga subito. Ricevi la conferma via email, senza dover scrivere a nessuno.</p>
+      <p class="lead">Guarda gli orari della settimana, scegli un one to one, un massaggio o un corso e prenota: il posto viene bloccato subito nell'agenda di Kone.</p>
     </div>
   </section>
 
   <section class="wrap plan" aria-labelledby="pl-h">
     <div class="plan-top">
-      <div><h2 id="pl-h">Planning settimanale</h2><p class="plan-sub">Tocca una casella libera per prenotare personal training, coppia o massaggio. Tocca un corso per prenotare il tuo posto.</p></div>
+      <div><h2 id="pl-h">Planning settimanale</h2><p class="plan-sub">Sono gli stessi orari dell'agenda di Kone, aggiornati in tempo reale. Tocca un orario libero per prenotare one to one o massaggio, tocca un corso per prenotare il tuo posto.</p></div>
       <div class="wk" role="group" aria-label="Settimana"><button class="wk-b" id="wk-prev" aria-label="Settimana precedente">‹</button><span id="wk-lab">Questa settimana</span><button class="wk-b" id="wk-next" aria-label="Settimana successiva">›</button></div>
     </div>
     <ul class="legend" aria-label="Legenda">
-      <li><i class="lg-free"></i>Libero · 2 posti</li><li><i class="lg-one"></i>1 posto rimasto</li><li><i class="lg-full"></i>Occupato / completo</li><li><i class="lg-corso"></i>Corso di gruppo · max 10</li>
+      <li><i class="lg-free"></i>Libero</li><li><i class="lg-one"></i>Ultimi posti</li><li><i class="lg-full"></i>Occupato / completo</li><li><i class="lg-corso"></i>Corso di gruppo</li>
     </ul>
     <div class="avviso" role="note"><span class="av-i" aria-hidden="true">!</span><p><b>Attenzione:</b> le sedute degli <b>abbonamenti mensili</b> e dei <b>corsi di gruppo</b> non sono recuperabili: se salti una lezione, la perdi. Le sedute dei <b>pacchetti</b> invece si possono recuperare.</p></div>
     <p class="live" id="live" hidden></p>
     <div class="days-m" id="days-m" role="tablist" aria-label="Giorno"></div>
     <div class="grid-wrap"><div class="pgrid" id="pgrid" aria-live="polite"></div></div>
-    <p class="plan-foot">One to one · in coppia · corsi — <b>solo su appuntamento</b>. Ogni ora libera accoglie al massimo 2 persone.</p>
+    <p class="plan-foot">One to one · massaggi · corsi — <b>solo su appuntamento</b>. Gli orari e i posti sono quelli dell'agenda di Kone: se cambia qualcosa, la griglia si aggiorna da sola.</p>
   </section>
 
   <section class="wrap packs" aria-labelledby="pk-h">
@@ -64,7 +64,7 @@
 
   <section class="wrap how" aria-labelledby="hw-h">
     <h2 id="hw-h">Come funziona</h2>
-    <ol class="steps"><li><b>Scegli</b>un'ora libera, un corso o un pacchetto.</li><li><b>Paga</b>con carta, Apple Pay, Google Pay o PayPal: il posto è tuo.</li><li><b>Ricevi la conferma</b>via email con l'indirizzo dello studio a Milano e il promemoria.</li></ol>
+    <ol class="steps"><li><b>Scegli</b>un orario libero, un corso o un pacchetto.</li><li><b>Prenota</b>dalla tua area clienti: il posto viene bloccato subito nell'agenda di Kone.</li><li><b>Ritrovi tutto nell'app</b>le tue prenotazioni, i promemoria e i pagamenti.</li></ol>
     <p class="note">Preferisci parlare con Kone? <a href="https://wa.me/393922696468?text=Ciao%20Kone%21%20Vorrei%20prenotare." target="_blank" rel="noopener">Scrivigli su WhatsApp</a> o chiama il <a href="tel:+393922696468">392 269 6468</a>.</p>
   </section>
 </main>
@@ -94,8 +94,9 @@
 b.addEventListener('click',function(){var o=h.classList.toggle('open');b.setAttribute('aria-expanded',o)});
 if('serviceWorker'in navigator&&location.protocol==='https:')navigator.serviceWorker.register('/sw.js').catch(function(){});})();
 </script>
-<script src="/assets/js/prenota-config.js?v=2"></script>
+<script src="/assets/js/cloud-config.js?v=1"></script>
+<script src="/assets/js/prenota-config.js?v=3"></script>
 <script src="/assets/js/prezzi-live.js?v=2"></script>
-<script src="/assets/js/prenota.js?v=5"></script>
+<script src="/assets/js/prenota.js?v=6"></script>
 </body>
 </html>

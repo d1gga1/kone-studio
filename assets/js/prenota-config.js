@@ -56,34 +56,10 @@ window.KM_PRENOTA = {
     "inc-corso": "corso-incluso"
   },
 
-  /* ---------- PLANNING SETTIMANALE CORSI ----------
-     Uguale al volantino. giorno: 1=lunedì … 6=sabato.  ora: inizio (durata 1 ora).
-     slug = evento su Cal.com di quel corso (con "Seats"/posti = 10).
-     Per cambiare il planning basta modificare questa lista.          */
-  orari: { inizio: 7, fine: 21 },      // prima e ultima ora della griglia
-  giorni: [1, 2, 3, 4, 5, 6],          // lunedì → sabato
-  postiCorso: 10,
-  postiOra: 2,          // ore libere: 2 persone per ora (singola = 1 posto, coppia = 2 posti)
-  planning: [
-    { giorno: 1, ora: 9,  corso: "Senior Fit",                 colore: "#3B82F6", slug: "senior-fit" },
-    { giorno: 2, ora: 9,  corso: "Mobilità & Postura",         colore: "#22C55E", slug: "mobilita-postura" },
-    { giorno: 3, ora: 9,  corso: "Ginnastica Dolce Over 70",   colore: "#A855F7", slug: "ginnastica-dolce" },
-    { giorno: 4, ora: 9,  corso: "Senior Fit",                 colore: "#3B82F6", slug: "senior-fit" },
-    { giorno: 5, ora: 9,  corso: "Mobilità & Postura",         colore: "#22C55E", slug: "mobilita-postura" },
-    { giorno: 6, ora: 9,  corso: "Ginnastica Dolce Over 70",   colore: "#A855F7", slug: "ginnastica-dolce" },
-    { giorno: 1, ora: 12, corso: "Circuit Training",           colore: "#F97316", slug: "circuit-training" },
-    { giorno: 2, ora: 12, corso: "Functional Training",        colore: "#DC2626", slug: "functional-training" },
-    { giorno: 3, ora: 12, corso: "Tabata Training",            colore: "#EAB308", slug: "tabata-training" },
-    { giorno: 4, ora: 12, corso: "Circuit Training",           colore: "#F97316", slug: "circuit-training" },
-    { giorno: 5, ora: 12, corso: "Tabata Training",            colore: "#EAB308", slug: "tabata-training" },
-    { giorno: 6, ora: 13, corso: "Total Body",                 colore: "#8B5E3C", slug: "total-body-corso" },
-    { giorno: 5, ora: 18, corso: "Functional Training",        colore: "#DC2626", slug: "functional-training" },
-    { giorno: 1, ora: 19, corso: "Functional Training",        colore: "#DC2626", slug: "functional-training" },
-    { giorno: 2, ora: 19, corso: "Total Body",                 colore: "#8B5E3C", slug: "total-body-corso" },
-    { giorno: 3, ora: 19, corso: "Total Body",                 colore: "#8B5E3C", slug: "total-body-corso" },
-    { giorno: 4, ora: 19, corso: "Functional Training",        colore: "#DC2626", slug: "functional-training" },
-    { giorno: 5, ora: 20, corso: "Tabata Training",            colore: "#EAB308", slug: "tabata-training" }
-  ],
+  /* ---------- ORARI ----------
+     Non c'è più un planning scritto qui: la pagina /prenota/ mostra gli orari
+     dell'agenda di Kone (app → Agenda), letti dal database in tempo reale.
+     Per cambiare corsi, orari o posti si modifica l'agenda nell'app.          */
   prezzoCorso: 29,     // ingresso singolo a un corso (se il titolare lo cambia nel Listino vale quello)
 
   /* Fallback finché Cal.com non è collegato: pagamento PayPal */

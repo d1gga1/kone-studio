@@ -322,3 +322,12 @@ feedback, contabilità, listino ed esercizi stanno nel database **Supabase**, pr
 - Limite: con l'app **completamente chiusa** la notifica non parte subito (arriva alla riapertura). Per la notifica immediata ad app chiusa
   servono le notifiche push (Web Push con chiavi VAPID + una Edge Function di Supabase che le invia): passo successivo.
 - `404.html` riallineato ad `app.html` (era rimasto indietro: /app e /coach su GitHub Pages usano `404.html`). `sw.js` → v26, `cloud.js?v=5`.
+
+## Orari sincronizzati (10/11/2026)
+
+- La pagina `/prenota/` non usa più un planning scritto a mano: legge gli **stessi slot dell'agenda del titolare**
+  (tabella `kmstudio.slot` + funzione `kmstudio.disponibilita` per i posti occupati, nomi/colori dal documento `corsi`).
+- Si aggiorna da sola: tempo reale sulla tabella `kmstudio.stato` (serve `supabase/kmstudio_patch_04.sql`) + controllo ogni 20 s di riserva.
+- Prenotare un orario dal sito apre l'app su `/app#prenota=<id slot>`: dopo l'accesso (o la registrazione) il cliente arriva
+  direttamente alla conferma e il posto finisce nell'agenda di Kone. PayPal/WhatsApp restano come seconda strada.
+- Per cambiare corsi, orari o posti si modifica solo l'agenda nell'app: sito, app clienti e agenda titolare mostrano la stessa cosa.
