@@ -1977,7 +1977,7 @@ function prenDaSito(){
   const p=new URLSearchParams(q),s=DB.agenda[p.get("prenota")];
   if(!s){go("prenota");toast("Quell'orario non è più in agenda: scegline un altro");return true}
   const tr=s.tipo==="tratt";S.area=tr?"tratt":"allen";S.view=tr?"tpren":"prenota";S.w=null;const w=W();
-  let att=s.tipo==="pt"?"pt":s.tipo==="corso"?"corso:"+s.corso:null;
+  let att=s.tipo==="pt"?"pt":s.tipo==="corso"?attCorso(s):null;
   if(tr){const n=(p.get("tratt")||"").toLowerCase().trim(),t=n?DB.trattamenti.find(t=>{const x=t.n.toLowerCase();return x.includes(n)||n.includes(x.replace(/^massaggio /,""))}):null;
     att=t?"tratt:"+t.id:null;w.dur=p.get("dur")==="30"?30:50}
   const ok=att&&wAtts().some(a=>a.id===att);
@@ -2988,16 +2988,24 @@ function calFiltri(){const f=calF();
 const TRATT_IMG=["decon","relax","sport","cervi","rifle","linfo","coppe","altri"];
 function wAtts(){let l;
   if(S.area==="tratt")l=DB.trattamenti.map(t=>({id:"tratt:"+t.id,tipo:"tratt",tr:t.id,n:t.n,sub:t.desc,img:TRATT_IMG.includes(t.id)?"/assets/img/"+t.id+"-480.webp":null,tag:"30′ o 50′",prezzo:pEff(t,"p30"),da:1,col:"#A478C8"}));
-  else l=[{id:"pt",tipo:"pt",n:"One to one con Kone",sub:"Allenamento su misura, solo tu e Kone",img:"/assets/img/personal-trainer-milano.webp",tag:"60′ · su misura",prezzo:pEff(DB.listino.pt[0]),col:"#5C8BC4"}]
-   .concat(DB.corsi.map(c=>({id:"corso:"+c.id,tipo:"corso",corso:c.id,n:c.n,sub:LIVELLI[c.livello]+" · "+c.obiettivo,tag:c.durata+"′ · max "+DB.settings.maxCorso,prezzo:pEff(corsoSingolo()),col:corsoCol(c.id)})));
+  else l=[{id:"pt",tipo:"pt",n:nomePT(),sub:"Allenamento su misura, solo tu e Kone",img:"/assets/img/personal-trainer-milano.webp",tag:"60′ · su misura",prezzo:pEff(DB.listino.pt[0]),col:"#5C8BC4"}]
+   .concat(corsiAgenda());
   if(S.w&&S.w.viaPiano)l=l.filter(x=>copre(me(),x.tipo));
   return l;
 }
+/* corsi prenotabili = quelli che sono davvero nell'agenda di Kone nei prossimi 14 giorni, con il nome che vede lui
+   (anche una lezione rinominata o un orario aggiunto a mano): cliente e titolare vedono gli stessi corsi */
+function attCorso(s){return "corso:"+s.corso+(s.nome?"|"+s.nome:"")}
+function corsiAgenda(){const fine=iso(addD(TODAY,13)),m=new Map();
+  Object.values(DB.agenda).filter(s=>s.tipo==="corso"&&s.d<=fine&&!isPast(s)&&!s.chiuso).sort((a,b)=>a.d===b.d?(a.h<b.h?-1:1):(a.d<b.d?-1:1)).forEach(s=>{
+    const k=attCorso(s);if(m.has(k))return;const c=corso(s.corso)||{livello:1,obiettivo:"",durata:s.dur||60};
+    m.set(k,{id:k,tipo:"corso",corso:s.corso,nome:s.nome||"",n:slotTitle(s),sub:(LIVELLI[c.livello]||"Corso di gruppo")+(c.obiettivo?" · "+c.obiettivo:""),tag:(s.dur||c.durata)+"′ · max "+s.cap,prezzo:pEff(corsoSingolo()),col:corsoCol(s.corso)})});
+  return Array.from(m.values())}
 function W(){if(!S.w||S.w.area!==S.area)S.w={area:S.area,step:1,att:null,dur:50,d:null,slot:null,pay:"paypal"};return S.w}
 function wAtt(){const w=W();return wAtts().find(a=>a.id===w.att)||null}
 function wPrezzo(a,w){a=a||wAtt();w=w||W();if(!a)return 0;if(a.tipo==="tratt"){const t=tratt(a.tr);return pEff(t,w.dur===30?"p30":"p60")}return a.prezzo}
-function wDur(a){a=a||wAtt();if(!a)return 0;if(a.tipo==="tratt")return W().dur;if(a.tipo==="corso")return corso(a.corso).durata;return 60}
-function wSlots(d){const a=wAtt();if(!a)return [];return slotsDay(d,[a.tipo]).filter(s=>(a.tipo!=="corso"||s.corso===a.corso)&&!isPast(s)&&!s.chiuso&&!s.pren.some(b=>b.cid===S.cid))}
+function wDur(a){a=a||wAtt();if(!a)return 0;if(a.tipo==="tratt")return W().dur;if(a.tipo==="corso")return (corso(a.corso)||{durata:60}).durata;return 60}
+function wSlots(d){const a=wAtt();if(!a)return [];return slotsDay(d,[a.tipo]).filter(s=>(a.tipo!=="corso"||(s.corso===a.corso&&(s.nome||"")===(a.nome||"")))&&!isPast(s)&&!s.chiuso&&!s.pren.some(b=>b.cid===S.cid))}
 function wFree(d){return wSlots(d).reduce((n,s)=>n+Math.max(0,s.cap-s.pren.length),0)}
 function wGo(n){const w=W();if(n>=2&&!w.att)return toast("Scegli prima cosa vuoi fare");if(n>=3&&!w.d)return toast("Scegli il giorno");if(n>=4&&!w.slot)return toast("Scegli l'orario");w.step=n;render();const m=el("main");if(m&&window.innerWidth<900){const t=document.querySelector(".wiz");if(t)m.scrollTop=Math.max(0,t.offsetTop-70)}}
 function wSet(k,v,next){const w=W();w[k]=v;if(k==="att"){w.d=null;w.slot=null}if(k==="d")w.slot=null;if(k==="dur")w.slot=null;if(next)wGo(next);else render()}
