@@ -67,7 +67,7 @@ window.KM_PRENOTA = {
      poi Impostazioni → Metodi di pagamento → attiva Apple Pay, Google Pay e Klarna.
      Il link (https://buy.stripe.com/…) si incolla nell'app: Area titolare → IBAN e pagamenti.
      Quello scritto qui sotto vale solo finché nell'app non ce n'è uno.                      */
-  stripe: "",
+  stripe: "https://buy.stripe.com/6oUdRb64w2GP1QZgZXa7C00",
 
   /* Fallback finché Cal.com non è collegato: pagamento PayPal */
   paypal: "https://www.paypal.com/qrcodes/p2pqrc/BAHYS4B2HYL2G",

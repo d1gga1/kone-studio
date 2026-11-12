@@ -291,7 +291,7 @@ function viaApp(s,nome){
 /* ---------- finché Cal.com non è collegato ---------- */
 function fallback(s,nome){
   var t=$("#tratt");
-  var msg="Ciao Kone! Vorrei prenotare: "+nome+(t?" ("+t.value+")":"")+(ctx.slot?" — "+quando(ctx.slot.d,ctx.slot.h,ctx.slot.dur):"")+(s.prezzo?" — "+eur(s.prezzo)+". Ho pagato con PayPal / pago in studio.":".");
+  var msg="Ciao Kone! Vorrei prenotare: "+nome+(t?" ("+t.value+")":"")+(ctx.slot?" — "+quando(ctx.slot.d,ctx.slot.h,ctx.slot.dur):"")+(s.prezzo?" — "+eur(s.prezzo)+". Ho pagato online (carta / PayPal) oppure pago in studio.":".");
   var wa="https://wa.me/"+WA+"?text="+encodeURIComponent(msg);
   var lk=s.link&&/^https:\/\//.test(s.link)?s.link:"";
   $("#step2").innerHTML='<div class="fb">'+(lk?'<p><b>Abbonamento con rinnovo automatico:</b> paghi il primo mese e autorizzi l\'addebito mensile (IBAN del tuo conto o carta). Lo disdici quando vuoi.</p><div class="cta-row" style="margin-bottom:16px"><a class="btn gold" href="'+esc(lk)+'" target="_blank" rel="noopener">Attiva l\'addebito automatico</a></div><p>Oppure blocca il posto così:</p>':(STRIPE?'<p>Paga subito e manda la prenotazione a Kone:</p>':'<p>Il pagamento automatico con carta si sta attivando. Intanto puoi bloccare il posto così:</p>'))+'<div class="cta-row">'+
@@ -346,7 +346,8 @@ function daListino(L){
   var sc=function(r){return r.sc>0&&(!r.scFino||r.scFino>=iso(new Date()))?" · sconto "+r.sc+"%":""};
   var MESE={abbPt:1,abbMass:1,percorsi:1};
   var voce=function(sez,r,i,nome,det){var id=idVoce(sez,r,i);L_USATI[id]=1;var m=!!(MESE[sez]||/mensil/i.test(r.n));return {id:id,nome:nome,det:(m?"Rinnovo automatico · ":"")+det+sc(r),prezzo:e(r),mese:m?1:0,link:r.link||""}};
-  if(typeof L.stripe==="string"&&(!L.stripe||/^https:\/\//.test(L.stripe)))STRIPE=L.stripe||(/^https:\/\//.test(C.stripe||"")?C.stripe:"");
+  if(L.stripe==="off")STRIPE="";
+  else if(typeof L.stripe==="string"&&(!L.stripe||/^https:\/\//.test(L.stripe)))STRIPE=L.stripe||(/^https:\/\//.test(C.stripe||"")?C.stripe:"");
   BON=L.bonifico&&L.bonifico.iban?L.bonifico:(L.bonifico&&L.bonifico.mod?null:{iban:"IT70R0306920310100000062819",intest:"Kone Moctar",banca:"Intesa Sanpaolo"});
   L_USATI={};
   var pt=li.pt||[],single=pt.filter(function(r){return r.sed===1}),pack=[];

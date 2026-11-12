@@ -285,5 +285,6 @@
   "intest": "Kone Moctar",
   "banca": "Intesa Sanpaolo"
  },
- "portale": ""
+ "portale": "",
+ "stripe": "https://buy.stripe.com/6oUdRb64w2GP1QZgZXa7C00"
 }

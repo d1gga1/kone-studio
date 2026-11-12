@@ -1414,7 +1414,7 @@ function pubTok(){try{return localStorage.getItem("km2_pubtok")||""}catch(e){ret
 function pubCfg(){return Object.assign({},PUB_DEF,(DB&&DB.settings.pub)||{})}
 function prezziSnap(){return {listino:DB.listino,
   trattamenti:DB.trattamenti.map(t=>{const o={};Object.keys(t).forEach(k=>{const v=t[k];if(!(typeof v==="string"&&v.slice(0,5)==="data:"))o[k]=v});return o}),
-  paypal:DB.settings.paypal||"",bonifico:bon(),portale:DB.settings.portale||"",stripe:stripeUrl()}}
+  paypal:DB.settings.paypal||"",bonifico:bon(),portale:DB.settings.portale||"",stripe:DB.settings.stripe==="off"?"off":stripeUrl()}}
 const prezziSig=()=>JSON.stringify(prezziSnap());
 function prezziCheck(){
   if(!DB||_pSig===null)return;
@@ -3090,7 +3090,8 @@ function pivaTxt(){const k=window.KM_STUDIO||{};return k.piva?(k.ragione||"Kone 
 function pivaPay(){const t=pivaTxt();return t?'<p class="piva-pay">'+ic("shield",12)+' Pagamento a '+esc(t)+'</p>':''}
 function pivaFill(){const t=pivaTxt();document.querySelectorAll("[data-piva]").forEach(x=>{x.textContent=t;x.hidden=!t})}
 window.addEventListener("load",()=>{pivaFill();if(S.role&&S.view)try{render()}catch(e){}});
-function stripeUrl(){const u=String(DB.settings.stripe||"").trim();return /^https:\/\//i.test(u)?u:""}
+const STRIPE_DEF="https://buy.stripe.com/6oUdRb64w2GP1QZgZXa7C00";
+function stripeUrl(){const s=DB.settings.stripe;if(s==="off")return "";const u=String(s||"").trim();return /^https:\/\//i.test(u)?u:STRIPE_DEF}
 function stripeLink(){const u=stripeUrl(),c=S.role==="client"?me():null;if(!u||!c||!c.email)return u;return u+(u.includes("?")?"&":"?")+"prefilled_email="+encodeURIComponent(c.email)}
 function stripeBox(imp,causale){if(!stripeUrl())return "";return '<div class="ppbox stbox"><div style="flex:1;min-width:0"><div class="flabel">Carta · Apple Pay · Google Pay · Klarna</div><div class="ppamt">'+eur(imp)+'</div>'+
   '<ol class="pplist"><li>Tocca il pulsante: si apre la pagina di pagamento sicura (Stripe)</li><li>Scrivi l\'importo <b>'+eur(imp)+'</b></li><li>Paga con carta, Apple Pay, Google Pay o Klarna (anche in 3 rate senza interessi)</li></ol>'+
@@ -3101,7 +3102,7 @@ function salvaStripe(v){v=String(v||"").trim().replace(/\s+/g,"");
   if(v&&!/^https:\/\//i.test(v))return toast("Il link deve iniziare con https://");
   if(v&&/dashboard\.stripe\.com/i.test(v))return toast("Questo è il link della tua pagina Stripe, non quello per i clienti: copia il link che inizia con https://buy.stripe.com/");
   if(v&&/\/test_/i.test(v)&&!confirm("Questo è un link di PROVA (test): i clienti non pagherebbero davvero. Salvarlo lo stesso?"))return;
-  DB.settings.stripe=v;save();render();toast(v?"Stripe collegato · i clienti pagano anche con carta, Apple Pay, Google Pay e Klarna":"Stripe scollegato")}
+  DB.settings.stripe=v||"off";save();render();toast(v?"Stripe collegato · i clienti pagano anche con carta, Apple Pay, Google Pay e Klarna":"Stripe scollegato")}
 function stripeCard(){const u=stripeUrl(),ok=!!u,dom=u&&!/^https:\/\/buy\.stripe\.com\//i.test(u);
   const st=(n,t,lk,lab)=>'<li style="margin-bottom:8px"><b>'+n+'</b> '+t+(lk?' <a href="'+lk+'" target="_blank" rel="noopener" style="white-space:nowrap">'+lab+' ↗</a>':'')+'</li>';
   return '<div class="ppbox" style="display:block"><div class="flabel" style="margin-bottom:6px">Carta, Apple Pay, Google Pay e Klarna · Stripe</div>'+
@@ -3113,7 +3114,7 @@ function stripeCard(){const u=stripeUrl(),ok=!!u,dom=u&&!/^https:\/\/buy\.stripe
        st("3.","Crea un link di pagamento scegliendo “I clienti scelgono quanto pagare”, valuta EUR.","https://dashboard.stripe.com/payment-links/create/customer-chooses-pricing","Crea il link")+
        st("4.","Copia il link (inizia con https://buy.stripe.com/) e incollalo qui sotto, poi tocca Collega.","","")+
       '</ol>')+
-   '<div class="field"><label>Link di pagamento Stripe</label><input class="fi" id="stU" value="'+esc(DB.settings.stripe||"")+'" placeholder="https://buy.stripe.com/…" autocapitalize="off" spellcheck="false"></div>'+
+   '<div class="field"><label>Link di pagamento Stripe</label><input class="fi" id="stU" value="'+esc(stripeUrl())+'" placeholder="https://buy.stripe.com/…" autocapitalize="off" spellcheck="false"></div>'+
    '<div class="inline" style="justify-content:flex-end;flex-wrap:wrap;gap:8px">'+
     (ok?'<button class="btn ghost" style="margin-right:auto" onclick="if(confirm(\'Scollegare Stripe? I clienti non vedranno più carta, Apple Pay, Google Pay e Klarna.\'))salvaStripe(\'\')">Scollega</button><a class="btn ghost" href="'+esc(u)+'" target="_blank" rel="noopener">Prova il link ↗</a>':'')+
     '<button class="btn primary" onclick="salvaStripe(el(\'stU\').value)">'+(ok?'Aggiorna':'Collega')+'</button></div></div>'}
