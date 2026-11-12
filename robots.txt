@@ -1,6 +1,28 @@
+# Kone Moctar Studio - kone-studio.com
+# Tutto il sito e' aperto a motori di ricerca e assistenti IA.
+# app.html, /app, /coach, 404 e intro.html hanno il tag noindex:
+# i motori devono poterle leggere per vedere il noindex, quindi non vanno bloccate qui.
+
 User-agent: *
 Allow: /
-# app.html, /app, /coach, 404 e intro.html hanno il tag noindex:
-# Google deve poterle leggere per vedere il noindex, quindi non vanno bloccate qui.
+
+# Motori di ricerca e assistenti IA (citazioni nelle risposte): accesso esplicito
+User-agent: Googlebot
+User-agent: Bingbot
+User-agent: Applebot
+User-agent: DuckDuckBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: Meta-ExternalAgent
+User-agent: MistralAI-User
+Allow: /
 
 Sitemap: https://kone-studio.com/sitemap.xml

@@ -1,6 +1,6 @@
 # Kone Moctar Studio
 
-> Studio di personal training e massaggi professionali a Milano, fondato da Kone Moctar, personal trainer e massaggiatore professionale. Riceve su appuntamento.
+> Studio privato di personal training e massaggi professionali a Vizzolo Predabissi (MI), alle porte di Milano vicino a Melegnano, fondato da Kone Moctar, personal trainer e massaggiatore professionale. Riceve su appuntamento.
 
 ## Servizi
 - Personal training one to one: 45 € a seduta; pacchetti 172 € (4), 336 € (8), 480 € (12); abbonamenti mensili da 165 € a 520 €
@@ -9,11 +9,13 @@
 - Le sedute degli abbonamenti mensili e dei corsi di gruppo non sono recuperabili se saltate; quelle dei pacchetti sì. Gli abbonamenti mensili si rinnovano in automatico e si disdicono quando si vuole
 - Massaggi professionali: 30 € (30 minuti), 55 € (50 minuti) — decontratturante, sportivo, rilassante e antistress, cervico lombare, linfodrenante, riflessologia plantare, coppettazione
 - Combo allenamento + trattamenti: Bronzo 370 €, Argento 740 €, Oro 1.040 €; percorsi mensili da 310 € a 820 €
-- Pagamenti: PayPal, contanti, carta
+- Pagamenti: contanti, carta, PayPal; online anche Apple Pay, Google Pay e Klarna
 - App personale per clienti: schede con foto e video, carichi, peso, prenotazioni (anche direttamente con il proprio abbonamento), chat con Kone
 
 ## Contatti
-- Indirizzo: Piazza Puccini 16/A, 20070 Vizzolo Predabissi (MI) (a sud-est di Milano), su appuntamento
+- Indirizzo: Piazza Puccini 16/A, 20070 Vizzolo Predabissi (MI), a sud-est di Milano, confinante con Melegnano; su appuntamento
+- Stazione più vicina: Melegnano (linee suburbane S1 e S12)
+- Zona servita: Vizzolo Predabissi, Melegnano, San Giuliano Milanese, San Donato Milanese, Cerro al Lambro, San Zenone al Lambro, Dresano, Colturano, Casalmaiocco, Sordio, Mediglia, Peschiera Borromeo, Milano
 - Partita IVA: 14938790962
 - Telefono / WhatsApp: +39 392 269 6468
 - Email: konemoctar00@gmail.com
@@ -37,6 +39,7 @@
 - [Prezzi e pacchetti](https://kone-studio.com/prezzi/)
 - [Chi è Kone Moctar](https://kone-studio.com/kone-moctar/)
 - [Contatti e prenotazioni](https://kone-studio.com/contatti/)
+- [Dove siamo: personal trainer e massaggi vicino a Melegnano](https://kone-studio.com/personal-trainer-massaggi-melegnano/)
 
 ## Esercizi
 - [Esercizi in palestra con foto e tecnica](https://kone-studio.com/esercizi/): 107 esercizi per gruppo muscolare (petto, dorso, spalle, gambe, glutei, femorali, polpacci, bicipiti, tricipiti, core, condizionamento, mobilità e stretching), ognuno con foto di partenza e di arrivo e indicazioni tecniche di Kone Moctar
@@ -46,5 +49,14 @@
 - [Massaggio decontratturante o sportivo?](https://kone-studio.com/guide/massaggio-decontratturante-o-sportivo/)
 - [Ogni quanto fare un massaggio?](https://kone-studio.com/guide/ogni-quanto-fare-un-massaggio/)
 - [Personal trainer o corsi di gruppo?](https://kone-studio.com/guide/personal-trainer-o-corsi-di-gruppo/)
+- [Massaggio Prima o Dopo l'Allenamento? Quando Farlo](https://kone-studio.com/guide/massaggio-prima-o-dopo-allenamento/)
+- [Coppettazione: Fa Male? Quanto Durano i Segni?](https://kone-studio.com/guide/coppettazione-fa-male-segni/)
+- [Massaggio Linfodrenante: Quante Sedute Servono?](https://kone-studio.com/guide/linfodrenante-quante-sedute/)
+- [Prima Seduta con il Personal Trainer: Cosa Aspettarsi](https://kone-studio.com/guide/prima-seduta-personal-trainer/)
+- [Dolori Muscolari Dopo l'Allenamento (DOMS): Cosa Fare](https://kone-studio.com/guide/dolori-muscolari-dopo-allenamento/)
+- [Cervicale e Tensioni al Collo: Massaggio o Esercizi?](https://kone-studio.com/guide/cervicale-massaggio-o-esercizi/)
 
 - [Prenota e paga online](https://kone-studio.com/prenota/): planning settimanale con orari liberi e corsi, prenotazione e pagamento online (carta, Apple Pay, Google Pay, PayPal).
+
+## Altro
+- [Versione completa per assistenti IA](https://kone-studio.com/llms-full.txt): prezzi, servizi e risposte alle domande frequenti in un unico file

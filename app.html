@@ -3370,7 +3370,8 @@ SCHEDE_PRONTE.forEach(p=>p.giorni.forEach((g,i)=>g.g=GIORNI7[i]));
 const prontaById=id=>SCHEDE_PRONTE.find(p=>p.id===id)||null;
 /* la scheda pronta come scheda normale (stesso formato di quelle di Kone) */
 const prontaScheda=p=>({nome:p.nome,creata:T0,pronta:p.id,giorni:clone(p.giorni)});
-function schedaCid(){return S.role==="coach"&&!S.preview?(S.view==="cliente"?S.client:(S.sclient||1)):S.cid}
+function schedeId(){return DB.clienti.some(c=>c.id===S.sclient)?S.sclient:(DB.clienti[0]?DB.clienti[0].id:null)}
+function schedaCid(){return S.role==="coach"&&!S.preview?(S.view==="cliente"?S.client:schedeId()):S.cid}
 function migraSchede(){
   if(!DB.schede){DB.schede={};const d=Object.getOwnPropertyDescriptor(DB,"scheda");if(d&&d.value&&d.value.giorni)DB.schede[1]=d.value}
   delete DB.scheda;DB.modelli=DB.modelli||[];DB.schedeArch=DB.schedeArch||{};
@@ -3420,7 +3421,8 @@ function apriFile(k){IDB.get(k).then(b=>{if(!b)return toast("File non disponibil
 function salvaModello(cid){const sc=DB.schede[cid];if(!sc)return;const m=clone(sc);m.file=null;m.nome=sc.nome;DB.modelli.push(m);save();toast("Salvata tra i modelli: “"+sc.nome+"”")}
 function inviaScheda(cid){const sc=DB.schede[cid];if(!sc)return;const t=chatDi(cid),msg="Ciao "+cli(cid).n.split(" ")[0]+"! Ti ho preparato la scheda “"+sc.nome+"”: la trovi nella sezione Scheda dell'app."+(sc.file?" C'è anche il file "+sc.file.nome+".":"")+" — Kone";
   t.msgs.push({t:msg,me:1,h:oraLabel()});t.last=msg;t.unreadC=(t.unreadC||0)+1;sc.inviata=T0;save();render();toast("Messaggio inviato in chat")}
-function vSchede(){const cid=S.sclient||1;
+function vSchede(){const cid=schedeId();
+  if(cid==null)return head("Schede dei clienti","Scegli il cliente, poi modifica la sua scheda o caricane una nuova")+'<div class="card"><p class="muted">Non ci sono ancora clienti. Aggiungine uno da Clienti per creargli la scheda.</p></div>';
   return head("Schede dei clienti","Scegli il cliente, poi modifica la sua scheda o caricane una nuova")+
    '<div class="card" style="margin-bottom:14px"><div class="sch-pick">'+DB.clienti.map(c=>'<button class="chk'+(c.id===cid?" on":"")+'" onclick="S.sclient='+c.id+';S.day=-1;render()">'+esc(c.n)+(DB.schede[c.id]?'':' <span class="dim">· da fare</span>')+'</button>').join("")+'</div></div>'+
    schedaPanel(cid)+

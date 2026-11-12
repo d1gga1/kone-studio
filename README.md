@@ -331,3 +331,28 @@ feedback, contabilità, listino ed esercizi stanno nel database **Supabase**, pr
 - Prenotare un orario dal sito apre l'app su `/app#prenota=<id slot>`: dopo l'accesso (o la registrazione) il cliente arriva
   direttamente alla conferma e il posto finisce nell'agenda di Kone. PayPal/WhatsApp restano come seconda strada.
 - Per cambiare corsi, orari o posti si modifica solo l'agenda nell'app: sito, app clienti e agenda titolare mostrano la stessa cosa.
+
+### Ottimizzazione visibilità online — 100 discipline (12/11/2026)
+
+- **Coerenza indirizzo (NAP)**: in tutte le pagine (piè di pagina, contatti, FAQ, dati strutturati) l'indirizzo è
+  Piazza Puccini 16/A, 20070 Vizzolo Predabissi (MI). Tolte le frasi che collocavano lo studio "a Milano" città.
+  Le parole chiave "Milano" restano nei titoli (città metropolitana), ma il testo dice "alle porte di Milano / vicino a Melegnano".
+- **Nuova pagina locale** `/personal-trainer-massaggi-melegnano/` (Dove siamo): come arrivare, stazione di Melegnano (S1, S12),
+  comuni vicini, servizi e prezzi, FAQ. Collegata da piè di pagina, contatti e riquadri "In breve".
+- **6 nuove guide** (in `guide/`): massaggio prima o dopo l'allenamento, coppettazione e segni, linfodrenante quante sedute,
+  prima seduta col personal trainer, dolori muscolari (DOMS), cervicale massaggio o esercizi. Ognuna con autore, data,
+  FAQ, Article + FAQPage, avviso medico, link a servizi ed esercizi. Pagina Guide divisa in due gruppi tematici.
+- **Riquadro "In breve"** in cima alle 12 pagine servizio: cos'è, per chi, prezzo, dove, come prenotare, guide collegate
+  (risposta rapida per Google, snippet e assistenti IA). Stile in `pagine.css` (`.facts`, versione `?v=5`).
+- **Dati strutturati**: `areaServed` con 13 comuni (Vizzolo, Melegnano, San Giuliano, San Donato, …, Milano),
+  `paymentAccepted` aggiornato, `ReserveAction` verso /prenota/ (agenti IA), Person con `hasOccupation` e Instagram di Kone,
+  pagina Prenota con la scheda dello studio.
+- **IA**: `robots.txt` con accesso esplicito ai crawler di ricerca IA; `llms.txt` aggiornato; nuovo `llms-full.txt`
+  (testo completo del sito per gli assistenti). Rigenerarlo quando cambiano molti testi.
+- **Anteprime social** nuove in `assets/og/` per le guide e la pagina Dove siamo.
+- **Accessibilità**: tabelle scorrevoli raggiungibili da tastiera, intestazione vuota corretta, contrasti della home.
+- Sitemap aggiornata (31 indirizzi), service worker `km-studio-v33`.
+- **App (area titolare)**: corretto l'errore "Cannot read properties of undefined (reading 'n')" in *Schede clienti*:
+  la pagina cercava il cliente con id 1 (quello della demo, non più esistente). Ora apre il primo cliente.
+- Le azioni da fare fuori dal sito (Google Business Profile, recensioni, directory, Bing/Apple, ecc.) sono nel documento
+  "Piano visibilità online — Kone Moctar Studio".
