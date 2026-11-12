@@ -956,7 +956,7 @@ body.resizing,body.resizing *{cursor:ns-resize!important}
       <button class="icon-btn tb-help" id="tbHelp" onclick="tourStart()" title="Guida all'app" aria-label="Guida all'app" hidden>
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2.5-3 4.5"/><path d="M12 17.5h.01"/></svg>
       </button>
-      <button class="icon-btn" onclick="esci()" title="Esci" aria-label="Esci">
+      <button class="icon-btn" onclick="menuEsci()" title="Esci o gestisci account" aria-label="Esci o gestisci account">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
       </button>
     </div>
@@ -1993,6 +1993,25 @@ function esci(){
   LS.del("sess");S.contiOk=false;
   if(S.role==="coach")showCoachAuth();else showClientAuth();
 }
+/* menu del pulsante Esci: per i clienti c'è anche l'eliminazione dell'account (obbligatoria per l'App Store) */
+function menuEsci(){
+  if(S.role!=="client"||S.preview)return esci();
+  const c=me();
+  openModal('<h3>Il tuo account</h3><p class="muted" style="margin-bottom:14px">'+esc(c?c.n:"")+(c&&c.email?' · '+esc(c.email):'')+'</p><div class="act-list">'+
+   '<button onclick="closeModal();esci()">'+ic("chevR",18)+'<span><b>Esci</b><small>Chiudi la sessione su questo dispositivo</small></span></button>'+
+   '<button onclick="eliminaAccountModal()">'+ic("trash",18)+'<span><b>Elimina il mio account</b><small>Cancella account e dati personali da KM Studio</small></span></button></div>')}
+function eliminaAccountModal(){
+  openModal('<h3>Eliminare l\'account?</h3><p style="margin-bottom:10px">Verranno cancellati il tuo account e i tuoi dati: profilo, schede, peso e carichi, dieta, chat e prenotazioni future.</p>'+
+   '<p class="muted" style="margin-bottom:10px">La richiesta arriva subito a Kone, che completa la cancellazione entro 7 giorni. Le prenotazioni già pagate e i dati che la legge obbliga a conservare (es. ricevute di pagamento) restano solo per il tempo previsto.</p>'+
+   '<div class="field"><label>Per confermare scrivi ELIMINA</label><input class="fi" id="delConf" autocapitalize="characters" autocomplete="off"></div>'+
+   '<div class="inline" style="justify-content:flex-end;gap:8px;flex-wrap:wrap"><button class="btn ghost" onclick="closeModal()">Annulla</button><button class="btn primary" onclick="eliminaAccount()">Elimina il mio account</button></div>')}
+function eliminaAccount(){
+  if(String(el("delConf").value||"").trim().toUpperCase()!=="ELIMINA")return toast("Scrivi ELIMINA per confermare");
+  const c=me();
+  try{msgAKone(S.cid,"🗑️ RICHIESTA DI ELIMINAZIONE ACCOUNT: "+(c?c.n:"")+(c&&c.email?" ("+c.email+")":"")+(c&&c.tel?" · tel. "+c.tel:"")+". Cancella il mio account e i miei dati personali entro 7 giorni.")}catch(e){return toast("Richiesta non inviata, riprova")}
+  if(c)c.eliminazione=T0;
+  save();closeModal();toast("Richiesta di eliminazione inviata: Kone cancella l'account entro 7 giorni");
+  setTimeout(()=>esci(),900)}
 function enterApp(role,cid){
   hideAll();S.role=role;S.preview=false;S.sets={};S.vals={};S.contiOk=false;
   if(role==="client"){S.cid=cid||1;S.area="allen";S.view="oggi"}else{S.area="allen";S.view="dash"}
