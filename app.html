@@ -2733,13 +2733,58 @@ let restH=null;
 function startRest(sec){stopRest();let t=sec;el("rest").classList.add("on");const p=()=>{el("restT").textContent=Math.floor(t/60)+":"+pad(t%60)};p();
   restH=setInterval(()=>{t--;p();if(t<=0){stopRest();toast("Recupero finito: vai con la prossima serie")}},1000)}
 function stopRest(){if(restH)clearInterval(restH);restH=null;const r=el("rest");if(r)r.classList.remove("on")}
-function vScheda(){
-  return head("La tua scheda",esc(DB.scheda.nome))+fileSchedaCliente()+'<p class="hint" style="margin:-8px 0 14px">Tocca un esercizio per vedere foto, video e come si esegue.</p>'+
-  '<div class="stack">'+DB.scheda.giorni.map((g,i)=>'<div class="card '+(i===dayIdx()?"":"flat")+'"><div class="card-h"><span class="pill '+(g.ex.length?"gold":"")+'">'+g.g+'</span><h3>'+esc(g.t)+'</h3>'+
+function giorniHTML(sc,oggi){
+  return '<div class="stack">'+sc.giorni.map((g,i)=>'<div class="card '+(oggi&&i===dayIdx()?"":"flat")+'"><div class="card-h"><span class="pill '+(g.ex.length?"gold":"")+'">'+g.g+'</span><h3>'+esc(g.t)+'</h3>'+
    (g.ex.length?'<span class="chip more">'+g.ex.length+' esercizi</span>':'<span class="chip more">riposo</span>')+'</div>'+
    (g.ex.length?'<div class="stack" style="gap:4px">'+g.ex.map(e=>'<button class="inline" style="justify-content:space-between;font-size:14px;width:100%;text-align:left;flex-wrap:nowrap;padding:4px 0" onclick="vediEsercizio(\''+esc(e.n).replace(/'/g,"\\'")+'\')">'+
      '<span class="inline" style="flex-wrap:nowrap">'+miniHTML(e.n)+'<span>'+esc(e.n)+'</span></span><span class="dim num" style="flex:none">'+e.s+'×'+esc(e.r)+(e.kg?' · '+fmtN(e.kg)+' kg':'')+'</span></button>').join("")+'</div>':'<p class="muted" style="font-size:14px">Nessun allenamento in programma.</p>')+'</div>').join("")+'</div>';
 }
+function vScheda(){
+  const mia=DB.schede[S.cid],pa=!mia&&prontaAttiva(S.cid);
+  if(!mia&&!pa&&!S.prVisto){S.tab=1;S.prVisto=1}
+  const tabs=tabsHTML(["La mia scheda","Schede pronte"],S.tab,"S.tab");
+  if(S.tab===1)return head("Schede pronte","Schede complete per tutta la settimana, in base al tuo obiettivo")+tabs+prontePanel();
+  if(!mia&&!pa)return head("La tua scheda","Non hai ancora una scheda")+tabs+fileSchedaCliente()+
+   '<div class="card"><p class="muted" style="margin-bottom:12px">Kone non ti ha ancora preparato una scheda personale. Intanto puoi seguire una delle schede pronte: scegli il tuo obiettivo e la trovi ogni giorno in Oggi.</p>'+
+   '<button class="btn primary" onclick="S.tab=1;render()">Scegli una scheda pronta</button></div>';
+  return head("La tua scheda",esc(DB.scheda.nome))+tabs+
+   (pa?'<div class="alert info" style="margin-bottom:14px"><div><b>Stai seguendo una scheda pronta</b><p>Quando Kone ti prepara la tua scheda personale, la trovi qui al suo posto.</p></div><button class="btn sm" onclick="S.prSel=\''+pa.pronta+'\';S.tab=1;render()">Cambia</button></div>':'')+
+   fileSchedaCliente()+'<p class="hint" style="margin:-8px 0 14px">Tocca un esercizio per vedere foto, video e come si esegue.</p>'+giorniHTML(DB.scheda,1);
+}
+let _prC=null;
+function prontaAttiva(cid){
+  if(S.role!=="client"||cid!==S.cid)return null;
+  const id=LS.get("pronta_"+cid,""),p=id&&prontaById(id);if(!p)return null;
+  if(!_prC||_prC.id!==id||_prC.cid!==cid)_prC={id,cid,sc:prontaScheda(p)};
+  return _prC.sc}
+function prontePanel(){
+  const mia=!!DB.schede[S.cid],att=mia?"":LS.get("pronta_"+S.cid,""),p=S.prSel&&prontaById(S.prSel);
+  if(!p)return '<p class="muted" style="margin-bottom:14px">Ogni scheda copre tutti i giorni della settimana, con allenamenti e giorni di riposo. Tocca un obiettivo per vederla.</p>'+
+   '<div class="act-list">'+SCHEDE_PRONTE.map(x=>{const n=x.giorni.filter(g=>g.ex.length).length;
+    return '<button onclick="S.prSel=\''+x.id+'\';render();el(\'main\').scrollTop=0">'+ic("plan",18)+'<span style="flex:1"><b>'+esc(x.ob)+(att===x.id?' · <span class="pill ok">la stai seguendo</span>':'')+'</b><small>'+esc(x.nome)+' · '+n+' allenamenti a settimana · '+esc(x.dur)+' · '+esc(x.liv)+'</small></span>'+ic("chevR",14)+'</button>'}).join("")+'</div>'+
+   (mia?'<p class="hint" style="margin-top:12px">Hai già una scheda personale preparata da Kone: se una di queste ti interessa, puoi chiedergli di passarci.</p>':'');
+  const az=att===p.id?'<span class="pill ok">'+ic("check",12)+' La stai seguendo</span><button class="btn sm ghost" onclick="smettiPronta()">Smetti di seguirla</button>'
+   :mia?'<button class="btn primary" onclick="chiediPronta(\''+p.id+'\')">'+ic("chat",14)+' Chiedi a Kone questa scheda</button>'
+   :'<button class="btn primary" onclick="seguiPronta(\''+p.id+'\')">Segui questa scheda</button>';
+  return '<button class="btn sm ghost" style="margin-bottom:12px" onclick="S.prSel=null;render()">‹ Tutte le schede</button>'+
+   '<div class="card" style="margin-bottom:14px"><div class="eyebrow" style="margin-bottom:6px">'+esc(p.ob)+'</div><h2 style="margin-bottom:8px">'+esc(p.nome)+'</h2>'+
+    '<div class="inline" style="flex-wrap:wrap;gap:6px;margin-bottom:10px"><span class="chip">'+esc(p.freq)+'</span><span class="chip">'+esc(p.dur)+' a seduta</span><span class="chip">'+esc(p.liv)+'</span></div>'+
+    '<p class="muted" style="margin-bottom:12px">'+esc(p.desc)+'</p>'+
+    '<p class="hint" style="margin-bottom:12px">Il carico lo scegli tu: deve permetterti di finire ogni serie con ancora 2 ripetizioni di riserva. Se hai dolori o problemi di salute, parlane prima con Kone.</p>'+
+    '<div class="inline" style="flex-wrap:wrap;gap:8px">'+az+'</div></div>'+
+   '<p class="hint" style="margin:0 0 14px">Tocca un esercizio per vedere foto e come si esegue.</p>'+giorniHTML(p);
+}
+function seguiPronta(id){const p=prontaById(id);if(!p)return;
+  if(!LS.set("pronta_"+S.cid,id))return toast("Non riesco a salvare la scelta su questo dispositivo");
+  _prC=null;S.sets={};S.vals={};S.day=-1;S.tab=0;S.prSel=null;
+  try{msgAKone(S.cid,"📋 Ho iniziato a seguire la scheda pronta “"+p.nome+"” (obiettivo: "+p.ob+").")}catch(e){}
+  save();render();el("main").scrollTop=0;toast("Scheda “"+p.ob+"” attiva: ogni giorno la trovi in Oggi")}
+function smettiPronta(){const p=prontaById(LS.get("pronta_"+S.cid,""));LS.del("pronta_"+S.cid);_prC=null;S.sets={};S.vals={};
+  try{if(p)msgAKone(S.cid,"Ho smesso di seguire la scheda pronta “"+p.nome+"”.")}catch(e){}
+  save();render();toast("Non segui più la scheda pronta")}
+function chiediPronta(id){const p=prontaById(id);if(!p)return;
+  try{msgAKone(S.cid,"📋 Mi piacerebbe passare alla scheda pronta “"+p.nome+"” (obiettivo: "+p.ob+"). Me la prepari?")}catch(e){return toast("Messaggio non inviato, riprova")}
+  save();toast("Richiesta inviata a Kone in chat")}
 function vDieta(){const d=dieta(S.cid),t=d?dTot(d):null;
   return head("La tua dieta",t?fN(t.k)+" kcal · "+fN(t.p)+" g proteine · "+fN(t.c)+" g carboidrati · "+fN(t.g)+" g grassi":"Il tuo piano alimentare, modificabile da te e da Kone")+dietaPanel(S.cid)}
 /* ---------- peso e carichi ---------- */
@@ -3205,11 +3250,111 @@ function migraPrezzi(){
 const GIORNI7=["Lun","Mar","Mer","Gio","Ven","Sab","Dom"];
 const schedaVuota=nome=>({nome:nome||"Nuova scheda",creata:T0,giorni:GIORNI7.map(g=>({g,t:"Riposo",ex:[]}))});
 const VUOTA=schedaVuota("Nessuna scheda assegnata");
+/* ---------- SCHEDE PRONTE · schede generali per obiettivo, uguali per tutti i clienti ----------
+   Il cliente le trova in Scheda → "Schede pronte" e può seguirne una finché Kone non gli assegna la sua.
+   Kone le trova in "Parti da un modello" per assegnarle (e personalizzarle) a un cliente.
+   Formato di ogni esercizio: n = nome (uguale alla libreria Esercizi), s = serie, r = ripetizioni o tempo, rec = recupero in secondi. */
+const PR_N="Scegli un carico con cui arrivi alla fine della serie con ancora 2 ripetizioni di riserva.";
+const px=(n,s,r,rec,note)=>({n,s,r:String(r),kg:0,last:0,rec,note:note||""});
+const rip=t=>({t,ex:[]});
+const SCHEDE_PRONTE=[
+ {id:"dimagrire",ob:"Dimagrire",nome:"Dimagrimento · brucia grassi",liv:"Tutti i livelli",freq:"4 allenamenti + 2 camminate",dur:"45-50′",
+  desc:"Circuiti total body e lavoro metabolico per consumare di più, con pause brevi. Da abbinare a un'alimentazione in leggero deficit.",
+  giorni:[
+   {t:"Total body A · circuito",ex:[px("Goblet squat",3,15,45,PR_N),px("Piegamenti su rialzo",3,12,45),px("Rematore con manubrio",3,"12+12",45),px("Affondi indietro",3,"10+10",45),px("Mountain climber",3,"30″",30),px("Plank frontale",3,"30″",30)]},
+   {t:"Cardio e addome",ex:[px("Treadmill incline walk",1,"30′",0,"Tapis roulant in salita (8-12%), passo svelto: devi riuscire a parlare ma con fatica."),px("Crunch a bicicletta",3,20,30),px("Dead bug",3,"10+10",30)]},
+   rip("Riposo attivo · camminata 30-45′"),
+   {t:"Total body B · circuito",ex:[px("Stacco gambe tese manubri",3,12,45,PR_N),px("Shoulder press manubri",3,12,45),px("Lat machine presa larga",3,12,45),px("Step-up con manubri",3,"10+10",45),px("Burpee",3,10,45,"Se è troppo intenso togli il salto finale."),px("Plank laterale",3,"20″+20″",30)]},
+   {t:"Metabolico · intervalli",ex:[px("Salto della corda",4,"40″",20),px("Thruster con kettlebell",4,12,40),px("Vogatore",4,"250 m",60),px("Squat a corpo libero",4,20,30),px("Battle rope",4,"30″",40)]},
+   rip("Riposo attivo · camminata o bici 45′"),
+   rip("Riposo")]},
+
+ {id:"massa",ob:"Massa muscolare",nome:"Massa muscolare · ipertrofia",liv:"Intermedio",freq:"5 allenamenti",dur:"60-70′",
+  desc:"Split classica per gruppi muscolari, 8-12 ripetizioni. Ogni settimana prova ad aggiungere un po' di carico o una ripetizione.",
+  giorni:[
+   {t:"Petto e tricipiti",ex:[px("Panca piana bilanciere",4,8,120,"2 serie di riscaldamento leggere, poi 4 serie piene. "+PR_N),px("Panca inclinata manubri",3,10,90),px("Croci ai cavi",3,12,60),px("Dip alle parallele (petto)",3,10,90,"Se non riesci, usa la macchina assistita o i piegamenti."),px("Pushdown con corda",3,12,60),px("French press manubrio",3,12,60)]},
+   {t:"Dorso e bicipiti",ex:[px("Trazioni alla sbarra",4,"6-8",120,"Se non ne fai 6, sostituisci con la Lat machine presa larga."),px("Rematore bilanciere",4,8,90,PR_N),px("Pulley basso",3,12,75),px("Pulldown a braccia tese",3,12,60),px("Curl bilanciere EZ",3,10,60),px("Curl a martello",3,12,60)]},
+   {t:"Gambe · quadricipiti",ex:[px("Squat bilanciere",4,8,150,PR_N),px("Leg press 45°",3,12,90),px("Split squat con manubri",3,"10+10",75),px("Leg extension",3,15,60),px("Calf raise in piedi",4,15,45)]},
+   rip("Riposo"),
+   {t:"Spalle e addome",ex:[px("Military press",4,8,120,PR_N),px("Alzate laterali",4,15,45),px("Alzate posteriori",3,15,45),px("Face pull ai cavi",3,15,45),px("Crunch ai cavi",3,15,45),px("Plank frontale",3,"45″",45)]},
+   {t:"Gambe · femorali e glutei",ex:[px("Stacco rumeno",4,8,120,PR_N),px("Hip thrust",4,10,90),px("Leg curl sdraiato",3,12,60),px("Affondi camminati bilanciere",3,"10+10",75),px("Calf raise seduto",3,15,45)]},
+   rip("Riposo")]},
+
+ {id:"tonificare",ob:"Tonificare",nome:"Tonificazione · total body",liv:"Principiante-intermedio",freq:"4 allenamenti + 2 camminate",dur:"50′",
+  desc:"Parte alta e parte bassa alternate, 12-15 ripetizioni con recuperi medi: corpo più sodo e definito senza aumentare troppo il volume.",
+  giorni:[
+   {t:"Gambe e glutei",ex:[px("Goblet squat",3,12,60,PR_N),px("Hip thrust",3,12,60),px("Affondi indietro",3,"10+10",60),px("Leg curl seduto",3,15,45),px("Abductor machine",3,15,45),px("Calf raise in piedi",3,15,45)]},
+   {t:"Parte alta",ex:[px("Panca piana manubri",3,12,60,PR_N),px("Lat machine presa larga",3,12,60),px("Shoulder press manubri",3,12,60),px("Rematore con manubrio",3,"12+12",60),px("Curl con manubri",2,15,45),px("Pushdown tricipiti",2,15,45)]},
+   rip("Riposo attivo · camminata 30-45′"),
+   {t:"Glutei, femorali e core",ex:[px("Stacco gambe tese manubri",3,12,60,PR_N),px("Ponte glutei con bilanciere",3,12,60),px("Step-up con manubri",3,"10+10",60),px("Slanci dietro (kickback)",3,"15+15",45),px("Dead bug",3,"10+10",30),px("Plank laterale",3,"25″+25″",30)]},
+   {t:"Parte alta e cardio",ex:[px("Piegamenti sulle braccia",3,"10-12",60,"Se servono, fai i piegamenti su rialzo."),px("Pulley basso",3,12,60),px("Alzate laterali",3,15,45),px("Face pull ai cavi",3,15,45),px("Vogatore",1,"12′",0,"Ritmo costante e sostenuto.")]},
+   rip("Riposo attivo · camminata o bici 45′"),
+   rip("Riposo")]},
+
+ {id:"glutei",ob:"Glutei e gambe",nome:"Glutei e gambe",liv:"Tutti i livelli",freq:"4 allenamenti",dur:"50-55′",
+  desc:"Focus su glutei e gambe tre volte a settimana, più un giorno per la parte alta così il corpo resta in equilibrio.",
+  giorni:[
+   {t:"Glutei · forza",ex:[px("Hip thrust",4,10,90,PR_N),px("Squat sumo con manubrio",3,12,75),px("Stacco rumeno",3,10,90),px("Abductor machine",3,15,45),px("Calf raise in piedi",3,15,45)]},
+   {t:"Parte alta e core",ex:[px("Lat machine presa larga",3,12,60,PR_N),px("Panca piana manubri",3,12,60),px("Rematore con manubrio",3,"12+12",60),px("Shoulder press manubri",3,12,60),px("Plank frontale",3,"40″",30),px("Dead bug",3,"10+10",30)]},
+   rip("Riposo attivo · camminata 30-45′"),
+   {t:"Gambe · quadricipiti e glutei",ex:[px("Goblet squat",4,12,75,PR_N),px("Split squat con manubri",3,"10+10",60),px("Leg press 45°",3,15,75,"Piedi alti e larghi sulla pedana per spostare il lavoro sui glutei."),px("Leg extension",3,15,45),px("Clamshell",3,"20+20",30)]},
+   rip("Riposo"),
+   {t:"Glutei · volume e pump",ex:[px("Ponte glutei con bilanciere",4,15,60,PR_N),px("Step-up con manubri",3,"12+12",60),px("Leg curl sdraiato",3,12,60),px("Slanci dietro (kickback)",3,"15+15",45),px("Fire hydrant",3,"15+15",30),px("Glute bridge monopodalico",3,"12+12",30)]},
+   rip("Riposo")]},
+
+ {id:"forza",ob:"Forza",nome:"Forza · i grandi esercizi",liv:"Intermedio-avanzato",freq:"4 allenamenti",dur:"70′",
+  desc:"Pochi esercizi fondamentali con carichi alti e ripetizioni basse, recuperi lunghi. Tecnica sempre pulita: mai arrivare al cedimento.",
+  giorni:[
+   {t:"Squat",ex:[px("Squat bilanciere",5,5,180,"Riscaldamento progressivo, poi 5 serie da 5 con lo stesso carico. Quando le chiudi tutte, la volta dopo +2,5 kg."),px("Leg press 45°",3,8,120),px("Leg curl sdraiato",3,10,75),px("Plank frontale",3,"45″",60)]},
+   {t:"Panca",ex:[px("Panca piana bilanciere",5,5,180,"Riscaldamento progressivo, poi 5×5. Quando le chiudi tutte, la volta dopo +2,5 kg. Sempre con assistenza."),px("Rematore bilanciere",4,6,120),px("Panca presa stretta",3,8,90),px("Face pull ai cavi",3,15,60)]},
+   rip("Riposo"),
+   {t:"Stacco",ex:[px("Stacco da terra",5,3,180,"Riscaldamento progressivo, poi 5×3. Schiena neutra in ogni ripetizione: se si arrotonda, il carico è troppo."),px("Front squat",3,6,150),px("Trazioni alla sbarra",4,"5-6",120,"Se servono, con elastico."),px("Farmer walk",3,"30 m",90)]},
+   {t:"Military press",ex:[px("Military press",5,5,150,"Riscaldamento progressivo, poi 5×5."),px("Panca inclinata manubri",3,8,90),px("Lat machine presa stretta",3,8,90),px("Curl bilanciere",3,8,60),px("Dead bug",3,"10+10",45)]},
+   rip("Riposo"),
+   rip("Riposo")]},
+
+ {id:"principiante",ob:"Principiante",nome:"Principiante · rimettersi in forma",liv:"Principiante",freq:"3 allenamenti + 2 camminate",dur:"40-45′",
+  desc:"Per chi parte da zero o riprende dopo una pausa: macchine ed esercizi semplici, total body tre volte a settimana. Prima la tecnica, poi il carico.",
+  giorni:[
+   {t:"Total body A",ex:[px("Leg press 45°",3,12,75,"Carico leggero: devi poter fare ancora 3-4 ripetizioni alla fine della serie."),px("Pectoral machine",3,12,60),px("Lat machine presa larga",3,12,60),px("Leg curl seduto",2,12,60),px("Plank frontale",3,"20″",45)]},
+   rip("Riposo attivo · camminata 30′"),
+   {t:"Total body B",ex:[px("Goblet squat",3,10,75,"Con un manubrio leggero: scendi solo fin dove la schiena resta dritta."),px("Piegamenti su rialzo",3,10,60),px("Pulley basso",3,12,60),px("Shoulder press manubri",2,12,60),px("Dead bug",3,"8+8",45)]},
+   rip("Riposo"),
+   {t:"Total body C",ex:[px("Affondi indietro",3,"8+8",75,"Anche senza pesi all'inizio."),px("Panca piana manubri",3,12,60),px("Rematore con manubrio",3,"10+10",60),px("Ponte glutei a corpo libero",3,15,45),px("Plank laterale",2,"15″+15″",45)]},
+   rip("Riposo attivo · camminata 30′"),
+   rip("Riposo")]},
+
+ {id:"postura",ob:"Postura e schiena",nome:"Postura e schiena sana",liv:"Tutti i livelli",freq:"3 sedute + 3 camminate",dur:"35-40′",
+  desc:"Mobilità, core profondo e rinforzo della parte alta della schiena e dei glutei. Ideale per chi sta molto seduto o soffre di mal di schiena (senza dolore acuto in corso).",
+  giorni:[
+   {t:"Mobilità e core",ex:[px("Cat-cow",2,10,30,"Lento, seguendo il respiro."),px("World's greatest stretch",2,"5+5",30),px("Bird dog",3,"8+8",30,"Tieni 2 secondi in allungamento senza far ruotare il bacino."),px("Dead bug",3,"8+8",30),px("Ponte glutei a corpo libero",3,12,45),px("Posizione del bambino",1,"1′",0)]},
+   rip("Riposo attivo · camminata 30′"),
+   {t:"Rinforzo posturale",ex:[px("Face pull ai cavi",3,15,45,"Gomiti alti, stringi le scapole alla fine."),px("Pulley basso",3,12,60),px("Alzate posteriori",3,15,45),px("Superman",3,"10 (2″ tenuta)",45),px("Plank frontale",3,"30″",45),px("Allungamento pettorali",2,"30″",0)]},
+   rip("Riposo attivo · camminata 30′"),
+   {t:"Anche, glutei e allungamento",ex:[px("Goblet squat",3,10,60,"Leggero, tutto il movimento controllato."),px("Hip thrust",3,12,60),px("Clamshell",3,"15+15",30),px("Pallof press",3,"10+10",45,"Il busto non deve ruotare."),px("Allungamento flessori dell'anca",2,"30″+30″",0),px("Allungamento femorali",2,"30″+30″",0)]},
+   rip("Riposo attivo · camminata 30′"),
+   rip("Riposo")]},
+
+ {id:"casa",ob:"A casa",nome:"A casa · corpo libero",liv:"Tutti i livelli",freq:"4 allenamenti",dur:"30-35′",
+  desc:"Nessun attrezzo: solo il tuo corpo e un tappetino. Perfetta quando non riesci a venire in studio o sei in viaggio.",
+  giorni:[
+   {t:"Gambe e glutei",ex:[px("Squat a corpo libero",4,20,45),px("Affondi indietro",3,"12+12",45),px("Ponte glutei a corpo libero",3,20,30),px("Glute bridge monopodalico",3,"12+12",30),px("Wall sit",3,"40″",45),px("Fire hydrant",3,"15+15",30)]},
+   {t:"Parte alta e core",ex:[px("Piegamenti sulle braccia",4,"10-15",60,"Se servono, con le mani su un rialzo (divano, sedia stabile)."),px("Dip su panca",3,12,45,"Con le mani su una sedia stabile."),px("Superman",3,12,30),px("Plank frontale",3,"40″",30),px("Plank laterale",3,"25″+25″",30),px("Crunch a bicicletta",3,20,30)]},
+   rip("Riposo attivo · camminata 30-45′"),
+   {t:"Circuito brucia grassi",ex:[px("Skater jump",4,"40″",20,"4 giri: un esercizio dopo l'altro, 1′ di pausa a fine giro."),px("Squat a corpo libero",4,"40″",20),px("Mountain climber",4,"40″",20),px("Burpee",4,"30″",20),px("High knees",4,"30″",60)]},
+   rip("Riposo"),
+   {t:"Total body e mobilità",ex:[px("Inchworm",3,8,45),px("Affondi indietro",3,"10+10",45),px("Piegamenti sulle braccia",3,"8-12",60),px("Dead bug",3,"10+10",30),px("World's greatest stretch",2,"5+5",0),px("Posizione del bambino",1,"1′",0)]},
+   rip("Riposo")]}
+];
+SCHEDE_PRONTE.forEach(p=>p.giorni.forEach((g,i)=>g.g=GIORNI7[i]));
+const prontaById=id=>SCHEDE_PRONTE.find(p=>p.id===id)||null;
+/* la scheda pronta come scheda normale (stesso formato di quelle di Kone) */
+const prontaScheda=p=>({nome:p.nome,creata:T0,pronta:p.id,giorni:clone(p.giorni)});
 function schedaCid(){return S.role==="coach"&&!S.preview?(S.view==="cliente"?S.client:(S.sclient||1)):S.cid}
 function migraSchede(){
   if(!DB.schede){DB.schede={};const d=Object.getOwnPropertyDescriptor(DB,"scheda");if(d&&d.value&&d.value.giorni)DB.schede[1]=d.value}
   delete DB.scheda;DB.modelli=DB.modelli||[];DB.schedeArch=DB.schedeArch||{};
-  Object.defineProperty(DB,"scheda",{get(){return DB.schede[schedaCid()]||VUOTA},configurable:true,enumerable:false});
+  Object.defineProperty(DB,"scheda",{get(){const c=schedaCid();return DB.schede[c]||prontaAttiva(c)||VUOTA},configurable:true,enumerable:false});
 }
 const oraLabel=()=>{const n=new Date();return fmtD(T0,{day:"numeric",month:"short"})+" "+pad(n.getHours())+":"+pad(n.getMinutes())};
 
@@ -3217,7 +3362,7 @@ const oraLabel=()=>{const n=new Date();return fmtD(T0,{day:"numeric",month:"shor
 function schedaOpzioni(cid,sost){const c=cli(cid);
   return '<div class="act-list">'+
    '<button onclick="nuovaScheda('+cid+')">'+ic("plus",18)+'<span><b>Scheda vuota</b><small>7 giorni: aggiungi gli esercizi dalla libreria</small></span></button>'+
-   '<button onclick="copiaSchedaModal('+cid+')">'+ic("copy",18)+'<span><b>Parti da un modello o da un altro cliente</b><small>'+DB.modelli.length+' modelli salvati · '+Object.keys(DB.schede).filter(k=>+k!==cid).length+' schede di altri clienti</small></span></button>'+
+   '<button onclick="copiaSchedaModal('+cid+')">'+ic("copy",18)+'<span><b>Parti da un modello o da un altro cliente</b><small>'+DB.modelli.length+' modelli salvati · '+SCHEDE_PRONTE.length+' schede pronte · '+Object.keys(DB.schede).filter(k=>+k!==cid).length+' schede di altri clienti</small></span></button>'+
    '<label class="act-file">'+ic("download",18)+'<span><b>Carica un file (PDF o foto)</b><small>'+esc(c.n.split(" ")[0])+' lo apre dalla sua app, nella sezione Scheda</small></span><input type="file" accept="application/pdf,image/*" hidden onchange="caricaFileScheda('+cid+',this)"></label>'+
    '</div>'+(sost?'<p class="hint">La scheda attuale non si perde: va nell\'archivio di '+esc(c.n.split(" ")[0])+'.</p>':'')}
 function schedaPanel(cid){
@@ -3244,8 +3389,9 @@ function copiaSchedaModal(cid){
   const altri=Object.keys(DB.schede).map(Number).filter(k=>k!==cid&&cli(k));
   openModal('<h3>Parti da…</h3><p class="muted" style="margin-bottom:14px">La copia è indipendente: puoi modificarla senza toccare l\'originale.</p>'+
    (DB.modelli.length?'<div class="flabel" style="margin-bottom:8px">I tuoi modelli</div><div class="act-list" style="margin-bottom:14px">'+DB.modelli.map((m,i)=>'<button onclick="nuovaScheda('+cid+',DB.modelli['+i+'])">'+ic("plan",18)+'<span><b>'+esc(m.nome)+'</b><small>'+m.giorni.filter(g=>g.ex.length).length+' giorni di allenamento</small></span></button>').join("")+'</div>':'')+
+   '<div class="flabel" style="margin-bottom:8px">Schede pronte per obiettivo</div><div class="act-list" style="margin-bottom:14px">'+SCHEDE_PRONTE.map((m,i)=>'<button onclick="nuovaScheda('+cid+',prontaScheda(SCHEDE_PRONTE['+i+']))">'+ic("plan",18)+'<span><b>'+esc(m.nome)+'</b><small>'+esc(m.ob)+' · '+m.giorni.filter(g=>g.ex.length).length+' giorni di allenamento · '+esc(m.liv)+'</small></span></button>').join("")+'</div>'+
    (altri.length?'<div class="flabel" style="margin-bottom:8px">Schede di altri clienti</div><div class="act-list">'+altri.map(k=>'<button onclick="nuovaScheda('+cid+',DB.schede['+k+'])">'+ic("users",18)+'<span><b>'+esc(cli(k).n)+'</b><small>'+esc(DB.schede[k].nome)+'</small></span></button>').join("")+'</div>':'')+
-   (!DB.modelli.length&&!altri.length?'<p class="muted">Non ci sono ancora modelli: crea una scheda e usa “Salva come modello”.</p>':''))}
+   '')}
 async function caricaFileScheda(cid,inp){const f=inp.files[0];if(!f)return;if(f.size>20*1024*1024)return toast("File troppo grande (max 20 MB)");
   const k="sf_"+cid+"_"+uid();try{await IDB.put(k,f)}catch(e){return toast("Non riesco a salvare il file su questo dispositivo")}
   if(!DB.schede[cid])DB.schede[cid]=schedaVuota(f.name.replace(/\.[a-z0-9]+$/i,""));
