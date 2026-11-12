@@ -785,6 +785,16 @@
   window.loginCliente = loginCliente;
   window.registraCliente = registraCliente;
   window.loginCoach = loginCoach;
+  /* eliminazione dell'account dall'app (Apple 5.1.1(v)): cancella subito profilo, dati e accesso */
+  window.KM_ELIMINA = async function () {
+    if (K.ruolo !== "client") throw new Error("Solo i clienti possono eliminare l'account da qui");
+    var r = await sb.rpc("elimina_mio_account");
+    if (r.error) throw r.error;
+    try { await sb.auth.signOut(); } catch (e) {}
+    K.ruolo = null; K.cid = null; K.snap = null; K.raw = null;
+    LS.del("sess"); S.contiOk = false;
+    return true;
+  };
   window.esci = esci;
   window.demoCliente = function () {};
   var cambiaPwLocale = window.cambiaPw;
