@@ -188,9 +188,20 @@ main{flex:1;overflow:auto;overscroll-behavior:contain}
 .btn.primary:hover{background:linear-gradient(150deg,var(--gold-hi),var(--gold));color:#150F04}
 .btn.sm{padding:6px 11px;font-size:11.5px}
 .btn.ghost{background:transparent}
+.btn.danger{background:var(--crit);border-color:var(--crit);color:#fff;font-weight:600}
+.btn.danger:hover{filter:brightness(1.1);color:#fff}
+.icon-btn.danger:hover{color:var(--crit);border-color:var(--crit)}
+.prep-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.prep-card{display:flex;flex-direction:column;gap:12px}
+.prep-open{display:flex;flex-direction:column;align-items:flex-start;gap:6px;text-align:left;background:none;border:0;padding:0;color:inherit;cursor:pointer;font:inherit}
+.prep-ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--surf-3);color:var(--gold-mid);margin-bottom:4px}
+.prep-t{font-family:var(--disp);font-size:20px;letter-spacing:.05em;text-transform:uppercase;line-height:1.15}
+.prep-open:hover .prep-t{color:var(--gold-mid)}
+.prep-act{margin-top:auto;gap:8px;flex-wrap:nowrap}
+.danger-zone{margin-top:14px;border-color:rgba(206,75,69,.35)}
 
 .grid{display:grid;gap:14px}
-.g2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
 .g3{grid-template-columns:repeat(auto-fit,minmax(215px,1fr))}
 .g4{grid-template-columns:repeat(auto-fit,minmax(168px,1fr))}
 .card{background:var(--surf);border:1px solid var(--line-soft);border-radius:var(--r);padding:16px 17px}
@@ -2068,7 +2079,7 @@ function buildNav(){
   const unread=DB.chat.reduce((a,c)=>a+c.unread,0),coach=S.role==="coach";
   const ut=!coach&&DB.chat.find(x=>x.n===me().n),uc=ut?ut.unreadC||0:0;
   const badge=(n,cls)=>n[0]==="chat"&&uc&&!coach?'<span class="'+cls+'">'+uc+'</span>':n[0]==="chat"&&unread&&coach?'<span class="'+cls+'">'+unread+'</span>':(n[0]==="conti"&&coach&&!S.contiOk?'':"");
-  const btn=n=>'<button class="nav '+(S.view===n[0]||(n[0]==="clienti"&&S.view==="cliente")?"on":"")+'" onclick="go(\''+n[0]+'\')">'+ic(n[2])+'<span>'+n[1]+'</span>'+badge(n,"badge")+'</button>';
+  const btn=n=>'<button class="nav '+(S.view===n[0]||(n[0]==="clienti"&&S.view==="cliente")||(n[0]==="libreria"&&S.view==="preparazione")?"on":"")+'" onclick="go(\''+n[0]+'\')">'+ic(n[2])+'<span>'+n[1]+'</span>'+badge(n,"badge")+'</button>';
   el("rail").innerHTML=coach
     ?'<div class="rail-sec">'+(S.area==="allen"?"Allenamenti":"Trattamenti")+'</div>'+NAV.coach[S.area].map(btn).join("")+'<div class="rail-sec">Studio</div>'+NAV.coach.studio.map(btn).join("")
     :NAV.client[S.area].map(btn).join("");
@@ -2221,7 +2232,7 @@ function vClienti(){
    '<td>'+esc(c.piano)+rinPill(c)+'<br><span class="dim" style="font-size:12.5px">'+esc(c.extra)+'</span><br>'+(DB.schede[c.id]?'<span class="pill ok" style="margin-top:4px">scheda attiva</span>':'<span class="pill warn" style="margin-top:4px">senza scheda</span>')+'</td>'+
    '<td style="min-width:130px"><div class="num" style="font-size:13px;margin-bottom:5px">'+usoTxt(c)+' sedute</div><div class="meter '+(!c.illim&&c.tot&&c.usate>=c.tot?"crit":"")+'"><i style="width:'+pctUso(c)+'%"></i></div></td>'+
    '<td class="num">'+c.scad+'</td><td>'+(c.gg===0?"oggi":c.gg+" giorni fa")+'</td><td>'+statoCli(c)+'</td>'+
-   '<td><button class="btn sm" onclick="openClient('+c.id+')">Apri</button></td></tr>'}).join("")+'</tbody></table></div></div>';
+   '<td><div class="inline" style="flex-wrap:nowrap;gap:6px"><button class="btn sm" onclick="openClient('+c.id+')">Apri</button><button class="icon-btn danger" onclick="eliminaClienteModal('+c.id+')" aria-label="Elimina cliente" title="Elimina cliente">'+ic("trash",15)+'</button></div></td></tr>'}).join("")+'</tbody></table></div></div>';
 }
 function vCliente(){
   const c=cli(S.client),tabs=["Panoramica","Scheda","Peso","Carichi","Prenotazioni","Dieta","Note"];let body="";
@@ -2234,7 +2245,8 @@ function vCliente(){
      '<button class="btn primary sm" style="align-self:flex-start" onclick="pianoModal('+c.id+')">'+ic("edit",13)+' Modifica abbonamento e sedute</button></div></div>'+
      '<div class="card">'+cardH("chart","Peso corporeo",pp.length?'<span class="chip num">'+fmtN(pp[pp.length-1].kg)+' kg</span>':"")+chartLine(pp.slice(-14).map(p=>[fmtD(p.d,{day:"numeric",month:"short"}),p.kg]),{unit:" kg"})+
      '<p class="hint">Registrato dal cliente nella sua app.</p></div></div>'+
-     '<div class="card" style="margin-top:14px">'+cardH("bell","Note private")+'<p class="muted">'+esc(c.note)+'</p></div>';
+     '<div class="card" style="margin-top:14px">'+cardH("bell","Note private")+'<p class="muted">'+esc(c.note)+'</p></div>'+
+     '<div class="card danger-zone"><div class="inline" style="justify-content:space-between;gap:12px;flex-wrap:wrap"><span><b>Elimina cliente</b><br><span class="dim" style="font-size:13px">Cancella il cliente e tutti i suoi dati. Non si può annullare.</span></span><button class="btn sm danger" onclick="eliminaClienteModal('+c.id+')">'+ic("trash",13)+' Elimina cliente</button></div></div>';
   } else if(S.tab===1)body=schedaPanel(c.id);
   else if(S.tab===2)body=pesoBlock(c.id,true);
   else if(S.tab===3)body=carichiBlock(c.id);
@@ -2267,7 +2279,7 @@ function togliEx(i){DB.scheda.giorni[S.day].ex.splice(i,1);save();render()}
 function vLibreria(){
   const grp={};DB.esercizi.forEach(e=>{(grp[e.m]=grp[e.m]||[]).push(e)});
   const nf=DB.esercizi.filter(e=>e.foto).length,nv=DB.esercizi.filter(e=>e.video).length;
-  return head("Libreria esercizi",DB.esercizi.length+" esercizi · "+nf+" con foto · "+nv+" con video",'<button class="btn primary" onclick="editEsercizio()">+ Nuovo esercizio</button>')+
+  return head("Libreria esercizi",DB.esercizi.length+" esercizi · "+nf+" con foto · "+nv+" con video",'<button class="btn" onclick="S.mod=null;go(\'preparazione\')">'+ic("plan",14)+' Preparazione schede'+(DB.modelli.length?' <span class="dim">'+DB.modelli.length+'</span>':'')+'</button><button class="btn primary" onclick="editEsercizio()">+ Nuovo esercizio</button>')+
    '<div class="alert info" style="margin-bottom:14px"><div><b>La libreria è tua</b><p>Aggiungi i tuoi esercizi con “+ Nuovo esercizio”, anche con un gruppo muscolare nuovo. Tocca un esercizio per cambiare nome, istruzioni, foto (anche scattata col telefono) e video, oppure per eliminarlo.</p></div></div>'+
    '<div class="exfilter"><input class="fi" id="exQ" type="search" placeholder="Cerca un esercizio…" oninput="filtraEx()" aria-label="Cerca esercizio"><span class="dim" id="exRes" style="font-size:13px"></span></div>'+
    '<div class="chips exchips" style="margin-bottom:14px"><button class="chk'+(!S.exg?" on":"")+'" onclick="S.exg=\'\';render()">Tutti</button>'+Object.keys(grp).map(m=>'<button class="chk'+(S.exg===m?" on":"")+'" onclick="S.exg=\''+esc(m).replace(/'/g,"\\'")+'\';render()">'+esc(m)+' <span class="dim">'+grp[m].length+'</span></button>').join("")+'</div>'+
@@ -3379,7 +3391,7 @@ function schedaCid(){return S.role==="coach"&&!S.preview?(S.view==="cliente"?S.c
 function migraSchede(){
   if(!DB.schede){DB.schede={};const d=Object.getOwnPropertyDescriptor(DB,"scheda");if(d&&d.value&&d.value.giorni)DB.schede[1]=d.value}
   delete DB.scheda;DB.modelli=DB.modelli||[];DB.schedeArch=DB.schedeArch||{};
-  Object.defineProperty(DB,"scheda",{get(){const c=schedaCid();return DB.schede[c]||prontaAttiva(c)||VUOTA},configurable:true,enumerable:false});
+  Object.defineProperty(DB,"scheda",{get(){if(S.role==="coach"&&!S.preview&&S.view==="preparazione"&&S.mod!=null&&DB.modelli[S.mod])return DB.modelli[S.mod];const c=schedaCid();return DB.schede[c]||prontaAttiva(c)||VUOTA},configurable:true,enumerable:false});
 }
 const oraLabel=()=>{const n=new Date();return fmtD(T0,{day:"numeric",month:"short"})+" "+pad(n.getHours())+":"+pad(n.getMinutes())};
 
@@ -3435,13 +3447,79 @@ function vSchede(){const cid=schedeId();
 function fileSchedaCliente(){const sc=DB.schede[S.cid];if(!sc||!sc.file)return "";
   return '<div class="alert info" style="margin-bottom:14px"><div><b>Kone ti ha caricato un file</b><p>'+esc(sc.file.nome)+'</p></div><button class="btn sm primary" onclick="apriFile(\''+sc.file.k+'\')">Apri</button></div>'}
 
+/* ---------- PREPARAZIONE SCHEDE · schede pronte da dare ai nuovi clienti (salvate in DB.modelli) ---------- */
+const prepGiorni=m=>(m.giorni||[]).filter(g=>g.ex.length).length;
+const prepEx=m=>(m.giorni||[]).reduce((a,g)=>a+g.ex.length,0);
+function vPreparazione(){
+  const L=DB.modelli;if(S.mod!=null&&!L[S.mod])S.mod=null;
+  if(S.mod==null){
+    return '<button class="btn sm ghost" onclick="go(\'libreria\')" style="margin-bottom:14px">← Esercizi</button>'+
+     head("Preparazione schede",L.length?L.length+(L.length===1?" scheda pronta":" schede pronte")+" da dare ai clienti":"Prepara le schede in anticipo: quando arriva un cliente gliela dai in un tocco",'<button class="btn primary" onclick="nuovaPrepModal()">+ Prepara scheda</button>')+
+     '<div class="alert info" style="margin-bottom:14px"><div><b>Schede pronte all\'uso</b><p>Prepara qui le tue schede tipo (es. “Principiante 3 giorni”, “Dimagrimento”, “Tonificazione”). Quando arriva un cliente tocca “Assegna”, oppure scegli la scheda direttamente mentre crei il nuovo cliente. Il cliente riceve una copia: puoi personalizzarla senza toccare l\'originale.</p></div></div>'+
+     (L.length?'<div class="prep-grid">'+L.map((m,i)=>'<div class="card prep-card"><button class="prep-open" onclick="apriPrep('+i+')"><span class="prep-ic">'+ic("plan",20)+'</span><span class="prep-t">'+esc(m.nome)+'</span><span class="dim" style="font-size:13px">'+prepGiorni(m)+(prepGiorni(m)===1?' giorno':' giorni')+' di allenamento · '+prepEx(m)+' esercizi</span>'+(m.nota?'<span class="muted" style="font-size:13px">'+esc(m.nota)+'</span>':'')+'</button>'+
+       '<div class="inline prep-act"><button class="btn sm primary" onclick="assegnaPrepModal('+i+')">'+ic("users",13)+' Assegna</button><button class="btn sm" onclick="apriPrep('+i+')">'+ic("edit",13)+' Modifica</button><button class="icon-btn" onclick="duplicaPrep('+i+')" aria-label="Duplica" title="Duplica">'+ic("copy",15)+'</button><button class="icon-btn danger" onclick="eliminaPrepModal('+i+')" aria-label="Elimina" title="Elimina">'+ic("trash",15)+'</button></div></div>').join("")+'</div>'
+      :'<div class="card"><p class="muted" style="margin-bottom:12px">Non hai ancora schede preparate.</p><button class="btn primary" onclick="nuovaPrepModal()">+ Prepara la prima scheda</button></div>');
+  }
+  const i=S.mod,m=L[i];
+  return '<button class="btn sm ghost" onclick="S.mod=null;render()" style="margin-bottom:14px">← Tutte le schede preparate</button>'+
+   '<div class="card sch-head"><div class="sch-row"><div style="flex:1;min-width:220px"><div class="flabel" style="margin-bottom:5px">Scheda preparata</div>'+
+   '<input class="fi sch-name" value="'+esc(m.nome)+'" onchange="DB.modelli['+i+'].nome=this.value.trim()||\'Scheda\';save();toast(\'Nome salvato\')" aria-label="Nome della scheda">'+
+   '<input class="fi" style="margin-top:8px" placeholder="Per chi è (es. principiante, 3 volte a settimana, dimagrimento)" value="'+esc(m.nota||"")+'" onchange="DB.modelli['+i+'].nota=this.value.trim();save();toast(\'Salvato\')" aria-label="Per chi è">'+
+   '<div class="dim" style="font-size:12.5px;margin-top:6px">'+prepGiorni(m)+(prepGiorni(m)===1?' giorno':' giorni')+' di allenamento · '+prepEx(m)+' esercizi · le modifiche si salvano da sole</div></div>'+
+   '<div class="inline sch-act"><button class="btn sm" onclick="duplicaPrep('+i+')">'+ic("copy",13)+' Duplica</button><button class="btn sm" onclick="eliminaPrepModal('+i+')">'+ic("trash",13)+' Elimina</button><button class="btn sm primary" onclick="assegnaPrepModal('+i+')">'+ic("users",13)+' Assegna a un cliente</button></div></div></div>'+
+   schedaEditor();
+}
+function apriPrep(i){S.mod=i;S.day=-1;if(S.view!=="preparazione"){S.view="preparazione";buildNav()}render();el("main").scrollTop=0}
+function nuovaPrepModal(){
+  openModal('<h3>Prepara una scheda</h3><p class="muted" style="margin-bottom:14px">Dai un nome e scegli da dove partire.</p>'+
+   '<div class="field"><label>Nome della scheda</label><input class="fi" id="npN" placeholder="es. Principiante · 3 giorni" autocomplete="off"></div>'+
+   '<div class="act-list"><button onclick="creaPrep()">'+ic("plus",18)+'<span><b>Scheda vuota</b><small>7 giorni: aggiungi gli esercizi dalla libreria</small></span></button></div>'+
+   '<div class="flabel" style="margin:14px 0 8px">Oppure parti da una scheda pronta per obiettivo</div><div class="act-list">'+
+   SCHEDE_PRONTE.map((p,k)=>'<button onclick="creaPrep('+k+')">'+ic("plan",18)+'<span><b>'+esc(p.nome)+'</b><small>'+esc(p.ob)+' · '+p.giorni.filter(g=>g.ex.length).length+' giorni di allenamento · '+esc(p.liv)+'</small></span></button>').join("")+'</div>')}
+function creaPrep(k){const n=el("npN")?el("npN").value.trim():"";
+  const m=k!=null?prontaScheda(SCHEDE_PRONTE[k]):schedaVuota("Nuova scheda");m.file=null;m.creata=T0;if(n)m.nome=n;
+  DB.modelli.push(m);save();closeModal();apriPrep(DB.modelli.length-1);toast(k!=null?"Scheda creata: modificala come vuoi":"Scheda creata: aggiungi gli esercizi")}
+function duplicaPrep(i){const m=clone(DB.modelli[i]);m.nome=m.nome+" (copia)";m.creata=T0;DB.modelli.splice(i+1,0,m);if(S.mod!=null)S.mod=i+1;save();render();toast("Scheda duplicata")}
+function eliminaPrepModal(i){const m=DB.modelli[i];if(!m)return;
+  openModal('<h3>Eliminare “'+esc(m.nome)+'”?</h3><p class="muted" style="margin-bottom:14px">Sparisce dalle schede preparate. I clienti a cui l\'hai già assegnata la tengono, perché hanno una copia.</p>'+
+   '<div class="inline" style="justify-content:flex-end;gap:8px"><button class="btn ghost" onclick="closeModal()">Annulla</button><button class="btn danger" onclick="eliminaPrep('+i+')">Elimina</button></div>')}
+function eliminaPrep(i){DB.modelli.splice(i,1);S.mod=null;save();closeModal();render();toast("Scheda eliminata")}
+function assegnaPrepModal(i){const m=DB.modelli[i];if(!m)return;
+  if(!DB.clienti.length)return openModal('<h3>Nessun cliente</h3><p class="muted" style="margin-bottom:14px">Crea il cliente: nel modulo “Nuovo cliente” puoi scegliere subito questa scheda.</p><div class="inline" style="justify-content:flex-end"><button class="btn primary" onclick="closeModal();go(\'clienti\');nuovoCliente('+i+')">+ Nuovo cliente</button></div>');
+  openModal('<h3>Assegna “'+esc(m.nome)+'”</h3><p class="muted" style="margin-bottom:14px">Il cliente riceve una copia che puoi personalizzare. Se ha già una scheda, quella va nel suo archivio (non si perde).</p>'+
+   '<div class="act-list">'+DB.clienti.map(c=>'<button onclick="assegnaPrep('+i+','+c.id+')">'+ic("users",18)+'<span><b>'+esc(c.n)+'</b><small>'+(DB.schede[c.id]?'Ha già “'+esc(DB.schede[c.id].nome)+'” · andrà in archivio':'Senza scheda')+'</small></span></button>').join("")+'</div>'+
+   '<div class="inline" style="justify-content:flex-end;margin-top:14px"><button class="btn sm" onclick="closeModal();go(\'clienti\');nuovoCliente('+i+')">'+ic("plus",13)+' È un cliente nuovo</button></div>')}
+function assegnaPrep(i,cid){const m=DB.modelli[i],c=cli(cid);if(!m||!c)return;
+  nuovaScheda(cid,m);
+  openModal('<h3>Scheda assegnata</h3><p class="muted" style="margin-bottom:14px">“'+esc(m.nome)+'” è ora la scheda di '+esc(c.n)+'.</p>'+
+   '<div class="inline" style="justify-content:flex-end;gap:8px;flex-wrap:wrap"><button class="btn" onclick="closeModal();openClient('+cid+');S.tab=1;render()">Apri la sua scheda</button><button class="btn primary" onclick="inviaScheda('+cid+');closeModal()">'+ic("chat",13)+' Avvisa il cliente</button></div>')}
+
+/* ---------- elimina cliente ---------- */
+function eliminaClienteModal(cid){const c=cli(cid);if(!c)return;
+  const fut=Object.values(DB.agenda).filter(s=>!isPast(s)&&(s.pren||[]).some(b=>b.cid===cid)).length;
+  openModal('<h3>Eliminare '+esc(c.n)+'?</h3><p style="margin-bottom:10px">Il cliente sparisce dall\'elenco insieme ai suoi dati: scheda e archivio, peso, carichi, dieta, chat'+(fut?' e <b>'+fut+(fut===1?' prenotazione futura':' prenotazioni future')+'</b>':' e prenotazioni')+'.</p>'+
+   '<p class="muted" style="margin-bottom:10px">Non si può annullare. I movimenti già registrati in Contabilità restano. Il cliente non potrà più usare il suo profilo nell\'app.</p>'+
+   '<div class="field"><label>Per confermare scrivi ELIMINA</label><input class="fi" id="dcConf" autocapitalize="characters" autocomplete="off"></div>'+
+   '<div class="inline" style="justify-content:flex-end;gap:8px;flex-wrap:wrap"><button class="btn ghost" onclick="closeModal()">Annulla</button><button class="btn danger" onclick="eliminaCliente('+cid+')">'+ic("trash",13)+' Elimina cliente</button></div>')}
+function eliminaCliente(cid){
+  if(String(el("dcConf").value||"").trim().toUpperCase()!=="ELIMINA")return toast("Scrivi ELIMINA per confermare");
+  const c=cli(cid);if(!c)return;
+  DB.clienti=DB.clienti.filter(x=>x.id!==cid);
+  ["schede","schedeArch","pesi","carichi","diete"].forEach(k=>{if(DB[k])delete DB[k][cid]});
+  Object.values(DB.agenda).forEach(s=>{if(s.pren)s.pren=s.pren.filter(b=>b.cid!==cid)});
+  DB.chat=DB.chat.filter(t=>t.id!==100+cid&&t.n!==c.n);
+  if(DB.feedback)DB.feedback=DB.feedback.filter(f=>f.cid!==cid);
+  if(S.sclient===cid)S.sclient=null;if(S.client===cid)S.client=null;
+  save();closeModal();go("clienti");toast(c.n+" eliminato")}
+
 /* ---------- nuovo cliente e accesso all'app ---------- */
-function nuovoCliente(){const pw="km"+Math.floor(1000+Math.random()*9000);
+function nuovoCliente(pre){const pw="km"+Math.floor(1000+Math.random()*9000);
   openModal('<h3>Nuovo cliente</h3><p class="muted" style="margin-bottom:14px">Crei la scheda anagrafica e le credenziali per entrare nell\'app.</p>'+
    '<div class="frow"><div class="field"><label>Nome e cognome</label><input class="fi" id="ncN" autocomplete="off"></div><div class="field"><label>Email (per entrare)</label><input class="fi" id="ncE" type="email" autocomplete="off"></div></div>'+
    '<div class="frow"><div class="field"><label>Password iniziale</label><input class="fi" id="ncP" value="'+pw+'"></div><div class="field"><label>Telefono</label><input class="fi" id="ncT" type="tel"></div></div>'+
    '<div class="frow"><div class="field"><label>Cosa fa</label><select class="fi" id="ncTipo"><option value="pacchetto">Personal training (pacchetto)</option><option value="abb">Personal training (abbonamento)</option><option value="mass">Solo trattamenti</option><option value="combo">Allenamento + trattamenti</option><option value="corsi">Corsi di gruppo</option><option value="none">Nessun abbonamento per ora</option></select></div>'+
    '<div class="field"><label>Piano</label><input class="fi" id="ncPiano" value="Pacchetto 4 sedute"></div><div class="field"><label>Sedute</label><input class="fi" id="ncTot" inputmode="numeric" value="4"></div></div>'+
+   (DB.modelli.length?'<div class="field"><label>Scheda da dare subito</label><select class="fi" id="ncSch"><option value="">Nessuna per ora</option>'+DB.modelli.map((m,i)=>'<option value="'+i+'"'+(pre===i?' selected':'')+'>'+esc(m.nome)+'</option>').join("")+'</select><p class="hint">Le schede che hai in Esercizi → Preparazione schede.</p></div>':'')+
    '<div class="field"><label>Note private (solo tu le vedi)</label><textarea class="fi" id="ncNote" placeholder="Obiettivo, infortuni, preferenze di orario…"></textarea></div>'+
    '<div class="inline" style="justify-content:flex-end"><button class="btn primary" onclick="salvaCliente()">Crea cliente</button></div>')}
 function salvaCliente(){const n=el("ncN").value.trim(),em=el("ncE").value.trim().toLowerCase(),pw=el("ncP").value.trim();
@@ -3450,8 +3528,10 @@ function salvaCliente(){const n=el("ncN").value.trim(),em=el("ncE").value.trim()
   const id=window.KM_CLOUD?KMC.prendiId():Math.max.apply(null,DB.clienti.map(c=>c.id).concat([0]))+1,tot=parseInt(el("ncTot").value)||4;
   DB.clienti.push({id,n,i:n.split(" ").map(x=>x[0]).join("").slice(0,2).toUpperCase(),email:em,pw:hashPw(pw),tel:el("ncT").value.trim(),piano:el("ncPiano").value.trim()||"Da definire",tipo:el("ncTipo").value,
     usate:0,tot,extra:tot+" sedute",scad:"—",gg:0,peso:null,start:null,ader:100,note:el("ncNote").value.trim()||"Nuovo cliente."});
+  const si=el("ncSch")?el("ncSch").value:"",mp=si!==""?DB.modelli[+si]:null;
+  if(mp){const sc=Object.assign(clone(mp),{creata:T0,inviata:null,file:null});sc.giorni.forEach(g=>g.ex.forEach(e=>e.last=0));DB.schede[id]=sc}
   save();closeModal();openClient(id);
-  openModal('<h3>Cliente creato</h3><p class="muted" style="margin-bottom:14px">Manda a '+esc(n.split(" ")[0])+' queste credenziali per entrare nell\'app:</p>'+credBox(em,pw)+'<p class="hint">Ora puoi creargli la scheda dalla scheda “Scheda”.</p>')}
+  openModal('<h3>Cliente creato</h3><p class="muted" style="margin-bottom:14px">Manda a '+esc(n.split(" ")[0])+' queste credenziali per entrare nell\'app:</p>'+credBox(em,pw)+(mp?'<p class="hint">Ha già la scheda “'+esc(mp.nome)+'”: la trova nella sezione Scheda dell\'app.</p>':'<p class="hint">Ora puoi creargli la scheda dalla scheda “Scheda”.</p>'))}
 function credBox(em,pw){const txt="Ciao! Ecco il tuo accesso all'app di KM Studio: https://kone-studio.com/app — email: "+em+" — password: "+pw;
   return '<div class="cred"><div class="kv"><span>Indirizzo</span><b>kone-studio.com/app</b></div><div class="kv"><span>Email</span><b>'+esc(em)+'</b></div><div class="kv"><span>Password</span><b>'+esc(pw)+'</b></div></div>'+
    '<div class="inline" style="margin-top:12px"><a class="btn sm primary" target="_blank" rel="noopener" href="https://wa.me/?text='+encodeURIComponent(txt)+'">Invia su WhatsApp</a><button class="btn sm" onclick="navigator.clipboard&&navigator.clipboard.writeText('+esc(JSON.stringify(txt))+').then(()=>toast(\'Copiato\'))">Copia</button></div>'}
@@ -3897,7 +3977,7 @@ function richiestaAbb(key,i,link){const r=DB.listino[key][i],c=me();if(!c)return
 function render(){
   if(typeof PD!=="undefined"&&PD&&PD.on){window._renderPend=1;return}   // sto trascinando un blocco: ridisegno dopo
   const coach=S.role==="coach";
-  const V=coach?{dash:vDash,agenda:vAgenda,clienti:vClienti,cliente:vCliente,chat:vChat,listino:vListino,pagamenti:vPagamenti,conti:vConti,schede:vSchede,libreria:vLibreria,corsi:vCorsi,nutrizione:vNutrizione,tratt:vTratt}
+  const V=coach?{dash:vDash,agenda:vAgenda,clienti:vClienti,cliente:vCliente,chat:vChat,listino:vListino,pagamenti:vPagamenti,conti:vConti,schede:vSchede,libreria:vLibreria,preparazione:vPreparazione,corsi:vCorsi,nutrizione:vNutrizione,tratt:vTratt}
     :{oggi:vOggi,scheda:vScheda,prenota:vPrenota,prog:vProgC,dieta:vDieta,listino:vListino,chat:vChatC,tcat:vTcat,tpren:vTpren};
   const f=V[S.view]||(coach?vDash:vOggi);
   try{el("view").innerHTML=f()}catch(e){console.error(e);el("view").innerHTML='<div class="card"><p>Qualcosa non ha funzionato in questa pagina.</p><p class="hint">'+esc(e.message)+'</p></div>'}
