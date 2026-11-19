@@ -21,6 +21,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="KM Studio">
+<meta name="apple-itunes-app" content="app-id=6833860332">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <!-- Google Search Console: incolla qui il codice di verifica (vedi README) -->
 <!-- <meta name="google-site-verification" content="CODICE"> -->
@@ -669,6 +670,15 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
 .footc a{display:flex;align-items:center;gap:10px}
 .footc svg{width:16px;height:16px;color:var(--gold);flex:none}
 
+/* ---------- badge App Store ---------- */
+.as-badge{display:inline-flex;align-items:center;gap:10px;padding:9px 20px 9px 15px;border-radius:14px;background:#000;color:#fff;border:1px solid rgba(255,255,255,.28);text-decoration:none;line-height:1;transition:transform .3s,border-color .3s,box-shadow .3s}
+.as-badge:hover{transform:translateY(-2px);border-color:var(--gold);box-shadow:0 12px 30px -14px rgba(217,169,60,.6)}
+.as-badge svg{width:26px;height:26px;flex:none}
+.as-badge span{display:flex;flex-direction:column;text-align:left}
+.as-badge small{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-size:10.5px;letter-spacing:.02em;opacity:.85}
+.as-badge b{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-size:19px;font-weight:600;letter-spacing:-.01em;margin-top:2px}
+.as-row{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:18px}
+.as-row p{margin:0!important;font-size:14px;color:var(--txt-3)}
 /* ---------- installazione app ---------- */
 .dl-btn{display:inline-flex;align-items:center;gap:10px}
 .dl-btn svg{width:18px;height:18px}
@@ -782,6 +792,7 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
   <a href="/prenota/"><small>07</small>Prenota online</a>
   <a class="app-btn" href="app.html"><span class="pulse"></span>Apri la tua App</a>
   <button class="btn line dl-btn" data-install style="margin-top:12px;align-self:flex-start"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Scarica sul telefono</button>
+  <a class="as-badge" href="https://apps.apple.com/it/app/km-studio-kone-moctar/id6833860332" target="_blank" rel="noopener" aria-label="Scarica KM Studio dall'App Store" style="margin-top:14px;align-self:flex-start"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.1 1.72-3.12 1.8-3.17-1-1.44-2.53-1.64-3.07-1.66-1.3-.13-2.55.77-3.21.77-.67 0-1.69-.75-2.78-.73-1.43.02-2.75.83-3.48 2.11-1.49 2.58-.38 6.39 1.07 8.48.71 1.02 1.55 2.17 2.65 2.13 1.07-.04 1.47-.69 2.76-.69 1.28 0 1.65.69 2.77.67 1.15-.02 1.87-1.04 2.57-2.07.81-1.18 1.14-2.33 1.16-2.39-.03-.01-2.22-.85-2.24-3.37zM14.26 6.43c.58-.71.98-1.69.87-2.68-.84.03-1.87.56-2.47 1.27-.54.62-1.01 1.63-.89 2.59.94.07 1.9-.48 2.49-1.18z"/></svg><span><small>Scarica su</small><b>App Store</b></span></a>
 </nav>
 
 <main id="top">
@@ -1089,8 +1100,9 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
     <div class="intro">
       <div class="eyebrow">La tua app personale</div>
       <h2>Kone,<br><span class="gold-txt">in tasca.</span></h2>
-      <p>Ogni cliente dello studio ha la sua app: la scheda di oggi, i carichi, i progressi, le prenotazioni e una chat diretta con Kone. Si installa sul telefono come un'app vera.</p>
+      <p>Ogni cliente dello studio ha la sua app: la scheda di oggi, i carichi, i progressi, le prenotazioni e una chat diretta con Kone. Su iPhone la scarichi dall'App Store; su Android si installa dal sito come un'app vera.</p>
       <div class="cta-row"><a class="btn gold" href="app.html" data-cursor="big" data-label="Entra">Entra nell'app <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><button class="btn line dl-btn" data-install data-cursor="hov"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Scarica sul telefono</button></div>
+      <div class="as-row"><a class="as-badge" href="https://apps.apple.com/it/app/km-studio-kone-moctar/id6833860332" target="_blank" rel="noopener" aria-label="Scarica KM Studio dall'App Store" data-cursor="hov"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.1 1.72-3.12 1.8-3.17-1-1.44-2.53-1.64-3.07-1.66-1.3-.13-2.55.77-3.21.77-.67 0-1.69-.75-2.78-.73-1.43.02-2.75.83-3.48 2.11-1.49 2.58-.38 6.39 1.07 8.48.71 1.02 1.55 2.17 2.65 2.13 1.07-.04 1.47-.69 2.76-.69 1.28 0 1.65.69 2.77.67 1.15-.02 1.87-1.04 2.57-2.07.81-1.18 1.14-2.33 1.16-2.39-.03-.01-2.22-.85-2.24-3.37zM14.26 6.43c.58-.71.98-1.69.87-2.68-.84.03-1.87.56-2.47 1.27-.54.62-1.01 1.63-.89 2.59.94.07 1.9-.48 2.49-1.18z"/></svg><span><small>Scarica su</small><b>App Store</b></span></a><p>Disponibile per iPhone</p></div>
     </div>
     <div class="phone-wrap">
       <div class="phone" id="phone">
@@ -1196,6 +1208,7 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
     <p>Prenota e paga online in un minuto, entra nella tua app o scrivi direttamente a Kone. Il primo passo è il più corto.</p>
     <a class="magnet" id="magnet" href="app.html" data-cursor="hov"><span>Apri<br>la tua app</span></a>
     <div style="margin-top:26px"><button class="btn line dl-btn" data-install data-cursor="hov"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Scarica l'app sul telefono</button></div>
+    <div class="as-row" style="justify-content:center"><a class="as-badge" href="https://apps.apple.com/it/app/km-studio-kone-moctar/id6833860332" target="_blank" rel="noopener" aria-label="Scarica KM Studio dall'App Store" data-cursor="hov"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.1 1.72-3.12 1.8-3.17-1-1.44-2.53-1.64-3.07-1.66-1.3-.13-2.55.77-3.21.77-.67 0-1.69-.75-2.78-.73-1.43.02-2.75.83-3.48 2.11-1.49 2.58-.38 6.39 1.07 8.48.71 1.02 1.55 2.17 2.65 2.13 1.07-.04 1.47-.69 2.76-.69 1.28 0 1.65.69 2.77.67 1.15-.02 1.87-1.04 2.57-2.07.81-1.18 1.14-2.33 1.16-2.39-.03-.01-2.22-.85-2.24-3.37zM14.26 6.43c.58-.71.98-1.69.87-2.68-.84.03-1.87.56-2.47 1.27-.54.62-1.01 1.63-.89 2.59.94.07 1.9-.48 2.49-1.18z"/></svg><span><small>Scarica su</small><b>App Store</b></span></a></div>
     <div class="contact-row" id="contactRow"></div>
   </div>
 </section>
@@ -1210,7 +1223,7 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
         <p style="color:var(--txt-3);margin-top:10px;font-size:15px">Piazza Puccini 16/A, 20070 Vizzolo Predabissi (MI)<br>Milano sud-est, vicino a Melegnano · su appuntamento</p>
       </div>
       <div><h2 class="fh">Studio a Milano</h2><a href="/personal-trainer-milano/">Personal trainer</a><a href="/corsi-di-gruppo-milano/">Corsi di gruppo</a><a href="/massaggi-milano/">Massaggi</a><a href="/allenamento-in-coppia-milano/">Allenamento in coppia</a><a href="/allenamento-e-massaggi-milano/">Allenamento + massaggi</a><a href="/prezzi/">Prezzi</a><a href="/guide/">Guide e consigli</a><a href="/esercizi/">Esercizi con foto</a><a href="/kone-moctar/">Chi è Kone</a><a href="/contatti/">Contatti</a><a href="/personal-trainer-massaggi-melegnano/">Dove siamo</a></div>
-      <div><h2 class="fh">Clienti</h2><a href="app.html">Entra nell'app</a><a href="app.html#registrati">Registrati</a><a href="#" data-install>Scarica l'app sul telefono</a><a href="#app">Cosa c'è nell'app</a><a href="/prezzi/">Listino</a><a href="/coach">Area titolare</a></div>
+      <div><h2 class="fh">Clienti</h2><a href="app.html">Entra nell'app</a><a href="app.html#registrati">Registrati</a><a href="https://apps.apple.com/it/app/km-studio-kone-moctar/id6833860332" target="_blank" rel="noopener">Scarica dall'App Store</a><a href="#" data-install>Scarica l'app sul telefono</a><a href="#app">Cosa c'è nell'app</a><a href="/prezzi/">Listino</a><a href="/coach">Area titolare</a></div>
       <div class="footc"><h2 class="fh">Contatti</h2><div id="footC"><a href="tel:+393922696468">392 269 6468</a><a href="mailto:konemoctar00@gmail.com">konemoctar00@gmail.com</a><a href="https://www.instagram.com/km.s.t.u.d.i.o.26/" target="_blank" rel="noopener">@km.s.t.u.d.i.o.26</a><a href="https://www.instagram.com/konemoctar4/" target="_blank" rel="noopener">@konemoctar4</a></div></div>
     </div>
     <p class="fmass" style="margin-top:34px;color:var(--txt-3);font-size:14px;line-height:2">Massaggi a Milano: <a href="/massaggio-decontratturante-milano/">Massaggio decontratturante</a> · <a href="/massaggio-sportivo-milano/">Massaggio sportivo</a> · <a href="/massaggio-rilassante-milano/">Rilassante e antistress</a> · <a href="/massaggio-cervicale-milano/">Cervico lombare</a> · <a href="/massaggio-linfodrenante-milano/">Linfodrenante</a> · <a href="/riflessologia-plantare-milano/">Riflessologia plantare</a> · <a href="/coppettazione-milano/">Coppettazione</a></p>
@@ -1239,6 +1252,7 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
         <a class="btn gold" href="app.html" data-cursor="big" data-label="Sì!">Sì, voglio l'app <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         <button class="btn line dl-btn" data-install><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Scarica</button>
       </div>
+      <div class="as-row"><a class="as-badge" href="https://apps.apple.com/it/app/km-studio-kone-moctar/id6833860332" target="_blank" rel="noopener" aria-label="Scarica KM Studio dall'App Store"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.1 1.72-3.12 1.8-3.17-1-1.44-2.53-1.64-3.07-1.66-1.3-.13-2.55.77-3.21.77-.67 0-1.69-.75-2.78-.73-1.43.02-2.75.83-3.48 2.11-1.49 2.58-.38 6.39 1.07 8.48.71 1.02 1.55 2.17 2.65 2.13 1.07-.04 1.47-.69 2.76-.69 1.28 0 1.65.69 2.77.67 1.15-.02 1.87-1.04 2.57-2.07.81-1.18 1.14-2.33 1.16-2.39-.03-.01-2.22-.85-2.24-3.37zM14.26 6.43c.58-.71.98-1.69.87-2.68-.84.03-1.87.56-2.47 1.27-.54.62-1.01 1.63-.89 2.59.94.07 1.9-.48 2.49-1.18z"/></svg><span><small>Scarica su</small><b>App Store</b></span></a></div>
       <button data-close style="margin-top:16px;color:var(--txt-3);font-size:14px;text-decoration:underline;text-underline-offset:4px">Più tardi</button>
       <div style="display:none">
       </div>
@@ -1266,7 +1280,8 @@ footer .bot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;m
     <div class="pop-l">
       <div class="eyebrow">Scarica l'app</div>
       <h3 id="instT">KM Studio<br><span class="gold-txt">sul tuo telefono</span></h3>
-      <p>Si installa in pochi secondi, senza passare dagli store: icona nella schermata Home, apertura a tutto schermo come un'app vera.</p>
+      <p>Su iPhone scaricala dall'App Store. Oppure installala dal sito in pochi secondi: icona nella schermata Home, apertura a tutto schermo come un'app vera.</p>
+      <div class="as-row"><a class="as-badge" href="https://apps.apple.com/it/app/km-studio-kone-moctar/id6833860332" target="_blank" rel="noopener" aria-label="Scarica KM Studio dall'App Store"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.1 1.72-3.12 1.8-3.17-1-1.44-2.53-1.64-3.07-1.66-1.3-.13-2.55.77-3.21.77-.67 0-1.69-.75-2.78-.73-1.43.02-2.75.83-3.48 2.11-1.49 2.58-.38 6.39 1.07 8.48.71 1.02 1.55 2.17 2.65 2.13 1.07-.04 1.47-.69 2.76-.69 1.28 0 1.65.69 2.77.67 1.15-.02 1.87-1.04 2.57-2.07.81-1.18 1.14-2.33 1.16-2.39-.03-.01-2.22-.85-2.24-3.37zM14.26 6.43c.58-.71.98-1.69.87-2.68-.84.03-1.87.56-2.47 1.27-.54.62-1.01 1.63-.89 2.59.94.07 1.9-.48 2.49-1.18z"/></svg><span><small>Scarica su</small><b>App Store</b></span></a><p>iPhone e iPad</p></div>
       <div data-os="prompt">
         <div class="cta-row" data-os="prompt"><button class="btn gold" id="doInstall"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Installa ora</button></div>
       </div>
