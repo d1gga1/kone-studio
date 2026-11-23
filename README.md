@@ -356,3 +356,13 @@ feedback, contabilità, listino ed esercizi stanno nel database **Supabase**, pr
   la pagina cercava il cliente con id 1 (quello della demo, non più esistente). Ora apre il primo cliente.
 - Le azioni da fare fuori dal sito (Google Business Profile, recensioni, directory, Bing/Apple, ecc.) sono nel documento
   "Piano visibilità online — Kone Moctar Studio".
+
+### Agenda: persone non registrate (23/11/2026)
+
+- In *Calendario* il titolare può mettere in un orario anche **chi non è ancora registrato** (prova o seduta singola):
+  menu "⋯" dell'orario → **Aggiungi persona nuova**, oppure "Gestisci prenotati e posti" → **Persona nuova / prova**.
+  Si scrivono nome, cellulare, tipo (prova / seduta singola), prezzo da incassare in studio (vuoto = gratis) e una nota.
+- Nel riquadro dei prenotati compaiono le etichette *prova*, il numero (tocca per chiamare) e **crea cliente**:
+  apre "Nuovo cliente" già compilato con nome e telefono; salvando, la prenotazione passa al nuovo cliente.
+- Nel database la prenotazione è salvata con `cliente_id` vuoto e i dati (telefono, prova, nota) nel campo `dati`.
+- `404.html` riallineato ad `app.html`, service worker `km-studio-v37`.

@@ -189,9 +189,20 @@ main{flex:1;overflow:auto;overscroll-behavior:contain}
 .btn.primary:hover{background:linear-gradient(150deg,var(--gold-hi),var(--gold));color:#150F04}
 .btn.sm{padding:6px 11px;font-size:11.5px}
 .btn.ghost{background:transparent}
+.btn.danger{background:var(--crit);border-color:var(--crit);color:#fff;font-weight:600}
+.btn.danger:hover{filter:brightness(1.1);color:#fff}
+.icon-btn.danger:hover{color:var(--crit);border-color:var(--crit)}
+.prep-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.prep-card{display:flex;flex-direction:column;gap:12px}
+.prep-open{display:flex;flex-direction:column;align-items:flex-start;gap:6px;text-align:left;background:none;border:0;padding:0;color:inherit;cursor:pointer;font:inherit}
+.prep-ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--surf-3);color:var(--gold-mid);margin-bottom:4px}
+.prep-t{font-family:var(--disp);font-size:20px;letter-spacing:.05em;text-transform:uppercase;line-height:1.15}
+.prep-open:hover .prep-t{color:var(--gold-mid)}
+.prep-act{margin-top:auto;gap:8px;flex-wrap:nowrap}
+.danger-zone{margin-top:14px;border-color:rgba(206,75,69,.35)}
 
 .grid{display:grid;gap:14px}
-.g2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
 .g3{grid-template-columns:repeat(auto-fit,minmax(215px,1fr))}
 .g4{grid-template-columns:repeat(auto-fit,minmax(168px,1fr))}
 .card{background:var(--surf);border:1px solid var(--line-soft);border-radius:var(--r);padding:16px 17px}
@@ -913,7 +924,7 @@ body.resizing,body.resizing *{cursor:ns-resize!important}
       <div class="field" style="margin:0"><label for="rgE">Email</label><input class="fi" id="rgE" type="email" autocomplete="email" placeholder="la-tua@email.it" required></div>
       <div class="field" style="margin:0"><label for="rgT">Telefono</label><input class="fi" id="rgT" type="tel" autocomplete="tel" placeholder="333 123 4567" required></div>
       <div class="frow2"><div class="field" style="margin:0"><label for="rgP">Password</label><input class="fi" id="rgP" type="password" autocomplete="new-password" placeholder="min. 6 caratteri" required></div><div class="field" style="margin:0"><label for="rgP2">Ripeti password</label><input class="fi" id="rgP2" type="password" autocomplete="new-password" required></div></div>
-      <label class="auth-chk"><input type="checkbox" id="rgOk"><span>Accetto il trattamento dei miei dati personali per la gestione di prenotazioni, pagamenti e allenamenti.</span></label>
+      <label class="auth-chk"><input type="checkbox" id="rgOk"><span>Accetto il trattamento dei miei dati personali, compresi i dati sulla salute (peso, misure, allenamenti), per la gestione di prenotazioni, pagamenti e allenamenti, come descritto nella <a href="/privacy/" target="_blank" rel="noopener" style="color:var(--gold-mid);text-decoration:underline">privacy policy</a>.</span></label>
       <div class="auth-err" id="rgErr"></div>
       <button class="btn primary" type="submit" style="padding:13px">Crea il tuo account</button>
       <p class="muted" style="text-align:center;font-size:13px;margin-top:4px">Hai già un account? <button type="button" class="linkbtn" onclick="authTab('login')">Accedi</button></p>
@@ -957,8 +968,8 @@ body.resizing,body.resizing *{cursor:ns-resize!important}
       <button class="icon-btn tb-help" id="tbHelp" onclick="tourStart()" title="Guida all'app" aria-label="Guida all'app" hidden>
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2.5-3 4.5"/><path d="M12 17.5h.01"/></svg>
       </button>
-      <button class="icon-btn" onclick="esci()" title="Esci" aria-label="Esci">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+      <button class="icon-btn" onclick="menuEsci()" title="Account" aria-label="Account: esci o elimina l'account">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
       </button>
     </div>
   </header>
@@ -1168,13 +1179,20 @@ const LIVELLI={1:"Principiante",2:"Intermedio",3:"Avanzato"};
 const LIV_MAX={1:7,2:8,3:9};
 const OBIETTIVI=["Dimagrimento","Forza e condizionamento","Tonificazione","Resistenza","Mobilità"];
 const FORMATI={stazioni:"Circuito a stazioni",tabata:"Tabata / intervalli",circuito:"Circuito a ripetizioni",flusso:"Flusso di mobilità"};
+/* corsi del volantino (palinsesto ufficiale dello studio) */
 const CORSI_SEED=[
-  {id:"func",n:"Functional Training",livello:2,obiettivo:"Forza e condizionamento",durata:50,intensita:7,formato:"stazioni",attrezzi:["tappetino","kettlebell","manubri","trx","box","slam ball"],vietati:[],consentiti:[]},
-  {id:"hiit",n:"HIIT Brucia Grassi",livello:2,obiettivo:"Dimagrimento",durata:45,intensita:8,formato:"tabata",attrezzi:["tappetino","kettlebell","funicella","air bike","vogatore"],vietati:[],consentiti:[]},
-  {id:"tono",n:"Tonificazione Total Body",livello:1,obiettivo:"Tonificazione",durata:50,intensita:6,formato:"circuito",attrezzi:["tappetino","manubri","elastici"],vietati:["Burpees"],consentiti:[]},
-  {id:"mob",n:"Mobilità & Postura",livello:1,obiettivo:"Mobilità",durata:50,intensita:3,formato:"flusso",attrezzi:["tappetino","elastici","trx"],vietati:[],consentiti:[]},
-  {id:"boot",n:"Bootcamp del Sabato",livello:3,obiettivo:"Resistenza",durata:60,intensita:8,formato:"stazioni",attrezzi:ATTREZZI.slice(),vietati:[],consentiti:[]}
+  {id:"senior",n:"Senior Fit",livello:1,obiettivo:"Mobilità",durata:60,intensita:4,formato:"circuito",attrezzi:["tappetino","elastici","manubri"],vietati:[],consentiti:[],col:"#3B82F6"},
+  {id:"mob",n:"Mobilità & Postura",livello:1,obiettivo:"Mobilità",durata:60,intensita:3,formato:"flusso",attrezzi:["tappetino","elastici","trx"],vietati:[],consentiti:[],col:"#22C55E"},
+  {id:"dolce",n:"Ginnastica Dolce Over 70",livello:1,obiettivo:"Mobilità",durata:60,intensita:2,formato:"flusso",attrezzi:["tappetino","elastici"],vietati:[],consentiti:[],col:"#A855F7"},
+  {id:"circuit",n:"Circuit Training",livello:2,obiettivo:"Forza e condizionamento",durata:60,intensita:7,formato:"circuito",attrezzi:["tappetino","kettlebell","manubri","box"],vietati:[],consentiti:[],col:"#F97316"},
+  {id:"func",n:"Functional Training",livello:2,obiettivo:"Forza e condizionamento",durata:60,intensita:7,formato:"stazioni",attrezzi:["tappetino","kettlebell","manubri","trx","box","slam ball"],vietati:[],consentiti:[],col:"#DC2626"},
+  {id:"tabata",n:"Tabata Training",livello:2,obiettivo:"Dimagrimento",durata:60,intensita:8,formato:"tabata",attrezzi:["tappetino","kettlebell","funicella"],vietati:[],consentiti:[],col:"#EAB308"},
+  {id:"totalbody",n:"Total Body",livello:1,obiettivo:"Tonificazione",durata:60,intensita:6,formato:"circuito",attrezzi:["tappetino","manubri","elastici"],vietati:[],consentiti:[],col:"#8B5E3C"}
 ];
+/* corsi del vecchio modello: restano in archivio (storico, programmi, feedback) */
+const CORSI_VECCHI=[{id:"hiit",n:"HIIT Brucia Grassi",livello:2,obiettivo:"Dimagrimento",durata:45,intensita:8,formato:"tabata",attrezzi:["tappetino","kettlebell","funicella","air bike","vogatore"],vietati:[],consentiti:[]},
+  {id:"tono",n:"Tonificazione Total Body",livello:1,obiettivo:"Tonificazione",durata:50,intensita:6,formato:"circuito",attrezzi:["tappetino","manubri","elastici"],vietati:["Burpees"],consentiti:[]},
+  {id:"boot",n:"Bootcamp del Sabato",livello:3,obiettivo:"Resistenza",durata:60,intensita:8,formato:"stazioni",attrezzi:ATTREZZI.slice(),vietati:[],consentiti:[]}];
 /* Catalogo esercizi del motore: nome, schema, attrezzo, alto impatto, livello minimo, intensità, zona a rischio, fase */
 const POOL=[
   ["Squat a corpo libero","squat","corpo libero",0,1,5,"ginocchia","main"],["Goblet squat","squat","kettlebell",0,1,6,"ginocchia","main"],
@@ -1339,16 +1357,13 @@ function migraEserciziTemi(){
 const PM={};POOL.forEach(e=>PM[e.n]=e);
 const ZONE=["ginocchia","schiena","spalle"];
 
-/* modello settimanale degli orari: [ora, tipo, corso] — 1 = lunedì */
-const TPL={
-  1:[["07:00","pt"],["08:00","pt"],["09:30","tratt"],["10:30","tratt"],["12:30","corso","hiit"],["15:00","tratt"],["16:00","pt"],["17:00","pt"],["18:30","corso","func"],["19:30","corso","tono"]],
-  2:[["07:00","pt"],["08:00","pt"],["09:30","tratt"],["10:30","tratt"],["12:30","corso","mob"],["15:00","tratt"],["16:00","pt"],["17:00","pt"],["18:30","corso","hiit"],["19:30","corso","func"]],
-  3:[["07:00","pt"],["08:00","pt"],["09:30","tratt"],["10:30","tratt"],["12:30","corso","tono"],["15:00","tratt"],["16:00","pt"],["17:00","pt"],["18:30","corso","func"],["19:30","corso","mob"]],
-  4:[["07:00","pt"],["08:00","pt"],["09:30","tratt"],["10:30","tratt"],["12:30","corso","hiit"],["15:00","tratt"],["16:00","pt"],["17:00","pt"],["18:30","corso","tono"],["19:30","corso","func"]],
-  5:[["07:00","pt"],["08:00","pt"],["09:30","tratt"],["10:30","tratt"],["12:30","corso","func"],["15:00","tratt"],["16:00","pt"],["17:00","pt"],["18:30","corso","hiit"]],
-  6:[["09:00","corso","boot"],["10:15","corso","mob"],["11:30","pt"],["12:30","tratt"]],
-  0:[]
-};
+/* modello settimanale = VOLANTINO: dalle 7 alle 21, lunedì → sabato.
+   Ogni ora è un corso (max 10) oppure un'ora libera da 2 posti (one to one, coppia o massaggio).
+   [ora, tipo, corso] — 1 = lunedì */
+const VOLANTINO={1:{9:"senior",12:"circuit",19:"func"},2:{9:"mob",12:"func",19:"totalbody"},3:{9:"dolce",12:"tabata",19:"totalbody"},
+  4:{9:"senior",12:"circuit",19:"func"},5:{9:"mob",12:"tabata",18:"func",20:"tabata"},6:{9:"dolce",13:"totalbody"}};
+const ORE_LIBERE_POSTI=2;
+const TPL=(()=>{const t={0:[]};for(let g=1;g<=6;g++){t[g]=[];for(let h=7;h<21;h++){const o=String(h).padStart(2,"0")+":00",c=VOLANTINO[g][h];t[g].push(c?[o,"corso",c]:[o,"pt"])}}return t})();
 
 
 /* Esercizi del motore Corsi · IA: [nome, gruppo, come si fa, foto] — foto = nome file in assets/img/esercizi/ (senza -a/-b), null = da caricare.
@@ -1411,7 +1426,7 @@ function pubTok(){try{return localStorage.getItem("km2_pubtok")||""}catch(e){ret
 function pubCfg(){return Object.assign({},PUB_DEF,(DB&&DB.settings.pub)||{})}
 function prezziSnap(){return {listino:DB.listino,
   trattamenti:DB.trattamenti.map(t=>{const o={};Object.keys(t).forEach(k=>{const v=t[k];if(!(typeof v==="string"&&v.slice(0,5)==="data:"))o[k]=v});return o}),
-  paypal:DB.settings.paypal||"",bonifico:bon(),portale:DB.settings.portale||""}}
+  paypal:DB.settings.paypal||"",bonifico:bon(),portale:DB.settings.portale||"",stripe:DB.settings.stripe==="off"?"off":stripeUrl()}}
 const prezziSig=()=>JSON.stringify(prezziSnap());
 function prezziCheck(){
   if(!DB||_pSig===null)return;
@@ -1519,16 +1534,43 @@ function seedCarichi(){
   DB.carichi[1]=h;
 }
 /* agenda: slot da 3 settimane fa a 2 settimane avanti */
+/* passaggio una tantum all'agenda del volantino (10/11/2026): corsi del volantino attivi, vecchi corsi in archivio,
+   orari futuri SENZA prenotazioni sostituiti dal nuovo modello. Le prenotazioni esistenti non si toccano mai. */
+/* ore "solo massaggio" rimaste dal vecchio modello: se non hanno prenotazioni diventano ore libere
+   (one to one, coppia, massaggio o trattamento). Le prenotazioni esistenti non si toccano. */
+function migraOreLibere(){
+  if(DB.settings.oreLibere==="tutte")return false;
+  Object.values(DB.agenda).forEach(s=>{if(s.tipo!=="tratt"||isPast(s)||s.pren.some(b=>!b._ph))return;
+    s.tipo="pt";s.cap=Math.max(s.cap||1,ORE_LIBERE_POSTI);s.dur=60});
+  DB.settings.oreLibere="tutte";return true}
+function migraVolantino(){
+  if(DB.settings.palinsesto==="volantino-1")return false;
+  DB.corsiArch=DB.corsiArch||[];
+  CORSI_SEED.forEach(c=>{let x=DB.corsi.find(y=>y.id===c.id);
+    if(!x){const a=DB.corsiArch.find(y=>y.id===c.id);if(a){DB.corsiArch=DB.corsiArch.filter(y=>y!==a);DB.corsi.push(a);x=a}}
+    if(x)Object.assign(x,{n:c.n,durata:c.durata,col:c.col});else DB.corsi.push(clone(c))});
+  DB.corsi=DB.corsi.filter(c=>{if(CORSI_VECCHI.some(v=>v.id===c.id)){if(!DB.corsiArch.some(y=>y.id===c.id))DB.corsiArch.push(c);return false}return true});
+  let tenuti=0;
+  Object.values(DB.agenda).forEach(s=>{if(isPast(s))return;
+    if(s.pren.some(b=>!b._ph)){tenuti++;if(s.tipo==="pt")s.cap=Math.max(s.cap,ORE_LIBERE_POSTI);return}
+    delete DB.agenda[s.id]});
+  if(DB.agendaDel)Object.keys(DB.agendaDel).forEach(k=>{if(k.slice(0,10)>=T0)delete DB.agendaDel[k]});
+  DB.settings.palinsesto="volantino-1";
+  setTimeout(()=>{try{toast("Agenda aggiornata al palinsesto del volantino"+(tenuti?" · "+tenuti+" orari con prenotazioni lasciati com'erano":""))}catch(e){}},1200);
+  return true;
+}
 function ensureAgenda(seedBookings){
+  const migrata=[migraVolantino(),migraOreLibere()].some(Boolean);
   const names=DB.clienti.filter(c=>c.tipo!=="mass").map(c=>({cid:c.id,nome:c.n})).concat(ALTRI_NOMI.map(n=>({cid:null,nome:n})));
   const massNames=DB.clienti.filter(c=>c.tipo==="mass"||c.tipo==="combo").map(c=>({cid:c.id,nome:c.n}));
-  let added=0;
+  let added=0;const giorniPieni=new Set(Object.values(DB.agenda).map(s=>s.d)),ora=nowHM();
   for(let i=-21;i<=13;i++){
     const dt=addD(TODAY,i),d=iso(dt);
     (TPL[dt.getDay()]||[]).forEach(t=>{
+      if(giorniPieni.has(d)&&(d<T0||(d===T0&&t[0]<=ora)))return;   /* lo storico già scritto non si tocca */
       const id=d+"_"+t[0];if(DB.agenda[id]||(DB.agendaDel&&DB.agendaDel[id]))return;if(t[2]&&!DB.corsi.some(x=>x.id===t[2]))return;
       const c=t[2]?corso(t[2]):null;
-      const s={id,d,h:t[0],tipo:t[1],corso:t[2]||null,cap:t[1]==="corso"?DB.settings.maxCorso:1,dur:c?c.durata:t[1]==="tratt"?50:60,pren:[],chiuso:false};
+      const s={id,d,h:t[0],tipo:t[1],corso:t[2]||null,cap:t[1]==="corso"?DB.settings.maxCorso:t[1]==="pt"?ORE_LIBERE_POSTI:1,dur:c?c.durata:t[1]==="tratt"?50:60,pren:[],chiuso:false};
       const r=rng("ag"+id);
       if(!window.KM_CLOUD&&(seedBookings||i>0)){
         if(s.tipo==="corso"){const n=i<0?4+Math.floor(r()*6):Math.floor(r()*(i<4?8:5))+(i<3?2:0);
@@ -1539,7 +1581,7 @@ function ensureAgenda(seedBookings){
       DB.agenda[id]=s;added++;
     });
   }
-  if(added&&!seedBookings)save();
+  if((added||migrata)&&!seedBookings)save();
 }
 function seedMarco(){
   const all=Object.values(DB.agenda).sort((a,b)=>(a.d+a.h)<(b.d+b.h)?-1:1);
@@ -1911,6 +1953,8 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
 /* =================== ACCESSI E ROUTING =================== */
 const isCoachRoute=()=>/\/coach\/?$/.test(location.pathname)||location.hash==="#coach"||new URLSearchParams(location.search).has("coach");
 const __standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+/* arrivo dal sito (/prenota/) con un orario già scelto: #prenota=<id slot>[&tratt=…&dur=30] — lo tengo fino a dopo l'accesso */
+try{const h=location.hash.match(/prenota=[^#]*/);if(h)sessionStorage.setItem("km_pren",h[0])}catch(e){}
 let introTimer=setTimeout(afterIntro,(__standalone||LS.get("sess",null))?1500:3800);
 function afterIntro(){
   if(window.KM_CLOUD&&!window.KMC_READY){window.KMC_WAIT=1;return}
@@ -1961,11 +2005,51 @@ function esci(){
   LS.del("sess");S.contiOk=false;
   if(S.role==="coach")showCoachAuth();else showClientAuth();
 }
+/* menu del pulsante Esci: per i clienti c'è anche l'eliminazione dell'account (obbligatoria per l'App Store) */
+function menuEsci(){
+  if(S.role!=="client"||S.preview)return esci();
+  const c=me();
+  openModal('<h3>Account</h3><p class="muted" style="margin-bottom:14px">'+esc(c?c.n:"")+(c&&c.email?' · '+esc(c.email):'')+'</p><div class="act-list">'+
+   '<button onclick="closeModal();esci()">'+ic("chevR",18)+'<span><b>Esci</b><small>Chiudi la sessione su questo dispositivo</small></span></button>'+
+   '<button onclick="eliminaAccountModal()">'+ic("trash",18)+'<span><b>Elimina il mio account</b><small>Cancella subito account e dati personali</small></span></button></div>'+
+   '<p class="hint" style="margin-top:12px"><a href="/privacy/" target="_blank" rel="noopener">Privacy policy</a></p>')}
+function eliminaAccountModal(){
+  openModal('<h3>Eliminare l\'account?</h3><p style="margin-bottom:10px">Il tuo account viene cancellato <b>subito e per sempre</b>, insieme ai tuoi dati: profilo, schede, peso e carichi, dieta, chat e prenotazioni.</p>'+
+   '<p class="muted" style="margin-bottom:10px">Non si può annullare. Restano solo le registrazioni dei pagamenti che la legge obbliga a conservare. Se hai un abbonamento attivo, le sedute rimaste vanno perse.</p>'+
+   '<div class="field"><label>Per confermare scrivi ELIMINA</label><input class="fi" id="delConf" autocapitalize="characters" autocomplete="off"></div>'+
+   '<div class="inline" style="justify-content:flex-end;gap:8px;flex-wrap:wrap"><button class="btn ghost" onclick="closeModal()">Annulla</button><button class="btn primary" id="delBtn" onclick="eliminaAccount()">Elimina definitivamente</button></div>')}
+async function eliminaAccount(){
+  if(String(el("delConf").value||"").trim().toUpperCase()!=="ELIMINA")return toast("Scrivi ELIMINA per confermare");
+  const b=el("delBtn");if(b){b.disabled=true;b.textContent="Elimino…"}
+  try{
+    if(typeof window.KM_ELIMINA!=="function")throw new Error("Collegamento non disponibile: controlla la connessione e riprova");
+    await window.KM_ELIMINA();
+  }catch(e){if(b){b.disabled=false;b.textContent="Elimina definitivamente"}return toast("Eliminazione non riuscita: "+((e&&e.message)||"riprova"))}
+  try{tourEnd(false)}catch(e){}
+  S.role=null;S.cid=null;
+  try{showClientAuth()}catch(e){}
+  openModal('<h3>Account eliminato</h3><p class="muted" style="margin-bottom:14px">Il tuo account KM Studio e i tuoi dati sono stati cancellati. Grazie per essere stato con noi.</p><div class="inline" style="justify-content:flex-end"><button class="btn primary" onclick="closeModal()">OK</button></div>')}
 function enterApp(role,cid){
   hideAll();S.role=role;S.preview=false;S.sets={};S.vals={};S.contiOk=false;
   if(role==="client"){S.cid=cid||1;S.area="allen";S.view="oggi"}else{S.area="allen";S.view="dash"}
   el("app").classList.add("show");chrome();buildNav();render();
+  if(role==="client"&&prenDaSito())return;
   if(role==="client"&&!LS.get("tour_"+S.cid,0))setTimeout(()=>{if(S.role==="client"&&!S.preview)tourStart()},700);
+}
+/* apre il wizard di prenotazione sull'orario scelto nel sito: stesso slot dell'agenda di Kone */
+function prenDaSito(){
+  let q=null;try{q=sessionStorage.getItem("km_pren");sessionStorage.removeItem("km_pren")}catch(e){}
+  if(!q||S.role!=="client"||S.preview)return false;
+  try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}
+  const p=new URLSearchParams(q),s=DB.agenda[p.get("prenota")];
+  if(!s){go("prenota");toast("Quell'orario non è più in agenda: scegline un altro");return true}
+  const tr=s.tipo!=="corso"&&p.get("tipo")==="tratt";S.area=tr?"tratt":"allen";S.view=tr?"tpren":"prenota";S.w=null;const w=W();
+  let att=s.tipo==="corso"?attCorso(s):"pt";
+  if(tr){const n=(p.get("tratt")||"").toLowerCase().trim(),t=n?DB.trattamenti.find(t=>{const x=t.n.toLowerCase();return x.includes(n)||n.includes(x.replace(/^massaggio /,""))}):null;
+    att=t?"tratt:"+t.id:null;w.dur=p.get("dur")==="30"?30:50}
+  const ok=att&&wAtts().some(a=>a.id===att);
+  if(ok){w.att=att;if(wSlots(s.d).some(x=>x.id===s.id)){w.d=s.d;w.slot=s.id;w.step=4}else{w.step=2;setTimeout(()=>toast("Quell'orario è appena stato preso o non è prenotabile: scegline un altro"),300)}}
+  buildNav();render();el("main").scrollTop=0;return true;
 }
 function chrome(){
   const coach=S.role==="coach";
@@ -1996,7 +2080,7 @@ function buildNav(){
   const unread=DB.chat.reduce((a,c)=>a+c.unread,0),coach=S.role==="coach";
   const ut=!coach&&DB.chat.find(x=>x.n===me().n),uc=ut?ut.unreadC||0:0;
   const badge=(n,cls)=>n[0]==="chat"&&uc&&!coach?'<span class="'+cls+'">'+uc+'</span>':n[0]==="chat"&&unread&&coach?'<span class="'+cls+'">'+unread+'</span>':(n[0]==="conti"&&coach&&!S.contiOk?'':"");
-  const btn=n=>'<button class="nav '+(S.view===n[0]||(n[0]==="clienti"&&S.view==="cliente")?"on":"")+'" onclick="go(\''+n[0]+'\')">'+ic(n[2])+'<span>'+n[1]+'</span>'+badge(n,"badge")+'</button>';
+  const btn=n=>'<button class="nav '+(S.view===n[0]||(n[0]==="clienti"&&S.view==="cliente")||(n[0]==="libreria"&&S.view==="preparazione")?"on":"")+'" onclick="go(\''+n[0]+'\')">'+ic(n[2])+'<span>'+n[1]+'</span>'+badge(n,"badge")+'</button>';
   el("rail").innerHTML=coach
     ?'<div class="rail-sec">'+(S.area==="allen"?"Allenamenti":"Trattamenti")+'</div>'+NAV.coach[S.area].map(btn).join("")+'<div class="rail-sec">Studio</div>'+NAV.coach.studio.map(btn).join("")
     :NAV.client[S.area].map(btn).join("");
@@ -2107,9 +2191,9 @@ const isPast=s=>s.d<T0||(s.d===T0&&s.h<=nowHM());
 const capMax=t=>({corso:DB.settings.maxCorso,pt:DB.settings.maxPT,tratt:DB.settings.maxTratt}[t]);
 const tipoLabel=t=>({corso:"corso di gruppo",pt:"one to one",tratt:"trattamento"}[t]);
 const nomePT=()=>(DB.settings.nomePT||"").trim()||"One to one con Kone";
-function slotTitle(s,b){if(s.nome)return s.nome;if(s.tipo==="corso")return (corso(s.corso)||{n:"Corso"}).n;if(s.tipo==="pt")return nomePT();
+function slotTitle(s,b){if(s.tipo==="pt"&&b&&b.tratt){const t=tratt(b.tratt);if(t)return t.n+(b.dur?" · "+b.dur+"′":"")}if(s.nome)return s.nome;if(s.tipo==="corso")return (corso(s.corso)||{n:"Corso"}).n;if(s.tipo==="pt"||(b&&!b.tratt))return nomePT();
   const t=b&&b.tratt?tratt(b.tratt):null;return t?t.n+(b.dur?" · "+b.dur+"′":""):"Trattamento"}
-function tipoPill(s){return s.tipo==="corso"?'<span class="pill gold">Corso</span>':s.tipo==="pt"?'<span class="pill info">One to one</span>':'<span class="pill vio">Trattamento</span>'}
+function tipoPill(s,b){return s.tipo==="corso"?'<span class="pill gold">Corso</span>':b?(b.tratt?'<span class="pill vio">Trattamento</span>':'<span class="pill info">One to one</span>'):s.tipo==="pt"?'<span class="pill info">One to one</span>':'<span class="pill vio">Trattamento</span>'}
 function seats(s){let h='<span class="seats" aria-hidden="true">';for(let i=0;i<s.cap;i++)h+='<i class="'+(i<s.pren.length?"on":"")+'"></i>';return h+'</span>'}
 function weekDays(){const mon=addD(TODAY,-((TODAY.getDay()+6)%7));return [0,1,2,3,4,5,6].map(i=>iso(addD(mon,i)))}
 
@@ -2149,7 +2233,7 @@ function vClienti(){
    '<td>'+esc(c.piano)+rinPill(c)+'<br><span class="dim" style="font-size:12.5px">'+esc(c.extra)+'</span><br>'+(DB.schede[c.id]?'<span class="pill ok" style="margin-top:4px">scheda attiva</span>':'<span class="pill warn" style="margin-top:4px">senza scheda</span>')+'</td>'+
    '<td style="min-width:130px"><div class="num" style="font-size:13px;margin-bottom:5px">'+usoTxt(c)+' sedute</div><div class="meter '+(!c.illim&&c.tot&&c.usate>=c.tot?"crit":"")+'"><i style="width:'+pctUso(c)+'%"></i></div></td>'+
    '<td class="num">'+c.scad+'</td><td>'+(c.gg===0?"oggi":c.gg+" giorni fa")+'</td><td>'+statoCli(c)+'</td>'+
-   '<td><button class="btn sm" onclick="openClient('+c.id+')">Apri</button></td></tr>'}).join("")+'</tbody></table></div></div>';
+   '<td><div class="inline" style="flex-wrap:nowrap;gap:6px"><button class="btn sm" onclick="openClient('+c.id+')">Apri</button><button class="icon-btn danger" onclick="eliminaClienteModal('+c.id+')" aria-label="Elimina cliente" title="Elimina cliente">'+ic("trash",15)+'</button></div></td></tr>'}).join("")+'</tbody></table></div></div>';
 }
 function vCliente(){
   const c=cli(S.client),tabs=["Panoramica","Scheda","Peso","Carichi","Prenotazioni","Dieta","Note"];let body="";
@@ -2162,7 +2246,8 @@ function vCliente(){
      '<button class="btn primary sm" style="align-self:flex-start" onclick="pianoModal('+c.id+')">'+ic("edit",13)+' Modifica abbonamento e sedute</button></div></div>'+
      '<div class="card">'+cardH("chart","Peso corporeo",pp.length?'<span class="chip num">'+fmtN(pp[pp.length-1].kg)+' kg</span>':"")+chartLine(pp.slice(-14).map(p=>[fmtD(p.d,{day:"numeric",month:"short"}),p.kg]),{unit:" kg"})+
      '<p class="hint">Registrato dal cliente nella sua app.</p></div></div>'+
-     '<div class="card" style="margin-top:14px">'+cardH("bell","Note private")+'<p class="muted">'+esc(c.note)+'</p></div>';
+     '<div class="card" style="margin-top:14px">'+cardH("bell","Note private")+'<p class="muted">'+esc(c.note)+'</p></div>'+
+     '<div class="card danger-zone"><div class="inline" style="justify-content:space-between;gap:12px;flex-wrap:wrap"><span><b>Elimina cliente</b><br><span class="dim" style="font-size:13px">Cancella il cliente e tutti i suoi dati. Non si può annullare.</span></span><button class="btn sm danger" onclick="eliminaClienteModal('+c.id+')">'+ic("trash",13)+' Elimina cliente</button></div></div>';
   } else if(S.tab===1)body=schedaPanel(c.id);
   else if(S.tab===2)body=pesoBlock(c.id,true);
   else if(S.tab===3)body=carichiBlock(c.id);
@@ -2195,7 +2280,7 @@ function togliEx(i){DB.scheda.giorni[S.day].ex.splice(i,1);save();render()}
 function vLibreria(){
   const grp={};DB.esercizi.forEach(e=>{(grp[e.m]=grp[e.m]||[]).push(e)});
   const nf=DB.esercizi.filter(e=>e.foto).length,nv=DB.esercizi.filter(e=>e.video).length;
-  return head("Libreria esercizi",DB.esercizi.length+" esercizi · "+nf+" con foto · "+nv+" con video",'<button class="btn primary" onclick="editEsercizio()">+ Nuovo esercizio</button>')+
+  return head("Libreria esercizi",DB.esercizi.length+" esercizi · "+nf+" con foto · "+nv+" con video",'<button class="btn" onclick="S.mod=null;go(\'preparazione\')">'+ic("plan",14)+' Preparazione schede'+(DB.modelli.length?' <span class="dim">'+DB.modelli.length+'</span>':'')+'</button><button class="btn primary" onclick="editEsercizio()">+ Nuovo esercizio</button>')+
    '<div class="alert info" style="margin-bottom:14px"><div><b>La libreria è tua</b><p>Aggiungi i tuoi esercizi con “+ Nuovo esercizio”, anche con un gruppo muscolare nuovo. Tocca un esercizio per cambiare nome, istruzioni, foto (anche scattata col telefono) e video, oppure per eliminarlo.</p></div></div>'+
    '<div class="exfilter"><input class="fi" id="exQ" type="search" placeholder="Cerca un esercizio…" oninput="filtraEx()" aria-label="Cerca esercizio"><span class="dim" id="exRes" style="font-size:13px"></span></div>'+
    '<div class="chips exchips" style="margin-bottom:14px"><button class="chk'+(!S.exg?" on":"")+'" onclick="S.exg=\'\';render()">Tutti</button>'+Object.keys(grp).map(m=>'<button class="chk'+(S.exg===m?" on":"")+'" onclick="S.exg=\''+esc(m).replace(/'/g,"\\'")+'\';render()">'+esc(m)+' <span class="dim">'+grp[m].length+'</span></button>').join("")+'</div>'+
@@ -2302,6 +2387,32 @@ function togliPren(id,i){const s=DB.agenda[id];const b=s.pren.splice(i,1)[0];sav
 function aggiungiPren(id){const s=DB.agenda[id],v=el("add_"+id.replace(/[^\w]/g,"")).value;if(!v)return;
   if(s.pren.length>=s.cap)return toast("Posti esauriti: aumenta la capienza con +");
   const c=cli(+v);const b={cid:c.id,nome:c.n};if(s.tipo==="tratt"){b.tratt="decon";b.dur=50}s.pren.push(b);save();render()}
+/* persona non registrata (prova / seduta singola) messa in agenda dal titolare */
+function estPill(b,sid,i){if(!b.est)return "";
+  return (b.prova?'<em class="pp">prova</em>':'')+(b.tel?'<a class="pp" href="tel:'+esc(String(b.tel).replace(/[^\d+]/g,""))+'" title="Chiama" style="color:inherit">'+esc(b.tel)+'</a>':'')+
+   (S.role==="coach"?'<em class="pp"><button onclick="registraEsterno(\''+sid+'\','+i+')" style="color:inherit" title="Crea la scheda cliente con nome e telefono già compilati">crea cliente</button></em>':'')}
+function prenEsterna(id){const s=DB.agenda[id];if(!s)return;
+  if(s.pren.length>=s.cap)return toast("Posti esauriti: aumenta la capienza con +");
+  openModal('<h3>Persona nuova</h3><p class="muted" style="margin-bottom:14px">'+esc(slotTitle(s))+' · '+capFirst(fmtD(s.d,{weekday:"long",day:"numeric",month:"long"}))+' · '+s.h+'<br>Per chi non è ancora registrato: una prova o una seduta singola. Puoi crearlo come cliente anche dopo.</p>'+
+   '<div class="frow"><div class="field"><label>Nome e cognome</label><input class="fi" id="peN" autocomplete="off"></div><div class="field"><label>Cellulare</label><input class="fi" id="peT" type="tel" autocomplete="off" placeholder="+39 …"></div></div>'+
+   '<div class="frow"><div class="field"><label>Tipo</label><select class="fi" id="peTipo" onchange="if(this.value===\'prova\')el(\'peP\').value=\'\'"><option value="prova">Prova</option><option value="singola">Seduta singola</option></select></div>'+
+   '<div class="field"><label>Prezzo da incassare in studio (€)</label><input class="fi" id="peP" inputmode="decimal" placeholder="vuoto = gratis"></div></div>'+
+   '<div class="field"><label>Nota (solo tu la vedi)</label><input class="fi" id="peNote" placeholder="Come ti ha conosciuto, obiettivo…"></div>'+
+   '<div class="inline" style="justify-content:flex-end"><button class="btn primary" onclick="salvaPrenEsterna(\''+id+'\')">Metti in agenda</button></div>');
+  setTimeout(()=>{const x=el("peN");if(x)x.focus()},60)}
+function salvaPrenEsterna(id){const s=DB.agenda[id];if(!s)return closeModal();
+  const nome=el("peN").value.trim().replace(/\s+/g," "),tel=el("peT").value.trim(),tipo=el("peTipo").value,imp=parseFloat(String(el("peP").value).replace(",","."))||0,nota=el("peNote").value.trim();
+  if(nome.length<2)return toast("Scrivi almeno il nome");
+  if(!tel)return toast("Scrivi il cellulare, così puoi ricontattarlo");
+  if(s.pren.length>=s.cap)return toast("Posti esauriti: aumenta la capienza con +");
+  const b={cid:null,nome,tel,est:1,prova:tipo==="prova"};if(nota)b.nota=nota;
+  if(s.tipo==="tratt"){b.tratt="decon";b.dur=50}
+  if(imp>0)b.pay={m:"studio",imp,stato:"da pagare"};
+  s.pren.push(b);save();closeModal();S.cv="giorno";S.cdate=s.d;S.aopen=s.id;render();toast(nome+" messo in agenda alle "+s.h)}
+function registraEsterno(sid,i){const s=DB.agenda[sid],b=s&&s.pren[i];if(!b||!b.est)return;
+  nuovoCliente();S.regEst={sid,i,nome:b.nome};
+  const n=el("ncN"),t=el("ncT"),no=el("ncNote"),tp=el("ncTipo");if(n)n.value=b.nome;if(t)t.value=b.tel||"";if(tp)tp.value="none";
+  if(no)no.value=(b.prova?"Prova del "+fmtD(s.d)+" alle "+s.h+".":"Seduta singola del "+fmtD(s.d)+" alle "+s.h+".")+(b.nota?" "+b.nota:"")}
 function toggleChiuso(id){DB.agenda[id].chiuso=!DB.agenda[id].chiuso;save();render()}
 function eliminaSlot(id){delete DB.agenda[id];(DB.agendaDel=DB.agendaDel||{})[id]=1;S.aopen=null;save();render();toast("Orario eliminato")}
 function impostazioniCapienza(){const st=DB.settings;
@@ -2685,13 +2796,58 @@ let restH=null;
 function startRest(sec){stopRest();let t=sec;el("rest").classList.add("on");const p=()=>{el("restT").textContent=Math.floor(t/60)+":"+pad(t%60)};p();
   restH=setInterval(()=>{t--;p();if(t<=0){stopRest();toast("Recupero finito: vai con la prossima serie")}},1000)}
 function stopRest(){if(restH)clearInterval(restH);restH=null;const r=el("rest");if(r)r.classList.remove("on")}
-function vScheda(){
-  return head("La tua scheda",esc(DB.scheda.nome))+fileSchedaCliente()+'<p class="hint" style="margin:-8px 0 14px">Tocca un esercizio per vedere foto, video e come si esegue.</p>'+
-  '<div class="stack">'+DB.scheda.giorni.map((g,i)=>'<div class="card '+(i===dayIdx()?"":"flat")+'"><div class="card-h"><span class="pill '+(g.ex.length?"gold":"")+'">'+g.g+'</span><h3>'+esc(g.t)+'</h3>'+
+function giorniHTML(sc,oggi){
+  return '<div class="stack">'+sc.giorni.map((g,i)=>'<div class="card '+(oggi&&i===dayIdx()?"":"flat")+'"><div class="card-h"><span class="pill '+(g.ex.length?"gold":"")+'">'+g.g+'</span><h3>'+esc(g.t)+'</h3>'+
    (g.ex.length?'<span class="chip more">'+g.ex.length+' esercizi</span>':'<span class="chip more">riposo</span>')+'</div>'+
    (g.ex.length?'<div class="stack" style="gap:4px">'+g.ex.map(e=>'<button class="inline" style="justify-content:space-between;font-size:14px;width:100%;text-align:left;flex-wrap:nowrap;padding:4px 0" onclick="vediEsercizio(\''+esc(e.n).replace(/'/g,"\\'")+'\')">'+
      '<span class="inline" style="flex-wrap:nowrap">'+miniHTML(e.n)+'<span>'+esc(e.n)+'</span></span><span class="dim num" style="flex:none">'+e.s+'×'+esc(e.r)+(e.kg?' · '+fmtN(e.kg)+' kg':'')+'</span></button>').join("")+'</div>':'<p class="muted" style="font-size:14px">Nessun allenamento in programma.</p>')+'</div>').join("")+'</div>';
 }
+function vScheda(){
+  const mia=DB.schede[S.cid],pa=!mia&&prontaAttiva(S.cid);
+  if(!mia&&!pa&&!S.prVisto){S.tab=1;S.prVisto=1}
+  const tabs=tabsHTML(["La mia scheda","Schede pronte"],S.tab,"S.tab");
+  if(S.tab===1)return head("Schede pronte","Schede complete per tutta la settimana, in base al tuo obiettivo")+tabs+prontePanel();
+  if(!mia&&!pa)return head("La tua scheda","Non hai ancora una scheda")+tabs+fileSchedaCliente()+
+   '<div class="card"><p class="muted" style="margin-bottom:12px">Kone non ti ha ancora preparato una scheda personale. Intanto puoi seguire una delle schede pronte: scegli il tuo obiettivo e la trovi ogni giorno in Oggi.</p>'+
+   '<button class="btn primary" onclick="S.tab=1;render()">Scegli una scheda pronta</button></div>';
+  return head("La tua scheda",esc(DB.scheda.nome))+tabs+
+   (pa?'<div class="alert info" style="margin-bottom:14px"><div><b>Stai seguendo una scheda pronta</b><p>Quando Kone ti prepara la tua scheda personale, la trovi qui al suo posto.</p></div><button class="btn sm" onclick="S.prSel=\''+pa.pronta+'\';S.tab=1;render()">Cambia</button></div>':'')+
+   fileSchedaCliente()+'<p class="hint" style="margin:-8px 0 14px">Tocca un esercizio per vedere foto, video e come si esegue.</p>'+giorniHTML(DB.scheda,1);
+}
+let _prC=null;
+function prontaAttiva(cid){
+  if(S.role!=="client"||cid!==S.cid)return null;
+  const id=LS.get("pronta_"+cid,""),p=id&&prontaById(id);if(!p)return null;
+  if(!_prC||_prC.id!==id||_prC.cid!==cid)_prC={id,cid,sc:prontaScheda(p)};
+  return _prC.sc}
+function prontePanel(){
+  const mia=!!DB.schede[S.cid],att=mia?"":LS.get("pronta_"+S.cid,""),p=S.prSel&&prontaById(S.prSel);
+  if(!p)return '<p class="muted" style="margin-bottom:14px">Ogni scheda copre tutti i giorni della settimana, con allenamenti e giorni di riposo. Tocca un obiettivo per vederla.</p>'+
+   '<div class="act-list">'+SCHEDE_PRONTE.map(x=>{const n=x.giorni.filter(g=>g.ex.length).length;
+    return '<button onclick="S.prSel=\''+x.id+'\';render();el(\'main\').scrollTop=0">'+ic("plan",18)+'<span style="flex:1"><b>'+esc(x.ob)+(att===x.id?' · <span class="pill ok">la stai seguendo</span>':'')+'</b><small>'+esc(x.nome)+' · '+n+' allenamenti a settimana · '+esc(x.dur)+' · '+esc(x.liv)+'</small></span>'+ic("chevR",14)+'</button>'}).join("")+'</div>'+
+   (mia?'<p class="hint" style="margin-top:12px">Hai già una scheda personale preparata da Kone: se una di queste ti interessa, puoi chiedergli di passarci.</p>':'');
+  const az=att===p.id?'<span class="pill ok">'+ic("check",12)+' La stai seguendo</span><button class="btn sm ghost" onclick="smettiPronta()">Smetti di seguirla</button>'
+   :mia?'<button class="btn primary" onclick="chiediPronta(\''+p.id+'\')">'+ic("chat",14)+' Chiedi a Kone questa scheda</button>'
+   :'<button class="btn primary" onclick="seguiPronta(\''+p.id+'\')">Segui questa scheda</button>';
+  return '<button class="btn sm ghost" style="margin-bottom:12px" onclick="S.prSel=null;render()">‹ Tutte le schede</button>'+
+   '<div class="card" style="margin-bottom:14px"><div class="eyebrow" style="margin-bottom:6px">'+esc(p.ob)+'</div><h2 style="margin-bottom:8px">'+esc(p.nome)+'</h2>'+
+    '<div class="inline" style="flex-wrap:wrap;gap:6px;margin-bottom:10px"><span class="chip">'+esc(p.freq)+'</span><span class="chip">'+esc(p.dur)+' a seduta</span><span class="chip">'+esc(p.liv)+'</span></div>'+
+    '<p class="muted" style="margin-bottom:12px">'+esc(p.desc)+'</p>'+
+    '<p class="hint" style="margin-bottom:12px">Il carico lo scegli tu: deve permetterti di finire ogni serie con ancora 2 ripetizioni di riserva. Se hai dolori o problemi di salute, parlane prima con Kone.</p>'+
+    '<div class="inline" style="flex-wrap:wrap;gap:8px">'+az+'</div></div>'+
+   '<p class="hint" style="margin:0 0 14px">Tocca un esercizio per vedere foto e come si esegue.</p>'+giorniHTML(p);
+}
+function seguiPronta(id){const p=prontaById(id);if(!p)return;
+  if(!LS.set("pronta_"+S.cid,id))return toast("Non riesco a salvare la scelta su questo dispositivo");
+  _prC=null;S.sets={};S.vals={};S.day=-1;S.tab=0;S.prSel=null;
+  try{msgAKone(S.cid,"📋 Ho iniziato a seguire la scheda pronta “"+p.nome+"” (obiettivo: "+p.ob+").")}catch(e){}
+  save();render();el("main").scrollTop=0;toast("Scheda “"+p.ob+"” attiva: ogni giorno la trovi in Oggi")}
+function smettiPronta(){const p=prontaById(LS.get("pronta_"+S.cid,""));LS.del("pronta_"+S.cid);_prC=null;S.sets={};S.vals={};
+  try{if(p)msgAKone(S.cid,"Ho smesso di seguire la scheda pronta “"+p.nome+"”.")}catch(e){}
+  save();render();toast("Non segui più la scheda pronta")}
+function chiediPronta(id){const p=prontaById(id);if(!p)return;
+  try{msgAKone(S.cid,"📋 Mi piacerebbe passare alla scheda pronta “"+p.nome+"” (obiettivo: "+p.ob+"). Me la prepari?")}catch(e){return toast("Messaggio non inviato, riprova")}
+  save();toast("Richiesta inviata a Kone in chat")}
 function vDieta(){const d=dieta(S.cid),t=d?dTot(d):null;
   return head("La tua dieta",t?fN(t.k)+" kcal · "+fN(t.p)+" g proteine · "+fN(t.c)+" g carboidrati · "+fN(t.g)+" g grassi":"Il tuo piano alimentare, modificabile da te e da Kone")+dietaPanel(S.cid)}
 /* ---------- peso e carichi ---------- */
@@ -2746,10 +2902,10 @@ function annulla(id){const s=DB.agenda[id],b=s.pren.find(x=>x.cid===S.cid),c=me(
   if(b&&c)try{msgAKone(c.id,"❌ Ho annullato: "+slotTitle(s,b)+" · "+fmtD(s.d,{weekday:"long",day:"numeric",month:"long"})+" alle "+s.h+(b.pay&&b.pay.stato==="pagato"?" (era già pagato)":""))}catch(e){}
   save();render();toast("Prenotazione annullata"+(rest?" · la seduta torna nel tuo abbonamento":""))}
 function mieHTML(tipi){
-  const all=mySlots().filter(s=>tipi.includes(s.tipo)),fut=all.filter(s=>!isPast(s));
+  const all=mySlots().filter(s=>{const b=s.pren.find(x=>x.cid===S.cid);return tipi.includes(b&&b.tratt?"tratt":s.tipo==="tratt"?"pt":s.tipo)}),fut=all.filter(s=>!isPast(s));
   const da=iso(addD(TODAY,-10)),fbs=all.filter(s=>s.tipo==="corso"&&isPast(s)&&s.d>=da);
   let h=avvCard()+'<div class="card" style="margin-bottom:14px">'+cardH("cal","Le tue prenotazioni",'<span class="chip">'+fut.length+'</span>');
-  h+=fut.length?fut.map(s=>{const b=s.pren.find(x=>x.cid===S.cid);return '<div class="row"><span class="num" style="width:104px;flex:none;color:var(--gold-mid);font-size:14px">'+fmtD(s.d)+'<br>'+s.h+'</span><span style="flex:1;min-width:0"><span class="nm">'+esc(slotTitle(s,b))+'</span><span class="mt">'+tipoPill(s)+payPill(b)+'</span></span>'+(b.pay&&b.pay.m==="paypal"&&b.pay.stato!=="pagato"?'<button class="btn sm primary" onclick="pagaModal(\''+s.id+'\')">Paga</button>':'')+
+  h+=fut.length?fut.map(s=>{const b=s.pren.find(x=>x.cid===S.cid);return '<div class="row"><span class="num" style="width:104px;flex:none;color:var(--gold-mid);font-size:14px">'+fmtD(s.d)+'<br>'+s.h+'</span><span style="flex:1;min-width:0"><span class="nm">'+esc(slotTitle(s,b))+'</span><span class="mt">'+tipoPill(s,b)+payPill(b)+'</span></span>'+(b.pay&&(b.pay.m==="paypal"||b.pay.m==="carta")&&b.pay.stato!=="pagato"?'<button class="btn sm primary" onclick="pagaModal(\''+s.id+'\')">Paga</button>':'')+
     (s.tipo==="corso"&&DB.programmi[s.d+"_"+s.corso]?'<button class="btn sm ghost" onclick="vediProgramma(\''+s.d+"_"+s.corso+'\')">Programma</button>':'')+'<button class="btn sm" onclick="annulla(\''+s.id+'\')">Annulla</button></div>'}).join(""):'<p class="muted">Nessuna prenotazione in arrivo.</p>';
   if(fbs.length)h+='<div class="sep"></div><div class="flabel" style="margin-bottom:6px">Corsi a cui hai partecipato</div>'+fbs.reverse().map(s=>{const pid=s.d+"_"+s.corso,f=DB.feedback.find(x=>x.pid===pid&&x.cid===S.cid);
     return '<div class="row"><span class="num" style="width:104px;flex:none;font-size:14px">'+fmtD(s.d)+'</span><span style="flex:1"><span class="nm">'+esc(corso(s.corso).n)+'</span><span class="mt">'+(f?"Feedback inviato · fatica "+f.rpe+"/10":"Com'è andata? Aiuta Kone a calibrare il prossimo")+'</span></span>'+
@@ -2821,9 +2977,10 @@ function gestisciHTML(s){
   const others=DB.clienti.filter(c=>!s.pren.some(b=>b.cid===c.id)),k=s.id.replace(/[^\w]/g,"");
   return '<div class="slot-more"><div class="inline" style="justify-content:space-between;margin-bottom:10px"><div class="flabel">Prenotati</div>'+
    '<span class="cap"><button class="icon-btn" onclick="capDelta(\''+s.id+'\',-1)" aria-label="Un posto in meno">'+ic("minus",15)+'</button><span class="n">'+s.pren.length+'/'+s.cap+' posti</span><button class="icon-btn" onclick="capDelta(\''+s.id+'\',1)" aria-label="Un posto in più">'+ic("plus",15)+'</button></span></div>'+
-   '<div class="who">'+(s.pren.length?s.pren.map((b,i)=>'<span>'+esc(b.nome)+(b.tratt?" · "+esc(tratt(b.tratt).n)+" "+b.dur+"′":"")+payPill(b,s.id,i)+'<button onclick="togliPren(\''+s.id+'\','+i+')" aria-label="Togli">'+ic("x",13)+'</button></span>').join(""):'<span class="dim" style="padding:4px 10px">Nessuno</span>')+'</div>'+
+   '<div class="who">'+(s.pren.length?s.pren.map((b,i)=>'<span>'+esc(b.nome)+(b.tratt?" · "+esc(tratt(b.tratt).n)+" "+b.dur+"′":"")+estPill(b,s.id,i)+payPill(b,s.id,i)+'<button onclick="togliPren(\''+s.id+'\','+i+')" aria-label="Togli">'+ic("x",13)+'</button></span>').join(""):'<span class="dim" style="padding:4px 10px">Nessuno</span>')+'</div>'+
    '<div class="inline" style="margin-top:12px"><select class="fi" style="max-width:240px" id="add_'+k+'"><option value="">Aggiungi un cliente…</option>'+others.map(c=>'<option value="'+c.id+'">'+esc(c.n)+'</option>').join("")+'</select>'+
-   '<button class="btn sm" onclick="aggiungiPren(\''+s.id+'\')">Aggiungi</button></div></div>';
+   '<button class="btn sm" onclick="aggiungiPren(\''+s.id+'\')">Aggiungi</button>'+
+   '<button class="btn sm ghost" onclick="prenEsterna(\''+s.id+'\')">'+ic("plus",13)+' Persona nuova / prova</button></div></div>';
 }
 
 /* ---------- vista settimana con trascinamento ---------- */
@@ -2906,6 +3063,7 @@ function calAzioni(id){const s=DB.agenda[id];if(!s)return;const past=isPast(s);
   openModal('<div class="act-h" style="--c:'+colSlot(s)+'"><h3>'+esc(slotTitle(s))+'</h3><p class="muted">'+capFirst(fmtD(s.d,{weekday:"long",day:"numeric",month:"long"}))+' · '+s.h+' · '+s.dur+'′ · '+s.pren.length+'/'+s.cap+' posti</p></div>'+
    '<div class="act-list">'+
    '<button onclick="closeModal();S.cv=\'giorno\';S.cdate=\''+s.d+'\';S.aopen=\''+s.id+'\';render()">'+ic("users",18)+'<span><b>Gestisci prenotati e posti</b><small>'+calPren(s)+'</small></span></button>'+
+   (past?'':'<button onclick="prenEsterna(\''+s.id+'\')">'+ic("plus",18)+'<span><b>Aggiungi persona nuova</b><small>Prova o seduta singola per chi non è ancora registrato</small></span></button>')+
    (past?'':'<button onclick="spostaModal(\''+s.id+'\')">'+ic("move",18)+'<span><b>Sposta</b><small>Cambia giorno o ora'+(s.pren.length?" · i prenotati ricevono un messaggio":"")+'</small></span></button>')+
    '<button onclick="rinominaModal(\''+s.id+'\')">'+ic("edit",18)+'<span><b>Rinomina</b><small>Ora si chiama “'+esc(slotTitle(s))+'” · i clienti vedono subito il nuovo nome</small></span></button>'+
    '<button onclick="duplicaModal(\''+s.id+'\')">'+ic("copy",18)+'<span><b>Duplica</b><small>Domani, la settimana prossima o per più settimane</small></span></button>'+
@@ -2971,16 +3129,24 @@ function calFiltri(){const f=calF();
 const TRATT_IMG=["decon","relax","sport","cervi","rifle","linfo","coppe","altri"];
 function wAtts(){let l;
   if(S.area==="tratt")l=DB.trattamenti.map(t=>({id:"tratt:"+t.id,tipo:"tratt",tr:t.id,n:t.n,sub:t.desc,img:TRATT_IMG.includes(t.id)?"/assets/img/"+t.id+"-480.webp":null,tag:"30′ o 50′",prezzo:pEff(t,"p30"),da:1,col:"#A478C8"}));
-  else l=[{id:"pt",tipo:"pt",n:"One to one con Kone",sub:"Allenamento su misura, solo tu e Kone",img:"/assets/img/personal-trainer-milano.webp",tag:"60′ · su misura",prezzo:pEff(DB.listino.pt[0]),col:"#5C8BC4"}]
-   .concat(DB.corsi.map(c=>({id:"corso:"+c.id,tipo:"corso",corso:c.id,n:c.n,sub:LIVELLI[c.livello]+" · "+c.obiettivo,tag:c.durata+"′ · max "+DB.settings.maxCorso,prezzo:pEff(corsoSingolo()),col:corsoCol(c.id)})));
+  else l=[{id:"pt",tipo:"pt",n:nomePT(),sub:"Allenamento su misura, solo tu e Kone",img:"/assets/img/personal-trainer-milano.webp",tag:"60′ · su misura",prezzo:pEff(DB.listino.pt[0]),col:"#5C8BC4"}]
+   .concat(corsiAgenda());
   if(S.w&&S.w.viaPiano)l=l.filter(x=>copre(me(),x.tipo));
   return l;
 }
-function W(){if(!S.w||S.w.area!==S.area)S.w={area:S.area,step:1,att:null,dur:50,d:null,slot:null,pay:"paypal"};return S.w}
+/* corsi prenotabili = quelli che sono davvero nell'agenda di Kone nei prossimi 14 giorni, con il nome che vede lui
+   (anche una lezione rinominata o un orario aggiunto a mano): cliente e titolare vedono gli stessi corsi */
+function attCorso(s){return "corso:"+s.corso+(s.nome?"|"+s.nome:"")}
+function corsiAgenda(){const fine=iso(addD(TODAY,13)),m=new Map();
+  Object.values(DB.agenda).filter(s=>s.tipo==="corso"&&s.d<=fine&&!isPast(s)&&!s.chiuso).sort((a,b)=>a.d===b.d?(a.h<b.h?-1:1):(a.d<b.d?-1:1)).forEach(s=>{
+    const k=attCorso(s);if(m.has(k))return;const c=corso(s.corso)||{livello:1,obiettivo:"",durata:s.dur||60};
+    m.set(k,{id:k,tipo:"corso",corso:s.corso,nome:s.nome||"",n:slotTitle(s),sub:(LIVELLI[c.livello]||"Corso di gruppo")+(c.obiettivo?" · "+c.obiettivo:""),tag:(s.dur||c.durata)+"′ · max "+s.cap,prezzo:pEff(corsoSingolo()),col:corsoCol(s.corso)})});
+  return Array.from(m.values())}
+function W(){if(!S.w||S.w.area!==S.area)S.w={area:S.area,step:1,att:null,dur:50,d:null,slot:null,pay:null};return S.w}
 function wAtt(){const w=W();return wAtts().find(a=>a.id===w.att)||null}
 function wPrezzo(a,w){a=a||wAtt();w=w||W();if(!a)return 0;if(a.tipo==="tratt"){const t=tratt(a.tr);return pEff(t,w.dur===30?"p30":"p60")}return a.prezzo}
-function wDur(a){a=a||wAtt();if(!a)return 0;if(a.tipo==="tratt")return W().dur;if(a.tipo==="corso")return corso(a.corso).durata;return 60}
-function wSlots(d){const a=wAtt();if(!a)return [];return slotsDay(d,[a.tipo]).filter(s=>(a.tipo!=="corso"||s.corso===a.corso)&&!isPast(s)&&!s.chiuso&&!s.pren.some(b=>b.cid===S.cid))}
+function wDur(a){a=a||wAtt();if(!a)return 0;if(a.tipo==="tratt")return W().dur;if(a.tipo==="corso")return (corso(a.corso)||{durata:60}).durata;return 60}
+function wSlots(d){const a=wAtt();if(!a)return [];return slotsDay(d,a.tipo==="corso"?["corso"]:["tratt","pt"]).filter(s=>(a.tipo!=="corso"||(s.corso===a.corso&&(s.nome||"")===(a.nome||"")))&&!isPast(s)&&!s.chiuso&&!s.pren.some(b=>b.cid===S.cid))}
 function wFree(d){return wSlots(d).reduce((n,s)=>n+Math.max(0,s.cap-s.pren.length),0)}
 function wGo(n){const w=W();if(n>=2&&!w.att)return toast("Scegli prima cosa vuoi fare");if(n>=3&&!w.d)return toast("Scegli il giorno");if(n>=4&&!w.slot)return toast("Scegli l'orario");w.step=n;render();const m=el("main");if(m&&window.innerWidth<900){const t=document.querySelector(".wiz");if(t)m.scrollTop=Math.max(0,t.offsetTop-70)}}
 function wSet(k,v,next){const w=W();w[k]=v;if(k==="att"){w.d=null;w.slot=null}if(k==="d")w.slot=null;if(k==="dur")w.slot=null;if(next)wGo(next);else render()}
@@ -3010,11 +3176,12 @@ function wizard(){
     if(!s){w.step=3;return wizard()}
     const conPiano=pianoAttivo(c)&&copre(c,a.tipo)?[["piano","Con il mio abbonamento",esc(c.piano)+" · "+rimTxt(c)+" · non paghi nulla"]]:[];
     const bonOpt=[["bonifico","Bonifico istantaneo",bon().iban?"Solo istantaneo · sul conto di Kone · "+eur(imp):"Intestato a "+(bon().intest||"Kone Moctar")+" · l'IBAN te lo manda Kone in chat"]];
-    const opts=w.viaPiano&&conPiano.length?conPiano:(imp>0?[["paypal","Paga ora con PayPal","Inquadra il QR o apri PayPal · "+eur(imp)]].concat(bonOpt):[]).concat(conPiano).concat([["studio","Pago in studio","Contanti o carta il giorno della seduta"]]);
+    const cartaOpt=stripeUrl()?[["carta","Carta, Apple Pay, Google Pay o Klarna","Pagamento sicuro · con Klarna anche in 3 rate · "+eur(imp)]]:[];
+    const opts=w.viaPiano&&conPiano.length?conPiano:(imp>0?cartaOpt.concat([["paypal","Paga ora con PayPal","Inquadra il QR o apri PayPal · "+eur(imp)]]).concat(bonOpt):[]).concat(conPiano).concat([["studio","Pago in studio","Contanti o carta il giorno della seduta"]]);
     if(!opts.some(o=>o[0]===w.pay))w.pay=opts[0][0];
     body=(w.viaPiano&&w.pay==="piano"?'<h2 class="wiz-t">Conferma</h2><p class="muted">Controlla il riepilogo: la seduta viene scalata dal tuo abbonamento.</p>':'<h2 class="wiz-t">Conferma e paga</h2><p class="muted">Controlla il riepilogo e scegli come pagare.</p>')+
-     '<div class="pays">'+opts.map(o=>'<button class="pay'+(w.pay===o[0]?" on":"")+'" onclick="wSet(\'pay\',\''+o[0]+'\')"><i></i><span><b>'+o[1]+'</b><small>'+o[2]+'</small></span>'+(o[0]==="paypal"?'<span class="pp-logo">PayPal</span>':'')+'</button>').join("")+'</div>'+
-     (w.pay==="paypal"?paypalBox(imp,a.n+" "+fmtD(s.d)+" "+s.h):w.pay==="bonifico"?bonificoBox(imp,a.n+" "+fmtD(s.d)+" "+s.h):'')+pivaPay()+(a.tipo==="corso"||(w.pay==="piano"&&c.rinnovo)?'<div style="margin-top:14px">'+avvisoSedute()+'</div>':'');
+     '<div class="pays">'+opts.map(o=>'<button class="pay'+(w.pay===o[0]?" on":"")+'" onclick="wSet(\'pay\',\''+o[0]+'\')"><i></i><span><b>'+o[1]+'</b><small>'+o[2]+'</small></span>'+(o[0]==="paypal"?'<span class="pp-logo">PayPal</span>':o[0]==="carta"?'<span class="pp-logo">Pay · Klarna</span>':'')+'</button>').join("")+'</div>'+
+     (w.pay==="carta"?stripeBox(imp,a.n+" "+fmtD(s.d)+" "+s.h):w.pay==="paypal"?paypalBox(imp,a.n+" "+fmtD(s.d)+" "+s.h):w.pay==="bonifico"?bonificoBox(imp,a.n+" "+fmtD(s.d)+" "+s.h):'')+pivaPay()+(a.tipo==="corso"||(w.pay==="piano"&&c.rinnovo)?'<div style="margin-top:14px">'+avvisoSedute()+'</div>':'');
   }
   const can=w.step===1?!!w.att:w.step===2?!!w.d:w.step===3?!!w.slot:true;
   return '<div class="wiz"><div class="wiz-main card"><ol class="stepper">'+steps.map((t,i)=>{const n=i+1,done=n<w.step;return '<li class="'+(n===w.step?"on":done?"done":"")+'">'+(done?'<button onclick="wGo('+n+')">':'<span>')+'<i>'+(done?ic("check",12):n)+'</i>'+t+(done?'</button>':'</span>')+'</li>'}).join("")+'</ol>'+
@@ -3028,11 +3195,39 @@ function wRiep(){const w=W(),a=wAtt(),s=w.slot?DB.agenda[w.slot]:null;
    (a&&a.img?'<img class="rimg" src="'+a.img+'" alt="">':'')+
    r("Attività",a?esc(a.n):"")+r("Durata",a?wDur(a)+" minuti":"")+r("Giorno",w.d?capFirst(fmtD(w.d,{weekday:"long",day:"numeric",month:"long"})):"")+r("Orario",s?s.h:"")+
    '<div class="sep"></div>'+r("Totale",a?(w.pay==="piano"&&w.step>=4||w.viaPiano?'<span class="tot">Incluso</span>':'<span class="tot">'+eur(wPrezzo())+'</span>'):"")+
-   '<p class="hint" style="margin-top:10px">'+ic("check",11)+' Annulli gratis fino all\'inizio · '+ic("check",11)+' Paghi con PayPal, bonifico, dal tuo piano o in studio</p></aside>'}
+   '<p class="hint" style="margin-top:10px">'+ic("check",11)+' Annulli gratis fino all\'inizio · '+ic("check",11)+' Paghi con carta, Apple Pay, Google Pay, Klarna, PayPal, bonifico, dal tuo piano o in studio</p></aside>'}
 function pivaTxt(){const k=window.KM_STUDIO||{};return k.piva?(k.ragione||"Kone Moctar Studio")+" · P.IVA "+k.piva:""}
 function pivaPay(){const t=pivaTxt();return t?'<p class="piva-pay">'+ic("shield",12)+' Pagamento a '+esc(t)+'</p>':''}
 function pivaFill(){const t=pivaTxt();document.querySelectorAll("[data-piva]").forEach(x=>{x.textContent=t;x.hidden=!t})}
 window.addEventListener("load",()=>{pivaFill();if(S.role&&S.view)try{render()}catch(e){}});
+const STRIPE_DEF="https://buy.stripe.com/6oUdRb64w2GP1QZgZXa7C00";
+function stripeUrl(){const s=DB.settings.stripe;if(s==="off")return "";const u=String(s||"").trim();return /^https:\/\//i.test(u)?u:STRIPE_DEF}
+function stripeLink(){const u=stripeUrl(),c=S.role==="client"?me():null;if(!u||!c||!c.email)return u;return u+(u.includes("?")?"&":"?")+"prefilled_email="+encodeURIComponent(c.email)}
+function stripeBox(imp,causale){if(!stripeUrl())return "";return '<div class="ppbox stbox"><div style="flex:1;min-width:0"><div class="flabel">Carta · Apple Pay · Google Pay · Klarna</div><div class="ppamt">'+eur(imp)+'</div>'+
+  '<ol class="pplist"><li>Tocca il pulsante: si apre la pagina di pagamento sicura (Stripe)</li><li>Scrivi l\'importo <b>'+eur(imp)+'</b></li><li>Paga con carta, Apple Pay, Google Pay o Klarna (anche in 3 rate senza interessi)</li></ol>'+
+  (causale?'<p class="hint" style="margin-bottom:10px">Causale: <b>'+esc(causale)+'</b></p>':'')+
+  '<a class="btn primary" href="'+esc(stripeLink())+'" target="_blank" rel="noopener">Paga '+eur(imp)+' '+ic("chevR",14)+'</a>'+
+  '<p class="hint">Kone conferma il pagamento appena lo riceve: lo vedi nelle tue prenotazioni.</p></div></div>'}
+function salvaStripe(v){v=String(v||"").trim().replace(/\s+/g,"");
+  if(v&&!/^https:\/\//i.test(v))return toast("Il link deve iniziare con https://");
+  if(v&&/dashboard\.stripe\.com/i.test(v))return toast("Questo è il link della tua pagina Stripe, non quello per i clienti: copia il link che inizia con https://buy.stripe.com/");
+  if(v&&/\/test_/i.test(v)&&!confirm("Questo è un link di PROVA (test): i clienti non pagherebbero davvero. Salvarlo lo stesso?"))return;
+  DB.settings.stripe=v||"off";save();render();toast(v?"Stripe collegato · i clienti pagano anche con carta, Apple Pay, Google Pay e Klarna":"Stripe scollegato")}
+function stripeCard(){const u=stripeUrl(),ok=!!u,dom=u&&!/^https:\/\/buy\.stripe\.com\//i.test(u);
+  const st=(n,t,lk,lab)=>'<li style="margin-bottom:8px"><b>'+n+'</b> '+t+(lk?' <a href="'+lk+'" target="_blank" rel="noopener" style="white-space:nowrap">'+lab+' ↗</a>':'')+'</li>';
+  return '<div class="ppbox" style="display:block"><div class="flabel" style="margin-bottom:6px">Carta, Apple Pay, Google Pay e Klarna · Stripe</div>'+
+   (ok?'<div class="alert info" style="margin-bottom:12px"><div><b>'+ic("check",14)+' Collegato</b><p>I clienti vedono “Carta, Apple Pay, Google Pay o Klarna” come primo modo di pagamento, nell\'app e sul sito.'+(dom?' Il link non inizia con buy.stripe.com: controlla che sia quello giusto con “Prova il link”.':'')+'</p></div></div>'
+     :'<p class="muted" style="margin-bottom:10px;font-size:14px">Non ancora collegato. Ci vogliono circa 15 minuti, una volta sola:</p>'+
+      '<ol style="margin:0 0 12px;padding:0;list-style:none;font-size:14px;line-height:1.5">'+
+       st("1.","Crea l\'account Stripe e completa la verifica (documento, P.IVA, IBAN su cui ricevere i soldi).","https://dashboard.stripe.com/register","Apri Stripe")+
+       st("2.","In Impostazioni → Metodi di pagamento attiva Apple Pay, Google Pay e Klarna.","https://dashboard.stripe.com/settings/payment_methods","Metodi di pagamento")+
+       st("3.","Crea un link di pagamento scegliendo “I clienti scelgono quanto pagare”, valuta EUR.","https://dashboard.stripe.com/payment-links/create/customer-chooses-pricing","Crea il link")+
+       st("4.","Copia il link (inizia con https://buy.stripe.com/) e incollalo qui sotto, poi tocca Collega.","","")+
+      '</ol>')+
+   '<div class="field"><label>Link di pagamento Stripe</label><input class="fi" id="stU" value="'+esc(stripeUrl())+'" placeholder="https://buy.stripe.com/…" autocapitalize="off" spellcheck="false"></div>'+
+   '<div class="inline" style="justify-content:flex-end;flex-wrap:wrap;gap:8px">'+
+    (ok?'<button class="btn ghost" style="margin-right:auto" onclick="if(confirm(\'Scollegare Stripe? I clienti non vedranno più carta, Apple Pay, Google Pay e Klarna.\'))salvaStripe(\'\')">Scollega</button><a class="btn ghost" href="'+esc(u)+'" target="_blank" rel="noopener">Prova il link ↗</a>':'')+
+    '<button class="btn primary" onclick="salvaStripe(el(\'stU\').value)">'+(ok?'Aggiorna':'Collega')+'</button></div></div>'}
 function paypalBox(imp,causale){return '<div class="ppbox"><img src="/assets/img/paypal-qr.webp" width="200" height="200" alt="QR code PayPal di Kone Moctar Studio">'+
   '<div><div class="flabel">Importo da inviare</div><div class="ppamt">'+eur(imp)+'</div>'+
   '<ol class="pplist"><li>Inquadra il QR con la fotocamera <span class="dim">oppure</span> tocca il pulsante qui sotto</li><li>Invia <b>'+eur(imp)+'</b> come pagamento a Kone Moctar</li><li>Nel messaggio scrivi: <b>'+esc(causale)+'</b></li></ol>'+
@@ -3120,12 +3315,112 @@ function migraPrezzi(){
 const GIORNI7=["Lun","Mar","Mer","Gio","Ven","Sab","Dom"];
 const schedaVuota=nome=>({nome:nome||"Nuova scheda",creata:T0,giorni:GIORNI7.map(g=>({g,t:"Riposo",ex:[]}))});
 const VUOTA=schedaVuota("Nessuna scheda assegnata");
+/* ---------- SCHEDE PRONTE · schede generali per obiettivo, uguali per tutti i clienti ----------
+   Il cliente le trova in Scheda → "Schede pronte" e può seguirne una finché Kone non gli assegna la sua.
+   Kone le trova in "Parti da un modello" per assegnarle (e personalizzarle) a un cliente.
+   Formato di ogni esercizio: n = nome (uguale alla libreria Esercizi), s = serie, r = ripetizioni o tempo, rec = recupero in secondi. */
+const PR_N="Scegli un carico con cui arrivi alla fine della serie con ancora 2 ripetizioni di riserva.";
+const px=(n,s,r,rec,note)=>({n,s,r:String(r),kg:0,last:0,rec,note:note||""});
+const rip=t=>({t,ex:[]});
+const SCHEDE_PRONTE=[
+ {id:"dimagrire",ob:"Dimagrire",nome:"Dimagrimento · brucia grassi",liv:"Tutti i livelli",freq:"4 allenamenti + 2 camminate",dur:"45-50′",
+  desc:"Circuiti total body e lavoro metabolico per consumare di più, con pause brevi. Da abbinare a un'alimentazione in leggero deficit.",
+  giorni:[
+   {t:"Total body A · circuito",ex:[px("Goblet squat",3,15,45,PR_N),px("Piegamenti su rialzo",3,12,45),px("Rematore con manubrio",3,"12+12",45),px("Affondi indietro",3,"10+10",45),px("Mountain climber",3,"30″",30),px("Plank frontale",3,"30″",30)]},
+   {t:"Cardio e addome",ex:[px("Treadmill incline walk",1,"30′",0,"Tapis roulant in salita (8-12%), passo svelto: devi riuscire a parlare ma con fatica."),px("Crunch a bicicletta",3,20,30),px("Dead bug",3,"10+10",30)]},
+   rip("Riposo attivo · camminata 30-45′"),
+   {t:"Total body B · circuito",ex:[px("Stacco gambe tese manubri",3,12,45,PR_N),px("Shoulder press manubri",3,12,45),px("Lat machine presa larga",3,12,45),px("Step-up con manubri",3,"10+10",45),px("Burpee",3,10,45,"Se è troppo intenso togli il salto finale."),px("Plank laterale",3,"20″+20″",30)]},
+   {t:"Metabolico · intervalli",ex:[px("Salto della corda",4,"40″",20),px("Thruster con kettlebell",4,12,40),px("Vogatore",4,"250 m",60),px("Squat a corpo libero",4,20,30),px("Battle rope",4,"30″",40)]},
+   rip("Riposo attivo · camminata o bici 45′"),
+   rip("Riposo")]},
+
+ {id:"massa",ob:"Massa muscolare",nome:"Massa muscolare · ipertrofia",liv:"Intermedio",freq:"5 allenamenti",dur:"60-70′",
+  desc:"Split classica per gruppi muscolari, 8-12 ripetizioni. Ogni settimana prova ad aggiungere un po' di carico o una ripetizione.",
+  giorni:[
+   {t:"Petto e tricipiti",ex:[px("Panca piana bilanciere",4,8,120,"2 serie di riscaldamento leggere, poi 4 serie piene. "+PR_N),px("Panca inclinata manubri",3,10,90),px("Croci ai cavi",3,12,60),px("Dip alle parallele (petto)",3,10,90,"Se non riesci, usa la macchina assistita o i piegamenti."),px("Pushdown con corda",3,12,60),px("French press manubrio",3,12,60)]},
+   {t:"Dorso e bicipiti",ex:[px("Trazioni alla sbarra",4,"6-8",120,"Se non ne fai 6, sostituisci con la Lat machine presa larga."),px("Rematore bilanciere",4,8,90,PR_N),px("Pulley basso",3,12,75),px("Pulldown a braccia tese",3,12,60),px("Curl bilanciere EZ",3,10,60),px("Curl a martello",3,12,60)]},
+   {t:"Gambe · quadricipiti",ex:[px("Squat bilanciere",4,8,150,PR_N),px("Leg press 45°",3,12,90),px("Split squat con manubri",3,"10+10",75),px("Leg extension",3,15,60),px("Calf raise in piedi",4,15,45)]},
+   rip("Riposo"),
+   {t:"Spalle e addome",ex:[px("Military press",4,8,120,PR_N),px("Alzate laterali",4,15,45),px("Alzate posteriori",3,15,45),px("Face pull ai cavi",3,15,45),px("Crunch ai cavi",3,15,45),px("Plank frontale",3,"45″",45)]},
+   {t:"Gambe · femorali e glutei",ex:[px("Stacco rumeno",4,8,120,PR_N),px("Hip thrust",4,10,90),px("Leg curl sdraiato",3,12,60),px("Affondi camminati bilanciere",3,"10+10",75),px("Calf raise seduto",3,15,45)]},
+   rip("Riposo")]},
+
+ {id:"tonificare",ob:"Tonificare",nome:"Tonificazione · total body",liv:"Principiante-intermedio",freq:"4 allenamenti + 2 camminate",dur:"50′",
+  desc:"Parte alta e parte bassa alternate, 12-15 ripetizioni con recuperi medi: corpo più sodo e definito senza aumentare troppo il volume.",
+  giorni:[
+   {t:"Gambe e glutei",ex:[px("Goblet squat",3,12,60,PR_N),px("Hip thrust",3,12,60),px("Affondi indietro",3,"10+10",60),px("Leg curl seduto",3,15,45),px("Abductor machine",3,15,45),px("Calf raise in piedi",3,15,45)]},
+   {t:"Parte alta",ex:[px("Panca piana manubri",3,12,60,PR_N),px("Lat machine presa larga",3,12,60),px("Shoulder press manubri",3,12,60),px("Rematore con manubrio",3,"12+12",60),px("Curl con manubri",2,15,45),px("Pushdown tricipiti",2,15,45)]},
+   rip("Riposo attivo · camminata 30-45′"),
+   {t:"Glutei, femorali e core",ex:[px("Stacco gambe tese manubri",3,12,60,PR_N),px("Ponte glutei con bilanciere",3,12,60),px("Step-up con manubri",3,"10+10",60),px("Slanci dietro (kickback)",3,"15+15",45),px("Dead bug",3,"10+10",30),px("Plank laterale",3,"25″+25″",30)]},
+   {t:"Parte alta e cardio",ex:[px("Piegamenti sulle braccia",3,"10-12",60,"Se servono, fai i piegamenti su rialzo."),px("Pulley basso",3,12,60),px("Alzate laterali",3,15,45),px("Face pull ai cavi",3,15,45),px("Vogatore",1,"12′",0,"Ritmo costante e sostenuto.")]},
+   rip("Riposo attivo · camminata o bici 45′"),
+   rip("Riposo")]},
+
+ {id:"glutei",ob:"Glutei e gambe",nome:"Glutei e gambe",liv:"Tutti i livelli",freq:"4 allenamenti",dur:"50-55′",
+  desc:"Focus su glutei e gambe tre volte a settimana, più un giorno per la parte alta così il corpo resta in equilibrio.",
+  giorni:[
+   {t:"Glutei · forza",ex:[px("Hip thrust",4,10,90,PR_N),px("Squat sumo con manubrio",3,12,75),px("Stacco rumeno",3,10,90),px("Abductor machine",3,15,45),px("Calf raise in piedi",3,15,45)]},
+   {t:"Parte alta e core",ex:[px("Lat machine presa larga",3,12,60,PR_N),px("Panca piana manubri",3,12,60),px("Rematore con manubrio",3,"12+12",60),px("Shoulder press manubri",3,12,60),px("Plank frontale",3,"40″",30),px("Dead bug",3,"10+10",30)]},
+   rip("Riposo attivo · camminata 30-45′"),
+   {t:"Gambe · quadricipiti e glutei",ex:[px("Goblet squat",4,12,75,PR_N),px("Split squat con manubri",3,"10+10",60),px("Leg press 45°",3,15,75,"Piedi alti e larghi sulla pedana per spostare il lavoro sui glutei."),px("Leg extension",3,15,45),px("Clamshell",3,"20+20",30)]},
+   rip("Riposo"),
+   {t:"Glutei · volume e pump",ex:[px("Ponte glutei con bilanciere",4,15,60,PR_N),px("Step-up con manubri",3,"12+12",60),px("Leg curl sdraiato",3,12,60),px("Slanci dietro (kickback)",3,"15+15",45),px("Fire hydrant",3,"15+15",30),px("Glute bridge monopodalico",3,"12+12",30)]},
+   rip("Riposo")]},
+
+ {id:"forza",ob:"Forza",nome:"Forza · i grandi esercizi",liv:"Intermedio-avanzato",freq:"4 allenamenti",dur:"70′",
+  desc:"Pochi esercizi fondamentali con carichi alti e ripetizioni basse, recuperi lunghi. Tecnica sempre pulita: mai arrivare al cedimento.",
+  giorni:[
+   {t:"Squat",ex:[px("Squat bilanciere",5,5,180,"Riscaldamento progressivo, poi 5 serie da 5 con lo stesso carico. Quando le chiudi tutte, la volta dopo +2,5 kg."),px("Leg press 45°",3,8,120),px("Leg curl sdraiato",3,10,75),px("Plank frontale",3,"45″",60)]},
+   {t:"Panca",ex:[px("Panca piana bilanciere",5,5,180,"Riscaldamento progressivo, poi 5×5. Quando le chiudi tutte, la volta dopo +2,5 kg. Sempre con assistenza."),px("Rematore bilanciere",4,6,120),px("Panca presa stretta",3,8,90),px("Face pull ai cavi",3,15,60)]},
+   rip("Riposo"),
+   {t:"Stacco",ex:[px("Stacco da terra",5,3,180,"Riscaldamento progressivo, poi 5×3. Schiena neutra in ogni ripetizione: se si arrotonda, il carico è troppo."),px("Front squat",3,6,150),px("Trazioni alla sbarra",4,"5-6",120,"Se servono, con elastico."),px("Farmer walk",3,"30 m",90)]},
+   {t:"Military press",ex:[px("Military press",5,5,150,"Riscaldamento progressivo, poi 5×5."),px("Panca inclinata manubri",3,8,90),px("Lat machine presa stretta",3,8,90),px("Curl bilanciere",3,8,60),px("Dead bug",3,"10+10",45)]},
+   rip("Riposo"),
+   rip("Riposo")]},
+
+ {id:"principiante",ob:"Principiante",nome:"Principiante · rimettersi in forma",liv:"Principiante",freq:"3 allenamenti + 2 camminate",dur:"40-45′",
+  desc:"Per chi parte da zero o riprende dopo una pausa: macchine ed esercizi semplici, total body tre volte a settimana. Prima la tecnica, poi il carico.",
+  giorni:[
+   {t:"Total body A",ex:[px("Leg press 45°",3,12,75,"Carico leggero: devi poter fare ancora 3-4 ripetizioni alla fine della serie."),px("Pectoral machine",3,12,60),px("Lat machine presa larga",3,12,60),px("Leg curl seduto",2,12,60),px("Plank frontale",3,"20″",45)]},
+   rip("Riposo attivo · camminata 30′"),
+   {t:"Total body B",ex:[px("Goblet squat",3,10,75,"Con un manubrio leggero: scendi solo fin dove la schiena resta dritta."),px("Piegamenti su rialzo",3,10,60),px("Pulley basso",3,12,60),px("Shoulder press manubri",2,12,60),px("Dead bug",3,"8+8",45)]},
+   rip("Riposo"),
+   {t:"Total body C",ex:[px("Affondi indietro",3,"8+8",75,"Anche senza pesi all'inizio."),px("Panca piana manubri",3,12,60),px("Rematore con manubrio",3,"10+10",60),px("Ponte glutei a corpo libero",3,15,45),px("Plank laterale",2,"15″+15″",45)]},
+   rip("Riposo attivo · camminata 30′"),
+   rip("Riposo")]},
+
+ {id:"postura",ob:"Postura e schiena",nome:"Postura e schiena sana",liv:"Tutti i livelli",freq:"3 sedute + 3 camminate",dur:"35-40′",
+  desc:"Mobilità, core profondo e rinforzo della parte alta della schiena e dei glutei. Ideale per chi sta molto seduto o soffre di mal di schiena (senza dolore acuto in corso).",
+  giorni:[
+   {t:"Mobilità e core",ex:[px("Cat-cow",2,10,30,"Lento, seguendo il respiro."),px("World's greatest stretch",2,"5+5",30),px("Bird dog",3,"8+8",30,"Tieni 2 secondi in allungamento senza far ruotare il bacino."),px("Dead bug",3,"8+8",30),px("Ponte glutei a corpo libero",3,12,45),px("Posizione del bambino",1,"1′",0)]},
+   rip("Riposo attivo · camminata 30′"),
+   {t:"Rinforzo posturale",ex:[px("Face pull ai cavi",3,15,45,"Gomiti alti, stringi le scapole alla fine."),px("Pulley basso",3,12,60),px("Alzate posteriori",3,15,45),px("Superman",3,"10 (2″ tenuta)",45),px("Plank frontale",3,"30″",45),px("Allungamento pettorali",2,"30″",0)]},
+   rip("Riposo attivo · camminata 30′"),
+   {t:"Anche, glutei e allungamento",ex:[px("Goblet squat",3,10,60,"Leggero, tutto il movimento controllato."),px("Hip thrust",3,12,60),px("Clamshell",3,"15+15",30),px("Pallof press",3,"10+10",45,"Il busto non deve ruotare."),px("Allungamento flessori dell'anca",2,"30″+30″",0),px("Allungamento femorali",2,"30″+30″",0)]},
+   rip("Riposo attivo · camminata 30′"),
+   rip("Riposo")]},
+
+ {id:"casa",ob:"A casa",nome:"A casa · corpo libero",liv:"Tutti i livelli",freq:"4 allenamenti",dur:"30-35′",
+  desc:"Nessun attrezzo: solo il tuo corpo e un tappetino. Perfetta quando non riesci a venire in studio o sei in viaggio.",
+  giorni:[
+   {t:"Gambe e glutei",ex:[px("Squat a corpo libero",4,20,45),px("Affondi indietro",3,"12+12",45),px("Ponte glutei a corpo libero",3,20,30),px("Glute bridge monopodalico",3,"12+12",30),px("Wall sit",3,"40″",45),px("Fire hydrant",3,"15+15",30)]},
+   {t:"Parte alta e core",ex:[px("Piegamenti sulle braccia",4,"10-15",60,"Se servono, con le mani su un rialzo (divano, sedia stabile)."),px("Dip su panca",3,12,45,"Con le mani su una sedia stabile."),px("Superman",3,12,30),px("Plank frontale",3,"40″",30),px("Plank laterale",3,"25″+25″",30),px("Crunch a bicicletta",3,20,30)]},
+   rip("Riposo attivo · camminata 30-45′"),
+   {t:"Circuito brucia grassi",ex:[px("Skater jump",4,"40″",20,"4 giri: un esercizio dopo l'altro, 1′ di pausa a fine giro."),px("Squat a corpo libero",4,"40″",20),px("Mountain climber",4,"40″",20),px("Burpee",4,"30″",20),px("High knees",4,"30″",60)]},
+   rip("Riposo"),
+   {t:"Total body e mobilità",ex:[px("Inchworm",3,8,45),px("Affondi indietro",3,"10+10",45),px("Piegamenti sulle braccia",3,"8-12",60),px("Dead bug",3,"10+10",30),px("World's greatest stretch",2,"5+5",0),px("Posizione del bambino",1,"1′",0)]},
+   rip("Riposo")]}
+];
+SCHEDE_PRONTE.forEach(p=>p.giorni.forEach((g,i)=>g.g=GIORNI7[i]));
+const prontaById=id=>SCHEDE_PRONTE.find(p=>p.id===id)||null;
+/* la scheda pronta come scheda normale (stesso formato di quelle di Kone) */
+const prontaScheda=p=>({nome:p.nome,creata:T0,pronta:p.id,giorni:clone(p.giorni)});
 function schedeId(){return DB.clienti.some(c=>c.id===S.sclient)?S.sclient:(DB.clienti[0]?DB.clienti[0].id:null)}
 function schedaCid(){return S.role==="coach"&&!S.preview?(S.view==="cliente"?S.client:schedeId()):S.cid}
 function migraSchede(){
   if(!DB.schede){DB.schede={};const d=Object.getOwnPropertyDescriptor(DB,"scheda");if(d&&d.value&&d.value.giorni)DB.schede[1]=d.value}
   delete DB.scheda;DB.modelli=DB.modelli||[];DB.schedeArch=DB.schedeArch||{};
-  Object.defineProperty(DB,"scheda",{get(){return DB.schede[schedaCid()]||VUOTA},configurable:true,enumerable:false});
+  Object.defineProperty(DB,"scheda",{get(){if(S.role==="coach"&&!S.preview&&S.view==="preparazione"&&S.mod!=null&&DB.modelli[S.mod])return DB.modelli[S.mod];const c=schedaCid();return DB.schede[c]||prontaAttiva(c)||VUOTA},configurable:true,enumerable:false});
 }
 const oraLabel=()=>{const n=new Date();return fmtD(T0,{day:"numeric",month:"short"})+" "+pad(n.getHours())+":"+pad(n.getMinutes())};
 
@@ -3133,7 +3428,7 @@ const oraLabel=()=>{const n=new Date();return fmtD(T0,{day:"numeric",month:"shor
 function schedaOpzioni(cid,sost){const c=cli(cid);
   return '<div class="act-list">'+
    '<button onclick="nuovaScheda('+cid+')">'+ic("plus",18)+'<span><b>Scheda vuota</b><small>7 giorni: aggiungi gli esercizi dalla libreria</small></span></button>'+
-   '<button onclick="copiaSchedaModal('+cid+')">'+ic("copy",18)+'<span><b>Parti da un modello o da un altro cliente</b><small>'+DB.modelli.length+' modelli salvati · '+Object.keys(DB.schede).filter(k=>+k!==cid).length+' schede di altri clienti</small></span></button>'+
+   '<button onclick="copiaSchedaModal('+cid+')">'+ic("copy",18)+'<span><b>Parti da un modello o da un altro cliente</b><small>'+DB.modelli.length+' modelli salvati · '+SCHEDE_PRONTE.length+' schede pronte · '+Object.keys(DB.schede).filter(k=>+k!==cid).length+' schede di altri clienti</small></span></button>'+
    '<label class="act-file">'+ic("download",18)+'<span><b>Carica un file (PDF o foto)</b><small>'+esc(c.n.split(" ")[0])+' lo apre dalla sua app, nella sezione Scheda</small></span><input type="file" accept="application/pdf,image/*" hidden onchange="caricaFileScheda('+cid+',this)"></label>'+
    '</div>'+(sost?'<p class="hint">La scheda attuale non si perde: va nell\'archivio di '+esc(c.n.split(" ")[0])+'.</p>':'')}
 function schedaPanel(cid){
@@ -3160,8 +3455,9 @@ function copiaSchedaModal(cid){
   const altri=Object.keys(DB.schede).map(Number).filter(k=>k!==cid&&cli(k));
   openModal('<h3>Parti da…</h3><p class="muted" style="margin-bottom:14px">La copia è indipendente: puoi modificarla senza toccare l\'originale.</p>'+
    (DB.modelli.length?'<div class="flabel" style="margin-bottom:8px">I tuoi modelli</div><div class="act-list" style="margin-bottom:14px">'+DB.modelli.map((m,i)=>'<button onclick="nuovaScheda('+cid+',DB.modelli['+i+'])">'+ic("plan",18)+'<span><b>'+esc(m.nome)+'</b><small>'+m.giorni.filter(g=>g.ex.length).length+' giorni di allenamento</small></span></button>').join("")+'</div>':'')+
+   '<div class="flabel" style="margin-bottom:8px">Schede pronte per obiettivo</div><div class="act-list" style="margin-bottom:14px">'+SCHEDE_PRONTE.map((m,i)=>'<button onclick="nuovaScheda('+cid+',prontaScheda(SCHEDE_PRONTE['+i+']))">'+ic("plan",18)+'<span><b>'+esc(m.nome)+'</b><small>'+esc(m.ob)+' · '+m.giorni.filter(g=>g.ex.length).length+' giorni di allenamento · '+esc(m.liv)+'</small></span></button>').join("")+'</div>'+
    (altri.length?'<div class="flabel" style="margin-bottom:8px">Schede di altri clienti</div><div class="act-list">'+altri.map(k=>'<button onclick="nuovaScheda('+cid+',DB.schede['+k+'])">'+ic("users",18)+'<span><b>'+esc(cli(k).n)+'</b><small>'+esc(DB.schede[k].nome)+'</small></span></button>').join("")+'</div>':'')+
-   (!DB.modelli.length&&!altri.length?'<p class="muted">Non ci sono ancora modelli: crea una scheda e usa “Salva come modello”.</p>':''))}
+   '')}
 async function caricaFileScheda(cid,inp){const f=inp.files[0];if(!f)return;if(f.size>20*1024*1024)return toast("File troppo grande (max 20 MB)");
   const k="sf_"+cid+"_"+uid();try{await IDB.put(k,f)}catch(e){return toast("Non riesco a salvare il file su questo dispositivo")}
   if(!DB.schede[cid])DB.schede[cid]=schedaVuota(f.name.replace(/\.[a-z0-9]+$/i,""));
@@ -3180,13 +3476,79 @@ function vSchede(){const cid=schedeId();
 function fileSchedaCliente(){const sc=DB.schede[S.cid];if(!sc||!sc.file)return "";
   return '<div class="alert info" style="margin-bottom:14px"><div><b>Kone ti ha caricato un file</b><p>'+esc(sc.file.nome)+'</p></div><button class="btn sm primary" onclick="apriFile(\''+sc.file.k+'\')">Apri</button></div>'}
 
+/* ---------- PREPARAZIONE SCHEDE · schede pronte da dare ai nuovi clienti (salvate in DB.modelli) ---------- */
+const prepGiorni=m=>(m.giorni||[]).filter(g=>g.ex.length).length;
+const prepEx=m=>(m.giorni||[]).reduce((a,g)=>a+g.ex.length,0);
+function vPreparazione(){
+  const L=DB.modelli;if(S.mod!=null&&!L[S.mod])S.mod=null;
+  if(S.mod==null){
+    return '<button class="btn sm ghost" onclick="go(\'libreria\')" style="margin-bottom:14px">← Esercizi</button>'+
+     head("Preparazione schede",L.length?L.length+(L.length===1?" scheda pronta":" schede pronte")+" da dare ai clienti":"Prepara le schede in anticipo: quando arriva un cliente gliela dai in un tocco",'<button class="btn primary" onclick="nuovaPrepModal()">+ Prepara scheda</button>')+
+     '<div class="alert info" style="margin-bottom:14px"><div><b>Schede pronte all\'uso</b><p>Prepara qui le tue schede tipo (es. “Principiante 3 giorni”, “Dimagrimento”, “Tonificazione”). Quando arriva un cliente tocca “Assegna”, oppure scegli la scheda direttamente mentre crei il nuovo cliente. Il cliente riceve una copia: puoi personalizzarla senza toccare l\'originale.</p></div></div>'+
+     (L.length?'<div class="prep-grid">'+L.map((m,i)=>'<div class="card prep-card"><button class="prep-open" onclick="apriPrep('+i+')"><span class="prep-ic">'+ic("plan",20)+'</span><span class="prep-t">'+esc(m.nome)+'</span><span class="dim" style="font-size:13px">'+prepGiorni(m)+(prepGiorni(m)===1?' giorno':' giorni')+' di allenamento · '+prepEx(m)+' esercizi</span>'+(m.nota?'<span class="muted" style="font-size:13px">'+esc(m.nota)+'</span>':'')+'</button>'+
+       '<div class="inline prep-act"><button class="btn sm primary" onclick="assegnaPrepModal('+i+')">'+ic("users",13)+' Assegna</button><button class="btn sm" onclick="apriPrep('+i+')">'+ic("edit",13)+' Modifica</button><button class="icon-btn" onclick="duplicaPrep('+i+')" aria-label="Duplica" title="Duplica">'+ic("copy",15)+'</button><button class="icon-btn danger" onclick="eliminaPrepModal('+i+')" aria-label="Elimina" title="Elimina">'+ic("trash",15)+'</button></div></div>').join("")+'</div>'
+      :'<div class="card"><p class="muted" style="margin-bottom:12px">Non hai ancora schede preparate.</p><button class="btn primary" onclick="nuovaPrepModal()">+ Prepara la prima scheda</button></div>');
+  }
+  const i=S.mod,m=L[i];
+  return '<button class="btn sm ghost" onclick="S.mod=null;render()" style="margin-bottom:14px">← Tutte le schede preparate</button>'+
+   '<div class="card sch-head"><div class="sch-row"><div style="flex:1;min-width:220px"><div class="flabel" style="margin-bottom:5px">Scheda preparata</div>'+
+   '<input class="fi sch-name" value="'+esc(m.nome)+'" onchange="DB.modelli['+i+'].nome=this.value.trim()||\'Scheda\';save();toast(\'Nome salvato\')" aria-label="Nome della scheda">'+
+   '<input class="fi" style="margin-top:8px" placeholder="Per chi è (es. principiante, 3 volte a settimana, dimagrimento)" value="'+esc(m.nota||"")+'" onchange="DB.modelli['+i+'].nota=this.value.trim();save();toast(\'Salvato\')" aria-label="Per chi è">'+
+   '<div class="dim" style="font-size:12.5px;margin-top:6px">'+prepGiorni(m)+(prepGiorni(m)===1?' giorno':' giorni')+' di allenamento · '+prepEx(m)+' esercizi · le modifiche si salvano da sole</div></div>'+
+   '<div class="inline sch-act"><button class="btn sm" onclick="duplicaPrep('+i+')">'+ic("copy",13)+' Duplica</button><button class="btn sm" onclick="eliminaPrepModal('+i+')">'+ic("trash",13)+' Elimina</button><button class="btn sm primary" onclick="assegnaPrepModal('+i+')">'+ic("users",13)+' Assegna a un cliente</button></div></div></div>'+
+   schedaEditor();
+}
+function apriPrep(i){S.mod=i;S.day=-1;if(S.view!=="preparazione"){S.view="preparazione";buildNav()}render();el("main").scrollTop=0}
+function nuovaPrepModal(){
+  openModal('<h3>Prepara una scheda</h3><p class="muted" style="margin-bottom:14px">Dai un nome e scegli da dove partire.</p>'+
+   '<div class="field"><label>Nome della scheda</label><input class="fi" id="npN" placeholder="es. Principiante · 3 giorni" autocomplete="off"></div>'+
+   '<div class="act-list"><button onclick="creaPrep()">'+ic("plus",18)+'<span><b>Scheda vuota</b><small>7 giorni: aggiungi gli esercizi dalla libreria</small></span></button></div>'+
+   '<div class="flabel" style="margin:14px 0 8px">Oppure parti da una scheda pronta per obiettivo</div><div class="act-list">'+
+   SCHEDE_PRONTE.map((p,k)=>'<button onclick="creaPrep('+k+')">'+ic("plan",18)+'<span><b>'+esc(p.nome)+'</b><small>'+esc(p.ob)+' · '+p.giorni.filter(g=>g.ex.length).length+' giorni di allenamento · '+esc(p.liv)+'</small></span></button>').join("")+'</div>')}
+function creaPrep(k){const n=el("npN")?el("npN").value.trim():"";
+  const m=k!=null?prontaScheda(SCHEDE_PRONTE[k]):schedaVuota("Nuova scheda");m.file=null;m.creata=T0;if(n)m.nome=n;
+  DB.modelli.push(m);save();closeModal();apriPrep(DB.modelli.length-1);toast(k!=null?"Scheda creata: modificala come vuoi":"Scheda creata: aggiungi gli esercizi")}
+function duplicaPrep(i){const m=clone(DB.modelli[i]);m.nome=m.nome+" (copia)";m.creata=T0;DB.modelli.splice(i+1,0,m);if(S.mod!=null)S.mod=i+1;save();render();toast("Scheda duplicata")}
+function eliminaPrepModal(i){const m=DB.modelli[i];if(!m)return;
+  openModal('<h3>Eliminare “'+esc(m.nome)+'”?</h3><p class="muted" style="margin-bottom:14px">Sparisce dalle schede preparate. I clienti a cui l\'hai già assegnata la tengono, perché hanno una copia.</p>'+
+   '<div class="inline" style="justify-content:flex-end;gap:8px"><button class="btn ghost" onclick="closeModal()">Annulla</button><button class="btn danger" onclick="eliminaPrep('+i+')">Elimina</button></div>')}
+function eliminaPrep(i){DB.modelli.splice(i,1);S.mod=null;save();closeModal();render();toast("Scheda eliminata")}
+function assegnaPrepModal(i){const m=DB.modelli[i];if(!m)return;
+  if(!DB.clienti.length)return openModal('<h3>Nessun cliente</h3><p class="muted" style="margin-bottom:14px">Crea il cliente: nel modulo “Nuovo cliente” puoi scegliere subito questa scheda.</p><div class="inline" style="justify-content:flex-end"><button class="btn primary" onclick="closeModal();go(\'clienti\');nuovoCliente('+i+')">+ Nuovo cliente</button></div>');
+  openModal('<h3>Assegna “'+esc(m.nome)+'”</h3><p class="muted" style="margin-bottom:14px">Il cliente riceve una copia che puoi personalizzare. Se ha già una scheda, quella va nel suo archivio (non si perde).</p>'+
+   '<div class="act-list">'+DB.clienti.map(c=>'<button onclick="assegnaPrep('+i+','+c.id+')">'+ic("users",18)+'<span><b>'+esc(c.n)+'</b><small>'+(DB.schede[c.id]?'Ha già “'+esc(DB.schede[c.id].nome)+'” · andrà in archivio':'Senza scheda')+'</small></span></button>').join("")+'</div>'+
+   '<div class="inline" style="justify-content:flex-end;margin-top:14px"><button class="btn sm" onclick="closeModal();go(\'clienti\');nuovoCliente('+i+')">'+ic("plus",13)+' È un cliente nuovo</button></div>')}
+function assegnaPrep(i,cid){const m=DB.modelli[i],c=cli(cid);if(!m||!c)return;
+  nuovaScheda(cid,m);
+  openModal('<h3>Scheda assegnata</h3><p class="muted" style="margin-bottom:14px">“'+esc(m.nome)+'” è ora la scheda di '+esc(c.n)+'.</p>'+
+   '<div class="inline" style="justify-content:flex-end;gap:8px;flex-wrap:wrap"><button class="btn" onclick="closeModal();openClient('+cid+');S.tab=1;render()">Apri la sua scheda</button><button class="btn primary" onclick="inviaScheda('+cid+');closeModal()">'+ic("chat",13)+' Avvisa il cliente</button></div>')}
+
+/* ---------- elimina cliente ---------- */
+function eliminaClienteModal(cid){const c=cli(cid);if(!c)return;
+  const fut=Object.values(DB.agenda).filter(s=>!isPast(s)&&(s.pren||[]).some(b=>b.cid===cid)).length;
+  openModal('<h3>Eliminare '+esc(c.n)+'?</h3><p style="margin-bottom:10px">Il cliente sparisce dall\'elenco insieme ai suoi dati: scheda e archivio, peso, carichi, dieta, chat'+(fut?' e <b>'+fut+(fut===1?' prenotazione futura':' prenotazioni future')+'</b>':' e prenotazioni')+'.</p>'+
+   '<p class="muted" style="margin-bottom:10px">Non si può annullare. I movimenti già registrati in Contabilità restano. Il cliente non potrà più usare il suo profilo nell\'app.</p>'+
+   '<div class="field"><label>Per confermare scrivi ELIMINA</label><input class="fi" id="dcConf" autocapitalize="characters" autocomplete="off"></div>'+
+   '<div class="inline" style="justify-content:flex-end;gap:8px;flex-wrap:wrap"><button class="btn ghost" onclick="closeModal()">Annulla</button><button class="btn danger" onclick="eliminaCliente('+cid+')">'+ic("trash",13)+' Elimina cliente</button></div>')}
+function eliminaCliente(cid){
+  if(String(el("dcConf").value||"").trim().toUpperCase()!=="ELIMINA")return toast("Scrivi ELIMINA per confermare");
+  const c=cli(cid);if(!c)return;
+  DB.clienti=DB.clienti.filter(x=>x.id!==cid);
+  ["schede","schedeArch","pesi","carichi","diete"].forEach(k=>{if(DB[k])delete DB[k][cid]});
+  Object.values(DB.agenda).forEach(s=>{if(s.pren)s.pren=s.pren.filter(b=>b.cid!==cid)});
+  DB.chat=DB.chat.filter(t=>t.id!==100+cid&&t.n!==c.n);
+  if(DB.feedback)DB.feedback=DB.feedback.filter(f=>f.cid!==cid);
+  if(S.sclient===cid)S.sclient=null;if(S.client===cid)S.client=null;
+  save();closeModal();go("clienti");toast(c.n+" eliminato")}
+
 /* ---------- nuovo cliente e accesso all'app ---------- */
-function nuovoCliente(){const pw="km"+Math.floor(1000+Math.random()*9000);
+function nuovoCliente(pre){S.regEst=null;const pw="km"+Math.floor(1000+Math.random()*9000);
   openModal('<h3>Nuovo cliente</h3><p class="muted" style="margin-bottom:14px">Crei la scheda anagrafica e le credenziali per entrare nell\'app.</p>'+
    '<div class="frow"><div class="field"><label>Nome e cognome</label><input class="fi" id="ncN" autocomplete="off"></div><div class="field"><label>Email (per entrare)</label><input class="fi" id="ncE" type="email" autocomplete="off"></div></div>'+
    '<div class="frow"><div class="field"><label>Password iniziale</label><input class="fi" id="ncP" value="'+pw+'"></div><div class="field"><label>Telefono</label><input class="fi" id="ncT" type="tel"></div></div>'+
    '<div class="frow"><div class="field"><label>Cosa fa</label><select class="fi" id="ncTipo"><option value="pacchetto">Personal training (pacchetto)</option><option value="abb">Personal training (abbonamento)</option><option value="mass">Solo trattamenti</option><option value="combo">Allenamento + trattamenti</option><option value="corsi">Corsi di gruppo</option><option value="none">Nessun abbonamento per ora</option></select></div>'+
    '<div class="field"><label>Piano</label><input class="fi" id="ncPiano" value="Pacchetto 4 sedute"></div><div class="field"><label>Sedute</label><input class="fi" id="ncTot" inputmode="numeric" value="4"></div></div>'+
+   (DB.modelli.length?'<div class="field"><label>Scheda da dare subito</label><select class="fi" id="ncSch"><option value="">Nessuna per ora</option>'+DB.modelli.map((m,i)=>'<option value="'+i+'"'+(pre===i?' selected':'')+'>'+esc(m.nome)+'</option>').join("")+'</select><p class="hint">Le schede che hai in Esercizi → Preparazione schede.</p></div>':'')+
    '<div class="field"><label>Note private (solo tu le vedi)</label><textarea class="fi" id="ncNote" placeholder="Obiettivo, infortuni, preferenze di orario…"></textarea></div>'+
    '<div class="inline" style="justify-content:flex-end"><button class="btn primary" onclick="salvaCliente()">Crea cliente</button></div>')}
 function salvaCliente(){const n=el("ncN").value.trim(),em=el("ncE").value.trim().toLowerCase(),pw=el("ncP").value.trim();
@@ -3195,8 +3557,11 @@ function salvaCliente(){const n=el("ncN").value.trim(),em=el("ncE").value.trim()
   const id=window.KM_CLOUD?KMC.prendiId():Math.max.apply(null,DB.clienti.map(c=>c.id).concat([0]))+1,tot=parseInt(el("ncTot").value)||4;
   DB.clienti.push({id,n,i:n.split(" ").map(x=>x[0]).join("").slice(0,2).toUpperCase(),email:em,pw:hashPw(pw),tel:el("ncT").value.trim(),piano:el("ncPiano").value.trim()||"Da definire",tipo:el("ncTipo").value,
     usate:0,tot,extra:tot+" sedute",scad:"—",gg:0,peso:null,start:null,ader:100,note:el("ncNote").value.trim()||"Nuovo cliente."});
+  const si=el("ncSch")?el("ncSch").value:"",mp=si!==""?DB.modelli[+si]:null;
+  if(mp){const sc=Object.assign(clone(mp),{creata:T0,inviata:null,file:null});sc.giorni.forEach(g=>g.ex.forEach(e=>e.last=0));DB.schede[id]=sc}
+  if(S.regEst){const r=S.regEst,rs=DB.agenda[r.sid],rb=rs&&rs.pren[r.i];if(rb&&rb.est&&rb.nome===r.nome){rb.cid=id;rb.nome=n;delete rb.est;delete rb.tel}S.regEst=null}
   save();closeModal();openClient(id);
-  openModal('<h3>Cliente creato</h3><p class="muted" style="margin-bottom:14px">Manda a '+esc(n.split(" ")[0])+' queste credenziali per entrare nell\'app:</p>'+credBox(em,pw)+'<p class="hint">Ora puoi creargli la scheda dalla scheda “Scheda”.</p>')}
+  openModal('<h3>Cliente creato</h3><p class="muted" style="margin-bottom:14px">Manda a '+esc(n.split(" ")[0])+' queste credenziali per entrare nell\'app:</p>'+credBox(em,pw)+(mp?'<p class="hint">Ha già la scheda “'+esc(mp.nome)+'”: la trova nella sezione Scheda dell\'app.</p>':'<p class="hint">Ora puoi creargli la scheda dalla scheda “Scheda”.</p>'))}
 function credBox(em,pw){const txt="Ciao! Ecco il tuo accesso all'app di KM Studio: https://kone-studio.com/app — email: "+em+" — password: "+pw;
   return '<div class="cred"><div class="kv"><span>Indirizzo</span><b>kone-studio.com/app</b></div><div class="kv"><span>Email</span><b>'+esc(em)+'</b></div><div class="kv"><span>Password</span><b>'+esc(pw)+'</b></div></div>'+
    '<div class="inline" style="margin-top:12px"><a class="btn sm primary" target="_blank" rel="noopener" href="https://wa.me/?text='+encodeURIComponent(txt)+'">Invia su WhatsApp</a><button class="btn sm" onclick="navigator.clipboard&&navigator.clipboard.writeText('+esc(JSON.stringify(txt))+').then(()=>toast(\'Copiato\'))">Copia</button></div>'}
@@ -3489,30 +3854,32 @@ function pagamentiCard(){const coach=S.role==="coach",b=bon();
      '<div class="field" style="flex:2"><label>IBAN</label><input class="fi num" id="bnI" value="'+esc(ibanFmt(b.iban))+'" placeholder="IT00 X000 0000 0000 0000 0000 000" autocapitalize="characters" spellcheck="false"></div></div>'+
      '<div class="field"><label>Banca (facoltativo)</label><input class="fi" id="bnB" value="'+esc(b.banca||"")+'"></div>'+
      '<div class="inline" style="justify-content:flex-end"><button class="btn primary" onclick="salvaBonifico()">Salva IBAN</button></div></div>'+
+    stripeCard()+
     '<div class="ppbox" style="display:block"><div class="flabel" style="margin-bottom:6px">Abbonamenti mensili · addebito automatico</div>'+
      '<p class="muted" style="margin-bottom:10px;font-size:14px">Per far rinnovare da solo un abbonamento mensile serve un link di pagamento ricorrente (Stripe: addebito SEPA sull\'IBAN del cliente o carta). Lo incolli su ogni voce mensile con il tasto “addebito auto”. Qui sotto il link che il cliente usa per disdire l\'addebito (portale clienti di Stripe).</p>'+
      '<div class="field"><label>Link per gestire o disdire l\'addebito</label><input class="fi" value="'+esc(DB.settings.portale||"")+'" placeholder="https://billing.stripe.com/p/login/…" onchange="salvaPortale(this.value)"></div></div>':'')+
    '</div>'}
 
 /* ---------- pagamenti da confermare: PayPal + bonifico ---------- */
-const PAY_LAB={paypal:"PayPal",bonifico:"Bonifico",studio:"Contanti",piano:"Abbonamento"};
+const PAY_LAB={paypal:"PayPal",bonifico:"Bonifico",carta:"Carta/Klarna",studio:"Contanti",piano:"Abbonamento"},PAY_ONLINE=["paypal","bonifico","carta"];
 function payPill(b,sid,i){if(!b.pay)return "";
-  if(b.pay.stato==="pagato")return '<em class="pp ok">'+ic("check",11)+' pagato '+esc(b.pay.m==="paypal"||b.pay.m==="bonifico"?PAY_LAB[b.pay.m]:"")+'</em>';
-  if(b.pay.m==="paypal"||b.pay.m==="bonifico")return S.role==="coach"?'<button class="pp warn" onclick="segnaPagato(\''+sid+'\','+i+')" title="Segna come pagato">'+PAY_LAB[b.pay.m]+' '+eur(b.pay.imp)+' · conferma</button>':'<em class="pp warn">'+PAY_LAB[b.pay.m]+' da verificare</em>';
+  if(b.pay.stato==="pagato")return '<em class="pp ok">'+ic("check",11)+' pagato '+esc(PAY_ONLINE.includes(b.pay.m)?PAY_LAB[b.pay.m]:"")+'</em>';
+  if(PAY_ONLINE.includes(b.pay.m))return S.role==="coach"?'<button class="pp warn" onclick="segnaPagato(\''+sid+'\','+i+')" title="Segna come pagato">'+PAY_LAB[b.pay.m]+' '+eur(b.pay.imp)+' · conferma</button>':'<em class="pp warn">'+PAY_LAB[b.pay.m]+' da verificare</em>';
   if(b.pay.m==="piano")return '<em class="pp">dal piano</em>';
   return '<em class="pp">'+(S.role==="coach"?'<button onclick="segnaPagato(\''+sid+'\','+i+')" style="color:inherit">in studio '+eur(b.pay.imp)+' · incassa</button>':"paga in studio")+'</em>';
 }
 function segnaPagato(sid,i){const s=DB.agenda[sid],b=s&&s.pren[i];if(!b||!b.pay)return;b.pay.stato="pagato";
-  DB.movimenti.unshift({id:uid(),d:T0,tipo:"entrata",desc:slotTitle(s,b)+" · "+fmtD(s.d)+" "+s.h,cli:b.nome,area:s.tipo==="tratt"?"Trattamenti":"Allenamenti",imp:b.pay.imp,met:b.pay.m==="paypal"?"PayPal":b.pay.m==="bonifico"?"Bonifico":"Contanti",pag:true});
+  DB.movimenti.unshift({id:uid(),d:T0,tipo:"entrata",desc:slotTitle(s,b)+" · "+fmtD(s.d)+" "+s.h,cli:b.nome,area:s.tipo==="tratt"?"Trattamenti":"Allenamenti",imp:b.pay.imp,met:b.pay.m==="paypal"?"PayPal":b.pay.m==="bonifico"?"Bonifico":b.pay.m==="carta"?"Carta / Apple Pay / Klarna":"Contanti",pag:true});
   save();render();toast("Pagamento registrato in Contabilità")}
-function paypalDaConfermare(){const out=[];Object.values(DB.agenda).forEach(s=>s.pren.forEach((b,i)=>{if(b.pay&&(b.pay.m==="paypal"||b.pay.m==="bonifico")&&b.pay.stato!=="pagato")out.push({s,b,i})}));return out.sort((a,b)=>(a.s.d+a.s.h)<(b.s.d+b.s.h)?-1:1)}
+function paypalDaConfermare(){const out=[];Object.values(DB.agenda).forEach(s=>s.pren.forEach((b,i)=>{if(b.pay&&PAY_ONLINE.includes(b.pay.m)&&b.pay.stato!=="pagato")out.push({s,b,i})}));return out.sort((a,b)=>(a.s.d+a.s.h)<(b.s.d+b.s.h)?-1:1)}
 function pagaModal(sid){const s=DB.agenda[sid],b=s&&s.pren.find(x=>x.cid===S.cid);if(!b)return;const caus=slotTitle(s,b)+" "+fmtD(s.d)+" "+s.h;
-  openModal('<h3>'+(b.pay&&b.pay.m==="bonifico"?"Paga con bonifico":"Paga con PayPal")+'</h3><p class="muted" style="margin-bottom:12px">'+esc(slotTitle(s,b))+' · '+fmtD(s.d)+' '+s.h+'</p>'+(b.pay&&b.pay.m==="bonifico"?bonificoBox(b.pay.imp,caus):paypalBox(b.pay.imp,caus)))}
+  const m=b.pay&&b.pay.m;
+  openModal('<h3>'+(m==="bonifico"?"Paga con bonifico":m==="carta"?"Paga con carta, Apple Pay o Klarna":"Paga con PayPal")+'</h3><p class="muted" style="margin-bottom:12px">'+esc(slotTitle(s,b))+' · '+fmtD(s.d)+' '+s.h+'</p>'+(m==="bonifico"?bonificoBox(b.pay.imp,caus):m==="carta"&&stripeUrl()?stripeBox(b.pay.imp,caus):paypalBox(b.pay.imp,caus)))}
 function wFatto(){const w=W(),s=DB.agenda[w.slot],b=s&&s.pren.find(x=>x.cid===S.cid);if(!s||!b){S.w=null;return wizard()}
   const caus=(wAtt()||{n:""}).n+" "+fmtD(s.d)+" "+s.h;
   return '<div class="card wdone"><span class="ok-ic">'+ic("check",30)+'</span><h2 class="wiz-t">Prenotato!</h2>'+
    '<p class="muted">'+esc(slotTitle(s,b))+' · '+capFirst(fmtD(s.d,{weekday:"long",day:"numeric",month:"long"}))+' alle '+s.h+'</p>'+
-   (b.pay.m==="paypal"?paypalBox(b.pay.imp,caus):b.pay.m==="bonifico"?bonificoBox(b.pay.imp,caus):'<p style="margin-top:10px">'+(b.pay.m==="piano"?"Scalato dal tuo abbonamento: non devi pagare nulla. "+capFirst(rimTxt(me()))+".":"Paghi "+eur(b.pay.imp)+" in studio il giorno della seduta.")+'</p>')+
+   (b.pay.m==="carta"?stripeBox(b.pay.imp,caus):b.pay.m==="paypal"?paypalBox(b.pay.imp,caus):b.pay.m==="bonifico"?bonificoBox(b.pay.imp,caus):'<p style="margin-top:10px">'+(b.pay.m==="piano"?"Scalato dal tuo abbonamento: non devi pagare nulla. "+capFirst(rimTxt(me()))+".":"Paghi "+eur(b.pay.imp)+" in studio il giorno della seduta.")+'</p>')+
    (s.tipo==="corso"||(b.pay.m==="piano"&&me().rinnovo)?'<div style="max-width:560px;margin:16px auto 0;text-align:left">'+avvisoSedute()+'</div>':'')+
    '<div class="inline" style="justify-content:center;margin-top:18px"><button class="btn primary" onclick="const v=S.w&&S.w.viaPiano;S.w=null;if(v&&pianoAttivo(me()))usaAbbonamento();else render()">Prenota un\'altra</button></div></div>'}
 const corsoSingolo=()=>(DB.listino.corsi||[]).find(r=>r.sed===1&&!/mensil/i.test(r.n))||null;
@@ -3539,8 +3906,8 @@ function disdiciModal(){const c=me(),fino=c.scadIso?fmtD(c.scadIso,{day:"numeric
   openModal('<h3>Disdire l\'abbonamento?</h3><p class="muted" style="margin-bottom:12px"><b>'+esc(c.piano)+'</b> resta attivo fino al <b>'+fino+'</b>: fino ad allora prenoti come sempre. Dopo non si rinnova più e non ti viene addebitato nulla.</p>'+
    (DB.settings.portale?'<p class="hint" style="margin-bottom:12px">Ti apriamo anche la pagina sicura dei pagamenti per fermare l\'addebito sul conto.</p>':'<p class="hint" style="margin-bottom:12px">Kone riceve subito la tua disdetta in chat e ferma l\'addebito.</p>')+
    '<div class="inline" style="justify-content:flex-end"><button class="btn ghost" onclick="closeModal()">Tengo l\'abbonamento</button><button class="btn primary" onclick="disdiciAbb()">Disdici</button></div>')}
-function payTesto(p){if(!p)return "";const L={paypal:"PayPal",bonifico:"bonifico",studio:"paga in studio",piano:"dal suo abbonamento"};
-  return (p.m==="piano"?"":"pagamento ")+(L[p.m]||p.m)+(p.imp?" "+eur(p.imp):"")+(p.m==="paypal"||p.m==="bonifico"?" (da verificare)":"")}
+function payTesto(p){if(!p)return "";const L={paypal:"PayPal",bonifico:"bonifico",carta:"carta / Apple Pay / Google Pay / Klarna",studio:"paga in studio",piano:"dal suo abbonamento"};
+  return (p.m==="piano"?"":"pagamento ")+(L[p.m]||p.m)+(p.imp?" "+eur(p.imp):"")+(PAY_ONLINE.includes(p.m)?" (da verificare)":"")}
 /* ---------- avvisi a Kone: nuove prenotazioni dall'app ---------- */
 function nuovePren(){const out=[];Object.values(DB.agenda).forEach(s=>s.pren.forEach(b=>{if(b.da==="app"&&!b._ph)out.push({s,b})}));
   return out.sort((a,b)=>(a.b.quando||"")<(b.b.quando||"")?1:-1)}
@@ -3640,7 +4007,7 @@ function richiestaAbb(key,i,link){const r=DB.listino[key][i],c=me();if(!c)return
 function render(){
   if(typeof PD!=="undefined"&&PD&&PD.on){window._renderPend=1;return}   // sto trascinando un blocco: ridisegno dopo
   const coach=S.role==="coach";
-  const V=coach?{dash:vDash,agenda:vAgenda,clienti:vClienti,cliente:vCliente,chat:vChat,listino:vListino,pagamenti:vPagamenti,conti:vConti,schede:vSchede,libreria:vLibreria,corsi:vCorsi,nutrizione:vNutrizione,tratt:vTratt}
+  const V=coach?{dash:vDash,agenda:vAgenda,clienti:vClienti,cliente:vCliente,chat:vChat,listino:vListino,pagamenti:vPagamenti,conti:vConti,schede:vSchede,libreria:vLibreria,preparazione:vPreparazione,corsi:vCorsi,nutrizione:vNutrizione,tratt:vTratt}
     :{oggi:vOggi,scheda:vScheda,prenota:vPrenota,prog:vProgC,dieta:vDieta,listino:vListino,chat:vChatC,tcat:vTcat,tpren:vTpren};
   const f=V[S.view]||(coach?vDash:vOggi);
   try{el("view").innerHTML=f()}catch(e){console.error(e);el("view").innerHTML='<div class="card"><p>Qualcosa non ha funzionato in questa pagina.</p><p class="hint">'+esc(e.message)+'</p></div>'}
@@ -3652,7 +4019,7 @@ setInterval(caricaPrezzi,180000);document.addEventListener("visibilitychange",()
 
 </script>
 <!-- collegamento al database: login vero, dati condivisi tra telefoni -->
-<script src="/assets/js/cloud.js?v=5"></script>
+<script src="/assets/js/cloud.js?v=6"></script>
 <script>
 if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("/sw.js").catch(function(){});});}
 </script>

@@ -2387,6 +2387,32 @@ function togliPren(id,i){const s=DB.agenda[id];const b=s.pren.splice(i,1)[0];sav
 function aggiungiPren(id){const s=DB.agenda[id],v=el("add_"+id.replace(/[^\w]/g,"")).value;if(!v)return;
   if(s.pren.length>=s.cap)return toast("Posti esauriti: aumenta la capienza con +");
   const c=cli(+v);const b={cid:c.id,nome:c.n};if(s.tipo==="tratt"){b.tratt="decon";b.dur=50}s.pren.push(b);save();render()}
+/* persona non registrata (prova / seduta singola) messa in agenda dal titolare */
+function estPill(b,sid,i){if(!b.est)return "";
+  return (b.prova?'<em class="pp">prova</em>':'')+(b.tel?'<a class="pp" href="tel:'+esc(String(b.tel).replace(/[^\d+]/g,""))+'" title="Chiama" style="color:inherit">'+esc(b.tel)+'</a>':'')+
+   (S.role==="coach"?'<em class="pp"><button onclick="registraEsterno(\''+sid+'\','+i+')" style="color:inherit" title="Crea la scheda cliente con nome e telefono già compilati">crea cliente</button></em>':'')}
+function prenEsterna(id){const s=DB.agenda[id];if(!s)return;
+  if(s.pren.length>=s.cap)return toast("Posti esauriti: aumenta la capienza con +");
+  openModal('<h3>Persona nuova</h3><p class="muted" style="margin-bottom:14px">'+esc(slotTitle(s))+' · '+capFirst(fmtD(s.d,{weekday:"long",day:"numeric",month:"long"}))+' · '+s.h+'<br>Per chi non è ancora registrato: una prova o una seduta singola. Puoi crearlo come cliente anche dopo.</p>'+
+   '<div class="frow"><div class="field"><label>Nome e cognome</label><input class="fi" id="peN" autocomplete="off"></div><div class="field"><label>Cellulare</label><input class="fi" id="peT" type="tel" autocomplete="off" placeholder="+39 …"></div></div>'+
+   '<div class="frow"><div class="field"><label>Tipo</label><select class="fi" id="peTipo" onchange="if(this.value===\'prova\')el(\'peP\').value=\'\'"><option value="prova">Prova</option><option value="singola">Seduta singola</option></select></div>'+
+   '<div class="field"><label>Prezzo da incassare in studio (€)</label><input class="fi" id="peP" inputmode="decimal" placeholder="vuoto = gratis"></div></div>'+
+   '<div class="field"><label>Nota (solo tu la vedi)</label><input class="fi" id="peNote" placeholder="Come ti ha conosciuto, obiettivo…"></div>'+
+   '<div class="inline" style="justify-content:flex-end"><button class="btn primary" onclick="salvaPrenEsterna(\''+id+'\')">Metti in agenda</button></div>');
+  setTimeout(()=>{const x=el("peN");if(x)x.focus()},60)}
+function salvaPrenEsterna(id){const s=DB.agenda[id];if(!s)return closeModal();
+  const nome=el("peN").value.trim().replace(/\s+/g," "),tel=el("peT").value.trim(),tipo=el("peTipo").value,imp=parseFloat(String(el("peP").value).replace(",","."))||0,nota=el("peNote").value.trim();
+  if(nome.length<2)return toast("Scrivi almeno il nome");
+  if(!tel)return toast("Scrivi il cellulare, così puoi ricontattarlo");
+  if(s.pren.length>=s.cap)return toast("Posti esauriti: aumenta la capienza con +");
+  const b={cid:null,nome,tel,est:1,prova:tipo==="prova"};if(nota)b.nota=nota;
+  if(s.tipo==="tratt"){b.tratt="decon";b.dur=50}
+  if(imp>0)b.pay={m:"studio",imp,stato:"da pagare"};
+  s.pren.push(b);save();closeModal();S.cv="giorno";S.cdate=s.d;S.aopen=s.id;render();toast(nome+" messo in agenda alle "+s.h)}
+function registraEsterno(sid,i){const s=DB.agenda[sid],b=s&&s.pren[i];if(!b||!b.est)return;
+  nuovoCliente();S.regEst={sid,i,nome:b.nome};
+  const n=el("ncN"),t=el("ncT"),no=el("ncNote"),tp=el("ncTipo");if(n)n.value=b.nome;if(t)t.value=b.tel||"";if(tp)tp.value="none";
+  if(no)no.value=(b.prova?"Prova del "+fmtD(s.d)+" alle "+s.h+".":"Seduta singola del "+fmtD(s.d)+" alle "+s.h+".")+(b.nota?" "+b.nota:"")}
 function toggleChiuso(id){DB.agenda[id].chiuso=!DB.agenda[id].chiuso;save();render()}
 function eliminaSlot(id){delete DB.agenda[id];(DB.agendaDel=DB.agendaDel||{})[id]=1;S.aopen=null;save();render();toast("Orario eliminato")}
 function impostazioniCapienza(){const st=DB.settings;
@@ -2951,9 +2977,10 @@ function gestisciHTML(s){
   const others=DB.clienti.filter(c=>!s.pren.some(b=>b.cid===c.id)),k=s.id.replace(/[^\w]/g,"");
   return '<div class="slot-more"><div class="inline" style="justify-content:space-between;margin-bottom:10px"><div class="flabel">Prenotati</div>'+
    '<span class="cap"><button class="icon-btn" onclick="capDelta(\''+s.id+'\',-1)" aria-label="Un posto in meno">'+ic("minus",15)+'</button><span class="n">'+s.pren.length+'/'+s.cap+' posti</span><button class="icon-btn" onclick="capDelta(\''+s.id+'\',1)" aria-label="Un posto in più">'+ic("plus",15)+'</button></span></div>'+
-   '<div class="who">'+(s.pren.length?s.pren.map((b,i)=>'<span>'+esc(b.nome)+(b.tratt?" · "+esc(tratt(b.tratt).n)+" "+b.dur+"′":"")+payPill(b,s.id,i)+'<button onclick="togliPren(\''+s.id+'\','+i+')" aria-label="Togli">'+ic("x",13)+'</button></span>').join(""):'<span class="dim" style="padding:4px 10px">Nessuno</span>')+'</div>'+
+   '<div class="who">'+(s.pren.length?s.pren.map((b,i)=>'<span>'+esc(b.nome)+(b.tratt?" · "+esc(tratt(b.tratt).n)+" "+b.dur+"′":"")+estPill(b,s.id,i)+payPill(b,s.id,i)+'<button onclick="togliPren(\''+s.id+'\','+i+')" aria-label="Togli">'+ic("x",13)+'</button></span>').join(""):'<span class="dim" style="padding:4px 10px">Nessuno</span>')+'</div>'+
    '<div class="inline" style="margin-top:12px"><select class="fi" style="max-width:240px" id="add_'+k+'"><option value="">Aggiungi un cliente…</option>'+others.map(c=>'<option value="'+c.id+'">'+esc(c.n)+'</option>').join("")+'</select>'+
-   '<button class="btn sm" onclick="aggiungiPren(\''+s.id+'\')">Aggiungi</button></div></div>';
+   '<button class="btn sm" onclick="aggiungiPren(\''+s.id+'\')">Aggiungi</button>'+
+   '<button class="btn sm ghost" onclick="prenEsterna(\''+s.id+'\')">'+ic("plus",13)+' Persona nuova / prova</button></div></div>';
 }
 
 /* ---------- vista settimana con trascinamento ---------- */
@@ -3036,6 +3063,7 @@ function calAzioni(id){const s=DB.agenda[id];if(!s)return;const past=isPast(s);
   openModal('<div class="act-h" style="--c:'+colSlot(s)+'"><h3>'+esc(slotTitle(s))+'</h3><p class="muted">'+capFirst(fmtD(s.d,{weekday:"long",day:"numeric",month:"long"}))+' · '+s.h+' · '+s.dur+'′ · '+s.pren.length+'/'+s.cap+' posti</p></div>'+
    '<div class="act-list">'+
    '<button onclick="closeModal();S.cv=\'giorno\';S.cdate=\''+s.d+'\';S.aopen=\''+s.id+'\';render()">'+ic("users",18)+'<span><b>Gestisci prenotati e posti</b><small>'+calPren(s)+'</small></span></button>'+
+   (past?'':'<button onclick="prenEsterna(\''+s.id+'\')">'+ic("plus",18)+'<span><b>Aggiungi persona nuova</b><small>Prova o seduta singola per chi non è ancora registrato</small></span></button>')+
    (past?'':'<button onclick="spostaModal(\''+s.id+'\')">'+ic("move",18)+'<span><b>Sposta</b><small>Cambia giorno o ora'+(s.pren.length?" · i prenotati ricevono un messaggio":"")+'</small></span></button>')+
    '<button onclick="rinominaModal(\''+s.id+'\')">'+ic("edit",18)+'<span><b>Rinomina</b><small>Ora si chiama “'+esc(slotTitle(s))+'” · i clienti vedono subito il nuovo nome</small></span></button>'+
    '<button onclick="duplicaModal(\''+s.id+'\')">'+ic("copy",18)+'<span><b>Duplica</b><small>Domani, la settimana prossima o per più settimane</small></span></button>'+
@@ -3514,7 +3542,7 @@ function eliminaCliente(cid){
   save();closeModal();go("clienti");toast(c.n+" eliminato")}
 
 /* ---------- nuovo cliente e accesso all'app ---------- */
-function nuovoCliente(pre){const pw="km"+Math.floor(1000+Math.random()*9000);
+function nuovoCliente(pre){S.regEst=null;const pw="km"+Math.floor(1000+Math.random()*9000);
   openModal('<h3>Nuovo cliente</h3><p class="muted" style="margin-bottom:14px">Crei la scheda anagrafica e le credenziali per entrare nell\'app.</p>'+
    '<div class="frow"><div class="field"><label>Nome e cognome</label><input class="fi" id="ncN" autocomplete="off"></div><div class="field"><label>Email (per entrare)</label><input class="fi" id="ncE" type="email" autocomplete="off"></div></div>'+
    '<div class="frow"><div class="field"><label>Password iniziale</label><input class="fi" id="ncP" value="'+pw+'"></div><div class="field"><label>Telefono</label><input class="fi" id="ncT" type="tel"></div></div>'+
@@ -3531,6 +3559,7 @@ function salvaCliente(){const n=el("ncN").value.trim(),em=el("ncE").value.trim()
     usate:0,tot,extra:tot+" sedute",scad:"—",gg:0,peso:null,start:null,ader:100,note:el("ncNote").value.trim()||"Nuovo cliente."});
   const si=el("ncSch")?el("ncSch").value:"",mp=si!==""?DB.modelli[+si]:null;
   if(mp){const sc=Object.assign(clone(mp),{creata:T0,inviata:null,file:null});sc.giorni.forEach(g=>g.ex.forEach(e=>e.last=0));DB.schede[id]=sc}
+  if(S.regEst){const r=S.regEst,rs=DB.agenda[r.sid],rb=rs&&rs.pren[r.i];if(rb&&rb.est&&rb.nome===r.nome){rb.cid=id;rb.nome=n;delete rb.est;delete rb.tel}S.regEst=null}
   save();closeModal();openClient(id);
   openModal('<h3>Cliente creato</h3><p class="muted" style="margin-bottom:14px">Manda a '+esc(n.split(" ")[0])+' queste credenziali per entrare nell\'app:</p>'+credBox(em,pw)+(mp?'<p class="hint">Ha già la scheda “'+esc(mp.nome)+'”: la trova nella sezione Scheda dell\'app.</p>':'<p class="hint">Ora puoi creargli la scheda dalla scheda “Scheda”.</p>'))}
 function credBox(em,pw){const txt="Ciao! Ecco il tuo accesso all'app di KM Studio: https://kone-studio.com/app — email: "+em+" — password: "+pw;
