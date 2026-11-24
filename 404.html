@@ -1947,7 +1947,7 @@ function spark(vals){if(vals.length<2)return "";const W=90,H=28,mn=Math.min.appl
 
 /* ---------- modale ---------- */
 function openModal(html){el("modalCard").innerHTML='<button class="icon-btn modal-x" onclick="closeModal()" aria-label="Chiudi">'+ic("x",16)+'</button>'+html;el("modal").classList.add("on");hydrate()}
-function closeModal(){el("modal").classList.remove("on");el("modalCard").innerHTML=""}
+function closeModal(){S.gmod=null;el("modal").classList.remove("on");el("modalCard").innerHTML=""}
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
 
 /* =================== ACCESSI E ROUTING =================== */
@@ -2398,7 +2398,7 @@ function prenEsterna(id){const s=DB.agenda[id];if(!s)return;
    '<div class="frow"><div class="field"><label>Tipo</label><select class="fi" id="peTipo" onchange="if(this.value===\'prova\')el(\'peP\').value=\'\'"><option value="prova">Prova</option><option value="singola">Seduta singola</option></select></div>'+
    '<div class="field"><label>Prezzo da incassare in studio (€)</label><input class="fi" id="peP" inputmode="decimal" placeholder="vuoto = gratis"></div></div>'+
    '<div class="field"><label>Nota (solo tu la vedi)</label><input class="fi" id="peNote" placeholder="Come ti ha conosciuto, obiettivo…"></div>'+
-   '<div class="inline" style="justify-content:flex-end"><button class="btn primary" onclick="salvaPrenEsterna(\''+id+'\')">Metti in agenda</button></div>');
+   '<div class="inline" style="justify-content:flex-end">'+(S.gmod===id?'<button class="btn ghost" onclick="gestisciModal(\''+id+'\')">Indietro</button>':'')+'<button class="btn primary" onclick="salvaPrenEsterna(\''+id+'\')">Metti in agenda</button></div>');
   setTimeout(()=>{const x=el("peN");if(x)x.focus()},60)}
 function salvaPrenEsterna(id){const s=DB.agenda[id];if(!s)return closeModal();
   const nome=el("peN").value.trim().replace(/\s+/g," "),tel=el("peT").value.trim(),tipo=el("peTipo").value,imp=parseFloat(String(el("peP").value).replace(",","."))||0,nota=el("peNote").value.trim();
@@ -2408,7 +2408,8 @@ function salvaPrenEsterna(id){const s=DB.agenda[id];if(!s)return closeModal();
   const b={cid:null,nome,tel,est:1,prova:tipo==="prova"};if(nota)b.nota=nota;
   if(s.tipo==="tratt"){b.tratt="decon";b.dur=50}
   if(imp>0)b.pay={m:"studio",imp,stato:"da pagare"};
-  s.pren.push(b);save();closeModal();S.cv="giorno";S.cdate=s.d;S.aopen=s.id;render();toast(nome+" messo in agenda alle "+s.h)}
+  s.pren.push(b);save();toast(nome+" messo in agenda alle "+s.h);
+  if(S.gmod===id){render();gestisciModal(id)}else{closeModal();S.cv="giorno";S.cdate=s.d;S.aopen=s.id;render()}}
 function registraEsterno(sid,i){const s=DB.agenda[sid],b=s&&s.pren[i];if(!b||!b.est)return;
   nuovoCliente();S.regEst={sid,i,nome:b.nome};
   const n=el("ncN"),t=el("ncT"),no=el("ncNote"),tp=el("ncTipo");if(n)n.value=b.nome;if(t)t.value=b.tel||"";if(tp)tp.value="none";
@@ -2983,6 +2984,19 @@ function gestisciHTML(s){
    '<button class="btn sm ghost" onclick="prenEsterna(\''+s.id+'\')">'+ic("plus",13)+' Persona nuova / prova</button></div></div>';
 }
 
+/* riquadro "Gestisci prenotati e posti" (solo titolare): posti, prenotati, aggiungi cliente o persona nuova */
+function gestisciModal(id){const s=DB.agenda[id];if(!s)return closeModal();
+  if(S.aopen===id){S.aopen=null;render()}
+  S.gmod=id;
+  openModal('<div class="act-h" style="--c:'+colSlot(s)+'"><h3>'+esc(slotTitle(s))+'</h3><p class="muted">'+capFirst(fmtD(s.d,{weekday:"long",day:"numeric",month:"long"}))+' · '+s.h+' · '+s.dur+'′</p></div>'+
+   '<div id="gestBox">'+gestisciHTML(s)+'</div>'+
+   '<div class="inline" style="justify-content:flex-end;margin-top:14px"><button class="btn ghost" onclick="calAzioni(\''+id+'\')">Indietro</button><button class="btn primary" onclick="closeModal()">Fatto</button></div>')}
+function gestRefresh(){if(!S.gmod)return;const b=el("gestBox");
+  if(!el("modal").classList.contains("on")){S.gmod=null;return}
+  if(!b)return;
+  const s=DB.agenda[S.gmod];if(!s){S.gmod=null;return closeModal()}
+  b.innerHTML=gestisciHTML(s)}
+
 /* ---------- vista settimana con trascinamento ---------- */
 const WPX=54;
 function calWeek(wk,one){
@@ -3059,10 +3073,10 @@ function calDbl(e){if(e.target!==e.currentTarget)return;const d=e.currentTarget.
   const c=e.currentTarget,r=c.getBoundingClientRect();nuovoSlot(d,toHM(clamp(snap15(+c.dataset.h0*60+(e.clientY-r.top)/WPX*60),0,23*60+45)))}
 
 /* ---------- azioni su un orario ---------- */
-function calAzioni(id){const s=DB.agenda[id];if(!s)return;const past=isPast(s);
+function calAzioni(id){const s=DB.agenda[id];if(!s)return;S.gmod=null;const past=isPast(s);
   openModal('<div class="act-h" style="--c:'+colSlot(s)+'"><h3>'+esc(slotTitle(s))+'</h3><p class="muted">'+capFirst(fmtD(s.d,{weekday:"long",day:"numeric",month:"long"}))+' · '+s.h+' · '+s.dur+'′ · '+s.pren.length+'/'+s.cap+' posti</p></div>'+
    '<div class="act-list">'+
-   '<button onclick="closeModal();S.cv=\'giorno\';S.cdate=\''+s.d+'\';S.aopen=\''+s.id+'\';render()">'+ic("users",18)+'<span><b>Gestisci prenotati e posti</b><small>'+calPren(s)+'</small></span></button>'+
+   '<button onclick="gestisciModal(\''+s.id+'\')">'+ic("users",18)+'<span><b>Gestisci prenotati e posti</b><small>'+calPren(s)+'</small></span></button>'+
    (past?'':'<button onclick="prenEsterna(\''+s.id+'\')">'+ic("plus",18)+'<span><b>Aggiungi persona nuova</b><small>Prova o seduta singola per chi non è ancora registrato</small></span></button>')+
    (past?'':'<button onclick="spostaModal(\''+s.id+'\')">'+ic("move",18)+'<span><b>Sposta</b><small>Cambia giorno o ora'+(s.pren.length?" · i prenotati ricevono un messaggio":"")+'</small></span></button>')+
    '<button onclick="rinominaModal(\''+s.id+'\')">'+ic("edit",18)+'<span><b>Rinomina</b><small>Ora si chiama “'+esc(slotTitle(s))+'” · i clienti vedono subito il nuovo nome</small></span></button>'+
@@ -4012,6 +4026,7 @@ function render(){
   const f=V[S.view]||(coach?vDash:vOggi);
   try{el("view").innerHTML=f()}catch(e){console.error(e);el("view").innerHTML='<div class="card"><p>Qualcosa non ha funzionato in questa pagina.</p><p class="hint">'+esc(e.message)+'</p></div>'}
   const m=el("msgs");if(m)m.scrollTop=m.scrollHeight;
+  gestRefresh();
   hydrate();
 }
 if(!window.KM_CLOUD){initDB();_pSig=prezziSig();caricaPrezzi();

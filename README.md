@@ -366,3 +366,10 @@ feedback, contabilità, listino ed esercizi stanno nel database **Supabase**, pr
   apre "Nuovo cliente" già compilato con nome e telefono; salvando, la prenotazione passa al nuovo cliente.
 - Nel database la prenotazione è salvata con `cliente_id` vuoto e i dati (telefono, prova, nota) nel campo `dati`.
 - `404.html` riallineato ad `app.html`, service worker `km-studio-v37`.
+
+### Agenda: "Gestisci prenotati e posti" in un riquadro (24/11/2026)
+
+- Dal menu di un orario, **Gestisci prenotati e posti** apre ora un riquadro (prima chiudeva il menu e passava alla vista
+  Giorno, e dalla vista Settimana sembrava non succedere nulla). Dentro: posti +/−, prenotati, *Aggiungi un cliente* e
+  **Persona nuova / prova**; dopo aver messo in agenda una persona nuova si torna al riquadro aggiornato.
+- `404.html` riallineato ad `app.html`, service worker `km-studio-v38`.
